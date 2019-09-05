@@ -50,8 +50,10 @@
     \pagestyle{fancy}
     \fancyhf{}
     \rhead{American Banking Corporation \& Co.}
+    \lhead{\Oldincludegraphics[width=1in,keepaspectratio]{logo}}
     % \lhead{American Banking Corporation & Co.}
     \rfoot{\thepage}
+
     \renewcommand{\footrulewidth}{0.4pt}    % bar on bottom of page
 
 ((*- endblock margins -*))
@@ -183,8 +185,12 @@
 %==============================================================================
 
 ((*- block any_cell scoped -*))
-    ((( super() )))
-    \newpage
+    ((*- if "nbconvert_ignore" in cell.metadata.get("tags", []) -*)) 
+    % Do Nothing
+    ((*- else -*))
+        ((( super() )))
+        \newpage
+    ((*- endif -*))
 ((*- endblock any_cell -*))
 
 %===============================================================================
