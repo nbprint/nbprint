@@ -1,4 +1,8 @@
+import sys
 from IPython.display import Markdown, Latex, display
+
+if 'nbconvert' in sys.argv:
+    raise Exception('Test')
 
 
 def p(text):
