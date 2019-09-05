@@ -2,6 +2,6 @@ from enum import Enum
 
 
 class Tags(Enum):
-    NBCONVERT_IGNORE = 'nbconvert_ignore'
+    NBCONVERT_IGNORE = 'nbcx_ignore'
     PARAMETERS = 'parameters'  # for Papermill
-    TITLE = 'title'
+    TITLE = 'nbcx_title'
