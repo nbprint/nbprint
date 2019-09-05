@@ -70,6 +70,12 @@
     \renewcommand{\headrulewidth}{.5pt}    % bar on bottom of page
     \renewcommand{\footrulewidth}{.5pt}    % bar on bottom of page
 
+    \let\Origsection\section
+    \let\Origsubsection\subsection
+    \let\Origsection\section
+    \let\Origsection\section
+    \let\Origsection\section
+
 ((*- endblock margins -*))
 
 
