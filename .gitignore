@@ -107,4 +107,8 @@ venv.bak/
 
 *.tex
 *.pdf
+*.aux
+*.out
+*.synctex.gz
+
 sample_files/
