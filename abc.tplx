@@ -187,7 +187,15 @@
 ((*- block any_cell scoped -*))
     ((*- if "nbcx_ignore" in cell.metadata.get("tags", []) -*)) 
     % Do Nothing
+    ((*- elif "nbcx_title" in cell.metadata.get("tags", []) -*)) 
+        \pagestyle{empty}
+        \vspace*{\fill}
+        \Oldincludegraphics[width=4in,keepaspectratio]{logo}
+        ((( super() )))
+        \vspace*{\fill}
+        \newpage
     ((*- else -*))
+        \pagestyle{fancy}
         ((( super() )))
         \newpage
     ((*- endif -*))
