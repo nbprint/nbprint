@@ -20,7 +20,7 @@ def table(df, title='', footnote=''):
       df.to_latex(escape=False) +
       '\\begin{tablenotes}'
       '\\small'
-      '\\item' + footnote +
+      '\\item ' + footnote +
       '\\end{tablenotes}'
       '\\end{threeparttable}'
       '\\end{center}')
