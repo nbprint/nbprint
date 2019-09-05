@@ -185,7 +185,7 @@
 %==============================================================================
 
 ((*- block any_cell scoped -*))
-    ((*- if "nbconvert_ignore" in cell.metadata.get("tags", []) -*)) 
+    ((*- if "nbcx_ignore" in cell.metadata.get("tags", []) -*)) 
     % Do Nothing
     ((*- else -*))
         ((( super() )))
