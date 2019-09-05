@@ -36,8 +36,10 @@
     \usepackage{needspace}
     \usepackage{fancyhdr}
     \usepackage[flushleft]{threeparttable}
-
      ((( super() )))
+    \usepackage{helvet}
+    \renewcommand{\familydefault}{\sfdefault}
+
 ((*- endblock packages -*))
 
 
