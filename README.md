@@ -7,3 +7,4 @@ NBConvert's default templates are largely designed with academic styling. This r
 
 
 [Sample](sample.pdf)
+
