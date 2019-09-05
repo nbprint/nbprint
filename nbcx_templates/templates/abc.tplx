@@ -67,7 +67,8 @@
     \futurelet\TMPfootrule\def\footrule{{\color{black}\TMPfootrule}}
 
     % Thick rule on bottom
-    \renewcommand{\footrulewidth}{5pt}    % bar on bottom of page
+    \renewcommand{\headrulewidth}{.5pt}    % bar on bottom of page
+    \renewcommand{\footrulewidth}{.5pt}    % bar on bottom of page
 
 ((*- endblock margins -*))
 
