@@ -1,16 +1,13 @@
 %==============================================================================
 % Extends base ipython template
 %==============================================================================
-
 ((= IPython input/output style =))
 ((*- extends 'base.tplx' -*))
 
 
 %==============================================================================
 % Predoc
-%==============================================================================
-
-
+%============================================================================== d
 ((* block predoc *))
     ((( super() )))
     ((* block tableofcontents *))
@@ -18,18 +15,19 @@
     ((* endblock tableofcontents *))
 ((* endblock predoc *))
 
+
 %==============================================================================
 % Docclass
 %==============================================================================
-
 ((* block docclass *))
     \documentclass[11pt]{report}
 ((*- endblock docclass -*))
 
+
+
 %==============================================================================
 % Packages
 %==============================================================================
-
 ((*- block packages -*))
     \usepackage{parskip}
     \setcounter{secnumdepth}{0} %Suppress section numbers
@@ -37,6 +35,8 @@
     \tcbset{nobeforeafter}
     \usepackage{needspace}
     \usepackage{fancyhdr}
+    \usepackage[flushleft]{threeparttable}
+
      ((( super() )))
 ((*- endblock packages -*))
 
@@ -44,27 +44,37 @@
 %==============================================================================
 % Margins
 %==============================================================================
-    
 ((*- block margins -*))
-    \geometry{verbose,tmargin=.7in,bmargin=.7in,lmargin=.7in,rmargin=.7in}
+    \geometry{verbose,tmargin=.7in,bmargin=1in,lmargin=.7in,rmargin=.7in}
     \pagestyle{fancy}
     \fancyhf{}
+
+    % Name
     \rhead{American Banking Corporation \& Co.}
+
+    % Logo
     \lhead{\Oldincludegraphics[width=1in,keepaspectratio]{logo}}
-    % \lhead{American Banking Corporation & Co.}
+
+    % Page number on right
     \rfoot{\thepage}
 
-    \renewcommand{\footrulewidth}{0.4pt}    % bar on bottom of page
+    % Warning on left
+    \lfoot{\textcolor{red}{For Institutional Clients Only}}
+
+    % in case changing color
+    \futurelet\TMPfootrule\def\footrule{{\color{black}\TMPfootrule}}
+
+    % Thick rule on bottom
+    \renewcommand{\footrulewidth}{5pt}    % bar on bottom of page
 
 ((*- endblock margins -*))
+
 
 
 
 %==============================================================================
 % Definitions
 %==============================================================================
-
-
 ((*- block definitions -*))
     ((( super() )))
 
@@ -174,7 +184,6 @@
 %==============================================================================
 % Title
 %==============================================================================
-    
 ((* block maketitle *))
 % \maketitle
 ((* endblock maketitle *))
@@ -183,11 +192,12 @@
 %==============================================================================
 % Cell
 %==============================================================================
-
 ((*- block any_cell scoped -*))
     ((*- if "nbcx_ignore" in cell.metadata.get("tags", []) -*)) 
-    % Do Nothing
+    % Do Nothing if nbcx_ignore tag is set
     ((*- elif "nbcx_title" in cell.metadata.get("tags", []) -*)) 
+        % Title page
+        % Don't include header/footer, and vertically center + logo
         \pagestyle{empty}
         \vspace*{\fill}
         \Oldincludegraphics[width=4in,keepaspectratio]{logo}
@@ -201,10 +211,11 @@
     ((*- endif -*))
 ((*- endblock any_cell -*))
 
+
+
 %===============================================================================
 % Input
 %===============================================================================
-
 ((* block input_group *))
 ((* endblock input_group *))
 
@@ -215,7 +226,6 @@
 %===============================================================================
 % Output
 %===============================================================================
-
 ((*- if charlim is not defined -*))
     ((* set charlim = 86 *))
 ((*- endif -*))
@@ -230,7 +240,6 @@
 %==============================================================================
 % Support Macros
 %==============================================================================
-
 % Name: draw_cell
 % Purpose: Renders an output/input prompt
 ((* macro draw_cell(text, cell, prompt, prompt_color) -*))
