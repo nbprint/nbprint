@@ -112,3 +112,9 @@ venv.bak/
 *.synctex.gz
 
 sample_files/
+
+
+docs/index.md
+docs/api
+
+
