@@ -1,4 +1,4 @@
-PYTHON=python3
+PYTHON=python3.7
 
 build:
 	jupyter nbconvert --to pdf sample.ipynb --template nbcx_templates/templates/abc.tplx && open sample.pdf
@@ -9,8 +9,8 @@ html:
 tex:
 	jupyter nbconvert --to latex sample.ipynb --template nbcx_templates/templates/abc.tplx
 
-test: lint ## run the tests for travis CI
-	@ ${PYTHON} -m pytest -v tests --cov=jupyterlab_templates
+tests: lint ## run the tests
+	${PYTHON} -m pytest -v nbcx_templates/tests --cov=nbcx_templates --junitxml=python_junit.xml --cov-report=xml --cov-branch
 
 lint: ## run linter
 	flake8 jupyterlab_templates 
@@ -20,6 +20,12 @@ clean: ## clean the repository
 	find . -name "*.pyc" | xargs rm -rf 
 	find . -name ".ipynb_checkpoints" | xargs  rm -rf 
 	rm -rf .coverage cover htmlcov logs build dist *.egg-info lib node_modules
+	git clean -fd
+	make -C ./docs clean
+
+docs:  ## make documentation
+	make -C ./docs html
+	open ./docs/_build/html/index.html
 
 install:  ## install to site-packages
 	${PYTHON} -m pip install .
