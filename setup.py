@@ -15,9 +15,10 @@ version = get_version(pjoin(here, name, '_version.py'))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
-    requires = f.read().split()
-
+requires = [
+    "nbconvert>=5.5.0",
+    "IPython>=7.0.0"
+]
 
 setup(
     name=name,
