@@ -1,13 +1,13 @@
 PYTHON=python3.7
 
-build:
-	jupyter nbconvert --to pdf sample.ipynb --template nbcx_templates/templates/abc.tplx && open sample.pdf
+build:  ## build a sample pdf report
+	jupyter nbconvert --to pdf sample.ipynb --template nbcx_templates/templates/reports/abc.tplx && open sample.pdf
 
-html:
-	jupyter nbconvert --to html sample.ipynb --template nbcx_templates/templates/abc.tpl && open sample.html
+html:  ## build a sample html report
+	jupyter nbconvert --to html sample.ipynb --template nbcx_templates/templates/reports/abc.tpl && open sample.html
 
-tex:
-	jupyter nbconvert --to latex sample.ipynb --template nbcx_templates/templates/abc.tplx
+tex:  ## build a sample latext report
+	jupyter nbconvert --to latex sample.ipynb --template nbcx_templates/templates/reports/abc.tplx
 
 tests: lint ## run the tests
 	${PYTHON} -m pytest -v nbcx_templates/tests --cov=nbcx_templates --junitxml=python_junit.xml --cov-report=xml --cov-branch
