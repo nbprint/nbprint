@@ -1,24 +1,19 @@
 import os
-
 from ipython_genutils.py3compat import getcwd
-from testpath.tempdir import TemporaryWorkingDirectory
 from nbconvert.exporters import PDFExporter
 from nbconvert.exporters.pdf import LatexFailed
+from testpath.tempdir import TemporaryWorkingDirectory
 
 
 class NBCXPDFExporter(PDFExporter):
-    """Writer designed to write to PDF files.
-    This inherits from :class:`LatexExporter`. It creates a LaTeX file in
-    a temporary directory using the template machinery, and then runs LaTeX
-    to create a pdf.
-    """
-    export_from_notebook = "PDF Report via LaTeX"
+    '''Custom Exporter to reformat the notebook node to allow for document-level configuration
+    from cell outputs based on tags'''
+    export_from_notebook = "NBCX PDF Report via LaTeX"
 
     def from_notebook_node(self, nb, resources=None, **kw):
-        latex, resources = super().from_notebook_node(
+        latex, resources = super(PDFExporter, self).from_notebook_node(
             nb, resources=resources, **kw
         )
-
         # set texinputs directory, so that local files will be found
         if resources and resources.get('metadata', {}).get('path'):
             self.texinputs = resources['metadata']['path']

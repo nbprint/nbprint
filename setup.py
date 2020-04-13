@@ -47,6 +47,12 @@ setup(
     extras_require={
         'dev': requires + ['pytest', 'pytest-cov', 'pylint', 'flake8', 'bumpversion', 'mock', 'codecov']
     },
+    entry_points = {
+        'nbconvert.exporters': [
+            'nbcx_pdf = nbcx_templates.exporters:NBCXPDFExporter',
+            'nbcx_latex = nbcx_templates.exporters:NBCXLatexExporter',
+        ],
+    },
     include_package_data=True,
     zip_safe=False,
 
