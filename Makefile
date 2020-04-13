@@ -7,7 +7,7 @@ html:  ## build a sample html report
 	jupyter nbconvert --to html sample.ipynb --template nbcx_templates/templates/reports/abc.html.j2 && open sample.html
 
 tex:  ## build a sample latext report
-	jupyter nbconvert --to nbcx_latex sample.ipynb --template nbcx_templates/templates/reports/abc.tex.j2
+	jupyter nbconvert --to nbcx_latex sample.ipynb --template nbcx_templates/templates/reports/abc.tex.j2 && code sample.tex
 
 tests: lint ## run the tests
 	${PYTHON} -m pytest -v nbcx_templates/tests --cov=nbcx_templates --junitxml=python_junit.xml --cov-report=xml --cov-branch

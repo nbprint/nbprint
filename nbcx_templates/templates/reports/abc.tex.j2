@@ -55,7 +55,7 @@
     \lhead{\Oldincludegraphics[width=1in,keepaspectratio]{logo}}
 
     % Center Header
-    \chead{}
+    ((* if resources.nbcx.chead *))\chead{ ((( resources.nbcx.chead ))) }((* endif *))
 
     % Right Header
     \rhead{American Banking Corporation \& Co.}
