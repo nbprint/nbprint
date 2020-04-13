@@ -51,23 +51,31 @@
     \pagestyle{fancy}
     \fancyhf{}
 
-    % Name
-    \rhead{American Banking Corporation \& Co.}
-
-    % Logo
+    % Left Header
     \lhead{\Oldincludegraphics[width=1in,keepaspectratio]{logo}}
 
-    % Page number on right
-    \rfoot{\thepage}
+    % Center Header
+    \chead{}
 
-    % Warning on left
+    % Right Header
+    \rhead{American Banking Corporation \& Co.}
+
+    % Left Footer
     \lfoot{\textcolor{red}{For Institutional Clients Only}}
+
+    % Center Footer
+    \cfoot{}
+
+    % Right Footer
+    \rfoot{\thepage}
 
     % in case changing color
     \futurelet\TMPfootrule\def\footrule{{\color{black}\TMPfootrule}}
 
-    % Thick rule on bottom
+    % Header horizontal rule
     \renewcommand{\headrulewidth}{.5pt}    % bar on bottom of page
+    
+    % Footer horizontal rule
     \renewcommand{\footrulewidth}{.5pt}    % bar on bottom of page
 
     \let\Origsection\section
@@ -204,15 +212,20 @@
 ((*- block any_cell scoped -*))
     ((*- if "nbcx_ignore" in cell.metadata.get("tags", []) -*)) 
     % Do Nothing if nbcx_ignore tag is set
-    ((*- elif "nbcx_title" in cell.metadata.get("tags", []) -*)) 
+    ((*- elif "nbcx_titlepage" in cell.metadata.get("tags", []) -*)) 
         % Title page
         % Don't include header/footer, and vertically center + logo
         \pagestyle{empty}
         \vspace*{\fill}
-        \Oldincludegraphics[width=4in,keepaspectratio]{logo}
         ((( super() )))
         \vspace*{\fill}
         \newpage
+    ((*- elif "nbcx_lhead" in cell.metadata.get("tags", []) -*)) 
+    ((*- elif "nbcx_chead" in cell.metadata.get("tags", []) -*)) 
+    ((*- elif "nbcx_rhead" in cell.metadata.get("tags", []) -*)) 
+    ((*- elif "nbcx_lfoot" in cell.metadata.get("tags", []) -*)) 
+    ((*- elif "nbcx_cfoot" in cell.metadata.get("tags", []) -*)) 
+    ((*- elif "nbcx_rfoot" in cell.metadata.get("tags", []) -*)) 
     ((*- else -*))
         \pagestyle{fancy}
         ((( super() )))
@@ -245,28 +258,3 @@
 ((* block markdowncell scoped *))
     ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex', extra_args=["--top-level-division=chapter"]) )))
 ((* endblock markdowncell *))
-
-%==============================================================================
-% Support Macros
-%==============================================================================
-% Name: draw_cell
-% Purpose: Renders an output/input prompt
-((* macro draw_cell(text, cell, prompt, prompt_color) -*))
-((( draw_prompt(cell, prompt, prompt_color) )))
-\begin{((( prompt ~ 'Verbatim')))}[commandchars=\\\{\}]
-((( text )))
-\end{((( prompt ~ 'Verbatim')))}
-((*- endmacro *))
-
-% Name: draw_prompt
-% Purpose: Renders an output/input prompt
-((* macro draw_prompt(cell, prompt, prompt_color) -*))
-    ((*- if cell.execution_count is defined -*))
-    ((*- set execution_count = "" ~ (cell.execution_count | replace(None, " ")) -*))
-    ((*- else -*))((*- set execution_count = " " -*))((*- endif *))
-    
-    ((*- if (resources.global_content_filter.include_output_prompt and prompt == 'Out')
-         or (resources.global_content_filter.include_input_prompt  and prompt == 'In' ) *))
-\prompt{(((prompt)))}{(((prompt_color)))}{(((execution_count)))}
-    ((*- endif -*))
-((*- endmacro *))

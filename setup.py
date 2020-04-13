@@ -16,8 +16,8 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 requires = [
-    "nbconvert>=5.5.0",
-    "IPython>=7.0.0"
+    "nbconvert>=5.6.1",
+    "IPython>=7.13.0"
 ]
 
 setup(
