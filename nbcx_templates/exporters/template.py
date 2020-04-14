@@ -26,6 +26,27 @@ class TemplateOverrideMixin:
         # Inject our own vars
         resources['nbcx'] = {}
         resources['nbcx']['chead'] = 'BLARG'
+
+        remove = []
+        for i, cell in enumerate(nb_copy.cells):
+            tags = [t for t in cell.metadata.get('tags', []) if t.startswith('nbcx_')]
+            if len(tags) > 1:
+                raise Exception("Can't mix nbcx tags!")
+
+            if not tags:
+                # don't do anything
+                continue
+
+            tag = tags[0]
+            if tag in ('nbcx_titlepage', 'nbcx_ignore'):
+                # don't do anything with these
+                continue
+
+            if tag in ('nbcx_lhead', 'nbcx_chead', 'nbcx_rhead', 'nbcx_lfoot', 'nbcx_cfoot', 'nbcx_rfoot'):
+                resources['nbcx'][tag.replace('nbcx_', '')] = ''.join(str(x) for x in cell.outputs)
+                remove.append(i)
+
+        nb_copy.cells = [cell for i, cell in enumerate(nb_copy.cells) if i not in remove]
         # ********************************************** #
 
         # ********************************************** #

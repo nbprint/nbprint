@@ -52,22 +52,27 @@
     \fancyhf{}
 
     % Left Header
-    \lhead{\Oldincludegraphics[width=1in,keepaspectratio]{logo}}
+    % \lhead{\Oldincludegraphics[width=1in,keepaspectratio]{logo}}
+    ((* if resources.nbcx.lhead *))\lhead{ ((( resources.nbcx.lhead ))) }((* endif *))
 
     % Center Header
     ((* if resources.nbcx.chead *))\chead{ ((( resources.nbcx.chead ))) }((* endif *))
 
     % Right Header
-    \rhead{American Banking Corporation \& Co.}
+    % \rhead{American Banking Corporation \& Co.}
+    ((* if resources.nbcx.rhead *))\rhead{ ((( resources.nbcx.rhead ))) }((* endif *))
 
     % Left Footer
-    \lfoot{\textcolor{red}{For Institutional Clients Only}}
+    % \lfoot{\textcolor{red}{For Institutional Clients Only}}
+    ((* if resources.nbcx.lfoot *))\lfoot{ ((( resources.nbcx.lfoot ))) }((* endif *))
 
     % Center Footer
-    \cfoot{}
+    % \cfoot{}
+    ((* if resources.nbcx.cfoot *))\cfoot{ ((( resources.nbcx.cfoot ))) }((* endif *))
 
     % Right Footer
-    \rfoot{\thepage}
+    % \rfoot{\thepage}
+    ((* if resources.nbcx.rfoot *))\rfoot{ ((( resources.nbcx.rfoot ))) }((* endif *))
 
     % in case changing color
     \futurelet\TMPfootrule\def\footrule{{\color{black}\TMPfootrule}}
