@@ -15,9 +15,10 @@ version = get_version(pjoin(here, name, '_version.py'))
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
-with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
-    requires = f.read().split()
-
+requires = [
+    "nbconvert>=5.6.1",
+    "IPython>=7.13.0"
+]
 
 setup(
     name=name,
@@ -45,6 +46,12 @@ setup(
     install_requires=requires,
     extras_require={
         'dev': requires + ['pytest', 'pytest-cov', 'pylint', 'flake8', 'bumpversion', 'mock', 'codecov']
+    },
+    entry_points = {
+        'nbconvert.exporters': [
+            'nbcx_pdf = nbcx_templates.exporters:NBCXPDFExporter',
+            'nbcx_latex = nbcx_templates.exporters:NBCXLatexExporter',
+        ],
     },
     include_package_data=True,
     zip_safe=False,
