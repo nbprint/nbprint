@@ -1,4 +1,4 @@
-# nbconvert_templates
+# nbconvertX
 A framework for customizing NBConvert templates and building reports
 
 [![Build Status](https://dev.azure.com/tpaine154/jupyter/_apis/build/status/timkpaine.nbconvert_templates?branchName=master)](https://dev.azure.com/tpaine154/jupyter/_build/latest?definitionId=21&branchName=master)
@@ -8,7 +8,9 @@ A framework for customizing NBConvert templates and building reports
 NBConvert's default templates are largely designed with academic styling. This repo is a collection of templates with industrial/business reports in mind.
 
 ## Gallery
-In Progress
 
-[Sample](sample.pdf)
+|||
+|:--|:--|
+|Sample - PDF||
+|[<img src="examples/sample.png" width=300>](examples/sample.pdf)|[Template](nbcx/templates/reports/abc.tex.j2)|
 
