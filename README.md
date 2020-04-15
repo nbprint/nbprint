@@ -5,8 +5,10 @@ A framework for customizing NBConvert templates and building reports
 [![Coverage](https://img.shields.io/azure-devops/coverage/tpaine154/jupyter/21)](https://dev.azure.com/tpaine154/jupyter/_build?definitionId=21&_a=summary)
 
 ## Templates
-NBConvert's default templates are largely designed with academic styling. This repo is a collection of templates with industrial reports in mind, primarily for financial services. 
+NBConvert's default templates are largely designed with academic styling. This repo is a collection of templates with industrial/business reports in mind.
 
+## Gallery
+In Progress
 
 [Sample](sample.pdf)
 

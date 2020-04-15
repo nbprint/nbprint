@@ -103,20 +103,18 @@ venv.bak/
 # mypy
 .mypy_cache/
 
+# others
 .autoversion
-
 *.tex
 *.pdf
 *.aux
 *.out
 *.synctex.gz
-
 sample_files/
-
-
 docs/index.md
 docs/api
-
-
 python_junit.xml
+*.fdb_latexmk
+*.fls
+
 

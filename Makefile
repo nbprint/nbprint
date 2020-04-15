@@ -1,19 +1,19 @@
 PYTHON=python3.7
 
-build:
-	jupyter nbconvert --to pdf sample.ipynb --template nbcx_templates/templates/abc.tplx && open sample.pdf
+build:  ## build a sample pdf report
+	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_pdf sample.ipynb  --execute --template nbcx_templates/templates/reports/abc.tex.j2 && open sample.pdf
 
-html:
-	jupyter nbconvert --to html sample.ipynb --template nbcx_templates/templates/abc.tpl && open sample.html
+html:  ## build a sample html report
+	NBCX_CONTEXT=html jupyter nbconvert --to html sample.ipynb  --execute --template nbcx_templates/templates/reports/abc.html.j2 && open sample.html
 
-tex:
-	jupyter nbconvert --to latex sample.ipynb --template nbcx_templates/templates/abc.tplx
+tex:  ## build a sample latext report
+	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_latex sample.ipynb --execute --template nbcx_templates/templates/reports/abc.tex.j2 && code sample.tex
 
 tests: lint ## run the tests
 	${PYTHON} -m pytest -v nbcx_templates/tests --cov=nbcx_templates --junitxml=python_junit.xml --cov-report=xml --cov-branch
 
 lint: ## run linter
-	flake8 jupyterlab_templates 
+	python3.7 -m flake8 nbcx_templates 
 
 clean: ## clean the repository
 	find . -name "__pycache__" | xargs  rm -rf 
@@ -31,7 +31,7 @@ install:  ## install to site-packages
 	${PYTHON} -m pip install .
 
 fix:  ## run autopep8/tslint fix
-	autopep8 --in-place -r -a -a crowdsource/
+	python3.7 -m autopep8 --in-place -r -a -a nbcx_templates/
 
 dist:  js  ## dist to pypi
 	rm -rf dist build

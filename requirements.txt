@@ -1,2 +1,0 @@
-nbconvert>=5.5.0
-IPython>=7.0.0
