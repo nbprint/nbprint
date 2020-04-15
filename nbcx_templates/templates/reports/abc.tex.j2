@@ -43,6 +43,35 @@
 ((*- endblock packages -*))
 
 
+
+%===============================================================================
+% Macros
+%===============================================================================
+% Draw a figure using the graphicx package.
+((* macro draw_figure_better(filename, width, height, align) -*))
+((* set filename = filename | posix_path *))
+((*- block figure scoped -*))
+
+    ((*- if align == "center"-*))
+        \begin{(((align|default('center'))))}
+    ((*- endif -*))
+
+        ((*- if width|default(0) and height|default(0) -*))
+            \Oldincludegraphics[width=(((width))),height=(((height)))]{(((filename)))}
+        ((*- elif width|default(0) -*))
+            \Oldincludegraphics[width=(((width))),keepaspectratio]{(((filename)))}
+        ((*- elif height|default(0) -*))
+            \Oldincludegraphics[height=(((height))),keepaspectratio]{(((filename)))}
+        ((*- else -*))
+            \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{((( filename )))}
+        ((*- endif -*))
+
+    ((*- if align == "center"-*))
+        \end{(((align|default('center'))))}
+    ((*- endif -*))
+((*- endblock figure -*))
+((*- endmacro *))
+
 %==============================================================================
 % Margins
 %==============================================================================
@@ -53,26 +82,72 @@
 
     % Left Header
     % \lhead{\Oldincludegraphics[width=1in,keepaspectratio]{logo}}
-    ((* if resources.nbcx.lhead *))\lhead{ ((( resources.nbcx.lhead ))) }((* endif *))
 
-    % Center Header
-    ((* if resources.nbcx.chead *))\chead{ ((( resources.nbcx.chead ))) }((* endif *))
-
-    % Right Header
-    % \rhead{American Banking Corporation \& Co.}
-    ((* if resources.nbcx.rhead *))\rhead{ ((( resources.nbcx.rhead ))) }((* endif *))
-
-    % Left Footer
-    % \lfoot{\textcolor{red}{For Institutional Clients Only}}
-    ((* if resources.nbcx.lfoot *))\lfoot{ ((( resources.nbcx.lfoot ))) }((* endif *))
-
-    % Center Footer
-    % \cfoot{}
-    ((* if resources.nbcx.cfoot *))\cfoot{ ((( resources.nbcx.cfoot ))) }((* endif *))
-
-    % Right Footer
-    % \rfoot{\thepage}
-    ((* if resources.nbcx.rfoot *))\rfoot{ ((( resources.nbcx.rfoot ))) }((* endif *))
+    % Headers & Footers
+    ((* if resources.nbcx.headers *))
+    ((*- for key, value in resources.nbcx.headers.items() -*))
+    \(((key))){
+        ((*- set cell = value -*))
+        ((*- if cell.cell_type == 'code'-*)) 
+            ((*- if resources.global_content_filter.include_code -*))
+                ((*- if cell.outputs and resources.global_content_filter.include_output -*))
+                    ((*- for output in cell.outputs -*))
+                            ((*- if output.output_type == 'execute_result' -*))
+                                ((*- for type in output.data | filter_data_type -*))
+                                    ((*- if type == 'application/pdf' -*))
+                                        ((( draw_figure_better(output.metadata.filenames['application/pdf']) )))
+                                    ((*- elif type == 'image/svg+xml' -*))
+                                        ((( draw_figure_better(output.metadata.filenames['image/svg+xml']) )))
+                                    ((*- elif type == 'image/png' -*))
+                                        ((( draw_figure_better(output.metadata.filenames['image/png']) )))
+                                    ((*- elif type == 'text/markdown' -*))
+                                        ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'latex'))))
+                                    ((*- elif type == 'image/jpeg' -*))
+                                        ((( draw_figure_better(output.metadata.filenames['image/jpeg'], output.metadata['image/jpeg']['widthcm'], output.metadata['image/jpeg']['heightcm'], output.metadata['image/jpeg']['align']) )))
+                                    ((*- elif type == 'text/plain' -*))
+                                        \begin{Verbatim}[commandchars=\\\{\}]
+                                            ((( output.data['text/plain'] | escape_latex | ansi2latex )))
+                                        \end{Verbatim}
+                                    ((*- elif type == 'text/latex' -*))
+                                        ((( output.data['text/latex'] | strip_files_prefix )))
+                                    ((*- endif -*))
+                                ((*- endfor -*))
+                            ((*- elif output.output_type == 'stream' -*))
+                                \begin{Verbatim}[commandchars=\\\{\}]
+                                    ((( output.text | escape_latex | ansi2latex )))
+                                \end{Verbatim}
+                            ((*- elif output.output_type == 'display_data' -*))
+                                ((*- for type in output.data | filter_data_type -*))
+                                    ((*- if type == 'application/pdf' -*))
+                                        ((( draw_figure_better(output.metadata.filenames['application/pdf']) )))
+                                    ((*- elif type == 'image/svg+xml' -*))
+                                        ((( draw_figure_better(output.metadata.filenames['image/svg+xml']) )))
+                                    ((*- elif type == 'image/png' -*))
+                                        ((( draw_figure_better(output.metadata.filenames['image/png']) )))
+                                    ((*- elif type == 'text/markdown' -*))
+                                        ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'latex'))))
+                                    ((*- elif type == 'image/jpeg' -*))
+                                        ((( draw_figure_better(output.metadata.filenames['image/jpeg'], output.metadata['image/jpeg']['widthcm'], output.metadata['image/jpeg']['heightcm'], output.metadata['image/jpeg']['align']) )))
+                                    ((*- elif type == 'text/plain' -*))
+                                        \begin{Verbatim}[commandchars=\\\{\}]
+                                            ((( output.data['text/plain'] | escape_latex | ansi2latex )))
+                                        \end{Verbatim}
+                                    ((*- elif type == 'text/latex' -*))
+                                        ((( output.data['text/latex'] | strip_files_prefix )))
+                                    ((*- endif -*))
+                                ((*- endfor -*))
+                            ((*- endif -*))
+                    ((*- endfor -*))
+                ((*- endif -*))
+            ((*- endif -*))
+        ((*- elif cell.cell_type in ['markdown'] -*))
+            ((*- if resources.global_content_filter.include_markdown and not cell.get("transient",{}).get("remove_source", false) -*))
+                ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
+            ((*- endif -*))
+        ((*- endif -*))
+    }
+    ((* endfor *))
+    ((* endif *))
 
     % in case changing color
     \futurelet\TMPfootrule\def\footrule{{\color{black}\TMPfootrule}}
@@ -214,10 +289,10 @@
 %==============================================================================
 % Cell
 %==============================================================================
-((*- block any_cell scoped -*))
-    ((*- if "nbcx_ignore" in cell.metadata.get("tags", []) -*)) 
+((* block any_cell scoped *))
+    ((* if "nbcx_ignore" in cell.metadata.get("tags", []) *)) 
     % Do Nothing if nbcx_ignore tag is set
-    ((*- elif "nbcx_titlepage" in cell.metadata.get("tags", []) -*)) 
+    ((* elif "nbcx_titlepage" in cell.metadata.get("tags", []) *)) 
         % Title page
         % Don't include header/footer, and vertically center + logo
         \pagestyle{empty}
@@ -225,18 +300,12 @@
         ((( super() )))
         \vspace*{\fill}
         \newpage
-    ((*- elif "nbcx_lhead" in cell.metadata.get("tags", []) -*)) 
-    ((*- elif "nbcx_chead" in cell.metadata.get("tags", []) -*)) 
-    ((*- elif "nbcx_rhead" in cell.metadata.get("tags", []) -*)) 
-    ((*- elif "nbcx_lfoot" in cell.metadata.get("tags", []) -*)) 
-    ((*- elif "nbcx_cfoot" in cell.metadata.get("tags", []) -*)) 
-    ((*- elif "nbcx_rfoot" in cell.metadata.get("tags", []) -*)) 
-    ((*- else -*))
+    ((* else *))
         \pagestyle{fancy}
         ((( super() )))
         \newpage
-    ((*- endif -*))
-((*- endblock any_cell -*))
+    ((* endif *))
+((* endblock any_cell *))
 
 
 

@@ -1,8 +1,12 @@
+import os
 from nbconvert.exporters import TemplateExporter
 
 
 class TemplateOverrideMixin:
     def _from_notebook_node_override(self, nb, resources=None, **kw):
+        # make sure this is set prior to execution
+        os.environ['NBCX_NBCONVERT'] = 'yes'
+
         # ********************************************** #
         # From Template Exporter
         # https://github.com/jupyter/nbconvert/blob/master/nbconvert/exporters/templateexporter.py
@@ -25,7 +29,7 @@ class TemplateOverrideMixin:
         # ***************** CUSTOM CODE **************** #
         # Inject our own vars
         resources['nbcx'] = {}
-        resources['nbcx']['chead'] = 'BLARG'
+        resources['nbcx']['headers'] = {}
 
         remove = []
         for i, cell in enumerate(nb_copy.cells):
@@ -43,7 +47,7 @@ class TemplateOverrideMixin:
                 continue
 
             if tag in ('nbcx_lhead', 'nbcx_chead', 'nbcx_rhead', 'nbcx_lfoot', 'nbcx_cfoot', 'nbcx_rfoot'):
-                resources['nbcx'][tag.replace('nbcx_', '')] = ''.join(str(x) for x in cell.outputs)
+                resources['nbcx']['headers'][tag.replace('nbcx_', '')] = cell
                 remove.append(i)
 
         nb_copy.cells = [cell for i, cell in enumerate(nb_copy.cells) if i not in remove]

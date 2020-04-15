@@ -1,4 +1,5 @@
 from IPython.display import Image, display
+from nbconvert.filters.pandoc import convert_pandoc
 from .common import nbconvert_context
 from .html import html
 from .latex import latex
@@ -10,7 +11,7 @@ def print(text, **kwargs):
         display(text)
         return
     if nbconvert_context() == 'pdf':
-        display(latex(text, **kwargs))
+        display(latex(convert_pandoc(text, 'markdown+tex_math_double_backslash', 'latex'), **kwargs))
     else:
         display(html(text, **kwargs))
 
@@ -56,10 +57,59 @@ def table(df, title='', footnote=''):
 
 def image(path, **kwargs):
     '''display a image'''
-    return Image(filename=path, **kwargs)
+    # measure in pixels for html, but cm for latex
+    width = kwargs.get('width', '')
+    height = kwargs.get('height', '')
+    align = kwargs.pop('align', 'left')
+    metadata = kwargs.pop('metadata', {})
+
+    if width:
+        if isinstance(width, str) and not width.endswith('cm'):
+            widthcm = width + 'cm'
+        elif not isinstance(width, str):
+            # assume in pixels, get cm
+
+            # TODO assume 96 DPI
+            widthcm = '{}cm'.format(int(width / 36))
+        else:
+            # assume already in cm, get pixels
+            width, widthcm = float(width.replace('cm', '')), width
+
+            # TODO assume 96 DPI
+            width = int(width * 36)
+            kwargs['width'] = width
+    else:
+        widthcm = ''
+
+    if height:
+        if isinstance(height, str) and not height.endswith('cm'):
+            heightcm = height + 'cm'
+        elif not isinstance(height, str):
+            # assume in pixels, get cm
+
+            # TODO assume 96 DPI
+            heightcm = '{}cm'.format(int(height / 36))
+
+        else:
+            # assume already in cm, get pixels
+            height, heightcm = float(height.replace('cm', '')), height
+
+            # TODO assume 96 DPI
+            height = int(height * 36)
+            kwargs['height'] = height
+    else:
+        heightcm = ''
+
+    metadata['widthcm'] = widthcm
+    metadata['heightcm'] = heightcm
+    metadata['align'] = align
+
+    return Image(filename=path, metadata=metadata, **kwargs)
 
 
 def pagenum():
     '''display a page number (latex only)'''
     if nbconvert_context() == 'pdf':
         return latex("\\thepage")
+    else:
+        return '[pagenum]'
