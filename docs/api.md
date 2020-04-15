@@ -1,16 +1,16 @@
 
 ```eval_rst
-.. automodule:: nbcx_templates
+.. automodule:: nbcx
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: nbcx_templates.tags
+.. automodule:: nbcx.tags
    :members:
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: nbcx_templates.utils
+.. automodule:: nbcx.utils
    :members:
    :undoc-members:
    :show-inheritance:

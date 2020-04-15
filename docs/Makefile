@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = nbcx_templates
+SPHINXPROJ    = nbcx
 SOURCEDIR     = .
 BUILDDIR      = _build
 
