@@ -21,7 +21,6 @@ import sys
 import os
 import os.path
 import subprocess
-import shutil
 import sphinx_rtd_theme
 from recommonmark.transform import AutoStructify
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -109,6 +108,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+html_extra_path = ['../examples', '../nbcx']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -192,15 +192,18 @@ def run_copyreadme(_):
                 elif "](docs/" in line:
                     # md
                     fp1.write(line.replace("](docs/", "]("))
+                elif "](examples/" in line:
+                    # md
+                    fp1.write(line.replace("](examples/", "]("))
+                elif "](nbcx/" in line:
+                    # md
+                    fp1.write(line.replace("](nbcx/", "]("))
                 else:
                     fp1.write(line)
 
         fp1.write("\n# API Documentation\n\n")
         with open(api, 'r') as fp2:
             fp1.write(fp2.read())
-
-    shutil.copytree("../examples", "examples")
-    shutil.copytree("../nbcx", "nbcx")
 
 
 def run_apidoc(_):
