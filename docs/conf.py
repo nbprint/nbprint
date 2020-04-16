@@ -187,10 +187,10 @@ def run_copyreadme(_):
             for line in fp2:
                 if 'src=' in line:
                     # <img>
-                    fp1.write(line.replace("docs/", ""))
+                    fp1.write(line.replace("docs/", "").replace("examples/", "../examples/").replace("nbcx/", "../nbcx/"))
                 elif "](docs/" in line:
                     # md
-                    fp1.write(line.replace("](docs/", "]("))
+                    fp1.write(line.replace("](docs/", "](").replace("](examples/", "](../examples/").replace("](nbcx/", "](../nbcx/"))
                 else:
                     fp1.write(line)
 
