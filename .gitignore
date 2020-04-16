@@ -113,6 +113,8 @@ venv.bak/
 sample_files/
 docs/index.md
 docs/api
+docs/examples
+docs/nbcx
 python_junit.xml
 *.fdb_latexmk
 *.fls
