@@ -21,6 +21,7 @@ import sys
 import os
 import os.path
 import subprocess
+import shutil
 import sphinx_rtd_theme
 from recommonmark.transform import AutoStructify
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -187,16 +188,19 @@ def run_copyreadme(_):
             for line in fp2:
                 if 'src=' in line:
                     # <img>
-                    fp1.write(line.replace("docs/", "").replace("examples/", "../examples/").replace("nbcx/", "../nbcx/"))
+                    fp1.write(line.replace("docs/", ""))
                 elif "](docs/" in line:
                     # md
-                    fp1.write(line.replace("](docs/", "](").replace("](examples/", "](../examples/").replace("](nbcx/", "](../nbcx/"))
+                    fp1.write(line.replace("](docs/", "]("))
                 else:
                     fp1.write(line)
 
-        fp1.write("# API Documentation\n\n")
+        fp1.write("\n# API Documentation\n\n")
         with open(api, 'r') as fp2:
             fp1.write(fp2.read())
+
+    shutil.copytree("../examples", "examples")
+    shutil.copytree("../nbcx", "nbcx")
 
 
 def run_apidoc(_):
