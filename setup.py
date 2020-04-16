@@ -8,7 +8,7 @@ pjoin = path.join
 
 ensure_python(('2.7', '>=3.3'))
 
-name = 'nbcx_templates'
+name = 'nbcx'
 here = path.abspath(path.dirname(__file__))
 version = get_version(pjoin(here, name, '_version.py'))
 
@@ -25,7 +25,7 @@ setup(
     version=version,
     description='NBConvert Templates',
     long_description=long_description,
-    url='https://github.com/timkpaine/nbcx_templates',
+    url='https://github.com/timkpaine/nbcx',
     author='Tim Paine',
     author_email='t.paine154@gmail.com',
     license='Apache 2.0',
@@ -49,8 +49,8 @@ setup(
     },
     entry_points = {
         'nbconvert.exporters': [
-            'nbcx_pdf = nbcx_templates.exporters:NBCXPDFExporter',
-            'nbcx_latex = nbcx_templates.exporters:NBCXLatexExporter',
+            'nbcx_pdf = nbcx.exporters:NBCXPDFExporter',
+            'nbcx_latex = nbcx.exporters:NBCXLatexExporter',
         ],
     },
     include_package_data=True,
