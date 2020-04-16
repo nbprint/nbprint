@@ -116,5 +116,5 @@ docs/api
 python_junit.xml
 *.fdb_latexmk
 *.fls
-
+*.ai
 
