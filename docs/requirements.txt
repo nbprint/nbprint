@@ -1,1 +1,2 @@
 jupyter_packaging
+sphinx-markdown-tables
