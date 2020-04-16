@@ -19,7 +19,7 @@ clean: ## clean the repository
 	find . -name "__pycache__" | xargs  rm -rf 
 	find . -name "*.pyc" | xargs rm -rf 
 	find . -name ".ipynb_checkpoints" | xargs  rm -rf 
-	rm -rf .coverage cover htmlcov logs build dist *.egg-info lib node_modules .pytest_cache coverage.xml python_junit.xml
+	rm -rf .coverage cover htmlcov logs build dist *.egg-info lib node_modules .pytest_cache coverage.xml python_junit.xml docs/nbcx docs/examples
 	git clean -fd
 	make -C ./docs clean
 
