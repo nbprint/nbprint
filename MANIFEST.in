@@ -6,7 +6,7 @@ include setup.cfg
 include pyproject.toml
 include .bumpversion.cfg
 include Makefile
-recursive-include nbcx_templates/templates
+recursive-include nbcx/templates
 
 graft tests
 
