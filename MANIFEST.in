@@ -11,10 +11,7 @@ recursive-include nbcx/templates
 graft tests
 
 # Documentation
-graft docs
-exclude docs/\#*
-
-# docs subdirs we want to skip
+prune docs
 prune docs/build
 prune docs/gh-pages
 prune docs/dist
