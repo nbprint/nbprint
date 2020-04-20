@@ -33,7 +33,7 @@ install:  ## install to site-packages
 fix:  ## run autopep8/tslint fix
 	python3.7 -m autopep8 --in-place -r -a -a nbcx/
 
-dist:  js  ## dist to pypi
+dist:  ## dist to pypi
 	rm -rf dist build
 	${PYTHON} setup.py sdist
 	${PYTHON} setup.py bdist_wheel
