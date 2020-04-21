@@ -50,8 +50,9 @@ setup(
     },
     entry_points = {
         'nbconvert.exporters': [
-            'nbcx_pdf = nbcx.exporters:NBCXPDFExporter',
+            'nbcx_html = nbcx.exporters:NBCXHTMLExporter',
             'nbcx_latex = nbcx.exporters:NBCXLatexExporter',
+            'nbcx_pdf = nbcx.exporters:NBCXPDFExporter',
         ],
     },
     include_package_data=True,

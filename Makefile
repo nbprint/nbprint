@@ -11,6 +11,10 @@ tex:  ## build a sample latext report
 
 tests: lint ## run the tests
 	${PYTHON} -m pytest -v nbcx/tests --cov=nbcx --junitxml=python_junit.xml --cov-report=xml --cov-branch
+	make tex
+	make build
+	make html
+
 
 lint: ## run linter
 	python3.7 -m flake8 nbcx 
