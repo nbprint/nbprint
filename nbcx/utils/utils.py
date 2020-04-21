@@ -28,6 +28,8 @@ def newpage():
     '''make a new page. in html, this just does a horizontal rule'''
     if nbconvert_context() == 'pdf':
         return latex('\\newpage')
+    elif nbconvert_context() == 'html':
+        return html('<P style="page-break-before: always">')
     else:
         return hr()
 
@@ -48,10 +50,10 @@ def table(df, title='', footnote=''):
     else:
         ret = ''
         if title:
-            ret += '### {}'.format(title)
+            ret += '### {}\n'.format(title)
         ret += df.to_html()
         if footnote:
-            ret += footnote
+            ret += '\n' + footnote + '\n'
         return html(ret)
 
 
@@ -112,4 +114,5 @@ def pagenum():
     if nbconvert_context() == 'pdf':
         return latex("\\thepage")
     else:
+        # TODO
         return '[pagenum]'

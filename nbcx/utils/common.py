@@ -15,4 +15,4 @@ def nbconvert_context():
         if os.environ.get('NBCX_CONTEXT', '') == 'html':
             return 'html'
         return 'pdf'
-    return 'html'
+    return ''

@@ -1,6 +1,7 @@
 {%- extends 'full.tpl' -%}
 
 {%- block html_head -%}
+{{ super() }}
 <style type="text/css">
     body {
         font-family: Calibri;
@@ -9,12 +10,18 @@
         font-weight: normal;
         letter-spacing: normal;
         overflow: visible;
-        padding: 8px;
+        padding: 0px;
+    }
+
+    #notebook-container {
+        box-shadow: none;
+        padding: 0px;
     }
 
     div#notebook {
         overflow: visible;
         border-top: none;
+        padding: 0px;
     }
 
     div.cell {
@@ -25,11 +32,6 @@
 
     }
 
-    {%- if resources.global_content_filter.no_prompt-%}
-    div#notebook-container{
-      padding: 6ex 12ex 8ex 12ex;
-    }
-    {%- endif -%}
     @media print {
       div.cell {
         display: block;
@@ -171,7 +173,6 @@
         font-size: 0.75em;
     }
 </style>
-{{ super() }}
 <div class="header"></div>
 {%- endblock html_head -%}
 
@@ -179,6 +180,29 @@
 <div class="footer"></div>
 {{ super() }}
 {%- endblock footer %}
+
+
+{# 
+==============================================================================
+ Cell
+==============================================================================
+#}
+
+{% block any_cell scoped %}
+    {% if "nbcx_ignore" in cell.metadata.get("tags", []) %}
+    {# Do Nothing if nbcx_ignore tag is set #}
+
+    {% elif "nbcx_titlepage" in cell.metadata.get("tags", []) %}
+        {# Title page #}
+        {# Don't include header/footer, and vertically center + logo #}
+        {{ super() }}
+    {% else %}
+        {{ super() }}
+        <P style="page-break-before: always">
+    {% endif %}
+{% endblock any_cell %}
+
+
 
 {% block in_prompt -%}
 {%- endblock in_prompt %}
