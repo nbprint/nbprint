@@ -1,4 +1,5 @@
 from nbconvert.exporters import HTMLExporter
+from nbconvert.filters.highlight import Highlight2HTML
 
 from .template import TemplateOverrideMixin
 
