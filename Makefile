@@ -4,7 +4,7 @@ build:  ## build a sample pdf report
 	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_pdf sample.ipynb  --execute --template nbcx/templates/reports/abc.tex.j2 && open sample.pdf
 
 html:  ## build a sample html report
-	NBCX_CONTEXT=html jupyter nbconvert --to html sample.ipynb  --execute --template nbcx/templates/reports/abc.html.j2 && open sample.html
+	NBCX_CONTEXT=html jupyter nbconvert --to nbcx_html sample.ipynb  --execute --template nbcx/templates/reports/abc.html.j2 && open sample.html
 
 tex:  ## build a sample latext report
 	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_latex sample.ipynb --execute --template nbcx/templates/reports/abc.tex.j2 && code sample.tex
