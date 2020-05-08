@@ -2,7 +2,7 @@
 A framework for customizing NBConvert templates and building reports
 
 [![Build Status](https://dev.azure.com/tpaine154/jupyter/_apis/build/status/timkpaine.nbcx?branchName=master)](https://dev.azure.com/tpaine154/jupyter/_build/latest?definitionId=25&branchName=master)
-[![Coverage](https://img.shields.io/azure-devops/coverage/tpaine154/jupyter/25)](https://dev.azure.com/tpaine154/jupyter/_build?definitionId=25&_a=summary)
+[![Coverage](https://img.shields.io/azure-devops/coverage/tpaine154/jupyter/25/master)](https://dev.azure.com/tpaine154/jupyter/_build?definitionId=25&_a=summary)
 [![GitHub issues](https://img.shields.io/github/issues/timkpaine/nbcx.svg)]()
 [![PyPI](https://img.shields.io/pypi/l/nbcx.svg)](https://pypi.python.org/pypi/nbcx)
 [![PyPI](https://img.shields.io/pypi/v/nbcx.svg)](https://pypi.python.org/pypi/nbcx)
