@@ -47,6 +47,11 @@ class TemplateOverrideMixin:
                 continue
 
             if tag in ('nbcx_lhead', 'nbcx_chead', 'nbcx_rhead', 'nbcx_lfoot', 'nbcx_cfoot', 'nbcx_rfoot'):
+                if tag in ('nbcx_lhead', 'nbcx_chead', 'nbcx_rhead'):
+                    resources['nbcx']['headerrule'] = True
+                if tag in ('nbcx_lfoot', 'nbcx_cfoot', 'nbcx_rfoot'):
+                    resources['nbcx']['footerrule'] = True
+                
                 resources['nbcx']['headers'][tag.replace('nbcx_', '')] = cell
                 remove.append(i)
 
