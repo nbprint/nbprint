@@ -119,4 +119,4 @@ python_junit.xml
 *.fdb_latexmk
 *.fls
 *.ai
-
+example_notebooks/nbcx
