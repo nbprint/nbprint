@@ -42,7 +42,7 @@ class TemplateOverrideMixin:
                 continue
 
             tag = tags[0]
-            if tag in ('nbcx_titlepage', 'nbcx_ignore'):
+            if tag in ('nbcx_title', 'nbcx_ignore'):
                 # don't do anything with these
                 continue
 

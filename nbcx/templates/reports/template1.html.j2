@@ -192,7 +192,7 @@
     {% if "nbcx_ignore" in cell.metadata.get("tags", []) %}
     {# Do Nothing if nbcx_ignore tag is set #}
 
-    {% elif "nbcx_titlepage" in cell.metadata.get("tags", []) %}
+    {% elif "nbcx_title" in cell.metadata.get("tags", []) %}
         {# Title page #}
         {# Don't include header/footer, and vertically center + logo #}
         {{ super() }}

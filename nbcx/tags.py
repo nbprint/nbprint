@@ -3,7 +3,7 @@ from enum import Enum
 
 class Tags(Enum):
     # Title Page
-    TITLEPAGE = 'nbcx_titlepage'
+    TITLEPAGE = 'nbcx_title'
 
     # Header
     LHEAD = 'nbcx_lhead'
