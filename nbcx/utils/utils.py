@@ -57,7 +57,7 @@ def table(df, title='', footnote=''):
         return html(ret)
 
 
-def image(path, **kwargs):
+def image(data=None, path=None, **kwargs):
     '''display a image'''
     # measure in pixels for html, but cm for latex
     width = kwargs.get('width', '')
@@ -106,7 +106,9 @@ def image(path, **kwargs):
     metadata['heightcm'] = heightcm
     metadata['align'] = align
 
-    return Image(filename=path, metadata=metadata, **kwargs)
+    if path:
+        return Image(filename=path, metadata=metadata, **kwargs)
+    return Image(data=data, metadata=metadata, **kwargs)
 
 
 def pagenum():

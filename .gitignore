@@ -120,3 +120,5 @@ python_junit.xml
 *.fls
 *.ai
 example_notebooks/nbcx
+example_notebooks/*_files/
+*.ipynb
