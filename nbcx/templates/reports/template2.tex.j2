@@ -39,7 +39,7 @@
     ((* else *))
         ((* if cell.outputs *))
             \pagestyle{fancy}
-            ((( super() )))
+            ((( draw_cell_custom(cell, draw_figure_asis) )))
         ((* endif *))
     ((* endif *))
 ((* endblock any_cell *))

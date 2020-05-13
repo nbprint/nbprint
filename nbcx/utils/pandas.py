@@ -1244,21 +1244,24 @@ def _setup_screenshot(driver, path):
     ''' Grab screenshot of browser rendered HTML.
         Ensure the browser is sized to display all the HTML content. '''
     # Ref: https://stackoverflow.com/a/52572919/
-    original_size = driver.get_window_size()
-    required_width = driver.execute_script('return document.body.parentNode.scrollWidth')
-    required_height = driver.execute_script('return document.body.parentNode.scrollHeight')
-    driver.set_window_size(required_width, required_height)
-    # driver.save_screenshot(path)  # has scrollbar
-    driver.find_element_by_tag_name('body').screenshot(path)  # avoids scrollbar
-    driver.set_window_size(original_size['width'], original_size['height'])
+    driver.set_window_size(3000,800)
+    # required_width = driver.execute_script('return document.body.parentNode.scrollWidth')
+    # required_height = driver.execute_script('return document.body.parentNode.scrollHeight')
+    # driver.set_window_size(required_width, required_height)
+    driver.save_screenshot(path)  # has scrollbar
+    driver.find_element_by_tag_name('table').screenshot(path)  # avoids scrollbar
+    # driver.find_element_by_tag_name('table').screenshot(path)  # avoids scrollbar
+    # driver.set_window_size(original_size['width'], original_size['height'])
 
 
-def _getTableImage(url, filename='dummy_table', path='.', delay=5, height=420, width=800):
+def _getTableImage(url, filename='dummy_table', path='.', delay=3, height=420, width=800):
     ''' Render HTML file in browser and grab a screenshot. '''
     from selenium import webdriver
     from selenium.webdriver.chrome.options import Options
     options = Options()
     options.add_argument("--headless")
+    options.add_argument("--hide-scrollbars")
+
     browser = webdriver.Chrome(chrome_options=options)
     browser.get(url)
     # Give the html some time to load
@@ -1270,28 +1273,27 @@ def _getTableImage(url, filename='dummy_table', path='.', delay=5, height=420, w
     return imgpath
 
 
-def table_to_png(df_or_series_or_styler, filename='testhtml'):
-    ''' Save HTML table as: {basepath}/{path}/{fnstub}.png '''
-    if nbconvert_context() == 'pdf':
-        with TemporaryDirectory() as dir:
-            file_full_path = '{}/{}.html'.format(dir, filename)
-            tmpurl = 'file://{}'.format(file_full_path)
+def table_to_png(df_or_series_or_styler, **kwargs):
+    # if nbconvert_context() == 'pdf':
+    with TemporaryDirectory() as dir:
+        file_full_path = '{}/{}.html'.format(dir, "temp")
+        tmpurl = 'file://{}'.format(file_full_path)
 
-            if isinstance(df_or_series_or_styler, pd.DataFrame):
-                tablehtml = df_or_series_or_styler.to_html()
-            elif isinstance(df_or_series_or_styler, pd.Series):
-                tablehtml = df_or_series_or_styler.to_html()
-            else:
-                tablehtml = df_or_series_or_styler.render()
+        if isinstance(df_or_series_or_styler, pd.DataFrame):
+            tablehtml = df_or_series_or_styler.to_html()
+        elif isinstance(df_or_series_or_styler, pd.Series):
+            tablehtml = df_or_series_or_styler.to_html()
+        else:
+            tablehtml = df_or_series_or_styler.render()
 
-            doc = '<html><head>{}</head><body><div class="jp-RenderedHTMLCommon">{}</div>'.format(_JUPYTERLAB_STYLE, tablehtml)
-            with open(file_full_path, 'w') as out:
-                out.write(doc)
-            with open(_getTableImage(tmpurl, filename, dir), 'rb') as fp:
-                return image(fp.read())
-    else:
-        # defer to native rendering
-        return df_or_series_or_styler
+        doc = '<html><head>{}</head><body><div class="jp-RenderedHTMLCommon">{}</div>'.format(_JUPYTERLAB_STYLE, tablehtml)
+        with open(file_full_path, 'w') as out:
+            out.write(doc)
+        with open(_getTableImage(tmpurl, "temp", dir), 'rb') as fp:
+            return image(fp.read())
+    # else:
+    #     # defer to native rendering
+    #     return df_or_series_or_styler
 
 
 def html_to_png_imgkit(tablehtml):

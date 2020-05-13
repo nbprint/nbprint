@@ -110,6 +110,7 @@ venv.bak/
 *.aux
 *.out
 *.synctex.gz
+.DS_Store
 sample_files/
 docs/index.md
 docs/api

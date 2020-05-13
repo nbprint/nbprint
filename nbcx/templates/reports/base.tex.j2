@@ -84,6 +84,24 @@
 ((* endblock figure_fullwidth *))
 ((*- endmacro *))
 
+
+((* macro draw_figure_asis(filename, align) -*))
+((* set filename = filename | posix_path *))
+((*- block figure_asis scoped -*))
+
+    ((*- if align == "center"-*))
+        \begin{(((align|default('center'))))}
+    ((*- endif -*))
+
+    \includegraphics[scale=1]{(((filename)))}
+
+    ((*- if align == "center"-*))
+        \end{(((align|default('center'))))}
+    ((*- endif -*))
+
+((*- endblock figure_asis -*))
+((*- endmacro *))
+
 %==============================================================================
 % A custom cell drawing method
 %==============================================================================
