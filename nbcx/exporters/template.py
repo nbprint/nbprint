@@ -31,7 +31,6 @@ class TemplateOverrideMixin:
         resources['nbcx'] = {}
         resources['nbcx']['headers'] = {}
 
-        remove = []
         for i, cell in enumerate(nb_copy.cells):
             tags = [t for t in cell.metadata.get('tags', []) if t.startswith('nbcx_')]
             if len(tags) > 1:
@@ -42,15 +41,19 @@ class TemplateOverrideMixin:
                 continue
 
             tag = tags[0]
-            if tag in ('nbcx_titlepage', 'nbcx_ignore'):
+            if tag in ('nbcx_title', 'nbcx_ignore'):
                 # don't do anything with these
                 continue
+            elif tag in ('nbcx_title',):
+                resources['nbcx'][tag.replace('nbcx_', '')] = cell
 
-            if tag in ('nbcx_lhead', 'nbcx_chead', 'nbcx_rhead', 'nbcx_lfoot', 'nbcx_cfoot', 'nbcx_rfoot'):
+            elif tag in ('nbcx_lhead', 'nbcx_chead', 'nbcx_rhead', 'nbcx_lfoot', 'nbcx_cfoot', 'nbcx_rfoot'):
+                if tag in ('nbcx_lhead', 'nbcx_chead', 'nbcx_rhead'):
+                    resources['nbcx']['headerrule'] = True
+                if tag in ('nbcx_lfoot', 'nbcx_cfoot', 'nbcx_rfoot'):
+                    resources['nbcx']['footerrule'] = True
+
                 resources['nbcx']['headers'][tag.replace('nbcx_', '')] = cell
-                remove.append(i)
-
-        nb_copy.cells = [cell for i, cell in enumerate(nb_copy.cells) if i not in remove]
         # ********************************************** #
 
         # ********************************************** #

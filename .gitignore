@@ -110,6 +110,7 @@ venv.bak/
 *.aux
 *.out
 *.synctex.gz
+.DS_Store
 sample_files/
 docs/index.md
 docs/api
@@ -119,4 +120,6 @@ python_junit.xml
 *.fdb_latexmk
 *.fls
 *.ai
-
+example_notebooks/nbcx
+example_notebooks/*_files/
+*.ipynb

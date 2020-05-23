@@ -1,20 +1,36 @@
 PYTHON=python3.7
 
+TEMPLATE=1
+
 build:  ## build a sample pdf report
-	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_pdf sample.ipynb  --execute --template nbcx/templates/reports/abc.tex.j2 && open sample.pdf
+	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_pdf example_notebooks/template${TEMPLATE}.ipynb  --execute --template nbcx_template${TEMPLATE}_pdf && open example_notebooks/template${TEMPLATE}.pdf
 
 html:  ## build a sample html report
-	NBCX_CONTEXT=html jupyter nbconvert --to nbcx_html sample.ipynb  --execute --template nbcx/templates/reports/abc.html.j2 && open sample.html
+	NBCX_CONTEXT=html jupyter nbconvert --to nbcx_html example_notebooks/template${TEMPLATE}.ipynb  --execute --template nbcx_template${TEMPLATE}_html && /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome example_notebooks/template${TEMPLATE}.html
 
 tex:  ## build a sample latext report
-	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_latex sample.ipynb --execute --template nbcx/templates/reports/abc.tex.j2 && code sample.tex
+	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_latex example_notebooks/template${TEMPLATE}.ipynb --execute --template nbcx_template${TEMPLATE}_pdf && code example_notebooks/template${TEMPLATE}.tex
+
+build1:  ## build pdf first template
+	make build TEMPLATE=1 
+
+html1:  ## build html first template
+	make html TEMPLATE=1 
+
+tex1:  ## build tex first template
+	make tex TEMPLATE=1 
+
+build2:  ## build pdf first template
+	make build TEMPLATE=2
+
+html2:  ## build html first template
+	make html TEMPLATE=2
+
+tex2:  ## build tex first template
+	make tex TEMPLATE=2
 
 tests: lint ## run the tests
-	${PYTHON} -m pytest -v nbcx/tests --cov=nbcx --junitxml=python_junit.xml --cov-report=xml --cov-branch
-	make tex
-	make build
-	make html
-
+	${PYTHON} -m pytest -vv nbcx/tests --cov=nbcx --junitxml=python_junit.xml --cov-report=xml --cov-branch
 
 lint: ## run linter
 	python3.7 -m flake8 nbcx 
@@ -25,6 +41,7 @@ clean: ## clean the repository
 	find . -name ".ipynb_checkpoints" | xargs  rm -rf 
 	rm -rf .coverage cover htmlcov logs build dist *.egg-info lib node_modules .pytest_cache coverage.xml python_junit.xml docs/nbcx docs/examples .pytest_cache .coverage coverage.xml sample_files sample.out sample.tex
 	git clean -fd
+	rm -rf *.fdb_latexmk *.aux *.fls *.log *.pdf *.synctex*
 	make -C ./docs clean
 
 docs:  ## make documentation
@@ -51,4 +68,4 @@ help:
 print-%:
 	@echo '$*=$($*)'
 
-.PHONY: clean install serverextension labextension test tests help docs dist
+.PHONY: clean install serverextension labextension test tests help docs dist build build1 build2 tex tex1 tex2 html html1 html2
