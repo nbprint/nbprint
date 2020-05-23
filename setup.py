@@ -17,8 +17,9 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 requires = [
     "dominate>=2.5.1",
+    "IPython>=7.13.0",
+    "jupyter_client>=6.1.3",
     "nbconvert>=6.0.0a1",
-    "IPython>=7.13.0"
 ]
 
 setup(
