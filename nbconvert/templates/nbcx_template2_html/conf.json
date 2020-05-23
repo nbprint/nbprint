@@ -1,0 +1,6 @@
+{
+    "base_template": "nbcx_base",
+    "mimetypes": {
+        "text/html": true
+    }
+}

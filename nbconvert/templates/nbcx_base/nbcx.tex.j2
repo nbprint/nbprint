@@ -40,6 +40,8 @@
     \usepackage{helvet}
     \renewcommand{\familydefault}{\sfdefault}
     \usepackage{layout}
+    \usepackage{threeparttable}
+    \usepackage{grid-system}
 
 ((*- endblock packages -*))
 
@@ -52,11 +54,9 @@
 ((* macro draw_figure_better(filename, width, height, align) -*))
 ((* set filename = filename | posix_path *))
 ((*- block figure_better scoped -*))
-
     ((*- if align == "center"-*))
         \begin{(((align|default('center'))))}
     ((*- endif -*))
-
         ((*- if width|default(0) and height|default(0) -*))
             \Oldincludegraphics[width=(((width))),height=(((height)))]{(((filename)))}
         ((*- elif width|default(0) -*))
@@ -66,7 +66,6 @@
         ((*- else -*))
             \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{((( filename )))}
         ((*- endif -*))
-
     ((*- if align == "center"-*))
         \end{(((align|default('center'))))}
     ((*- endif -*))
@@ -76,12 +75,12 @@
 % Draw a figure using the graphicx package.
 ((* macro draw_figure_fullwidth(filename) -*))
 ((* set filename = filename | posix_path *))
-((* block figure_fullwidth scoped *))
+((*- block figure_fullwidth scoped -*))
         \vspace{-10cm}
         \begin{center}
         \noindent\makebox[\textwidth]{\includegraphics[width=\paperwidth]{((( filename )))}}
         \end{center}
-((* endblock figure_fullwidth *))
+((*- endblock figure_fullwidth -*))
 ((*- endmacro *))
 
 
