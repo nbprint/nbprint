@@ -15,7 +15,7 @@ NBConvert's default templates are largely designed with academic styling. This r
 |||
 |:--|:--|
 |Sample - PDF||
-|[![sample.pdf](examples/sample.png)](examples/sample.pdf)|[Template](nbcx/templates/reports/abc.tex.j2)|
+|[![sample.pdf](examples/template1.png)](examples/template1.pdf)|[Template](nbcx/templates/reports/abc.tex.j2)|
 
 
 ## Getting started
