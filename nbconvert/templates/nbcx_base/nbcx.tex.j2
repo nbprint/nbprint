@@ -39,6 +39,9 @@
      ((( super() )))
     \usepackage{helvet}
     \renewcommand{\familydefault}{\sfdefault}
+    \usepackage{layout}
+    \usepackage{threeparttable}
+    \usepackage{grid-system}
 
 ((*- endblock packages -*))
 
@@ -50,12 +53,10 @@
 % Draw a figure using the graphicx package.
 ((* macro draw_figure_better(filename, width, height, align) -*))
 ((* set filename = filename | posix_path *))
-((*- block figure scoped -*))
-
+((*- block figure_better scoped -*))
     ((*- if align == "center"-*))
         \begin{(((align|default('center'))))}
     ((*- endif -*))
-
         ((*- if width|default(0) and height|default(0) -*))
             \Oldincludegraphics[width=(((width))),height=(((height)))]{(((filename)))}
         ((*- elif width|default(0) -*))
@@ -65,12 +66,108 @@
         ((*- else -*))
             \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{((( filename )))}
         ((*- endif -*))
+    ((*- if align == "center"-*))
+        \end{(((align|default('center'))))}
+    ((*- endif -*))
+((*- endblock figure_better -*))
+((*- endmacro *))
+
+% Draw a figure using the graphicx package.
+((* macro draw_figure_fullwidth(filename) -*))
+((* set filename = filename | posix_path *))
+((*- block figure_fullwidth scoped -*))
+        \vspace{-10cm}
+        \begin{center}
+        \noindent\makebox[\textwidth]{\includegraphics[width=\paperwidth]{((( filename )))}}
+        \end{center}
+((*- endblock figure_fullwidth -*))
+((*- endmacro *))
+
+
+((* macro draw_figure_asis(filename, align) -*))
+((* set filename = filename | posix_path *))
+((*- block figure_asis scoped -*))
+
+    ((*- if align == "center"-*))
+        \begin{(((align|default('center'))))}
+    ((*- endif -*))
+
+    \includegraphics[scale=1]{(((filename)))}
 
     ((*- if align == "center"-*))
         \end{(((align|default('center'))))}
     ((*- endif -*))
-((*- endblock figure -*))
+
+((*- endblock figure_asis -*))
 ((*- endmacro *))
+
+%==============================================================================
+% A custom cell drawing method
+%==============================================================================
+((* macro draw_cell_custom(cell, draw_method) -*))
+((* set draw_method = draw_method | default(draw_figure) *))
+((*- if cell.cell_type == 'code'-*)) 
+    ((*- if resources.global_content_filter.include_code -*))
+        ((*- if cell.outputs and resources.global_content_filter.include_output -*))
+            ((*- for output in cell.outputs -*))
+                    ((*- if output.output_type == 'execute_result' -*))
+                        ((*- for type in output.data | filter_data_type -*))
+                            ((*- if type == 'application/pdf' -*))
+                                ((( draw_method(output.metadata.filenames['application/pdf']) )))
+                            ((*- elif type == 'image/svg+xml' -*))
+                                ((( draw_method(output.metadata.filenames['image/svg+xml']) )))
+                            ((*- elif type == 'image/png' -*))
+                                ((( draw_method(output.metadata.filenames['image/png']) )))
+                            ((*- elif type == 'text/markdown' -*))
+                                ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'latex'))))
+                            ((*- elif type == 'image/jpeg' -*))
+                                ((( draw_method(output.metadata.filenames['image/jpeg'], output.metadata['image/jpeg']['widthcm'], output.metadata['image/jpeg']['heightcm'], output.metadata['image/jpeg']['align']) )))
+                            ((*- elif type == 'text/plain' -*))
+                                \begin{Verbatim}[commandchars=\\\{\}]
+                                    ((( output.data['text/plain'] | escape_latex | ansi2latex )))
+                                \end{Verbatim}
+                            ((*- elif type == 'text/latex' -*))
+                                ((( output.data['text/latex'] | strip_files_prefix )))
+                            ((*- endif -*))
+                        ((*- endfor -*))
+                    ((*- elif output.output_type == 'stream' -*))
+                        \begin{Verbatim}[commandchars=\\\{\}]
+                            ((( output.text | escape_latex | ansi2latex )))
+                        \end{Verbatim}
+                    ((*- elif output.output_type == 'display_data' -*))
+                        ((*- for type in output.data | filter_data_type -*))
+                            ((*- if type == 'application/pdf' -*))
+                                ((( draw_method(output.metadata.filenames['application/pdf']) )))
+                            ((*- elif type == 'image/svg+xml' -*))
+                                ((( draw_method(output.metadata.filenames['image/svg+xml']) )))
+                            ((*- elif type == 'image/png' -*))
+                                ((( draw_method(output.metadata.filenames['image/png']) )))
+                            ((*- elif type == 'text/markdown' -*))
+                                ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'latex'))))
+                            ((*- elif type == 'image/jpeg' -*))
+                                ((( draw_method(output.metadata.filenames['image/jpeg'], output.metadata['image/jpeg']['widthcm'], output.metadata['image/jpeg']['heightcm'], output.metadata['image/jpeg']['align']) )))
+                            ((*- elif type == 'text/plain' -*))
+                                \begin{Verbatim}[commandchars=\\\{\}]
+                                    ((( output.data['text/plain'] | escape_latex | ansi2latex )))
+                                \end{Verbatim}
+                            ((*- elif type == 'text/latex' -*))
+                                ((( output.data['text/latex'] | strip_files_prefix )))
+                            ((*- endif -*))
+                        ((*- endfor -*))
+                    ((*- endif -*))
+            ((*- endfor -*))
+        ((*- endif -*))
+    ((*- endif -*))
+((*- elif cell.cell_type in ['markdown'] -*))
+    ((*- if resources.global_content_filter.include_markdown and not cell.get("transient",{}).get("remove_source", false) -*))
+        ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
+    ((*- endif -*))
+((*- endif -*))
+((*- endmacro *))
+
+
+
+
 
 %==============================================================================
 % Margins
@@ -88,63 +185,7 @@
     ((*- for key, value in resources.nbcx.headers.items() -*))
     \(((key))){
         ((*- set cell = value -*))
-        ((*- if cell.cell_type == 'code'-*)) 
-            ((*- if resources.global_content_filter.include_code -*))
-                ((*- if cell.outputs and resources.global_content_filter.include_output -*))
-                    ((*- for output in cell.outputs -*))
-                            ((*- if output.output_type == 'execute_result' -*))
-                                ((*- for type in output.data | filter_data_type -*))
-                                    ((*- if type == 'application/pdf' -*))
-                                        ((( draw_figure_better(output.metadata.filenames['application/pdf']) )))
-                                    ((*- elif type == 'image/svg+xml' -*))
-                                        ((( draw_figure_better(output.metadata.filenames['image/svg+xml']) )))
-                                    ((*- elif type == 'image/png' -*))
-                                        ((( draw_figure_better(output.metadata.filenames['image/png']) )))
-                                    ((*- elif type == 'text/markdown' -*))
-                                        ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'latex'))))
-                                    ((*- elif type == 'image/jpeg' -*))
-                                        ((( draw_figure_better(output.metadata.filenames['image/jpeg'], output.metadata['image/jpeg']['widthcm'], output.metadata['image/jpeg']['heightcm'], output.metadata['image/jpeg']['align']) )))
-                                    ((*- elif type == 'text/plain' -*))
-                                        \begin{Verbatim}[commandchars=\\\{\}]
-                                            ((( output.data['text/plain'] | escape_latex | ansi2latex )))
-                                        \end{Verbatim}
-                                    ((*- elif type == 'text/latex' -*))
-                                        ((( output.data['text/latex'] | strip_files_prefix )))
-                                    ((*- endif -*))
-                                ((*- endfor -*))
-                            ((*- elif output.output_type == 'stream' -*))
-                                \begin{Verbatim}[commandchars=\\\{\}]
-                                    ((( output.text | escape_latex | ansi2latex )))
-                                \end{Verbatim}
-                            ((*- elif output.output_type == 'display_data' -*))
-                                ((*- for type in output.data | filter_data_type -*))
-                                    ((*- if type == 'application/pdf' -*))
-                                        ((( draw_figure_better(output.metadata.filenames['application/pdf']) )))
-                                    ((*- elif type == 'image/svg+xml' -*))
-                                        ((( draw_figure_better(output.metadata.filenames['image/svg+xml']) )))
-                                    ((*- elif type == 'image/png' -*))
-                                        ((( draw_figure_better(output.metadata.filenames['image/png']) )))
-                                    ((*- elif type == 'text/markdown' -*))
-                                        ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'latex'))))
-                                    ((*- elif type == 'image/jpeg' -*))
-                                        ((( draw_figure_better(output.metadata.filenames['image/jpeg'], output.metadata['image/jpeg']['widthcm'], output.metadata['image/jpeg']['heightcm'], output.metadata['image/jpeg']['align']) )))
-                                    ((*- elif type == 'text/plain' -*))
-                                        \begin{Verbatim}[commandchars=\\\{\}]
-                                            ((( output.data['text/plain'] | escape_latex | ansi2latex )))
-                                        \end{Verbatim}
-                                    ((*- elif type == 'text/latex' -*))
-                                        ((( output.data['text/latex'] | strip_files_prefix )))
-                                    ((*- endif -*))
-                                ((*- endfor -*))
-                            ((*- endif -*))
-                    ((*- endfor -*))
-                ((*- endif -*))
-            ((*- endif -*))
-        ((*- elif cell.cell_type in ['markdown'] -*))
-            ((*- if resources.global_content_filter.include_markdown and not cell.get("transient",{}).get("remove_source", false) -*))
-                ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
-            ((*- endif -*))
-        ((*- endif -*))
+        ((( draw_cell_custom(value, draw_figure_better) )))
     }
     ((* endfor *))
     ((* endif *))
@@ -153,10 +194,18 @@
     \futurelet\TMPfootrule\def\footrule{{\color{black}\TMPfootrule}}
 
     % Header horizontal rule
-    \renewcommand{\headrulewidth}{.5pt}    % bar on bottom of page
+    ((* if resources.nbcx.headerrule *))
+        \renewcommand{\headrulewidth}{.5pt}
+    ((* else *))
+        \renewcommand{\headrulewidth}{0pt}
+    ((* endif *))
     
     % Footer horizontal rule
-    \renewcommand{\footrulewidth}{.5pt}    % bar on bottom of page
+    ((* if resources.nbcx.footerrule *))
+        \renewcommand{\footrulewidth}{.5pt}
+    ((* else *))
+        \renewcommand{\footrulewidth}{0pt}
+    ((* endif *))
 
     \let\Origsection\section
     \let\Origsubsection\subsection
@@ -275,38 +324,12 @@
 ((*- endblock definitions -*))
 
 
-
-
-
 %==============================================================================
 % Title
 %==============================================================================
 ((* block maketitle *))
 % \maketitle
 ((* endblock maketitle *))
-
-
-%==============================================================================
-% Cell
-%==============================================================================
-((* block any_cell scoped *))
-    ((* if "nbcx_ignore" in cell.metadata.get("tags", []) *)) 
-    % Do Nothing if nbcx_ignore tag is set
-    ((* elif "nbcx_titlepage" in cell.metadata.get("tags", []) *)) 
-        % Title page
-        % Don't include header/footer, and vertically center + logo
-        \pagestyle{empty}
-        \vspace*{\fill}
-        ((( super() )))
-        \vspace*{\fill}
-        \newpage
-    ((* else *))
-        \pagestyle{fancy}
-        ((( super() )))
-        \newpage
-    ((* endif *))
-((* endblock any_cell *))
-
 
 
 %===============================================================================
