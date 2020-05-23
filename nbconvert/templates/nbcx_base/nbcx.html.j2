@@ -1,0 +1,103 @@
+{%- extends 'lab/index.html.j2' -%}
+
+{%- block html_head_js -%}
+<script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js"></script>
+{{ super() }}
+{%- endblock html_head_js -%}
+
+
+{% block extra_css %}
+{{ resources.include_css("nbcx_base/jupyter_style.css") }}
+{{ resources.include_css("nbcx_base/style.css") }}
+{% endblock extra_css %}
+
+{# ====
+No notebook
+=== #}
+{% block notebook_css %}
+{% endblock notebook_css %}
+
+{# ====
+No custom CSS
+=== #}
+{% block custom_css %}
+{% endblock custom_css %}
+
+
+
+
+{% block body_header %}
+<body>
+  <div class="header"></div>
+  <div tabindex="-1" id="notebook" class="border-box-sizing">
+    <div class="container" id="notebook-container">
+{% endblock body_header %}
+
+{% block body_footer %}
+    </div>
+  </div>
+  <div class="footer"></div>
+</body>
+{% endblock body_footer %}
+
+
+{# 
+==============================================================================
+ Cell
+==============================================================================
+#}
+
+{% block any_cell scoped %}
+    {% if "nbcx_ignore" in cell.metadata.get("tags", []) %}
+    {# Do Nothing if nbcx_ignore tag is set #}
+
+    {% elif "nbcx_title" in cell.metadata.get("tags", []) %}
+        {# Title page #}
+        {# Don't include header/footer, and vertically center + logo #}
+        {{ super() }}
+    {% else %}
+        {{ super() }}
+    {% endif %}
+{% endblock any_cell %}
+
+
+
+{%- block data_widget_state scoped %}
+{% set div_id = uuid4() %}
+{% set datatype_list = output.data | filter_data_type %}
+{% set datatype = datatype_list[0]%}
+<div id="{{ div_id }}"></div>
+<div class="output_subarea output_widget_state {{ extra_class }}">
+<script type="{{ datatype }}">
+{{ output.data[datatype] | json_dumps }}
+</script>
+</div>
+{%- endblock data_widget_state -%}
+{%- block data_widget_view scoped %}
+{% set div_id = uuid4() %}
+{% set datatype_list = output.data | filter_data_type %}
+{% set datatype = datatype_list[0]%}
+<div id="{{ div_id }}"></div>
+<div class="jupyter-widgets jp-OutputArea-output {{ extra_class }}">
+<script type="{{ datatype }}">
+{{ output.data[datatype] | json_dumps }}
+</script>
+</div>
+{%- endblock data_widget_view -%}
+
+
+{% block in_prompt -%}
+{%- endblock in_prompt %}
+
+{% block input_group -%}
+{% endblock input_group %}
+
+{% block input %}
+{%- endblock input %}
+
+{% block empty_in_prompt -%}
+{%- endblock empty_in_prompt %}
+
+{% block output_area_prompt %}
+{% endblock output_area_prompt %}
+

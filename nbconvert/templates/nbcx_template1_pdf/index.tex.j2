@@ -1,0 +1,39 @@
+%==============================================================================
+% Extends base template
+%==============================================================================
+((*- extends 'nbcx.tex.j2' -*))
+
+%==============================================================================
+% Cell
+%==============================================================================
+((* block any_cell scoped *))
+((* if "nbcx_ignore" in cell.metadata.get("tags", []) *)) 
+% Do Nothing if nbcx_ignore tag is set
+((* elif "nbcx_lhead" in cell.metadata.get("tags", []) *)) 
+% Ignore headers and footers
+((* elif "nbcx_rhead" in cell.metadata.get("tags", []) *)) 
+% Ignore headers and footers
+((* elif "nbcx_chead" in cell.metadata.get("tags", []) *)) 
+% Ignore headers and footers
+((* elif "nbcx_lfoot" in cell.metadata.get("tags", []) *)) 
+% Ignore headers and footers
+((* elif "nbcx_rfoot" in cell.metadata.get("tags", []) *)) 
+% Ignore headers and footers
+((* elif "nbcx_cfoot" in cell.metadata.get("tags", []) *)) 
+% Ignore headers and footers
+((* elif "nbcx_title" in cell.metadata.get("tags", []) *)) 
+% Title page
+% Don't include header/footer, and vertically center + logo
+\thispagestyle{empty}
+\setlength{\voffset}{-0.75in}
+\setlength{\headsep}{5pt}
+((( draw_cell_custom(cell, draw_figure_fullwidth) )))
+\newpage
+\setlength{\voffset}{0.5in}
+((* else *))
+((* if cell.outputs *))
+\pagestyle{fancy}
+((( draw_cell_custom(cell, draw_figure_asis) )))
+((* endif *))
+((* endif *))
+((* endblock any_cell *))
