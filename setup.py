@@ -22,6 +22,7 @@ requires = [
     "ipywidgets>=7.5.1",
     "jupyter_client>=6.1.3",
     "nbconvert>=6.0.0a1",
+    "pandas>=0.17.1",
 ]
 
 def get_data_files():
