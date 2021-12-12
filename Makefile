@@ -1,6 +1,6 @@
 TEMPLATE=1
 
-build:  ## build a sample pdf report
+buildtpl:  ## build a sample pdf report
 	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_pdf example_notebooks/template${TEMPLATE}.ipynb  --execute --template nbcx_template${TEMPLATE}_pdf && open example_notebooks/template${TEMPLATE}.pdf
 
 html:  ## build a sample html report
@@ -10,7 +10,7 @@ tex:  ## build a sample latext report
 	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_latex example_notebooks/template${TEMPLATE}.ipynb --execute --template nbcx_template${TEMPLATE}_pdf && code example_notebooks/template${TEMPLATE}.tex
 
 build1:  ## build pdf first template
-	make build TEMPLATE=1 
+	make buildtpl TEMPLATE=1 
 
 html1:  ## build html first template
 	make html TEMPLATE=1 
@@ -19,13 +19,16 @@ tex1:  ## build tex first template
 	make tex TEMPLATE=1 
 
 build2:  ## build pdf first template
-	make build TEMPLATE=2
+	make buildtpl TEMPLATE=2
 
 html2:  ## build html first template
 	make html TEMPLATE=2
 
 tex2:  ## build tex first template
 	make tex TEMPLATE=2
+
+build: ## build python
+	python setup.py build
 
 tests: lint ## run the tests
 	python -m pytest -vv nbcx/tests --cov=nbcx --junitxml=python_junit.xml --cov-report=xml --cov-branch
