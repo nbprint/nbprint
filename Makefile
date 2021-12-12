@@ -1,8 +1,6 @@
-PYTHON=python3.7
-
 TEMPLATE=1
 
-build:  ## build a sample pdf report
+buildtpl:  ## build a sample pdf report
 	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_pdf example_notebooks/template${TEMPLATE}.ipynb  --execute --template nbcx_template${TEMPLATE}_pdf && open example_notebooks/template${TEMPLATE}.pdf
 
 html:  ## build a sample html report
@@ -12,7 +10,7 @@ tex:  ## build a sample latext report
 	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_latex example_notebooks/template${TEMPLATE}.ipynb --execute --template nbcx_template${TEMPLATE}_pdf && code example_notebooks/template${TEMPLATE}.tex
 
 build1:  ## build pdf first template
-	make build TEMPLATE=1 
+	make buildtpl TEMPLATE=1 
 
 html1:  ## build html first template
 	make html TEMPLATE=1 
@@ -21,7 +19,7 @@ tex1:  ## build tex first template
 	make tex TEMPLATE=1 
 
 build2:  ## build pdf first template
-	make build TEMPLATE=2
+	make buildtpl TEMPLATE=2
 
 html2:  ## build html first template
 	make html TEMPLATE=2
@@ -29,11 +27,17 @@ html2:  ## build html first template
 tex2:  ## build tex first template
 	make tex TEMPLATE=2
 
+build: ## build python
+	python setup.py build
+
 tests: lint ## run the tests
-	${PYTHON} -m pytest -vv nbcx/tests --cov=nbcx --junitxml=python_junit.xml --cov-report=xml --cov-branch
+	python -m pytest -vv nbcx/tests --cov=nbcx --junitxml=python_junit.xml --cov-report=xml --cov-branch
 
 lint: ## run linter
-	python3.7 -m flake8 nbcx 
+	python -m flake8 nbcx setup.py docs/conf.py
+
+fix:  ## run black fix
+	python -m black nbcx/ setup.py docs/conf.py
 
 clean: ## clean the repository
 	find . -name "__pycache__" | xargs  rm -rf 
@@ -49,16 +53,15 @@ docs:  ## make documentation
 	open ./docs/_build/html/index.html
 
 install:  ## install to site-packages
-	${PYTHON} -m pip install .
+	python -m pip install .
 
-fix:  ## run autopep8/tslint fix
-	python3.7 -m autopep8 --in-place -r -a -a nbcx/
-
-dist:  ## dist to pypi
+dist:  ## create dists
 	rm -rf dist build
-	${PYTHON} setup.py sdist
-	${PYTHON} setup.py bdist_wheel
-	twine check dist/* && twine upload dist/*
+	python setup.py sdist bdist_wheel
+	python -m twine check dist/*
+	
+publish: dist  ## dist to pypi
+	python -m twine upload dist/* --skip-existing
 
 # Thanks to Francoise at marmelab.com for this
 .DEFAULT_GOAL := help
