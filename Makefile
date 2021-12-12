@@ -1,5 +1,3 @@
-PYTHON=python3.7
-
 TEMPLATE=1
 
 build:  ## build a sample pdf report
@@ -30,7 +28,7 @@ tex2:  ## build tex first template
 	make tex TEMPLATE=2
 
 tests: lint ## run the tests
-	${PYTHON} -m pytest -vv nbcx/tests --cov=nbcx --junitxml=python_junit.xml --cov-report=xml --cov-branch
+	python -m pytest -vv nbcx/tests --cov=nbcx --junitxml=python_junit.xml --cov-report=xml --cov-branch
 
 lint: ## run linter
 	python -m flake8 nbcx setup.py docs/conf.py
@@ -52,7 +50,7 @@ docs:  ## make documentation
 	open ./docs/_build/html/index.html
 
 install:  ## install to site-packages
-	${PYTHON} -m pip install .
+	python -m pip install .
 
 dist:  ## create dists
 	rm -rf dist build
