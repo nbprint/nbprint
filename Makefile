@@ -33,7 +33,10 @@ tests: lint ## run the tests
 	${PYTHON} -m pytest -vv nbcx/tests --cov=nbcx --junitxml=python_junit.xml --cov-report=xml --cov-branch
 
 lint: ## run linter
-	python3.7 -m flake8 nbcx 
+	python -m flake8 nbcx setup.py docs/conf.py
+
+fix:  ## run black fix
+	python -m black nbcx/ setup.py docs/conf.py
 
 clean: ## clean the repository
 	find . -name "__pycache__" | xargs  rm -rf 
@@ -51,14 +54,13 @@ docs:  ## make documentation
 install:  ## install to site-packages
 	${PYTHON} -m pip install .
 
-fix:  ## run autopep8/tslint fix
-	python3.7 -m autopep8 --in-place -r -a -a nbcx/
-
-dist:  ## dist to pypi
+dist:  ## create dists
 	rm -rf dist build
-	${PYTHON} setup.py sdist
-	${PYTHON} setup.py bdist_wheel
-	twine check dist/* && twine upload dist/*
+	python setup.py sdist bdist_wheel
+	python -m twine check dist/*
+	
+publish: dist  ## dist to pypi
+	python -m twine upload dist/* --skip-existing
 
 # Thanks to Francoise at marmelab.com for this
 .DEFAULT_GOAL := help
