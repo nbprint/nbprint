@@ -21,6 +21,7 @@ requires = [
     "jupyter_client>=6.1.3",
     "nbconvert>=6.0.0a1",
     "pandas>=0.17.1",
+    "testpath",
 ]
 
 requires_dev = requires + [
