@@ -1,0 +1,154 @@
+
+:root {
+    --background: whitesmoke;
+    --pagedjs-width: 8.5in;
+    --pagedjs-height: 11in;
+    --color-paper: white;
+    --color-mbox: rgba(0, 0, 0, 0.2);
+    --running-title-width: 2.5in;
+    --screen-pages-spacing: 5mm;
+}
+
+@media screen, pagedjs-ignore {
+    body {
+        background-color: var(--background) !important;
+        margin: var(--screen-pages-spacing) auto 0 auto;
+    }
+    .pagedjs_pages {
+        display: flex;
+        max-width: calc(var(--pagedjs-width) );
+        flex: 0;
+        flex-wrap: wrap;
+        margin: 0 auto;
+        justify-content: center;
+    }
+    .pagedjs_page {
+        background-color: var(--color-paper);
+        box-shadow: 0 0 0 1px var(--color-mbox);
+        flex-shrink: 0;
+        flex-grow: 0;
+        margin: auto auto var(--screen-pages-spacing) auto;
+        border: solid 1px gray;
+    }
+}
+
+/* when a row can hold two pages, start first page on the right */
+@media screen and (min-width: 12.32in) {
+    .pagedjs_page {
+        margin: auto 0 var(--screen-pages-spacing) 0;
+    }
+}
+
+/* use a fixed width body for mobiles */
+@media screen and (max-width:1180px)  {
+    body {
+        width: calc(var(--pagedjs-width) + var(--screen-pages-spacing));
+    }
+}
+
+@page {
+    @top-left-corner {}
+    @top-left {}
+    @top-center {}
+    @top-right {}
+    @top-right-corner {}
+    @left-top {}
+    @left-middle {}
+    @left-bottom {}
+    @right-top {}
+    @right-middle {}
+    @right-bottom {}
+    @bottom-left-corner {}
+    @bottom-left {}
+    @bottom-center {}
+    @bottom-right {
+        content: counter(page);
+    }
+    @bottom-right-corner {}
+
+    size: letter;
+}
+
+@media print {
+    div.cell {
+        display: block;
+        page-break-inside: avoid;
+    }
+    div.output_wrapper {
+        display: block;
+        page-break-inside: avoid;
+    }
+    div.output {
+        display: block;
+        page-break-inside: avoid;
+    }
+}
+
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+body {
+    font-family: Calibri;
+    line-height: 1.1;
+    font-weight: normal;
+    letter-spacing: normal;
+    overflow: visible;
+
+    /* Don't remove this, it is necessary to avoid bad blank page */
+    padding: 0px !important;
+
+    /* Don't remove this, it is necessary to allow for scrolling in Voila */
+    /* overflow: visible !important; */
+}
+
+.lm-Widget {
+    overflow: auto !important;
+}
+
+#notebook-container {
+    box-shadow: none;
+    padding: 0px;
+}
+
+div#notebook {
+    overflow: visible;
+    border-top: none;
+    padding: 0px;
+}
+
+/* img {
+    width: 100%;
+    white-space: nowrap;
+    padding: 0px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+} */
+
+/* .header {
+    font-size: 0.75em;
+}
+
+.footer {
+    font-size: 0.75em;
+}
+ */
+
+.pagebreak {
+    break-before: page;
+}
+
+div.PSPContainer {
+    min-height: 500px;
+}
+
+div.PSPContainer > perspective-viewer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
