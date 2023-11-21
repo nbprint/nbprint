@@ -6,7 +6,7 @@ build:  ## build python/javascript
 
 develop:  ## install to site-packages in editable mode
 	python -m pip install --upgrade build pip setuptools twine wheel
-	cd js; yarn
+	cd js; yarn && npx playwright install
 	python -m pip install -e .[develop]
 
 install:  ## install to site-packages
