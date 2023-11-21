@@ -1,0 +1,40 @@
+{
+  "name": "nbcx",
+  "version": "0.1.0",
+  "description": "A framework for customizing NBConvert templates and building reports",
+  "repository": "git@github.com:timkpaine/nbcx.git",
+  "author": "Tim Paine <t.paine154@gmail.com>",
+  "license": "Apache-2.0",
+  "files": [
+    "dist/**/*",
+    "index.d.ts"
+  ],
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "node build.mjs",
+    "clean": "rm -rf dist playwright-report ../nbcx/extension",
+    "lint": "prettier --check \"src/js/*.js\" \"src/less/*.less\" \"tests/*.spec.js\" \"*.js\" \"*.json\"",
+    "fix": "prettier --write  \"src/js/*.js\" \"src/less/*.less\" \"tests/*.spec.js\" \"*.js\" \"*.json\"",
+    "prepack": "npm run build",
+    "start:tests": "http-server -p 3000 ",
+    "start:examples": "http-server -p 3000 -o examples/",
+    "test": "TZ=UTC playwright test"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "pagedjs": "^0.4.3"
+  },
+  "devDependencies": {
+    "@finos/perspective-esbuild-plugin": "^2.3.2",
+    "@finos/perspective-workspace": "^2.1.2",
+    "@playwright/test": "^1.36.2",
+    "@prospective.co/procss": "^0.1.13",
+    "cpy": "^10.1.0",
+    "esbuild": "^0.19.0",
+    "esbuild-plugin-less": "^1.2.3",
+    "http-server": "^14.1.1",
+    "prettier": "^3.0.1"
+  }
+}
