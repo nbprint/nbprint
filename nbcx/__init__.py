@@ -1,5 +1,5 @@
-from ._version import __version__  # noqa: F401
+__version__ = "0.1.0"
 
-from .exporters import *  # noqa: F403, F401
-from .utils import *  # noqa: F403, F401
-from .tags import *  # noqa: F403, F401
+from .config import *
+from .generate import generate
+from .utils import *

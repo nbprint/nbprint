@@ -1,0 +1,64 @@
+{%- extends 'lab/index.html.j2' -%}
+
+{%- block html_head_js -%}
+<script>
+var nbcx_notebook_info = new Map();
+</script>
+{{ resources.include_js("static/embedded.js", True) }}
+{{ super() }}
+{%- endblock html_head_js -%}
+
+{% block extra_css %}
+{{ super() }}
+{{ resources.include_css("static/embedded.css") }}
+{{ resources.include_css("static/table-of-content.css") }}
+{{ resources.include_css("static/index.css") }}
+{% endblock extra_css %}
+
+{# === No notebook === #}
+{% block notebook_css %}
+{{ super() }}
+{% endblock notebook_css %}
+
+{# === No custom CSS === #}
+{% block custom_css %}
+{{ super() }}
+{% endblock custom_css %}
+
+
+{#
+==============================================================================
+ Cell
+==============================================================================
+#}
+
+{% block any_cell scoped %}
+{% if cell.metadata.get("nbcx", {}) != {} %}
+    <script>
+        nbcx_notebook_info.set("{{ cell.id }}", {{ cell.metadata.get("nbcx", {}) | json_dumps | escape_html_script }});
+    </script>
+{% endif %}
+
+{% if cell.metadata.get("nbcx", {}).get("ignore", False) %}
+    {# Do Nothing if nbcx_ignore tag is set #}
+{% else %}
+    {{ super() }}
+{% endif %}
+{% endblock any_cell %}
+
+
+
+{% block in_prompt -%}
+{%- endblock in_prompt %}
+
+{% block input_group -%}
+{% endblock input_group %}
+
+{% block input %}
+{%- endblock input %}
+
+{% block empty_in_prompt -%}
+{%- endblock empty_in_prompt %}
+
+{% block output_area_prompt %}
+{% endblock output_area_prompt %}
