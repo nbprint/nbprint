@@ -1,68 +1,89 @@
-TEMPLATE=1
+###############
+# Build Tools #
+###############
+build:  ## build python/javascript
+	python -m build .
 
-buildtpl:  ## build a sample pdf report
-	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_pdf example_notebooks/template${TEMPLATE}.ipynb  --execute --template nbcx_template${TEMPLATE}_pdf && open example_notebooks/template${TEMPLATE}.pdf
-
-html:  ## build a sample html report
-	NBCX_CONTEXT=html jupyter nbconvert --to nbcx_html example_notebooks/template${TEMPLATE}.ipynb  --execute --template nbcx_template${TEMPLATE}_html && /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome example_notebooks/template${TEMPLATE}.html
-
-tex:  ## build a sample latext report
-	NBCX_CONTEXT=pdf jupyter nbconvert --to nbcx_latex example_notebooks/template${TEMPLATE}.ipynb --execute --template nbcx_template${TEMPLATE}_pdf && code example_notebooks/template${TEMPLATE}.tex
-
-build1:  ## build pdf first template
-	make buildtpl TEMPLATE=1 
-
-html1:  ## build html first template
-	make html TEMPLATE=1 
-
-tex1:  ## build tex first template
-	make tex TEMPLATE=1 
-
-build2:  ## build pdf first template
-	make buildtpl TEMPLATE=2
-
-html2:  ## build html first template
-	make html TEMPLATE=2
-
-tex2:  ## build tex first template
-	make tex TEMPLATE=2
-
-build: ## build python
-	python setup.py build
-
-tests: lint ## run the tests
-	python -m pytest -vv nbcx/tests --cov=nbcx --junitxml=python_junit.xml --cov-report=xml --cov-branch
-
-lint: ## run linter
-	python -m flake8 nbcx setup.py docs/conf.py
-
-fix:  ## run black fix
-	python -m black nbcx/ setup.py docs/conf.py
-
-clean: ## clean the repository
-	find . -name "__pycache__" | xargs  rm -rf 
-	find . -name "*.pyc" | xargs rm -rf 
-	find . -name ".ipynb_checkpoints" | xargs  rm -rf 
-	rm -rf .coverage cover htmlcov logs build dist *.egg-info lib node_modules .pytest_cache coverage.xml python_junit.xml docs/nbcx docs/examples .pytest_cache .coverage coverage.xml sample_files sample.out sample.tex
-	git clean -fd
-	rm -rf *.fdb_latexmk *.aux *.fls *.log *.pdf *.synctex*
-	make -C ./docs clean
-
-docs:  ## make documentation
-	make -C ./docs html
-	open ./docs/_build/html/index.html
+develop:  ## install to site-packages in editable mode
+	python -m pip install --upgrade build pip setuptools twine wheel
+	cd js; yarn && npx playwright install
+	python -m pip install -e .[develop]
 
 install:  ## install to site-packages
 	python -m pip install .
 
-dist:  ## create dists
-	rm -rf dist build
-	python setup.py sdist bdist_wheel
+###########
+# Testing #
+###########
+testpy: ## Clean and Make unit tests
+	python -m pytest -v nbcx/tests --junitxml=junit.xml --cov=nbcx --cov-report=xml:.coverage.xml --cov-branch --cov-fail-under=0 --cov-report term-missing
+
+testjs: ## Clean and Make js tests
+	cd js; yarn test
+
+test: tests
+tests: testpy testjs ## run the tests
+
+###########
+# Linting #
+###########
+lintpy:  ## Black/flake8 python
+	python -m ruff nbcx setup.py
+
+lintjs:  ## ESlint javascript
+	cd js; yarn lint
+
+lint: lintpy lintjs  ## run linter
+
+fixpy:  ## Black python
+	python -m isort nbcx setup.py
+	python -m ruff format nbcx setup.py
+
+fixjs:  ## ESlint Autofix JS
+	cd js; yarn fix
+
+fix: fixpy fixjs  ## run black/tslint fix
+format: fix
+
+#################
+# Other Checks #
+#################
+check: checks
+
+checks: check-manifest  ## run security, packaging, and other checks
+
+check-manifest:  ## run manifest checker for sdist
+	check-manifest -v
+
+################
+# Distribution #
+################
+dist: clean build  ## create dists
 	python -m twine check dist/*
-	
-publish: dist  ## dist to pypi
+
+publishpy:  ## dist to pypi
 	python -m twine upload dist/* --skip-existing
 
+publishjs:  ## dist to npm
+	cd js; npm publish || echo "can't publish - might already exist"
+
+publish: dist publishpy publishjs  ## dist to pypi and npm
+
+############
+# Cleaning #
+############
+clean: ## clean the repository
+	find . -name "__pycache__" | xargs  rm -rf
+	find . -name "*.pyc" | xargs rm -rf
+	find . -name ".ipynb_checkpoints" | xargs  rm -rf
+	rm -rf .coverage coverage *.xml build dist *.egg-info lib node_modules .pytest_cache *.egg-info
+	rm -rf nbcx/extension
+	cd js && yarn clean
+	git clean -fd
+
+###########
+# Helpers #
+###########
 # Thanks to Francoise at marmelab.com for this
 .DEFAULT_GOAL := help
 help:
@@ -71,4 +92,4 @@ help:
 print-%:
 	@echo '$*=$($*)'
 
-.PHONY: clean install serverextension labextension test tests help docs dist build build1 build2 tex tex1 tex2 html html1 html2
+.PHONY: testjs testpy tests test lintpy lintjs lint fixpy fixjs fix format checks check check-manifest semgrep build develop install labextension dist publishpy publishjs publish docs clean
