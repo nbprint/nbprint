@@ -1,6 +1,6 @@
 {
   "name": "nbcx",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A framework for customizing NBConvert templates and building reports",
   "repository": "git@github.com:timkpaine/nbcx.git",
   "author": "Tim Paine <t.paine154@gmail.com>",
