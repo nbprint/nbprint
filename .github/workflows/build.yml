@@ -51,6 +51,14 @@ jobs:
         cache: 'yarn'
         cache-dependency-path: js/yarn.lock
 
+    - name: Install pandoc via brew
+      run: brew install pandoc
+      if: ${{ matrix.os == 'macos-latest' }}
+
+    - name: Install pandoc via apt
+      run: sudo apt install pandoc
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+
     - name: Install yarn
       run: npm install -g yarn
 
