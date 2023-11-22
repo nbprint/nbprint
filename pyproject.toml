@@ -41,8 +41,11 @@ classifiers = [
 
 dependencies = [
     "dominate",
+    "ipywidgets",
     "nbformat",
     "notebook",
+    "omegaconf",
+    "pydantic",
 ]
 
 [project.optional-dependencies]
@@ -52,6 +55,11 @@ develop = [
     "ruff",
     "pytest",
     "pytest-cov",
+    # notebook deps
+    "matplotlib",
+    "pandas",
+    "perspective-python",
+    "seaborn",
 ]
 test = [
     "pytest",
@@ -137,4 +145,4 @@ relative-imports-order = "closest-to-furthest"
 "__init__.py" = ["F401", "F403"]
 
 [tool.setuptools]
-py-modules = []
+packages = ["nbcx"]
