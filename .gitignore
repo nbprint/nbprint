@@ -159,4 +159,5 @@ $RECYCLE.BIN/
 
 # nbcx/extension/*
 # nbcx/templates/nbcx/static/*
+tmp.html
 
