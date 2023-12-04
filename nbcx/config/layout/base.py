@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from nbformat import NotebookNode
-from pydantic import SerializeAsAny, validator
+from pydantic import validator
 
 from ..base import NBCXBaseModel
-from ..utils import _append_or_extend
+from ..utils import SerializeAsAny, _append_or_extend
 from .common import NBCXLayoutHorizontalAlignment, NBCXLayoutJustify, NBCXLayoutVerticalAlignment
 from .page_number import NBCXLayoutPageNumber
 
