@@ -3,9 +3,10 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from nbformat import NotebookNode
-from pydantic import DirectoryPath, SerializeAsAny, validator
+from pydantic import DirectoryPath, validator
 
 from .base import NBCXBaseModel
+from .utils import SerializeAsAny
 
 if TYPE_CHECKING:
     from .config import NBCXConfiguration

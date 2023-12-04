@@ -1,10 +1,11 @@
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from nbformat import NotebookNode
-from pydantic import SerializeAsAny, validator
+from pydantic import validator
 
 from ..base import NBCXBaseModel, NBCXType
 from ..layout import NBCXLayout
+from ..utils import SerializeAsAny
 
 if TYPE_CHECKING:
     from ..config import NBCXConfiguration

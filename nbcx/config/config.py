@@ -3,7 +3,7 @@ from typing import Dict, List, Union
 
 from nbformat import NotebookNode
 from omegaconf import DictConfig, OmegaConf
-from pydantic import Field, PrivateAttr, SerializeAsAny, validator
+from pydantic import Field, PrivateAttr, validator
 
 from .base import NBCXBaseModel, NBCXType
 from .content import NBCXContent
@@ -11,7 +11,7 @@ from .context import NBCXContext
 from .layout import NBCXLayoutGlobal
 from .outputs import NBCXOutputs
 from .parameters import NBCXParameters
-from .utils import _append_or_extend
+from .utils import SerializeAsAny, _append_or_extend
 
 
 class NBCXConfiguration(NBCXBaseModel):
