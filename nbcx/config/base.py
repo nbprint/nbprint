@@ -5,7 +5,9 @@ from typing import TYPE_CHECKING, List, Optional, Type, Union
 
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
-from pydantic import BaseModel, SerializeAsAny, validator
+from pydantic import BaseModel, validator
+
+from .utils import SerializeAsAny
 
 if TYPE_CHECKING:
     from ..config import NBCXConfiguration
