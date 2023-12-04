@@ -1,9 +1,8 @@
 from enum import Enum
 from typing import Optional
 
-from pydantic import SerializeAsAny
-
 from ..base import NBCXBaseModel
+from ..utils import SerializeAsAny
 
 
 class NBCXLayoutHorizontalAlignment(str, Enum):
