@@ -17,7 +17,7 @@ const BUILD = [
       ".css": "text",
       ".html": "text",
     },
-    outfile: "../nbcx/extension/index.js",
+    outfile: "../nbprint/extension/index.js",
   },
   {
     define: {
@@ -30,7 +30,7 @@ const BUILD = [
       ".css": "text",
       ".html": "text",
     },
-    outfile: "../nbcx/templates/nbcx/static/embedded.js",
+    outfile: "../nbprint/templates/nbprint/static/embedded.js",
   },
   {
     define: {
@@ -43,7 +43,7 @@ const BUILD = [
       ".css": "text",
       ".html": "text",
     },
-    outfile: "../nbcx/voila/static/embedded.js",
+    outfile: "../nbprint/voila/static/embedded.js",
   },
 ];
 
@@ -55,21 +55,21 @@ function add(builder, path) {
 }
 
 async function compile_css() {
-  fs.mkdirSync("../nbcx/extension", { recursive: true });
-  fs.mkdirSync("../nbcx/templates/nbcx/static", { recursive: true });
+  fs.mkdirSync("../nbprint/extension", { recursive: true });
+  fs.mkdirSync("../nbprint/templates/nbprint/static", { recursive: true });
   const builder1 = new BuildCss("");
   add(builder1, "./index.less");
   fs.writeFileSync(
-    "../nbcx/extension/index.css",
+    "../nbprint/extension/index.css",
     builder1.compile().get("index.css"),
   );
 }
 
 async function build_all() {
   await compile_css();
-  await cpy("./src/css/*", "../nbcx/extension/");
-  await cpy("./src/css/*", "../nbcx/templates/nbcx/static/");
-  await cpy("./src/css/*", "../nbcx/voila/static/");
+  await cpy("./src/css/*", "../nbprint/extension/");
+  await cpy("./src/css/*", "../nbprint/templates/nbprint/static/");
+  await cpy("./src/css/*", "../nbprint/voila/static/");
   await Promise.all(BUILD.map(build)).catch(() => process.exit(1));
 }
 

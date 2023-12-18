@@ -1,0 +1,357 @@
+%==============================================================================
+% Extends base ipython template
+%==============================================================================
+((= IPython input/output style =))
+((*- extends 'base.tplx' -*))
+
+
+%==============================================================================
+% Predoc
+%============================================================================== d
+((* block predoc *))
+    ((( super() )))
+    ((* block tableofcontents *))
+        % \tableofcontents
+    ((* endblock tableofcontents *))
+((* endblock predoc *))
+
+
+%==============================================================================
+% Docclass
+%==============================================================================
+((* block docclass *))
+    \documentclass[11pt]{report}
+((*- endblock docclass -*))
+
+
+
+%==============================================================================
+% Packages
+%==============================================================================
+((*- block packages -*))
+    \usepackage{parskip}
+    \setcounter{secnumdepth}{0} %Suppress section numbers
+    \usepackage[breakable]{tcolorbox}
+    \tcbset{nobeforeafter}
+    \usepackage{needspace}
+    \usepackage{fancyhdr}
+    \usepackage[flushleft]{threeparttable}
+     ((( super() )))
+    \usepackage{helvet}
+    \renewcommand{\familydefault}{\sfdefault}
+    \usepackage{layout}
+    \usepackage{threeparttable}
+    \usepackage{grid-system}
+
+((*- endblock packages -*))
+
+
+
+%===============================================================================
+% Macros
+%===============================================================================
+% Draw a figure using the graphicx package.
+((* macro draw_figure_better(filename, width, height, align) -*))
+((* set filename = filename | posix_path *))
+((*- block figure_better scoped -*))
+    ((*- if align == "center"-*))
+        \begin{(((align|default('center'))))}
+    ((*- endif -*))
+        ((*- if width|default(0) and height|default(0) -*))
+            \Oldincludegraphics[width=(((width))),height=(((height)))]{(((filename)))}
+        ((*- elif width|default(0) -*))
+            \Oldincludegraphics[width=(((width))),keepaspectratio]{(((filename)))}
+        ((*- elif height|default(0) -*))
+            \Oldincludegraphics[height=(((height))),keepaspectratio]{(((filename)))}
+        ((*- else -*))
+            \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{((( filename )))}
+        ((*- endif -*))
+    ((*- if align == "center"-*))
+        \end{(((align|default('center'))))}
+    ((*- endif -*))
+((*- endblock figure_better -*))
+((*- endmacro *))
+
+% Draw a figure using the graphicx package.
+((* macro draw_figure_fullwidth(filename) -*))
+((* set filename = filename | posix_path *))
+((*- block figure_fullwidth scoped -*))
+        \vspace{-10cm}
+        \begin{center}
+        \noindent\makebox[\textwidth]{\includegraphics[width=\paperwidth]{((( filename )))}}
+        \end{center}
+((*- endblock figure_fullwidth -*))
+((*- endmacro *))
+
+
+((* macro draw_figure_asis(filename, align) -*))
+((* set filename = filename | posix_path *))
+((*- block figure_asis scoped -*))
+
+    ((*- if align == "center"-*))
+        \begin{(((align|default('center'))))}
+    ((*- endif -*))
+
+    \includegraphics[scale=1]{(((filename)))}
+
+    ((*- if align == "center"-*))
+        \end{(((align|default('center'))))}
+    ((*- endif -*))
+
+((*- endblock figure_asis -*))
+((*- endmacro *))
+
+%==============================================================================
+% A custom cell drawing method
+%==============================================================================
+((* macro draw_cell_custom(cell, draw_method) -*))
+((* set draw_method = draw_method | default(draw_figure) *))
+((*- if cell.cell_type == 'code'-*))
+    ((*- if resources.global_content_filter.include_code -*))
+        ((*- if cell.outputs and resources.global_content_filter.include_output -*))
+            ((*- for output in cell.outputs -*))
+                    ((*- if output.output_type == 'execute_result' -*))
+                        ((*- for type in output.data | filter_data_type -*))
+                            ((*- if type == 'application/pdf' -*))
+                                ((( draw_method(output.metadata.filenames['application/pdf']) )))
+                            ((*- elif type == 'image/svg+xml' -*))
+                                ((( draw_method(output.metadata.filenames['image/svg+xml']) )))
+                            ((*- elif type == 'image/png' -*))
+                                ((( draw_method(output.metadata.filenames['image/png']) )))
+                            ((*- elif type == 'text/markdown' -*))
+                                ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'latex'))))
+                            ((*- elif type == 'image/jpeg' -*))
+                                ((( draw_method(output.metadata.filenames['image/jpeg'], output.metadata['image/jpeg']['widthcm'], output.metadata['image/jpeg']['heightcm'], output.metadata['image/jpeg']['align']) )))
+                            ((*- elif type == 'text/plain' -*))
+                                \begin{Verbatim}[commandchars=\\\{\}]
+                                    ((( output.data['text/plain'] | escape_latex | ansi2latex )))
+                                \end{Verbatim}
+                            ((*- elif type == 'text/latex' -*))
+                                ((( output.data['text/latex'] | strip_files_prefix )))
+                            ((*- endif -*))
+                        ((*- endfor -*))
+                    ((*- elif output.output_type == 'stream' -*))
+                        \begin{Verbatim}[commandchars=\\\{\}]
+                            ((( output.text | escape_latex | ansi2latex )))
+                        \end{Verbatim}
+                    ((*- elif output.output_type == 'display_data' -*))
+                        ((*- for type in output.data | filter_data_type -*))
+                            ((*- if type == 'application/pdf' -*))
+                                ((( draw_method(output.metadata.filenames['application/pdf']) )))
+                            ((*- elif type == 'image/svg+xml' -*))
+                                ((( draw_method(output.metadata.filenames['image/svg+xml']) )))
+                            ((*- elif type == 'image/png' -*))
+                                ((( draw_method(output.metadata.filenames['image/png']) )))
+                            ((*- elif type == 'text/markdown' -*))
+                                ((( output.data['text/markdown'] | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'latex'))))
+                            ((*- elif type == 'image/jpeg' -*))
+                                ((( draw_method(output.metadata.filenames['image/jpeg'], output.metadata['image/jpeg']['widthcm'], output.metadata['image/jpeg']['heightcm'], output.metadata['image/jpeg']['align']) )))
+                            ((*- elif type == 'text/plain' -*))
+                                \begin{Verbatim}[commandchars=\\\{\}]
+                                    ((( output.data['text/plain'] | escape_latex | ansi2latex )))
+                                \end{Verbatim}
+                            ((*- elif type == 'text/latex' -*))
+                                ((( output.data['text/latex'] | strip_files_prefix )))
+                            ((*- endif -*))
+                        ((*- endfor -*))
+                    ((*- endif -*))
+            ((*- endfor -*))
+        ((*- endif -*))
+    ((*- endif -*))
+((*- elif cell.cell_type in ['markdown'] -*))
+    ((*- if resources.global_content_filter.include_markdown and not cell.get("transient",{}).get("remove_source", false) -*))
+        ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex'))))
+    ((*- endif -*))
+((*- endif -*))
+((*- endmacro *))
+
+
+
+
+
+%==============================================================================
+% Margins
+%==============================================================================
+((*- block margins -*))
+    \geometry{verbose,tmargin=.7in,bmargin=1in,lmargin=.7in,rmargin=.7in}
+    \pagestyle{fancy}
+    \fancyhf{}
+
+    % Left Header
+    % \lhead{\Oldincludegraphics[width=1in,keepaspectratio]{logo}}
+
+    % Headers & Footers
+    ((* if resources.nbprint.headers *))
+    ((*- for key, value in resources.nbprint.headers.items() -*))
+    \(((key))){
+        ((*- set cell = value -*))
+        ((( draw_cell_custom(value, draw_figure_better) )))
+    }
+    ((* endfor *))
+    ((* endif *))
+
+    % in case changing color
+    \futurelet\TMPfootrule\def\footrule{{\color{black}\TMPfootrule}}
+
+    % Header horizontal rule
+    ((* if resources.nbprint.headerrule *))
+        \renewcommand{\headrulewidth}{.5pt}
+    ((* else *))
+        \renewcommand{\headrulewidth}{0pt}
+    ((* endif *))
+
+    % Footer horizontal rule
+    ((* if resources.nbprint.footerrule *))
+        \renewcommand{\footrulewidth}{.5pt}
+    ((* else *))
+        \renewcommand{\footrulewidth}{0pt}
+    ((* endif *))
+
+    \let\Origsection\section
+    \let\Origsubsection\subsection
+    \let\Origsection\section
+    \let\Origsection\section
+    \let\Origsection\section
+
+((*- endblock margins -*))
+
+
+
+
+%==============================================================================
+% Definitions
+%==============================================================================
+((*- block definitions -*))
+    ((( super() )))
+
+    % Pygments definitions
+    (((- resources.latex.pygments_definitions )))
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    ((*- block style_colors *))
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    ((*- endblock style_colors *))
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    ((*- block style_prompt *))
+    \newcommand{\prompt}[4]{
+        \ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}
+    }
+    ((* endblock style_prompt *))
+((*- endblock definitions -*))
+
+
+%==============================================================================
+% Title
+%==============================================================================
+((* block maketitle *))
+% \maketitle
+((* endblock maketitle *))
+
+
+%===============================================================================
+% Input
+%===============================================================================
+((* block input_group *))
+((* endblock input_group *))
+
+((* block input scoped *))
+((* endblock input *))
+
+
+%===============================================================================
+% Output
+%===============================================================================
+((*- if charlim is not defined -*))
+    ((* set charlim = 86 *))
+((*- endif -*))
+
+((* block execute_result scoped *))
+((* endblock execute_result *))
+
+((* block markdowncell scoped *))
+    ((( cell.source | citation2latex | strip_files_prefix | convert_pandoc('markdown+tex_math_double_backslash', 'json',extra_args=[]) | resolve_references | convert_pandoc('json','latex', extra_args=["--top-level-division=chapter"]) )))
+((* endblock markdowncell *))

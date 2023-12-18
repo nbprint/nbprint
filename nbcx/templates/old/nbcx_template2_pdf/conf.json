@@ -1,7 +1,0 @@
-{
-    "base_template": "nbcx_base",
-    "mimetypes": {
-        "text/latex": true,
-        "application/pdf": true
-    }
-}
