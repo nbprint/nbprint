@@ -81,23 +81,23 @@ jobs:
     - name: Upload test results (Python)
       uses: actions/upload-artifact@v4
       with:
-        name: py-test-results-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.node-version}}-${{ matrix.pydantic-version }}
+        name: py-test-results-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.node-version}}
         path: junit.xml
-      if: ${{ matrix.os == 'ubuntu-latest' }}
+      if: ${{ matrix.os == 'ubuntu-latest' && matrix.pydantic-version != '<2' }}
 
     - name: Upload test results (JS)
       uses: actions/upload-artifact@v4
       with:
-        name: js-test-results-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.node-version}}-${{ matrix.pydantic-version }}
+        name: js-test-results-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.node-version}}
         path: js/junit.xml
-      if: ${{ matrix.os == 'ubuntu-latest' }}
+      if: ${{ matrix.os == 'ubuntu-latest' && matrix.pydantic-version != '<2' }}
 
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       with:
         files: |
             **/junit.xml
-      if: ${{ matrix.os == 'ubuntu-latest' }}
+      if: ${{ matrix.os == 'ubuntu-latest' && matrix.pydantic-version != '<2' }}
 
     - name: Upload coverage
       uses: codecov/codecov-action@v3
