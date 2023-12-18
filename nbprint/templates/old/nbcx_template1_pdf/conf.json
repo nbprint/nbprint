@@ -1,0 +1,7 @@
+{
+    "base_template": "nbprint_base",
+    "mimetypes": {
+        "text/latex": true,
+        "application/pdf": true
+    }
+}

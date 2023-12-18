@@ -16,7 +16,7 @@ install:  ## install to site-packages
 # Testing #
 ###########
 testpy: ## Clean and Make unit tests
-	python -m pytest -v nbcx/tests --junitxml=junit.xml --cov=nbcx --cov-report=xml:.coverage.xml --cov-branch --cov-fail-under=0 --cov-report term-missing
+	python -m pytest -v nbprint/tests --junitxml=junit.xml --cov=nbprint --cov-report=xml:.coverage.xml --cov-branch --cov-fail-under=0 --cov-report term-missing
 
 testjs: ## Clean and Make js tests
 	cd js; yarn test
@@ -28,7 +28,7 @@ tests: testpy testjs ## run the tests
 # Linting #
 ###########
 lintpy:  ## Black/flake8 python
-	python -m ruff nbcx setup.py
+	python -m ruff nbprint setup.py
 
 lintjs:  ## ESlint javascript
 	cd js; yarn lint
@@ -36,8 +36,8 @@ lintjs:  ## ESlint javascript
 lint: lintpy lintjs  ## run linter
 
 fixpy:  ## Black python
-	python -m isort nbcx setup.py
-	python -m ruff format nbcx setup.py
+	python -m isort nbprint setup.py
+	python -m ruff format nbprint setup.py
 
 fixjs:  ## ESlint Autofix JS
 	cd js; yarn fix
@@ -77,7 +77,7 @@ clean: ## clean the repository
 	find . -name "*.pyc" | xargs rm -rf
 	find . -name ".ipynb_checkpoints" | xargs  rm -rf
 	rm -rf .coverage coverage *.xml build dist *.egg-info lib node_modules .pytest_cache *.egg-info
-	rm -rf nbcx/extension
+	rm -rf nbprint/extension
 	cd js && yarn clean
 	git clean -fd
 
