@@ -1,8 +1,8 @@
 {
-  "name": "nbcx",
+  "name": "nbprint",
   "version": "0.1.2",
   "description": "A framework for customizing NBConvert templates and building reports",
-  "repository": "git@github.com:timkpaine/nbcx.git",
+  "repository": "git@github.com:timkpaine/nbprint.git",
   "author": "Tim Paine <t.paine154@gmail.com>",
   "license": "Apache-2.0",
   "files": [
@@ -12,7 +12,7 @@
   "types": "index.d.ts",
   "scripts": {
     "build": "node build.mjs",
-    "clean": "rm -rf dist playwright-report ../nbcx/extension",
+    "clean": "rm -rf dist playwright-report ../nbprint/extension",
     "lint": "prettier --check \"src/js/*.js\" \"src/less/*.less\" \"tests/*.spec.js\" \"*.js\" \"*.json\"",
     "fix": "prettier --write  \"src/js/*.js\" \"src/less/*.less\" \"tests/*.spec.js\" \"*.js\" \"*.json\"",
     "prepack": "npm run build",

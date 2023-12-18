@@ -1,0 +1,204 @@
+{%- extends 'base.html.j2' -%}
+{% from 'mathjax.html.j2' import mathjax %}
+{% from 'mermaidjs.html.j2' import mermaid_js %}
+{% from 'voila_setup.macro.html.j2' import voila_setup_helper_functions, voila_setup_labextensions with context %}
+
+{%- block header -%}
+<!DOCTYPE html>
+<html lang="{{ resources.language_code }}">
+<head>
+{%- block html_head -%}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% set nb_title = nb.metadata.get('title', resources['metadata']['name']) | escape_html_keep_quotes %}
+<title>{{nb_title}}</title>
+
+{%- block html_head_js -%}
+<script>
+var nbprint_notebook_info = new Map();
+</script>
+{{ resources.include_js("static/embedded.js", True) }}
+{%- block html_head_js_requirejs -%}
+<script src="{{ resources.require_js_url }}"></script>
+{%- endblock html_head_js_requirejs -%}
+{%- endblock html_head_js -%}
+
+{# this overrides the default behaviour of rendering static widgets #}
+{% block jupyter_widgets %}
+{% endblock jupyter_widgets %}
+
+{% block extra_css %}
+{{ resources.include_css("static/embedded.css") }}
+{{ resources.include_css("static/table-of-content.css") }}
+{{ resources.include_css("static/index.css") }}
+{% endblock extra_css %}
+
+{% block notebook_css %}
+{{ resources.include_css("static/index.css") }}
+  {% if frontend == "voila" %}
+    {# {{ resources.include_js("static/voila-style.js") }} #}
+  {% endif %}
+
+{% if resources.theme == 'dark' %}
+    {{ resources.include_css("static/theme-dark.css") }}
+{% elif resources.theme == 'light'  %}
+    {{ resources.include_css("static/theme-light.css") }}
+{% else %}
+    {{ resources.include_lab_theme(resources.theme) }}
+{% endif %}
+<style type="text/css">
+/* Force rendering true colors when outputing to pdf */
+* {
+  -webkit-print-color-adjust: exact;
+}
+
+/* Misc */
+a.anchor-link {
+  display: none;
+}
+
+/* Input area styling */
+.jp-InputArea {
+  overflow: hidden;
+}
+
+.jp-InputArea-editor {
+  overflow: hidden;
+}
+
+.cm-editor.cm-s-jupyter .highlight pre {
+/* weird, but --jp-code-padding defined to be 5px but 4px horizontal padding is hardcoded for pre.cm-line */
+  padding: var(--jp-code-padding) 4px;
+  margin: 0;
+
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+
+}
+
+.jp-OutputArea-output pre {
+  line-height: inherit;
+  font-family: inherit;
+}
+
+.jp-RenderedText pre {
+  color: var(--jp-content-font-color1);
+  font-size: var(--jp-code-font-size);
+}
+
+/* Hiding the collapser by default */
+.jp-Collapser {
+  display: none;
+}
+
+@page {
+    margin: 0.5in; /* Margin for each printed piece of paper */
+}
+
+@media print {
+  .jp-Cell-inputWrapper,
+  .jp-Cell-outputWrapper {
+    display: block;
+  }
+}
+</style>
+
+{% endblock notebook_css %}
+
+{%- block html_head_js_mathjax -%}
+{# {{ mathjax("https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS_CHTML-full,Safe") }} #}
+{%- endblock html_head_js_mathjax -%}
+
+{%- block html_head_js_mermaidjs -%}
+{{ mermaid_js(resources.mermaid_js_url) }}
+{%- endblock html_head_js_mermaidjs -%}
+
+{%- block html_head_css -%}
+{%- endblock html_head_css -%}
+
+{%- endblock html_head -%}
+</head>
+{%- endblock header -%}
+
+{%- block body_header -%}
+{% if resources.theme == 'dark' %}
+<body class="jp-Notebook" data-jp-theme-light="false" data-jp-theme-name="JupyterLab Dark">
+{% else %}
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+{% endif %}
+<main>
+{{ voila_setup_helper_functions() }}
+
+{%- endblock body_header -%}
+
+{% block data_priority scoped %}
+{% if output %}
+  <script type="application/vnd.voila.cell-output+json">
+    {{ output | trusted | tojson }}
+  </script>
+{% endif %}
+{% endblock data_priority %}
+
+{%- block body_loop -%}
+  {# from this point on, the kernel is started #}
+
+  {# Copy so we do not modify the page_config with updates. #}
+  {% set page_config_full = page_config.copy() %}
+
+  {%- with kernel_id = kernel_start(nb) -%}
+    {# Set a dummy variable - we just want the side effect of the update. #}
+    {% set _ = page_config_full.update(baseUrl=resources.base_url, kernelId=kernel_id) %}
+
+    <script id="jupyter-config-data" type="application/json">
+      {{ page_config_full | tojson }}
+    </script>
+
+    {% set cell_count = nb.cells|length %}
+
+    {#
+    Voilà is using Jinja's Template.generate method to not render the whole template in one go.
+    The current implementation of Jinja will however not yield template snippets if we call a blocks' super()
+    Therefore it is important to have the cell loop in the template.
+    The issue for Jinja is: https://github.com/pallets/jinja/issues/1044
+    #}
+    {%- for cell in cell_generator(nb, kernel_id) -%}
+      {% set cellloop = loop %}
+      {%- block any_cell scoped -%}
+        {% if cell.metadata.get("nbprint", {}) != {} %}
+            <script>
+                nbprint_notebook_info.set("{{ cell.id }}", {{ cell.metadata.get("nbprint", {}) | json_dumps | escape_html_script }});
+            </script>
+        {% endif %}
+        {% if cell.metadata.get("nbprint", {}).get("ignore", False) %}
+            {# Do Nothing if nbprint_ignore tag is set #}
+        {% else %}
+          <div cell-index="{{cellloop.index}}">
+            <script>
+              voila_process({{ cellloop.index }}, {{ cell_count }})
+            </script>
+            {{ super() }}
+          </div>
+        {% endif %}
+      {%- endblock any_cell -%}
+    {%- endfor -%}
+  {% endwith %}
+{%- endblock body_loop -%}
+
+{%- block body_footer -%}
+</main>
+</body>
+<script type="text/javascript">
+  window.voila_finish();
+</script>
+{{ voila_setup_labextensions(resources.base_url, resources.labextensions) }}
+{{ super() }}
+{%- endblock body_footer -%}
+
+{%- block footer %}
+{% block footer_js %}
+{% endblock footer_js %}
+{{ super() }}
+</html>
+{%- endblock footer-%}
