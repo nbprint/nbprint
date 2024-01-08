@@ -6,3 +6,7 @@ A framework for building reports with [nbconvert](https://nbconvert.readthedocs.
 [![GitHub issues](https://img.shields.io/github/issues/timkpaine/nbprint.svg)](https://github.com/timkpaine/nbprint/issues)
 [![PyPI](https://img.shields.io/pypi/l/nbprint.svg)](https://pypi.python.org/pypi/nbprint)
 [![PyPI](https://img.shields.io/pypi/v/nbprint.svg)](https://pypi.python.org/pypi/nbprint)
+
+## Background
+
+
