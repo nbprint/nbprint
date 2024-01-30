@@ -1,11 +1,10 @@
 import ast
 from importlib import import_module
 from json import dumps, loads
-from typing import TYPE_CHECKING, List, Optional, Type, Union
-
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
 from pydantic import BaseModel, validator
+from typing import TYPE_CHECKING, List, Optional, Type, Union
 
 from .utils import SerializeAsAny
 
