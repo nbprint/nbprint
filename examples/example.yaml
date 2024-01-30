@@ -95,12 +95,13 @@ content:
       %matplotlib inline
       import pandas as pd
       import matplotlib.pyplot as plt
+      import superstore as sup
       import seaborn as sns
 
       sns.set()
 
 
-      df = pd.DataFrame(pd._testing.getTimeSeriesData())
+      df = pd.DataFrame(sup.getTimeSeriesData())
 
       # add to context
       nbprint_ctx.df = df

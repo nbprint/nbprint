@@ -61,6 +61,7 @@ develop = [
     "pandas",
     "perspective-python",
     "seaborn",
+    "superstore",
 ]
 test = [
     "pytest",
