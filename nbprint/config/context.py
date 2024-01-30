@@ -1,7 +1,6 @@
-from typing import TYPE_CHECKING, Optional
-
 from nbformat import NotebookNode
 from pydantic import PrivateAttr
+from typing import TYPE_CHECKING, Optional
 
 from .base import BaseModel
 
