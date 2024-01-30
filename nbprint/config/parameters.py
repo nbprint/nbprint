@@ -1,8 +1,7 @@
 import ast
 from json import dumps
-from typing import TYPE_CHECKING
-
 from nbformat import NotebookNode
+from typing import TYPE_CHECKING
 
 from .base import BaseModel
 

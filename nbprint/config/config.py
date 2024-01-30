@@ -1,9 +1,8 @@
-from pathlib import Path
-from typing import Dict, List, Union
-
 from nbformat import NotebookNode
 from omegaconf import DictConfig, OmegaConf
+from pathlib import Path
 from pydantic import Field, PrivateAttr, validator
+from typing import Dict, List, Union
 
 from .base import BaseModel, Type
 from .content import Content
