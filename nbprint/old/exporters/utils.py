@@ -31,10 +31,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 import asyncio
 import concurrent.futures
+import nbconvert
 import os
 import tempfile
-
-import nbconvert
 from nbconvert.exporters import Exporter
 from pyppeteer import launch
 from traitlets import default

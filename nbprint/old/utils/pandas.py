@@ -1,8 +1,7 @@
 import os
 import os.path
-import time
-
 import pandas as pd
+import time
 from IPython.display import HTML
 
 from . import nbconvert_context

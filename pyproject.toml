@@ -52,6 +52,7 @@ dependencies = [
 develop = [
     "black>=23",
     "check-manifest",
+    "isort",
     "ruff",
     "pytest",
     "pytest-cov",
@@ -133,16 +134,23 @@ dependencies = [
 path = "js"
 build_cmd = "build"
 
+[tool.isort]
+combine_as_imports = true
+include_trailing_comma = true
+line_length = 120
+profile = "black"
+
+default_section = "THIRDPARTY"
+sections = "FUTURE,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+
+known_first_party = "nbprint"
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+testpaths = "nbprint/tests"
+
 [tool.ruff]
 line-length = 120
 
-[tool.ruff.isort]
-case-sensitive = true
-known-first-party = ["nbprint"]
-relative-imports-order = "closest-to-furthest"
-
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401", "F403"]
-
-[tool.setuptools]
-packages = ["nbprint"]

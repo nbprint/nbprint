@@ -1,6 +1,5 @@
-from typing import Optional
-
 from IPython.display import HTML, display
+from typing import Optional
 
 from nbprint import ContentCover, ContentImage
 
