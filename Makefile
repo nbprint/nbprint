@@ -46,16 +46,6 @@ fixjs:  ## autoformat javascript with eslint
 fix: fixpy fixjs  ## run black/tslint fix
 format: fix
 
-#################
-# Other Checks #
-#################
-check: checks
-
-checks: check-manifest  ## run security, packaging, and other checks
-
-check-manifest:  ## run manifest checker for sdist
-	check-manifest -v
-
 ################
 # Distribution #
 ################
@@ -93,4 +83,4 @@ help:
 print-%:
 	@echo '$*=$($*)'
 
-.PHONY: testjs testpy tests test lintpy lintjs lint fixpy fixjs fix format checks check check-manifest semgrep build develop install labextension dist publishpy publishjs publish docs clean
+.PHONY: testjs testpy tests test lintpy lintjs lint fixpy fixjs fix format build develop install labextension dist publishpy publishjs publish docs clean
