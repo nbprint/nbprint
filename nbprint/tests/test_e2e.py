@@ -1,7 +1,6 @@
-from pprint import pprint
-
 from nbconvert.nbconvertapp import main
 from nbformat import write
+from pprint import pprint
 
 from nbprint import generate, load
 

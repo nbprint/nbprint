@@ -1,6 +1,5 @@
-from typing import TYPE_CHECKING, Optional
-
 from nbformat import NotebookNode
+from typing import TYPE_CHECKING, Optional
 
 from ..base import BaseModel
 from .base import Content

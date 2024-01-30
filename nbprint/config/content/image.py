@@ -1,9 +1,8 @@
-from pathlib import Path
-from typing import TYPE_CHECKING, Optional
-
 from IPython.display import Image, display
 from nbformat import NotebookNode
+from pathlib import Path
 from pydantic import FilePath, validator
+from typing import TYPE_CHECKING, Optional
 
 from ..base import BaseModel
 from .base import Content

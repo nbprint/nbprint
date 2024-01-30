@@ -1,7 +1,6 @@
-from sys import version_info
-
 from nbformat import NotebookNode
 from nbformat.v4 import new_notebook
+from sys import version_info
 
 import nbprint
 
