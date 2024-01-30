@@ -1,7 +1,6 @@
-from typing import TYPE_CHECKING, List, Optional, Union
-
 from nbformat import NotebookNode
 from pydantic import validator
+from typing import TYPE_CHECKING, List, Optional, Union
 
 from ..base import BaseModel
 from ..utils import SerializeAsAny, _append_or_extend

@@ -1,5 +1,4 @@
 import os
-
 from ipython_genutils.py3compat import getcwd
 from nbconvert.exporters import PDFExporter
 from nbconvert.exporters.pdf import LatexFailed

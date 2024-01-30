@@ -1,7 +1,6 @@
-from typing import TYPE_CHECKING, Optional
-
 from IPython.display import HTML, display
 from nbformat import NotebookNode
+from typing import TYPE_CHECKING, Optional
 
 from ..base import BaseModel
 from .base import Content

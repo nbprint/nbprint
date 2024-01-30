@@ -1,9 +1,8 @@
 from enum import Enum
-from pathlib import Path
-from typing import TYPE_CHECKING
-
 from nbformat import NotebookNode
+from pathlib import Path
 from pydantic import DirectoryPath, validator
+from typing import TYPE_CHECKING
 
 from .base import BaseModel
 from .utils import SerializeAsAny

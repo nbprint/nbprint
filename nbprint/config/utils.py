@@ -1,8 +1,7 @@
-from typing import List, Union
-
 import pydantic
 from nbformat import NotebookNode
 from packaging.version import Version
+from typing import List, Union
 
 if Version(pydantic.__version__) >= Version("2"):
     from pydantic import SerializeAsAny  # noqa: F401

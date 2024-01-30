@@ -8,7 +8,6 @@ on:
       - v*
     paths-ignore:
       - docs/
-      - CONTRIBUTING.md
       - LICENSE
       - README.md
   pull_request:
@@ -42,7 +41,7 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         cache: "pip"
-        cache-dependency-path: 'setup.py'
+        cache-dependency-path: 'pyproject.toml'
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4

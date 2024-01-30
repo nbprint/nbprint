@@ -15,10 +15,10 @@ install:  ## install to site-packages
 ###########
 # Testing #
 ###########
-testpy: ## Clean and Make unit tests
+testpy: ## clean and Make unit tests
 	python -m pytest -v nbprint/tests --junitxml=junit.xml --cov=nbprint --cov-report=xml:.coverage.xml --cov-branch --cov-fail-under=0 --cov-report term-missing
 
-testjs: ## Clean and Make js tests
+testjs: ## clean and Make js tests
 	cd js; yarn test
 
 test: tests
@@ -27,33 +27,24 @@ tests: testpy testjs ## run the tests
 ###########
 # Linting #
 ###########
-lintpy:  ## Black/flake8 python
+lintpy:  ## lint python with ruff and isort
+	python -m isort --check nbprint setup.py
 	python -m ruff nbprint setup.py
 
-lintjs:  ## ESlint javascript
+lintjs:  ## lint javascript with eslint
 	cd js; yarn lint
 
-lint: lintpy lintjs  ## run linter
+lint: lintpy lintjs  ## run linters
 
-fixpy:  ## Black python
+fixpy:  ## autoformat python with ruff and isort
 	python -m isort nbprint setup.py
 	python -m ruff format nbprint setup.py
 
-fixjs:  ## ESlint Autofix JS
+fixjs:  ## autoformat javascript with eslint
 	cd js; yarn fix
 
 fix: fixpy fixjs  ## run black/tslint fix
 format: fix
-
-#################
-# Other Checks #
-#################
-check: checks
-
-checks: check-manifest  ## run security, packaging, and other checks
-
-check-manifest:  ## run manifest checker for sdist
-	check-manifest -v
 
 ################
 # Distribution #
@@ -92,4 +83,4 @@ help:
 print-%:
 	@echo '$*=$($*)'
 
-.PHONY: testjs testpy tests test lintpy lintjs lint fixpy fixjs fix format checks check check-manifest semgrep build develop install labextension dist publishpy publishjs publish docs clean
+.PHONY: testjs testpy tests test lintpy lintjs lint fixpy fixjs fix format build develop install labextension dist publishpy publishjs publish docs clean
