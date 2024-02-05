@@ -99,7 +99,7 @@ jobs:
       if: ${{ matrix.os == 'ubuntu-latest' && matrix.pydantic-version != '<2' }}
 
     - name: Upload coverage
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
 
     - name: Twine check
       run: make dist
