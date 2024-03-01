@@ -1,0 +1,40 @@
+---
+resources:
+
+outputs:
+  type: nbprint:NBConvertOutputs
+  path_root: ./examples/finance/output
+  target: "html"
+
+parameters:
+  type: nbprint.example:ExampleFinanceParameters
+  ticker: "ABCD"
+  color: "#5db39c"
+
+context:
+  type: nbprint.example:ExampleFinanceContext
+
+layout: {}
+
+content:
+  - type: nbprint.example:ExampleFinanceTitleContent
+    title: "Jefferies Morgan"
+    subtitle: "Research"
+    date: "November 8, 2023 08:45 GMT"
+
+  - type: nbprint:ContentColumnLayout
+    count: 2
+    sizes: [0.6, 0.4]
+    separator_size: "1px"
+    separator_color: ${parameters.color}"
+    content:
+      - type: nbprint:ContentColumnLayout
+        count: 1
+        content:
+          - type: nbprint.example:ExampleFinanceStockHeadlineContent
+            company_name: "ABCD Inc."
+            region: "North America"
+            title: "4Q23 Results: Solid Growth in both Domestic and International Markets"
+      - type: nbprint:TextComponent
+        text: Right Column
+        horizontal_alignment: left

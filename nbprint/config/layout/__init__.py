@@ -1,23 +1,14 @@
-from .base import (
-    Layout,
-    LayoutBottomLeft,
-    LayoutBottomRight,
+from .base import Layout
+from .global_ import (
+    LayoutBottomLeftMargin,
+    LayoutBottomRightMargin,
     LayoutFooter,
     LayoutGlobal,
     LayoutHeader,
-    LayoutLeft,
+    LayoutLeftMargin,
     LayoutRegionBase,
-    LayoutRight,
-    LayoutTopLeft,
-    LayoutTopRight,
-)
-from .common import (
-    LayoutFontStyle,
-    LayoutFontWeight,
-    LayoutHorizontalAlignment,
-    LayoutJustify,
-    LayoutTextDecoration,
-    LayoutVerticalAlignment,
-    TextComponent,
+    LayoutRightMargin,
+    LayoutTopLeftMargin,
+    LayoutTopRightMargin,
 )
 from .page_number import LayoutPageNumber

@@ -1,9 +1,14 @@
 {%- extends 'lab/index.html.j2' -%}
 
 {%- block html_head_js -%}
+
+
 <script>
-var nbprint_notebook_info = new Map();
+var _nbprint_configuration = {};
+var _nbprint_notebook_info = new Map();
 </script>
+
+
 {{ resources.include_js("static/embedded.js", True) }}
 {{ super() }}
 {%- endblock html_head_js -%}
@@ -12,7 +17,7 @@ var nbprint_notebook_info = new Map();
 {{ super() }}
 {{ resources.include_css("static/embedded.css") }}
 {{ resources.include_css("static/table-of-content.css") }}
-{{ resources.include_css("static/index.css") }}
+{{ resources.include_css("static/nbprint.css") }}
 {% endblock extra_css %}
 
 {# === No notebook === #}
@@ -35,12 +40,25 @@ var nbprint_notebook_info = new Map();
 {% block any_cell scoped %}
 {% if cell.metadata.get("nbprint", {}) != {} %}
     <script>
-        nbprint_notebook_info.set("{{ cell.id }}", {{ cell.metadata.get("nbprint", {}) | json_dumps | escape_html_script }});
+        _nbprint_notebook_info.set("{{ cell.metadata["nbprint"]["id"] }}", {{ cell.metadata["nbprint"] | json_dumps | escape_html_script }});
+        {% if cell.metadata["nbprint"].get("role", "") == "configuration" %}
+        _nbprint_configuration = {{ cell.metadata["nbprint"] | json_dumps | escape_html_script }};
+        {% endif %}
     </script>
-{% endif %}
 
-{% if cell.metadata.get("nbprint", {}).get("ignore", False) %}
-    {# Do Nothing if nbprint_ignore tag is set #}
+
+    {% if cell.metadata["nbprint"].get("ignore", False) %}
+        {# Don't generate any visual elements if nbprint_ignore tag is set #}
+    {% else %}
+        {% if cell.metadata["nbprint"].get("parent-id", None) %}
+        <div class="nbprint" data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}" data-nbprint-parent-id="{{ cell.metadata["nbprint"]["parent-id"] }}">
+        {% else %}
+        <div class="nbprint" data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}">
+        {% endif %}
+        {{ super() }}
+        </div>
+    {% endif %}
+
 {% else %}
     {{ super() }}
 {% endif %}
