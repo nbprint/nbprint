@@ -1,8 +1,8 @@
 from typing import Optional
 
 from ..base import BaseModel
-from .common import TextComponent
+from ..common import Text
 
 
 class LayoutPageNumber(BaseModel):
-    text: Optional[TextComponent] = None
+    text: Optional[Text] = None

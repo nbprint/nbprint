@@ -1,12 +1,14 @@
 ---
+debug: false
 resources:
   logo:
     type: nbprint:ContentImage
-    path: ./examples/logo.jpg
+    path: ./examples/basic/logo.jpg
 
 outputs:
-  path_root: ./examples/output
-  naming: "uuid"  # options are "uuid" or "sha"
+  type: nbprint:NBConvertOutputs
+  path_root: ./examples/basic/output
+  target: "html"
 
 parameters:
   type: nbprint.example:ExampleParameters
@@ -18,7 +20,7 @@ context:
 layout:
   header:
     content:
-      - type: nbprint:LayoutContent
+      - type: nbprint:LayoutGlobal
         justify: space-between
         content:
           - ${resources.logo}
@@ -28,7 +30,7 @@ layout:
 
   footer:
     content:
-      - type: nbprint:LayoutContent
+      - type: nbprint:LayoutGlobal
         justify: space-between
         content:
           - type: nbprint:TextComponent

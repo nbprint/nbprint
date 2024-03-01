@@ -29,7 +29,7 @@ tests: testpy testjs ## run the tests
 ###########
 lintpy:  ## lint python with ruff and isort
 	python -m isort --check nbprint setup.py
-	python -m ruff nbprint setup.py
+	python -m ruff check nbprint setup.py
 
 lintjs:  ## lint javascript with eslint
 	cd js; yarn lint

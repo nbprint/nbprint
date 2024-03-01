@@ -1,7 +1,7 @@
-from nbprint import ContentDynamic, table
+from nbprint import Content, table
 
 
-class ExampleCodeBlock(ContentDynamic):
+class ExampleCodeBlock(Content):
     def __call__(self, ctx=None, *args, **kwargs):
         return table(
             ctx.df[["A", "B", "C", "D"]].head(20),

@@ -1,5 +1,6 @@
-export * from "./table-of-content";
-import { createToc } from "./table-of-content";
+export * from "./components/table-of-content";
+import { createToc } from "./components/table-of-content";
+import { initializeNBPrint } from "./nbprint";
 import { Previewer, registerHandlers, Handler } from "pagedjs";
 
 class handlers extends Handler {
@@ -9,7 +10,7 @@ class handlers extends Handler {
 
   beforeParsed(content) {
     createToc({
-      content: content,
+      content,
       tocElement: "#toc",
       titleElements: ["h1", "h2", "h3", "h4"],
     });
@@ -48,11 +49,18 @@ const build = async () => {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-  if (window.voila_process !== undefined) {
-    setTimeout(async () => {
+  // Process with NBPrint
+  let nbprint = initializeNBPrint();
+  await nbprint.process();
+
+  if (nbprint.buildPagedJS()) {
+    // Build pagedjs
+    if (window.voila_process !== undefined) {
+      setTimeout(async () => {
+        await build();
+      }, 3000);
+    } else {
       await build();
-    }, 3000);
-  } else {
-    await build();
+    }
   }
 });
