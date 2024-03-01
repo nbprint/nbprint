@@ -59,10 +59,20 @@ async function compile_css() {
   fs.mkdirSync("../nbprint/templates/nbprint/static", { recursive: true });
   const builder1 = new BuildCss("");
   add(builder1, "./index.less");
+
+  const css = builder1.compile().get("index.css");
+
+  // write to extension
   fs.writeFileSync(
     "../nbprint/extension/index.css",
-    builder1.compile().get("index.css"),
+    css,
   );
+  // write to template
+  fs.writeFileSync(
+    "../nbprint/templates/nbprint/static/nbprint.css",
+    css,
+  );
+
 }
 
 async function build_all() {
