@@ -1,28 +1,40 @@
 from nbformat import NotebookNode
+from nbformat.v4 import new_notebook
 from omegaconf import DictConfig, OmegaConf
 from pathlib import Path
+from pprint import pprint
 from pydantic import Field, PrivateAttr, validator
+from sys import version_info
 from typing import Dict, List, Union
 
+from .. import __version__
 from .base import BaseModel, Type
 from .content import Content
 from .context import Context
-from .layout import LayoutGlobal
 from .outputs import Outputs
+from .page import PageGlobal
 from .parameters import Parameters
-from .utils import SerializeAsAny, _append_or_extend
+from .utils import Role, SerializeAsAny, _append_or_extend
 
 
 class Configuration(BaseModel):
+    name: str
     resources: Dict[str, SerializeAsAny[BaseModel]] = Field(default_factory=dict)
     outputs: SerializeAsAny[Outputs]
     parameters: SerializeAsAny[Parameters]
-    layout: SerializeAsAny[LayoutGlobal]
+    page: SerializeAsAny[PageGlobal]
     context: SerializeAsAny[Context]
     content: List[SerializeAsAny[Content]] = Field(default_factory=list)
 
+    # basic metadata
+    tags: List[str] = Field(default=["nbprint:config"])
+    role: Role = Role.CONFIGURATION
+    ignore: bool = True
+    debug: bool = True
+
     # internals
     _nb_var_name: str = PrivateAttr(default="nbprint_config")
+    _nb_vars: set = PrivateAttr(default_factory=set)
 
     @validator("resources", pre=True)
     def convert_resources_from_obj(cls, value):
@@ -41,9 +53,9 @@ class Configuration(BaseModel):
     def convert_parameters_from_obj(cls, v):
         return BaseModel._to_type(v, Parameters)
 
-    @validator("layout", pre=True)
-    def convert_layout_from_obj(cls, v):
-        return BaseModel._to_type(v, LayoutGlobal)
+    @validator("page", pre=True)
+    def convert_page_from_obj(cls, v):
+        return BaseModel._to_type(v, PageGlobal)
 
     @validator("context", pre=True)
     def convert_context_from_obj(cls, v):
@@ -61,43 +73,65 @@ class Configuration(BaseModel):
                     v[i] = BaseModel._to_type(element)
         return v
 
-    def generate(self, metadata: dict = None, config: "Configuration" = None) -> List[NotebookNode]:
-        cells = []
+    def generate(self, extra_metadata: dict = None) -> List[NotebookNode]:
+        nb = new_notebook()
+        nb.metadata.nbprint = {}
+        nb.metadata.nbprint.version = __version__
+        nb.metadata.nbprint.tags = []
+        nb.metadata.nbprint.nbprint = {}
+        nb.metadata.nbprint.language = f"python{version_info.major}.{version_info.minor}"
+
+        base_meta = {
+            "tags": [],
+            "nbprint": {},
+        }
+
+        nb.cells = []
 
         # start with parameters for papermill compat
-        _append_or_extend(cells, self.parameters.generate(metadata=metadata, config=self))
+        # use `parent=None` because we parameters is first cell, and we wont instantiate the config
+        # until the next cell
+        _append_or_extend(nb.cells, self.parameters.generate(metadata=base_meta.copy(), config=self, parent=None))
 
         # now do the configuration itself
-        _append_or_extend(cells, self._generate_self(metadata=metadata))
+        _append_or_extend(nb.cells, self._generate_self(metadata=base_meta.copy()))
 
-        # now do
-        # context: SerializeAsAny[Context]
-        _append_or_extend(cells, self.context.generate(metadata=metadata, config=self, parent=self))
+        # now do the context object
+        # pass in parent=self, attr=context so we do config.context
+        _append_or_extend(
+            nb.cells, self.context.generate(metadata=base_meta.copy(), config=self, parent=self, attr="context")
+        )
 
         # resources: Dict[str, SerializeAsAny[BaseModel]] = Field(default_factory=dict)
+        # TODO omitting resources, referenced directly in yaml
         # cell.metadata.nbprint.resources = {k: v.json() for k, v in self.resources.items()}
 
         # outputs: SerializeAsAny[Outputs]
+        # TODO skipping, consumed internally
 
-        # now setup the layout
-        # layout: SerializeAsAny[Layout]
-        _append_or_extend(cells, self.layout.generate(metadata=metadata, config=self, parent=self))
+        # now setup the page layout
+        # pass in parent=self, attr=page so we do config.page
+        _append_or_extend(
+            nb.cells, self.page.generate(metadata=base_meta.copy(), config=self, parent=self, attr="page")
+        )
 
-        # content: List[SerializeAsAny[Content]] = Field(default_factory=list)
+        # now iterate through the content, recursively generating
         for i, content in enumerate(self.content):
             _append_or_extend(
-                cells, content.generate(metadata=metadata, config=self, parent=self, attr="content", counter=i)
+                nb.cells,
+                content.generate(metadata=base_meta.copy(), config=self, parent=self, attr="content", counter=i),
             )
-        return cells
 
-    def _generate_self(self, metadata: dict = None) -> NotebookNode:
-        cell = super()._base_generate(metadata=metadata, config=None)
-        cell.metadata.tags.append("nbprint:configuration")
-        cell.metadata.nbprint.role = "configuration"
-        cell.metadata.nbprint.ignore = True
+        return nb
+
+    def _generate_self(self, metadata: dict) -> NotebookNode:
+        cell = super()._base_generate(metadata=metadata, config=self)
 
         # omit the data
         cell.metadata.nbprint.data = ""
+
+        # add extras
+        cell.metadata.nbprint.debug = self.debug
 
         # add resources
         # TODO do this or no?
@@ -107,9 +141,6 @@ class Configuration(BaseModel):
 
     def _generate_resources_cells(self, metadata: dict = None):
         cell = super()._base_generate(metadata=metadata, config=None)
-        cell.metadata.tags.append("nbprint:resources")
-        cell.metadata.nbprint.role = "resources"
-        cell.metadata.nbprint.ignore = True
 
         # omit the data
         cell.metadata.nbprint.data = ""
@@ -121,19 +152,28 @@ class Configuration(BaseModel):
         #     ...
         return cell
 
+    @staticmethod
+    def load(path_or_model: Union[str, Path, dict, "Configuration"], name: str) -> "Configuration":
+        if isinstance(path_or_model, Configuration):
+            return path_or_model
 
-def load(path_or_model: Union[str, Path, dict, Configuration]) -> Configuration:
-    if isinstance(path_or_model, Configuration):
-        return path_or_model
+        if isinstance(path_or_model, str) and (path_or_model.endswith(".yml") or path_or_model.endswith(".yaml")):
+            path_or_model = Path(path_or_model).resolve()
 
-    if isinstance(path_or_model, str) and (path_or_model.endswith(".yml") or path_or_model.endswith(".yaml")):
-        path_or_model = Path(path_or_model).resolve()
+        if isinstance(path_or_model, Path):
+            path_or_model = OmegaConf.load(path_or_model)
 
-    if isinstance(path_or_model, Path):
-        path_or_model = OmegaConf.load(path_or_model)
+        if isinstance(path_or_model, DictConfig):
+            container = OmegaConf.to_container(path_or_model, resolve=True, throw_on_missing=True)
+            return Configuration(name=name, **container)
 
-    if isinstance(path_or_model, DictConfig):
-        container = OmegaConf.to_container(path_or_model, resolve=True, throw_on_missing=True)
-        return Configuration(**container)
+        raise TypeError(f"Path or model malformed: {path_or_model} {type(path_or_model)}")
 
-    raise TypeError(f"Path or model malformed: {path_or_model} {type(path_or_model)}")
+    def run(self, debug: bool = True):
+        gen = self.generate(self)
+        if debug:
+            pprint(gen)
+        self.outputs.run(self, gen)
+
+
+load = Configuration.load
