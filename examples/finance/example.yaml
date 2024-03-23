@@ -1,0 +1,57 @@
+---
+# global config options
+css: "./examples/finance/finance.css"
+debug: false
+# end global config options
+
+resources:
+
+outputs:
+  type: nbprint:NBConvertOutputs
+  path_root: ./examples/finance/output
+  target: "html"
+
+parameters:
+  type: nbprint.example:ExampleFinanceParameters
+  ticker: "ABCD"
+  color: "#5db39c"
+
+context:
+  type: nbprint.example:ExampleFinanceContext
+
+page:
+
+content:
+  - type: nbprint.example:ExampleFinanceTitleContent
+    title: "Jefferies Morgan"
+    subtitle: "Research"
+    date: "November 8, 2023 08:45 GMT"
+
+  - type: nbprint:ContentFlexRowLayout
+    sizes: [5, 3]
+    separator_size: "1px"
+    separator_color: ${parameters.color}"
+    content:
+      - type: nbprint:ContentFlexColumnLayout
+        content:
+          - type: nbprint.example:ExampleFinanceStockHeadlineContent
+            company_name: "ABCD Inc."
+            region: "North America"
+            byline: "4Q23 Results: Solid Growth in both Domestic and International Markets"
+            color: ${parameters.color}
+
+      - type: nbprint:ContentFlexColumnLayout
+        content:
+          - type: nbprint.example:ExampleFinanceReportAuthor
+            name: John Smith
+            title: Equity Analyst
+            email: John.Smith@jm.com
+            phoneno: +1 212-867-5309
+            color: ${parameters.color}
+
+          - type: nbprint.example:ExampleFinanceReportAuthor
+            name: Jane Doe
+            title: Equity Analyst
+            email: Jane.Doe@jm.com
+            phoneno: +1 212-867-5309
+            color: ${parameters.color}

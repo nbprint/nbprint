@@ -1,24 +1,30 @@
 import ast
 from json import dumps
 from nbformat import NotebookNode
-from typing import TYPE_CHECKING
+from pydantic import Field
+from typing import TYPE_CHECKING, List
 
 from .base import BaseModel
+from .utils import Role
 
 if TYPE_CHECKING:
     from .config import Configuration
 
 
 class Parameters(BaseModel):
-    def generate(self, metadata: dict = None, config: "Configuration" = None) -> NotebookNode:
+    tags: List[str] = Field(default=["parameters", "nbprint:parameters"])
+    role: Role = Role.CONTENT
+    ignore: bool = True
+
+    def generate(self, metadata: dict, config: "Configuration", *args, **kwargs) -> NotebookNode:
         cell = self._base_generate_meta(metadata=metadata)
-        cell.metadata.tags.extend(["parameters", "nbprint:parameters"])
-        cell.metadata.nbprint.role = "parameters"
-        cell.metadata.nbprint.ignore = True
+        # if nb_vars:
+        #     # add parameter variable
+        #     nb_vars.add(k)
 
         mod = ast.Module(body=[], type_ignores=[])
         for i, (k, v) in enumerate(self.dict().items()):
-            if k in ("type",):
+            if k in ("type", "tags", "role", "ignore"):
                 continue
             mod.body.append(
                 ast.Assign(

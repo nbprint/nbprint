@@ -1,0 +1,157 @@
+---
+debug: false
+resources:
+  logo:
+    type: nbprint:ContentImage
+    path: ./examples/basic/logo.jpg
+
+outputs:
+  type: nbprint:NBConvertOutputs
+  path_root: ./examples/basic/output
+  target: "html"
+
+parameters:
+  type: nbprint.example:ExampleParameters
+  ticker: "AAPL"
+
+context:
+  type: nbprint.example:ExampleContext
+
+page:
+  header:
+    content:
+      - type: nbprint:LayoutGlobal
+        justify: space-between
+        content:
+          - ${resources.logo}
+          - type: nbprint:TextComponent
+            content: American Banking Corporation & Co.
+            horizontal_alignment: right
+
+  footer:
+    content:
+      - type: nbprint:LayoutGlobal
+        justify: space-between
+        content:
+          - type: nbprint:TextComponent
+            content: For Institutional Clients Only
+            horizontal_alignment: left
+          - type: nbprint:LayoutPageNumber
+            horizontal_alignment: right
+
+content:
+  - type: nbprint.example:ExampleCoverPageContent
+    vertical_alignment: "center"
+    horizontal_alignment: "left"
+    logo: ${resources.logo}
+    title: "Report for AAPL"
+    subtitle: "In this section we have some boilerplate stuff about Apple"
+
+  - type: nbprint:ContentTableOfContents
+
+  - type: nbprint:ContentMarkdown
+    content: |
+      # Section One
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+      ## Subsection One
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+      ## Subsection Two
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+      ### Sub Sub1
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+      #### Sub Sub Sub3
+
+      ##### Sub Sub Sub3
+
+        * Item 1
+        * Item 2
+          1. Item 2a
+          2. Item 2b
+
+      [Link](www.google.com)
+
+      *some* other **stuff**
+
+      ```python
+      print("Hello World!")
+      ```
+      > Block
+      > Quotes
+
+  - type: nbprint:ContentPageBreak
+
+  - type: nbprint.example:ExampleMarkdownBlock
+    # content: |
+    #   # Performance
+    #   Now some discussion of the performance, as well as some charts
+    #   Lorem ipsum dolor sit amet, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    #   ## A Chart
+    #   A chart of some data
+    #   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  - type: nbprint:ContentCode
+    content: |
+      %matplotlib inline
+      import pandas as pd
+      import matplotlib.pyplot as plt
+      import superstore as sup
+      import seaborn as sns
+
+      sns.set()
+
+
+      df = pd.DataFrame(sup.getTimeSeriesData())
+
+      # add to context
+      nbprint_ctx.df = df
+
+      fig = plt.figure(1, clear=True, figsize=(12,8));
+      ax = fig.add_subplot(111);
+
+      _ = df.plot(ax=ax);
+      _ = fig.text(.3, -.05, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, \n'
+                            'sed do eiusmod tempor incididunt ut labore et dolore magna \n'
+                            'aliqua. Ut enim ad minim veniam, quis nostrud exercitation \n'
+                            'ullamco laboris nisi ut aliquip ex ea commodo consequat. \n'
+                            'Duis aute irure dolor in reprehenderit in voluptate velit.',
+                fontsize=12,
+                wrap=True,
+                ha='left');
+      _ = fig.text(.3, .06, 'This Image:',
+                fontsize=12,
+                weight='bold',
+                wrap=True,
+                ha='left');
+      plt.show()
+
+  - type: nbprint:ContentPageBreak
+
+  - type: nbprint:ContentMarkdown
+    content: |
+      ## Some Widgets
+      Some widgets, some ipywidgets and perspective
+
+  - type: nbprint:ContentCode
+    content: |
+      from ipywidgets import IntSlider
+      IntSlider()
+
+  - type: nbprint:ContentCode
+    content: |
+      from perspective import PerspectiveWidget
+      PerspectiveWidget(nbprint_ctx.df)
+
+  - type: nbprint:ContentMarkdown
+    content: |
+      ## A Grid
+      And A grid of the data
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  - type: nbprint.example:ExampleCodeBlock
+    # content: |
+    #   table(df[['A', 'B', 'C', 'D']],
+    #   'Sample Table',
+    #   'This is where authors provide additional information about the data, including whatever notes are needed.'))
+

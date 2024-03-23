@@ -1,10 +1,9 @@
 from nbformat import NotebookNode
-from pydantic import validator
+from pydantic import Field, validator
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from ..base import BaseModel, Type
-from ..layout import Layout
-from ..utils import SerializeAsAny
+from ..utils import Role, SerializeAsAny, _append_or_extend
 
 if TYPE_CHECKING:
     from ..config import Configuration
@@ -12,7 +11,11 @@ if TYPE_CHECKING:
 
 class Content(BaseModel):
     content: Optional[Union[str, List[SerializeAsAny[BaseModel]]]] = ""
-    layout: Optional[SerializeAsAny[Layout]] = None
+    tags: List[str] = Field(default=["nbprint:content"])
+    role: Role = Role.CONTENT
+
+    # used by lots of things
+    color: str = ""
 
     def generate(
         self,
@@ -22,20 +25,32 @@ class Content(BaseModel):
         attr: str = "",
         counter: Optional[int] = None,
     ) -> Optional[Union[NotebookNode, List[NotebookNode]]]:
+        # make a cell for yourself
+        self_cell = super().generate(
+            metadata=metadata,
+            config=config,
+            parent=parent,
+            attr=attr or "content",
+            counter=counter,
+        )
+        if isinstance(self.content, str) and self.content:
+            # replace content if its a str
+            self_cell.source = self.content
+
+            # remove the data, redundant
+            self_cell.metadata.nbprint.data = ""
+
+        cells = [self_cell]
+
         if isinstance(self.content, list):
-            cells = [
-                c.generate(metadata=metadata, config=config, parent=self, attr="content", counter=i)
-                for i, c in enumerate(self.content)
-            ]
-        else:
-            cell = super()._base_generate(
-                metadata=metadata, config=config, parent=parent, attr="content", counter=counter
-            )
-            cell.metadata.tags.append("nbprint:content")
-            cell.metadata.nbprint.role = "content"
-            cell.metadata.nbprint.data = ""
-            cell.source = self.content
-            cells = [cell]
+            for i, cell in enumerate(self.content):
+                _append_or_extend(
+                    cells,
+                    cell.generate(metadata=metadata, config=config, parent=self, attr=attr or "content", counter=i),
+                )
+        for cell in cells:
+            if cell is None:
+                raise Exception("got null cell, investigate!")
         return cells
 
     @validator("content", pre=True)
@@ -63,38 +78,8 @@ class ContentMarkdown(Content):
         counter: Optional[int] = None,
     ) -> Optional[Union[NotebookNode, List[NotebookNode]]]:
         cell = super()._base_generate_md(metadata=metadata)
-        cell.metadata.tags.append("nbprint:content")
-        cell.metadata.nbprint.role = "content"
         cell.source = self.content
         return cell
 
 
-class ContentCode(Content):
-    ...
-
-
-class ContentDynamic(Content):
-    content: Optional[str] = ""
-
-    def generate(
-        self,
-        metadata: Optional[dict] = None,
-        config: Optional["Configuration"] = None,
-        parent: Optional["BaseModel"] = None,
-        attr: str = "",
-        counter: Optional[int] = None,
-    ) -> Optional[Union[NotebookNode, List[NotebookNode]]]:
-        # force parent to None to load from json explicitly
-        cell = super()._base_generate(
-            metadata=metadata,
-            config=config,
-            parent=parent,
-            attr=attr,
-            counter=counter,
-            call_with_context=config.context.nb_var_name,
-        )
-
-        # add tags and role
-        cell.metadata.tags.extend(["nbprint:content", "nbprint:content:dynamic"])
-        cell.metadata.nbprint.role = "content"
-        return cell
+class ContentCode(Content): ...

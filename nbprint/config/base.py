@@ -1,12 +1,16 @@
 import ast
 from importlib import import_module
+from IPython.display import DisplayObject
 from json import dumps, loads
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
-from pydantic import BaseModel, validator
-from typing import TYPE_CHECKING, List, Optional, Type, Union
+from pathlib import Path
+from pydantic import BaseModel, Field, PrivateAttr, validator
+from typing import TYPE_CHECKING, List, Mapping, Optional, Type, Union
+from uuid import uuid4
 
-from .utils import SerializeAsAny
+# from .exceptions import NBPrintGenerationException
+from .utils import Role, SerializeAsAny
 
 if TYPE_CHECKING:
     from ..config import Configuration
@@ -33,10 +37,27 @@ class Type(BaseModel):
 
 
 class BaseModel(BaseModel):
+    # type info
     type: SerializeAsAny[Type]
 
+    # basic metadata
+    tags: List[str] = Field(default_factory=list)
+    role: Role = Role.UNDEFINED
+    ignore: bool = False
+
+    # frontend code
+    # This is designed to match anywidget
+    css: Optional[Union[str, Path]] = Field(default="")
+    esm: Optional[Union[str, Path]] = Field(default="")
+    classname: Optional[Union[str, List[str]]] = Field(default="")
+    attrs: Optional[Mapping[str, str]] = Field(default_factory=dict)
+
     # internals
-    _nb_var_name: Optional[str] = ""
+    # Variable to use inside notebook for this model
+    _nb_var_name: Optional[str] = PrivateAttr(default="")
+
+    # id to use to reconstitute dom during page building
+    _id: str = PrivateAttr(default_factory=lambda: str(uuid4()))
 
     class Config:
         arbitrary_types_allowed: bool = False
@@ -47,6 +68,23 @@ class BaseModel(BaseModel):
         if "type" not in kwargs:
             kwargs["type"] = Type(module=self.__class__.__module__, name=self.__class__.__name__)
         super().__init__(**kwargs)
+
+    @validator("css", pre=True)
+    def convert_css_string_or_path_to_string_or_path(cls, v):
+        if isinstance(v, str):
+            if v.strip().endswith(".css"):
+                # TODO resolve relative to class?
+                v = Path(v).resolve().read_text()
+        return v
+
+    @validator("esm", pre=True)
+    def convert_esm_string_or_path_to_string_or_path(cls, v):
+        if isinstance(v, str):
+            v = v.strip()
+            if v.endswith(".js") or v.endswith(".mjs"):
+                # TODO resolve relative to class?
+                v = Path(v).resolve().read_text()
+        return v
 
     @validator("type", pre=True)
     def convert_type_string_to_module_and_name(cls, v):
@@ -62,6 +100,17 @@ class BaseModel(BaseModel):
         if name.startswith("nbprint"):
             return name.replace("nbprint", "nbprint_")
         return f"nbprint_{name}"
+
+    def _recalculate_nb_var_name(self, nb_vars: set):
+        attempt = 0
+        test_nb_var_name = self.nb_var_name
+        while test_nb_var_name in nb_vars:
+            test_nb_var_name = f"{self.nb_var_name}{attempt}"
+            attempt += 1
+        # reset var name
+        self._nb_var_name = test_nb_var_name
+        # put in set
+        nb_vars.add(self._nb_var_name)
 
     @staticmethod
     def _to_type(value, model_type=None):
@@ -82,19 +131,21 @@ class BaseModel(BaseModel):
         data = loads(json)
         return cls(**data)
 
-    def __call__(self, ctx: "Context" = None, *args, **kwargs) -> None:
+    def __call__(self, ctx: "Context" = None, *args, **kwargs) -> Optional[DisplayObject]:
         """Execute this model inside of a notebook
 
         Args:
             ctx (_type_, optional): _description_. Defaults to None.
         """
-        ...
+        return self
 
     def generate(
         self,
-        metadata: Optional[dict] = None,
-        config: Optional["Configuration"] = None,
+        metadata: dict,
+        config: Optional["Configuration"],
         parent: Optional["BaseModel"] = None,
+        attr: str = "",
+        counter: Optional[int] = None,
         *args,
         **kwargs,
     ) -> Optional[Union[NotebookNode, List[NotebookNode]]]:
@@ -107,36 +158,57 @@ class BaseModel(BaseModel):
         Returns:
             NotebookNode: the content of the notebook node
         """
-        ...
+        return self._base_generate(metadata=metadata, config=config, parent=parent, attr=attr, counter=counter)
 
     def _base_generate_meta(self, metadata: dict = None) -> Optional[NotebookNode]:
         cell = new_code_cell(metadata=metadata)
-        cell.metadata.tags.extend(["nbprint"])
-        cell.metadata.nbprint.role = "undefined"
+        cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
+        # TODO consolidate with self.json()?
+        cell.metadata.nbprint.id = self._id
+        cell.metadata.nbprint.role = self.role or "undefined"
         cell.metadata.nbprint.type = self.type.to_string()
+        cell.metadata.nbprint.ignore = self.ignore or False
+
         cell.metadata.nbprint.data = self.json()
+
+        # TODO move these all to common method?
+        cell.metadata.nbprint.css = self.css or ""
+        cell.metadata.nbprint.esm = self.esm or ""
+        cell.metadata.nbprint["class"] = "nbprint " + (
+            " ".join(self.classname) if isinstance(self.classname, list) else self.classname or ""
+        )
+        cell.metadata.nbprint.attrs = " ".join(f"{k}={dumps(v)}" for k, v in (self.attrs or {}).items())
         return cell
 
     def _base_generate_md_meta(self, metadata: dict = None) -> Optional[NotebookNode]:
         cell = new_markdown_cell(metadata=metadata)
-        cell.metadata.tags.extend(["nbprint"])
-        cell.metadata.nbprint.role = "undefined"
+        cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
+        cell.metadata.nbprint.id = self._id
+        cell.metadata.nbprint.role = self.role or "undefined"
         cell.metadata.nbprint.type = self.type.to_string()
+        cell.metadata.nbprint.ignore = self.ignore or False
         return cell
 
     def _base_generate(
         self,
-        metadata: Optional[dict] = None,
-        config: Optional["Configuration"] = None,
+        metadata: dict,
+        config: "Configuration",
         parent: Optional["BaseModel"] = None,
         attr: str = "",
         counter: Optional[int] = None,
-        call_with_context: str = "",
     ) -> Optional[NotebookNode]:
         cell = self._base_generate_meta(metadata=metadata)
         mod = ast.Module(body=[], type_ignores=[])
 
-        if parent:
+        assert config is not None
+        self._recalculate_nb_var_name(config._nb_vars)
+
+        if parent and attr:
+            # set in metadata
+            if parent.ignore is False:
+                cell.metadata.nbprint["parent-id"] = parent._id
+
+            # now construct accessor
             value = ast.Attribute(value=ast.Name(id=parent.nb_var_name, ctx=ast.Load()), attr=attr, ctx=ast.Load())
 
             if counter is not None:
@@ -175,29 +247,29 @@ class BaseModel(BaseModel):
                 )
             )
 
-        if call_with_context:
-            mod.body.append(
-                ast.Expr(
-                    value=ast.Call(
-                        func=ast.Name(id=self.nb_var_name, ctx=ast.Load()),
-                        args=[],
-                        keywords=[ast.keyword(arg="ctx", value=ast.Name(id=call_with_context, ctx=ast.Load()))],
-                    )
+        if config and config.context and config.context._context_generated:
+            call_with_context = config.context.nb_var_name
+        else:
+            call_with_context = "None"
+
+        mod.body.append(
+            ast.Expr(
+                value=ast.Call(
+                    func=ast.Name(id=self.nb_var_name, ctx=ast.Load()),
+                    args=[],
+                    keywords=[ast.keyword(arg="ctx", value=ast.Name(id=call_with_context, ctx=ast.Load()))],
                 )
             )
-        else:
-            mod.body.append(ast.Expr(value=ast.Name(id=self.nb_var_name, ctx=ast.Load())))
+        )
+        # this line just puts the object as the last item, lets call it always instead
+        # mod.body.append(ast.Expr(value=ast.Name(id=self.nb_var_name, ctx=ast.Load())))
 
         source = ast.unparse(mod).replace('"', '\\"')
         cell.source = source
         return cell
 
-    def _base_generate_md(
-        self,
-        metadata: Optional[dict] = None,
-    ) -> Optional[NotebookNode]:
-        cell = self._base_generate_md_meta(metadata=metadata)
-        return cell
+    def _base_generate_md(self, metadata: Optional[dict] = None) -> Optional[NotebookNode]:
+        return self._base_generate_md_meta(metadata=metadata)
 
     def __repr__(self) -> str:
         # Truncate the output for now

@@ -1,16 +1,22 @@
 from nbformat import NotebookNode
-from pydantic import PrivateAttr
-from typing import TYPE_CHECKING, Optional
+from pydantic import Field, PrivateAttr
+from typing import TYPE_CHECKING, List
 
 from .base import BaseModel
+from .utils import Role
 
 if TYPE_CHECKING:
     from .config import Configuration
 
 
 class Context(BaseModel):
+    tags: List[str] = Field(default=["nbprint:context"])
+    role: Role = Role.CONTEXT
+    ignore: bool = True
+
     # internals
     _nb_var_name: str = PrivateAttr(default="nbprint_ctx")
+    _context_generated: bool = PrivateAttr(default=False)
 
     class Config:
         arbitrary_types_allowed: bool = True
@@ -18,13 +24,7 @@ class Context(BaseModel):
         validate_assignment: bool = False
 
     def generate(
-        self,
-        metadata: Optional[dict] = None,
-        config: Optional["Configuration"] = None,
-        parent: Optional["BaseModel"] = None,
+        self, metadata: dict, config: "Configuration", parent: BaseModel, attr: str = "", *args, **kwargs
     ) -> NotebookNode:
-        cell = self._base_generate(metadata=metadata)
-        cell.metadata.tags.append("nbprint:context")
-        cell.metadata.nbprint.role = "context"
-        cell.metadata.nbprint.ignore = True
-        return cell
+        self._context_generated = True
+        return super().generate(metadata=metadata, config=config, parent=parent, attr=attr, *args, **kwargs)
