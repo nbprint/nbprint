@@ -157,7 +157,7 @@ $RECYCLE.BIN/
 
 # Notebook and lab extensions
 
-# nbprint/extension/*
-# nbprint/templates/nbprint/static/*
+nbprint/extension/*
+nbprint/templates/nbprint/static/*
 tmp.html
 examples/*/output/
