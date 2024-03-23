@@ -5,6 +5,7 @@ from pydantic import Field
 from typing import TYPE_CHECKING, List
 
 from .base import BaseModel
+from .utils import Role
 
 if TYPE_CHECKING:
     from .config import Configuration
@@ -12,7 +13,7 @@ if TYPE_CHECKING:
 
 class Parameters(BaseModel):
     tags: List[str] = Field(default=["parameters", "nbprint:parameters"])
-    role: str = "parameters"
+    role: Role = Role.CONTENT
     ignore: bool = True
 
     def generate(self, metadata: dict, config: "Configuration", *args, **kwargs) -> NotebookNode:

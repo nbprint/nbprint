@@ -6,11 +6,11 @@ from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
 from pathlib import Path
 from pydantic import BaseModel, Field, PrivateAttr, validator
-from typing import TYPE_CHECKING, List, Optional, Type, Union
+from typing import TYPE_CHECKING, List, Mapping, Optional, Type, Union
 from uuid import uuid4
 
 # from .exceptions import NBPrintGenerationException
-from .utils import SerializeAsAny
+from .utils import Role, SerializeAsAny
 
 if TYPE_CHECKING:
     from ..config import Configuration
@@ -42,13 +42,15 @@ class BaseModel(BaseModel):
 
     # basic metadata
     tags: List[str] = Field(default_factory=list)
-    role: str = "undefined"
+    role: Role = Role.UNDEFINED
     ignore: bool = False
 
     # frontend code
     # This is designed to match anywidget
     css: Optional[Union[str, Path]] = Field(default="")
     esm: Optional[Union[str, Path]] = Field(default="")
+    classname: Optional[Union[str, List[str]]] = Field(default="")
+    attrs: Optional[Mapping[str, str]] = Field(default_factory=dict)
 
     # internals
     # Variable to use inside notebook for this model
@@ -161,11 +163,21 @@ class BaseModel(BaseModel):
     def _base_generate_meta(self, metadata: dict = None) -> Optional[NotebookNode]:
         cell = new_code_cell(metadata=metadata)
         cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
+        # TODO consolidate with self.json()?
         cell.metadata.nbprint.id = self._id
         cell.metadata.nbprint.role = self.role or "undefined"
         cell.metadata.nbprint.type = self.type.to_string()
-        cell.metadata.nbprint.data = self.json()
         cell.metadata.nbprint.ignore = self.ignore or False
+
+        cell.metadata.nbprint.data = self.json()
+
+        # TODO move these all to common method?
+        cell.metadata.nbprint.css = self.css or ""
+        cell.metadata.nbprint.esm = self.esm or ""
+        cell.metadata.nbprint["class"] = "nbprint " + (
+            " ".join(self.classname) if isinstance(self.classname, list) else self.classname or ""
+        )
+        cell.metadata.nbprint.attrs = " ".join(f"{k}={dumps(v)}" for k, v in (self.attrs or {}).items())
         return cell
 
     def _base_generate_md_meta(self, metadata: dict = None) -> Optional[NotebookNode]:

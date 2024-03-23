@@ -3,8 +3,7 @@ from pydantic import Field, validator
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from ..base import BaseModel, Type
-from ..layout import Layout
-from ..utils import SerializeAsAny, _append_or_extend
+from ..utils import Role, SerializeAsAny, _append_or_extend
 
 if TYPE_CHECKING:
     from ..config import Configuration
@@ -12,9 +11,11 @@ if TYPE_CHECKING:
 
 class Content(BaseModel):
     content: Optional[Union[str, List[SerializeAsAny[BaseModel]]]] = ""
-    layout: Optional[SerializeAsAny[Layout]] = None
     tags: List[str] = Field(default=["nbprint:content"])
-    role: str = "content"
+    role: Role = Role.CONTENT
+
+    # used by lots of things
+    color: str = ""
 
     def generate(
         self,

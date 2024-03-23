@@ -63,4 +63,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       await build();
     }
   }
+
+  await nbprint.postprocess();
 });

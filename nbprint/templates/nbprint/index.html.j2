@@ -45,17 +45,44 @@ var _nbprint_notebook_info = new Map();
         _nbprint_configuration = {{ cell.metadata["nbprint"] | json_dumps | escape_html_script }};
         {% endif %}
     </script>
+    {% if cell.metadata["nbprint"].get("css", None) %}
+    <style>
+        /* TODO add to shadow dom */
+        {{ cell.metadata["nbprint"]["css"] }}
+    </style>
+    {% endif %}
+
+    {% if cell.metadata["nbprint"].get("esm", None) %}
+    <script type="module">
+        document.addEventListener("nbprint-ready", async () => {
+
+            // TODO formal entrypoint a la anywidget
+            {{ cell.metadata["nbprint"]["esm"] }}
+
+            typeof(render) !== undefined &&
+            render(
+                {{ cell.metadata["nbprint"] | json_dumps }},
+                document.querySelector(
+                    `[data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}`,
+                )
+            );
+        });
+    </script>
+    {% endif %}
 
 
     {% if cell.metadata["nbprint"].get("ignore", False) %}
         {# Don't generate any visual elements if nbprint_ignore tag is set #}
     {% else %}
         {% if cell.metadata["nbprint"].get("parent-id", None) %}
-        <div class="nbprint" data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}" data-nbprint-parent-id="{{ cell.metadata["nbprint"]["parent-id"] }}">
+        <div class="{{ cell.metadata["nbprint"]["class"] }}" {{ cell.metadata["nbprint"]["attrs"] }} data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}" data-nbprint-parent-id="{{ cell.metadata["nbprint"]["parent-id"] }}">
         {% else %}
-        <div class="nbprint" data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}">
+        <div class="{{ cell.metadata["nbprint"]["class"] }}" {{ cell.metadata["nbprint"]["attrs"] }} data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}">
         {% endif %}
-        {{ super() }}
+            <!-- TODO should we make this like `ignore` as a first-order attribute? -->
+            {% if cell.metadata["nbprint"].get("role", "content") == "content" %}
+            {{ super() }}
+            {% endif %}
         </div>
     {% endif %}
 

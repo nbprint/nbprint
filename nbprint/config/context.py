@@ -3,6 +3,7 @@ from pydantic import Field, PrivateAttr
 from typing import TYPE_CHECKING, List
 
 from .base import BaseModel
+from .utils import Role
 
 if TYPE_CHECKING:
     from .config import Configuration
@@ -10,7 +11,7 @@ if TYPE_CHECKING:
 
 class Context(BaseModel):
     tags: List[str] = Field(default=["nbprint:context"])
-    role: str = "context"
+    role: Role = Role.CONTEXT
     ignore: bool = True
 
     # internals
