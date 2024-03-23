@@ -1,4 +1,5 @@
 import pydantic
+from enum import StrEnum
 from nbformat import NotebookNode
 from packaging.version import Version
 from typing import List, Union
@@ -19,3 +20,14 @@ def _append_or_extend(cells: list, cell_or_cells: Union[NotebookNode, List[Noteb
     elif cell_or_cells:
         cells.append(cell_or_cells)
     # None, ignore
+
+
+class Role(StrEnum):
+    UNDEFINED = "undefined"
+    CONFIGURATION = "configuration"
+    CONTEXT = "context"
+    OUTPUTS = "outputs"
+    PARAMETERS = "parameters"
+    CONTENT = "content"
+    PAGE = "page"
+    LAYOUT = "layout"

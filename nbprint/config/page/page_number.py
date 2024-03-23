@@ -4,5 +4,5 @@ from ..base import BaseModel
 from ..common import Text
 
 
-class LayoutPageNumber(BaseModel):
+class PageNumber(BaseModel):
     text: Optional[Text] = None

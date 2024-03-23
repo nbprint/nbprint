@@ -11,10 +11,10 @@ from .. import __version__
 from .base import BaseModel, Type
 from .content import Content
 from .context import Context
-from .layout import LayoutGlobal
 from .outputs import Outputs
+from .page import PageGlobal
 from .parameters import Parameters
-from .utils import SerializeAsAny, _append_or_extend
+from .utils import Role, SerializeAsAny, _append_or_extend
 
 
 class Configuration(BaseModel):
@@ -22,13 +22,13 @@ class Configuration(BaseModel):
     resources: Dict[str, SerializeAsAny[BaseModel]] = Field(default_factory=dict)
     outputs: SerializeAsAny[Outputs]
     parameters: SerializeAsAny[Parameters]
-    layout: SerializeAsAny[LayoutGlobal]
+    page: SerializeAsAny[PageGlobal]
     context: SerializeAsAny[Context]
     content: List[SerializeAsAny[Content]] = Field(default_factory=list)
 
     # basic metadata
     tags: List[str] = Field(default=["nbprint:config"])
-    role: str = "configuration"
+    role: Role = Role.CONFIGURATION
     ignore: bool = True
     debug: bool = True
 
@@ -53,9 +53,9 @@ class Configuration(BaseModel):
     def convert_parameters_from_obj(cls, v):
         return BaseModel._to_type(v, Parameters)
 
-    @validator("layout", pre=True)
-    def convert_layout_from_obj(cls, v):
-        return BaseModel._to_type(v, LayoutGlobal)
+    @validator("page", pre=True)
+    def convert_page_from_obj(cls, v):
+        return BaseModel._to_type(v, PageGlobal)
 
     @validator("context", pre=True)
     def convert_context_from_obj(cls, v):
@@ -109,10 +109,10 @@ class Configuration(BaseModel):
         # outputs: SerializeAsAny[Outputs]
         # TODO skipping, consumed internally
 
-        # now setup the layout
-        # pass in parent=self, attr=layout so we do config.layout
+        # now setup the page layout
+        # pass in parent=self, attr=page so we do config.page
         _append_or_extend(
-            nb.cells, self.layout.generate(metadata=base_meta.copy(), config=self, parent=self, attr="layout")
+            nb.cells, self.page.generate(metadata=base_meta.copy(), config=self, parent=self, attr="page")
         )
 
         # now iterate through the content, recursively generating
