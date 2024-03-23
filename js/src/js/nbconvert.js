@@ -2,6 +2,7 @@ export * from "./components/table-of-content";
 import { createToc } from "./components/table-of-content";
 import { initializeNBPrint } from "./nbprint";
 import { Previewer, registerHandlers, Handler } from "pagedjs";
+import "@fortawesome/fontawesome-free/js/all";
 
 class handlers extends Handler {
   constructor(chunker, polisher, caller) {

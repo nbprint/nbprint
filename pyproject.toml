@@ -125,10 +125,11 @@ exclude = [
 [tool.hatch.build.hooks.jupyter-builder]
 build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = [
-    "nbprint/templates/nbprint/index.html.j2",
+    "nbprint/templates/nbprint/static/nbprint.css",
     "nbprint/extension/index.js",
 ]
 skip-if-exists = [
+    "nbprint/templates/nbprint/static/nbprint.css",
     "nbprint/extension/index.js",
 ]
 dependencies = [
