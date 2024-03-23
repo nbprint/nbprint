@@ -1,5 +1,5 @@
 from IPython.display import HTML
-from typing import List, Optional
+from typing import List
 
 from ..utils import Role
 from .base import Content
@@ -9,8 +9,6 @@ class _ContentFlexLayout(Content):
     # component to split into certain number of columns
     # count: int = 1
     sizes: List[float] = [1.0]
-    separator_size: Optional[str] = None
-    separator_color: Optional[str] = None
 
     # override role
     role: Role = Role.LAYOUT

@@ -3,7 +3,8 @@ import { build } from "@finos/perspective-esbuild-plugin/build.js";
 import { BuildCss } from "@prospective.co/procss/target/cjs/procss.js";
 import cpy from "cpy";
 import fs from "fs";
-import path_mod from "path";
+import { createRequire } from 'node:module';
+
 
 const BUILD = [
   {
@@ -47,10 +48,11 @@ const BUILD = [
   },
 ];
 
-function add(builder, path) {
+const require = createRequire(import.meta.url);
+function add(builder, path, path2) {
   builder.add(
-    path,
-    fs.readFileSync(path_mod.join("./src/less", path)).toString(),
+      path,
+      fs.readFileSync(require.resolve(path2 || path)).toString()
   );
 }
 
@@ -58,7 +60,7 @@ async function compile_css() {
   fs.mkdirSync("../nbprint/extension", { recursive: true });
   fs.mkdirSync("../nbprint/templates/nbprint/static", { recursive: true });
   const builder1 = new BuildCss("");
-  add(builder1, "./index.less");
+  add(builder1, "./src/less/index.less");
 
   const css = builder1.compile().get("index.css");
 
@@ -75,11 +77,16 @@ async function compile_css() {
 
 }
 
+async function cp_css(path) {
+  await cpy(path, "../nbprint/extension/", {flat: true});
+  await cpy(path, "../nbprint/templates/nbprint/static/", {flat: true});
+  await cpy(path, "../nbprint/voila/static/"), {flat: true};
+}
+
 async function build_all() {
   await compile_css();
-  await cpy("./src/css/*", "../nbprint/extension/");
-  await cpy("./src/css/*", "../nbprint/templates/nbprint/static/");
-  await cpy("./src/css/*", "../nbprint/voila/static/");
+  await cp_css("./src/css/*");
+  await cp_css("node_modules/\@fortawesome/fontawesome-free/css/fontawesome.min.css");
   await Promise.all(BUILD.map(build)).catch(() => process.exit(1));
 }
 

@@ -14,7 +14,15 @@ outputs:
 parameters:
   type: nbprint.example:ExampleFinanceParameters
   ticker: "ABCD"
+  company_name: "ABCD Inc."
+  sector: "Autos & Shared Mobility"
+  region: "North America"
+  country: "United States of America"
   color: "#5db39c"
+
+  rating: Overweight
+  view: In-Line
+  price_target: 10.0
 
 context:
   type: nbprint.example:ExampleFinanceContext
@@ -29,29 +37,58 @@ content:
 
   - type: nbprint:ContentFlexRowLayout
     sizes: [5, 3]
-    separator_size: "1px"
-    separator_color: ${parameters.color}"
     content:
       - type: nbprint:ContentFlexColumnLayout
         content:
           - type: nbprint.example:ExampleFinanceStockHeadlineContent
-            company_name: "ABCD Inc."
-            region: "North America"
-            byline: "4Q23 Results: Solid Growth in both Domestic and International Markets"
+            company_name: ${parameters.company_name}
+            region: ${parameters.region}
+            byline: "Solid Growth in both Domestic and International Markets"
             color: ${parameters.color}
 
+          - type: nbprint.example:ExampleFinanceStockPTUpdate
+            rating: ${parameters.rating}
+            view: ${parameters.view}
+            price_target: ${parameters.price_target}
+
+          - type: nbprint.example:ExampleFinanceStockHeadline
+            text: |
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+
       - type: nbprint:ContentFlexColumnLayout
+        classname: "nbprint-example-finance-rightbar"
         content:
           - type: nbprint.example:ExampleFinanceReportAuthor
             name: John Smith
             title: Equity Analyst
             email: John.Smith@jm.com
-            phoneno: +1 212-867-5309
+            phone: +1 212 867-5309
             color: ${parameters.color}
 
           - type: nbprint.example:ExampleFinanceReportAuthor
             name: Jane Doe
             title: Equity Analyst
             email: Jane.Doe@jm.com
-            phoneno: +1 212-867-5309
+            phone: +1 212 867-5309
             color: ${parameters.color}
+
+          - type: nbprint.example:ExampleFinanceStockQuickStats
+            color: ${parameters.color}
+            ticker: ${parameters.ticker}
+            company_name: ${parameters.company_name}
+            sector: ${parameters.sector}
+            country: ${parameters.country}
+
+            rating: ${parameters.rating}
+            view: ${parameters.view}
+            price_target: ${parameters.price_target}
+
+            share_price: 7.59
+            market_cap: 1,024
+            range_min: 4.35
+            range_max: 8.25
+
+          - type: nbprint.example:ExampleFinanceStockEarningsTable
