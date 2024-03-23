@@ -6,6 +6,9 @@
 <script>
 var _nbprint_configuration = {};
 var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = {
+    searchPseudoElements: true
+  }
 </script>
 
 
@@ -18,6 +21,7 @@ var _nbprint_notebook_info = new Map();
 {{ resources.include_css("static/embedded.css") }}
 {{ resources.include_css("static/table-of-content.css") }}
 {{ resources.include_css("static/nbprint.css") }}
+{{ resources.include_css("static/fontawesome.min.css") }}
 {% endblock extra_css %}
 
 {# === No notebook === #}
