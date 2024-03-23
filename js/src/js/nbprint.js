@@ -6,17 +6,30 @@ class NBPrint {
 
   async process() {
     document.querySelectorAll("[data-nbprint-parent-id]").forEach((elem) => {
+      // read the parent ID from the element
       let parent_id = elem.getAttribute("data-nbprint-parent-id");
+
+      // grab the parent element
       let parent_elem = document.querySelector(
         `[data-nbprint-id="${parent_id}"`,
       );
-      let place_to_insert = parent_elem.querySelector(".jp-RenderedHTML");
-      if (place_to_insert && place_to_insert.lastElementChild) {
-        place_to_insert.lastElementChild.appendChild(elem);
-      } else if (place_to_insert) {
-        place_to_insert.appendChild(elem);
+
+      if (parent_elem) {
+        parent_elem.appendChild(elem);
       }
     });
+  }
+
+  async postprocess() {
+    const myEvent = new CustomEvent("nbprint-ready", {
+      detail: {
+        nbprint: this,
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: false,
+    });
+    document.dispatchEvent(myEvent);
   }
 
   buildPagedJS() {

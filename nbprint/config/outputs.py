@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, List, Literal, Optional, Union
 from uuid import uuid4
 
 from .base import BaseModel
-from .utils import SerializeAsAny
+from .utils import Role, SerializeAsAny
 
 if TYPE_CHECKING:
     from .config import Configuration
@@ -26,7 +26,7 @@ class Outputs(BaseModel):
     naming: List[Union[OutputNaming, str]] = [OutputNaming.name, "-", OutputNaming.date]
 
     tags: List[str] = Field(default=["nbprint:outputs"])
-    role: str = "outputs"
+    role: Role = Role.OUTPUTS
     ignore: bool = True
 
     @validator("path_root", pre=True)

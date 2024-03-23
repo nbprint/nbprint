@@ -30,6 +30,20 @@ class ExampleFinanceStockHeadlineContent(Content):
 
     def __call__(self, ctx=None, *args, **kwargs):
         return DisplayList(
-            HTML(f"<h3>{self.company_name} {self.sep} {self.region}</h3>"),
+            HTML(f'<h3 style="color: {self.color};">{self.company_name} {self.sep} {self.region}</h3>'),
             HTML(f"<h1>{self.byline}</h1>"),
+        )
+
+
+class ExampleFinanceReportAuthor(Content):
+    name: str = ""
+    title: str = ""
+    email: str = ""
+    phoneno: str = ""
+
+    def __call__(self, ctx=None, *args, **kwargs):
+        return HTML(
+            f"<h4>{self.name}</h4>"
+            f"<h5>{self.title}</h5>"
+            f'<div style="display:flex;flex-direction:row;justify-content:space-between;"><h6>{self.email}</h6><h6>{self.phoneno}</h6></div>'
         )

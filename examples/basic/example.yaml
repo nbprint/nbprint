@@ -17,7 +17,7 @@ parameters:
 context:
   type: nbprint.example:ExampleContext
 
-layout:
+page:
   header:
     content:
       - type: nbprint:LayoutGlobal
