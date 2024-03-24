@@ -1,25 +1,43 @@
-from enum import Enum
+from enum import StrEnum
+from typing import Optional, Union
 
-from ..base import BaseModel
+from .css import _BaseCss
 
 
-class FontWeight(str, Enum):
+class FontWeight(StrEnum):
     normal = "normal"
     bold = "bold"
 
 
-class FontStyle(str, Enum):
+class FontStyle(StrEnum):
     normal = "normal"
     italic = "italic"
 
 
-class TextDecoration(str, Enum):
+class TextDecoration(StrEnum):
     none = "none"
     underline = "underline"
 
 
-class Text(BaseModel):
-    text: str = ""
+class TextTransform(StrEnum):
+    capitalize = "capitalize"
+    lowercase = "lowercase"
+    uppercase = "uppercase"
+
+
+class FontFamily(StrEnum):
+    serif = "serif"
+    sans_serif = "sans-serif"
+    monospace = "monospace"
+
+
+class Font(_BaseCss):
+    family: Optional[Union[FontFamily, str]]
+    size: Optional[int]
+    transform: Optional[TextTransform]
+
+
+class Text(_BaseCss):
     decoration: TextDecoration = TextDecoration.none
     style: FontStyle = FontStyle.normal
     weight: FontWeight = FontWeight.normal

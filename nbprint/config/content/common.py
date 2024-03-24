@@ -3,17 +3,16 @@ from pydantic import Field
 from typing import List, Optional
 
 from ..common import FontStyle, FontWeight, HorizontalAlignment, TextDecoration, VerticalAlignment
-from ..utils import SerializeAsAny
 from .base import Content
 
 
 class TextComponent(Content):
     text: Optional[str] = ""
-    horizontal_alignment: Optional[SerializeAsAny[HorizontalAlignment]] = None
-    vertical_alignment: Optional[SerializeAsAny[VerticalAlignment]] = None
-    font_weight: Optional[SerializeAsAny[FontWeight]] = None
-    font_style: Optional[SerializeAsAny[FontStyle]] = None
-    text_decoration: Optional[SerializeAsAny[TextDecoration]] = None
+    horizontal_alignment: Optional[HorizontalAlignment] = None
+    vertical_alignment: Optional[VerticalAlignment] = None
+    font_weight: Optional[FontWeight] = None
+    font_style: Optional[FontStyle] = None
+    text_decoration: Optional[TextDecoration] = None
 
     tags: List[str] = Field(default=["nbprint:content"])
 

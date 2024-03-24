@@ -6,8 +6,7 @@ from pydantic import DirectoryPath, Field, validator
 from typing import TYPE_CHECKING, List, Literal, Optional, Union
 from uuid import uuid4
 
-from .base import BaseModel
-from .utils import Role, SerializeAsAny
+from ..base import BaseModel, Role
 
 if TYPE_CHECKING:
     from .config import Configuration
@@ -22,7 +21,7 @@ class OutputNaming(str, Enum):
 
 
 class Outputs(BaseModel):
-    path_root: SerializeAsAny[DirectoryPath]
+    path_root: DirectoryPath
     naming: List[Union[OutputNaming, str]] = [OutputNaming.name, "-", OutputNaming.date]
 
     tags: List[str] = Field(default=["nbprint:outputs"])
