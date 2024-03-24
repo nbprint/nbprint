@@ -26,6 +26,7 @@ class ExampleFinanceStockHeadlineContent(Content):
     company_name: str = ""
     region: str = ""
     byline: str = ""
+    color: str = ""
 
     def __call__(self, ctx=None, *args, **kwargs):
         return HTML(f"""
@@ -61,6 +62,7 @@ class ExampleFinanceReportAuthor(Content):
 class ExampleFinanceStockQuickStats(Content):
     ticker: str = ""
     company_name: str = ""
+    color: str = ""
 
     sector: str = ""
     country: str = ""

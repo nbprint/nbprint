@@ -7,24 +7,23 @@ from pydantic import Field, PrivateAttr, validator
 from sys import version_info
 from typing import Dict, List, Union
 
-from .. import __version__
-from .base import BaseModel, Type
-from .content import Content
+from ... import __version__
+from ..base import BaseModel, Role, Type, _append_or_extend
+from ..content import Content
+from ..page import PageGlobal
 from .context import Context
 from .outputs import Outputs
-from .page import PageGlobal
 from .parameters import Parameters
-from .utils import Role, SerializeAsAny, _append_or_extend
 
 
 class Configuration(BaseModel):
     name: str
-    resources: Dict[str, SerializeAsAny[BaseModel]] = Field(default_factory=dict)
-    outputs: SerializeAsAny[Outputs]
-    parameters: SerializeAsAny[Parameters]
-    page: SerializeAsAny[PageGlobal]
-    context: SerializeAsAny[Context]
-    content: List[SerializeAsAny[Content]] = Field(default_factory=list)
+    resources: Dict[str, BaseModel] = Field(default_factory=dict)
+    outputs: Outputs
+    parameters: Parameters
+    page: PageGlobal
+    context: Context
+    content: List[Content] = Field(default_factory=list)
 
     # basic metadata
     tags: List[str] = Field(default=["nbprint:config"])
