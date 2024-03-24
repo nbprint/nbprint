@@ -2,11 +2,13 @@ from nbformat import NotebookNode
 from pydantic import Field, validator
 from typing import TYPE_CHECKING, List, Optional, Union
 
-from ..base import BaseModel, Type
-from ..utils import Role, SerializeAsAny, _append_or_extend
+from ..base import BaseModel, Role, SerializeAsAny, Type, _append_or_extend
 
 if TYPE_CHECKING:
-    from ..config import Configuration
+    from ..core import Configuration
+
+
+class Style(BaseModel): ...
 
 
 class Content(BaseModel):
@@ -15,7 +17,7 @@ class Content(BaseModel):
     role: Role = Role.CONTENT
 
     # used by lots of things
-    color: str = ""
+    style: Optional[Style] = None
 
     def generate(
         self,

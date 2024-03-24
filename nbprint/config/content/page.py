@@ -1,7 +1,7 @@
 from IPython.display import HTML
 from typing import List
 
-from ..utils import Role
+from ..base import Role
 from .base import Content
 
 

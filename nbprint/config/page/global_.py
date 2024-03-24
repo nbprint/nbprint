@@ -2,17 +2,16 @@ from nbformat import NotebookNode
 from pydantic import validator
 from typing import TYPE_CHECKING, List, Optional, Union
 
-from ..base import BaseModel
-from ..utils import SerializeAsAny, _append_or_extend
+from ..base import BaseModel, _append_or_extend
 from .base import Page
 from .page_number import PageNumber
 
 if TYPE_CHECKING:
-    from ..config import Configuration
+    from ..core.config import Configuration
 
 
 class PageRegionBase(Page):
-    page_number: Optional[SerializeAsAny[PageNumber]] = None
+    page_number: Optional[PageNumber] = None
 
     def generate(
         self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str, *args, **kwargs
@@ -47,14 +46,14 @@ class PageBottomRightMargin(PageRegionBase): ...
 
 
 class PageGlobal(BaseModel):
-    header: Optional[SerializeAsAny[PageHeader]] = None
-    footer: Optional[SerializeAsAny[PageFooter]] = None
-    left: Optional[SerializeAsAny[PageLeftMargin]] = None
-    right: Optional[SerializeAsAny[PageRightMargin]] = None
-    top_left: Optional[SerializeAsAny[PageTopLeftMargin]] = None
-    top_right: Optional[SerializeAsAny[PageTopRightMargin]] = None
-    bottom_left: Optional[SerializeAsAny[PageBottomLeftMargin]] = None
-    bottom_right: Optional[SerializeAsAny[PageBottomRightMargin]] = None
+    header: Optional[PageHeader] = None
+    footer: Optional[PageFooter] = None
+    left: Optional[PageLeftMargin] = None
+    right: Optional[PageRightMargin] = None
+    top_left: Optional[PageTopLeftMargin] = None
+    top_right: Optional[PageTopRightMargin] = None
+    bottom_left: Optional[PageBottomLeftMargin] = None
+    bottom_right: Optional[PageBottomRightMargin] = None
 
     @validator("header", pre=True)
     def convert_header_from_obj(cls, v):

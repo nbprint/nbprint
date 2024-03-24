@@ -46,7 +46,8 @@ dependencies = [
     "nbformat",
     "notebook",
     "omegaconf",
-    "pydantic",
+    "pydantic>=2,<3",
+    "pydantic_extra_types",
     "typer",
 ]
 

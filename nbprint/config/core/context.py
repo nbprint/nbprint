@@ -2,8 +2,7 @@ from nbformat import NotebookNode
 from pydantic import Field, PrivateAttr
 from typing import TYPE_CHECKING, List
 
-from .base import BaseModel
-from .utils import Role
+from ..base import BaseModel, Role
 
 if TYPE_CHECKING:
     from .config import Configuration

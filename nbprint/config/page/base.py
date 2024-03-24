@@ -1,15 +1,14 @@
 from pydantic import Field
 from typing import List, Optional
 
-from ..base import BaseModel
+from ..base import BaseModel, Role
 from ..common import HorizontalAlignment, Justify, VerticalAlignment
-from ..utils import Role, SerializeAsAny
 
 
 class Page(BaseModel):
-    vertical_alignment: Optional[SerializeAsAny[VerticalAlignment]] = None
-    horizontal_alignment: Optional[SerializeAsAny[HorizontalAlignment]] = None
-    justify: Optional[SerializeAsAny[Justify]] = None
+    vertical_alignment: Optional[VerticalAlignment] = None
+    horizontal_alignment: Optional[HorizontalAlignment] = None
+    justify: Optional[Justify] = None
     border_size: Optional[int] = None
     border_color: Optional[str] = None
 

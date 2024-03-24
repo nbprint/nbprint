@@ -1,20 +1,37 @@
 import ast
+from enum import StrEnum
 from importlib import import_module
 from IPython.display import DisplayObject
 from json import dumps, loads
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
 from pathlib import Path
-from pydantic import BaseModel, Field, PrivateAttr, validator
-from typing import TYPE_CHECKING, List, Mapping, Optional, Type, Union
+from pydantic import BaseModel, Field, PrivateAttr, SerializeAsAny, validator
+from pydantic._internal._model_construction import ModelMetaclass
+from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple, Type, Union
 from uuid import uuid4
-
-# from .exceptions import NBPrintGenerationException
-from .utils import Role, SerializeAsAny
 
 if TYPE_CHECKING:
     from ..config import Configuration
-    from .context import Context
+    from .core.context import Context
+
+__all__ = (
+    "Type",
+    "Role",
+    "BaseModel",
+    "_append_or_extend",
+)
+
+
+# https://github.com/pydantic/pydantic/issues/6423#issuecomment-1967475432
+class _SerializeAsAnyMeta(ModelMetaclass):
+    def __new__(self, name: str, bases: Tuple[type], namespaces: Dict[str, Any], **kwargs):
+        annotations: dict = namespaces.get("__annotations__", {}).copy()
+        for field, annotation in annotations.items():
+            if not field.startswith("__"):
+                annotations[field] = SerializeAsAny[annotation]
+        namespaces["__annotations__"] = annotations
+        return super().__new__(self, name, bases, namespaces, **kwargs)
 
 
 class Type(BaseModel):
@@ -36,9 +53,20 @@ class Type(BaseModel):
         return self.type()(**kwargs)
 
 
-class BaseModel(BaseModel):
+class Role(StrEnum):
+    UNDEFINED = "undefined"
+    CONFIGURATION = "configuration"
+    CONTEXT = "context"
+    OUTPUTS = "outputs"
+    PARAMETERS = "parameters"
+    CONTENT = "content"
+    PAGE = "page"
+    LAYOUT = "layout"
+
+
+class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
     # type info
-    type: SerializeAsAny[Type]
+    type: Type
 
     # basic metadata
     tags: List[str] = Field(default_factory=list)
@@ -274,3 +302,12 @@ class BaseModel(BaseModel):
     def __repr__(self) -> str:
         # Truncate the output for now
         return f"<{self.__class__.__name__}>"
+
+
+def _append_or_extend(cells: list, cell_or_cells: Union[NotebookNode, List[NotebookNode]]) -> None:
+    if isinstance(cell_or_cells, list):
+        print(type(cell_or_cells[0]))
+        cells.extend(cell_or_cells)
+    elif cell_or_cells:
+        cells.append(cell_or_cells)
+    # None, ignore
