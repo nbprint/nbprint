@@ -168,9 +168,9 @@ class Configuration(BaseModel):
 
         raise TypeError(f"Path or model malformed: {path_or_model} {type(path_or_model)}")
 
-    def run(self, debug: bool = True):
+    def run(self):
         gen = self.generate(self)
-        if debug:
+        if self.debug:
             pprint(gen)
         self.outputs.run(self, gen)
 

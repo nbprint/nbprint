@@ -17,16 +17,10 @@ class _ContentFlexLayout(Content):
     css: str = "div.nbprint-flex-layout { display: flex; }"
     esm: str = """
 function render(meta, elem) {
-    console.log(meta);
-    console.log(elem);
     let data = JSON.parse(meta.data);
     if (data.sizes.length > 1 ) {
-        const sum =
         data.sizes.forEach((size, index) => {
-            console.log(size);
-            console.log(index);
             const child = elem.children[index];
-            console.log(child);
             if(child) {
                 child.style.flex = `${size}`;
             }
@@ -42,9 +36,9 @@ function render(meta, elem) {
 
 class ContentFlexColumnLayout(_ContentFlexLayout):
     classname: str = "nbprint-column-layout"
-    css: str = "div.nbprint-column-layout { display: flex; flex-direction: column; }"
+    css: str = ":scope { display: flex; flex-direction: column; }"
 
 
 class ContentFlexRowLayout(_ContentFlexLayout):
     classname: str = "nbprint-row-layout"
-    css: str = "div.nbprint-row-layout { display: flex; flex-direction: row; }"
+    css: str = ":scope { display: flex; flex-direction: row; }"
