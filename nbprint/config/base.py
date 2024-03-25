@@ -85,7 +85,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
     _nb_var_name: Optional[str] = PrivateAttr(default="")
 
     # id to use to reconstitute dom during page building
-    _id: str = PrivateAttr(default_factory=lambda: str(uuid4()))
+    _id: str = PrivateAttr(default_factory=lambda: str(uuid4()).replace("-", ""))
 
     class Config:
         arbitrary_types_allowed: bool = False
@@ -202,8 +202,11 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         # TODO move these all to common method?
         cell.metadata.nbprint.css = self.css or ""
         cell.metadata.nbprint.esm = self.esm or ""
-        cell.metadata.nbprint["class"] = "nbprint " + (
-            " ".join(self.classname) if isinstance(self.classname, list) else self.classname or ""
+        cell.metadata.nbprint.class_selector = f'{cell.metadata.nbprint.type.replace(":", "-").replace(".", "-")}'
+        cell.metadata.nbprint.element_selector = f"{cell.metadata.nbprint.class_selector}-{self._id}"
+        cell.metadata.nbprint["class"] = (
+            f"nbprint {cell.metadata.nbprint.class_selector} {cell.metadata.nbprint.element_selector} "
+            + (" ".join(self.classname) if isinstance(self.classname, list) else self.classname or "")
         )
         cell.metadata.nbprint.attrs = " ".join(f"{k}={dumps(v)}" for k, v in (self.attrs or {}).items())
         return cell
@@ -306,7 +309,6 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
 
 def _append_or_extend(cells: list, cell_or_cells: Union[NotebookNode, List[NotebookNode]]) -> None:
     if isinstance(cell_or_cells, list):
-        print(type(cell_or_cells[0]))
         cells.extend(cell_or_cells)
     elif cell_or_cells:
         cells.append(cell_or_cells)
