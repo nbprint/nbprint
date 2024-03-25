@@ -51,8 +51,14 @@ window.FontAwesomeConfig = {
     </script>
     {% if cell.metadata["nbprint"].get("css", None) %}
     <style>
-        /* TODO add to shadow dom */
+        /* TODO should we make this like `ignore` as a first-order attribute? */
+        {% if cell.metadata["nbprint"].get("role", "") != "configuration" %}
+        @scope (.{{ cell.metadata["nbprint"]["element_selector"] }}) {
+        {% endif %}
         {{ cell.metadata["nbprint"]["css"] }}
+        {% if cell.metadata["nbprint"].get("role", "") != "configuration" %}
+        }
+        {% endif %}
     </style>
     {% endif %}
 
@@ -83,13 +89,14 @@ window.FontAwesomeConfig = {
         {% else %}
         <div class="{{ cell.metadata["nbprint"]["class"] }}" {{ cell.metadata["nbprint"]["attrs"] }} data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}">
         {% endif %}
-            <!-- TODO should we make this like `ignore` as a first-order attribute? -->
-            {% if cell.metadata["nbprint"].get("role", "content") == "content" %}
-            {{ super() }}
-            {% endif %}
+
+        <!-- TODO should we make this like `ignore` as a first-order attribute? -->
+        {% if cell.metadata["nbprint"].get("role", "content") == "content" %}
+        {{ super() }}
+        {% endif %}
+
         </div>
     {% endif %}
-
 {% else %}
     {{ super() }}
 {% endif %}

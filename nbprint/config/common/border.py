@@ -30,7 +30,14 @@ class BorderLineWidth(StrEnum):
     thick = "thick"
 
 
-class Border(_BaseCss):
+class BorderStyle(_BaseCss):
     width: Optional[Union[BorderLineWidth, int]]
     style: Optional[BorderLineStyle]
     color: Optional[Color]
+
+
+class Border(_BaseCss):
+    right: Optional[BorderStyle]
+    left: Optional[BorderStyle]
+    top: Optional[BorderStyle]
+    bottom: Optional[BorderStyle]
