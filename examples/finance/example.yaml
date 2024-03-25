@@ -34,6 +34,45 @@ content:
     title: "Jefferies Morgan"
     subtitle: "Research"
     date: "November 8, 2023 08:45 GMT"
+    styles:
+      - scope:
+          element: div
+          classname: row
+        spacing:
+          padding:
+            bottom: 10
+      - scope:
+          element: h1
+        text:
+          font:
+            family: sans-serif
+            size: 25
+        spacing:
+          padding:
+            right: 15
+        border:
+          right:
+            width: 2
+            style: solid
+            color: black
+      - scope:
+          element: h2
+        text:
+          font:
+            family: sans-serif
+            size: 12
+            transform: uppercase
+            weight: bold
+        spacing:
+          padding:
+            left: 15
+      - scope:
+          element: span
+        text:
+          font:
+            size: 15
+            style: italic
+            color: grey
 
   - type: nbprint:ContentFlexRowLayout
     sizes: [5, 3]

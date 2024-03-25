@@ -5,113 +5,11 @@
 
 
 /* SPECIFIC */
-
-
-/* Title */
-.nbprint-example-finance-title > div{
-  padding-bottom: 10px;
-}
-
-.nbprint-example-finance-title-title {
-  font-family: "Arial";
-  font-size: 25px !important;
-  padding-right: 15px;
-  border-right: 2px solid black;
-}
-
-.nbprint-example-finance-title-subtitle {
-  font-family: "Arial";
-  text-transform: uppercase;
-  font-weight: bold !important;
-  font-size: 12px !important;
-  padding-left: 15px;
-}
-
-.nbprint-example-finance-title-date {
-  color: grey;
-  font-size: 15px !important;
-  font-style: italic;
-}
-
-.nbprint-example-finance-heading > div{
-  padding-bottom: 10px;
-}
-
-.nbprint-example-finance-heading-companyname {
-  padding-right: 15px;
-}
-
-.nbprint-example-finance-heading-region {
-  padding-left: 15px;
-}
-
-.nbprint-example-finance-heading-byline {
-  font-weight: normal;
-}
-
 /* Right Bar */
 .nbprint-example-finance-rightbar {
   padding-left: 10px;
   border-left: 1px solid black;
 }
-
-/* Authors */
-.nbprint-example-finance-author {
-
-}
-.nbprint-example-finance-author-name {
-  font-size: 12px;
-  font-weight: bold;
-}
-.nbprint-example-finance-author-title {
-  font-size: 10px;
-  text-transform: uppercase;
-}
-
-.nbprint-example-finance-author-contact {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.nbprint-example-finance-author-email {
-  font-size: 10px;
-}
-.nbprint-example-finance-author-phone {
-  font-family: monospace;
-  font-size: 10px;
-}
-
-/* QuickStats */
-.nbprint-example-finance-stock-quickstats-titlebar {
-  padding-left: 5px;
-}
-.nbprint-example-finance-stock-quickstats > div:nth-child(2) {
-  font-size: 9px;
-}
-.nbprint-example-finance-stock-quickstats-stats > div.row {
-  justify-content: space-between;
-}
-.nbprint-example-finance-stock-quickstats-stats > div.row {
-  font-size: 10px;
-}
-.nbprint-example-finance-stock-quickstats-stats > div.row:nth-child(1),
-.nbprint-example-finance-stock-quickstats-stats > div.row:nth-child(2),
-.nbprint-example-finance-stock-quickstats-stats > div.row:nth-child(3) {
-  font-weight: bold;
-}
-
-/* Earnings */
-.nbprint-example-finance-stock-earnings table {
-  font-size: 10px;
-}
-.nbprint-example-finance-stock-earnings table thead tr {
-  font-weight: bold;
-}
-.nbprint-example-finance-stock-earnings table tbody tr td:nth-child(1){
-  font-weight: bold;
-}
-
 
 /* PT Update */
 .nbprint-example-finance-stock-ptupdate {

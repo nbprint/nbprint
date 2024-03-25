@@ -1,6 +1,7 @@
 from enum import StrEnum
 from typing import Optional, Union
 
+from .common import Color
 from .css import _BaseCss
 
 
@@ -35,9 +36,10 @@ class Font(_BaseCss):
     family: Optional[Union[FontFamily, str]]
     size: Optional[int]
     transform: Optional[TextTransform]
+    decoration: Optional[TextDecoration]
+    style: Optional[FontStyle]
+    weight: Optional[FontWeight]
+    color: Optional[Color]
 
 
-class Text(_BaseCss):
-    decoration: TextDecoration = TextDecoration.none
-    style: FontStyle = FontStyle.normal
-    weight: FontWeight = FontWeight.normal
+class Text(Font): ...
