@@ -11,6 +11,8 @@ from ..base import BaseModel, Role
 if TYPE_CHECKING:
     from .config import Configuration
 
+__all__ = ("OutputNaming", "Outputs", "NBConvertOutputs")
+
 
 class OutputNaming(str, Enum):
     name = "${name}"
