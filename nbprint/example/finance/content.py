@@ -260,31 +260,82 @@ class ExampleFinanceStockPTUpdate(Content):
     view: str
     price_target: float
 
+    css: str = """
+:scope div.row {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  justify-content: space-between;
+}
+
+div.row > div:nth-child(2),
+div.row > div:nth-child(3) {
+  padding-left: 20px;
+  border-left: 1px solid black;
+}
+
+div.row > div > span:nth-child(1) {
+  font-size: 10px;
+}
+
+div.row > div > span:nth-child(2) {
+  font-size: 20px;
+}
+
+div.row div:nth-child(1) span:nth-child(1)::before {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: '\\f201';
+  display: none;
+  width: 20px;
+}
+
+div.row div:nth-child(2) span:nth-child(1)::before {
+  font-family: "Font Awesome 6 Free";
+  content: '\\f06e';
+  display: none;
+}
+
+div.row div:nth-child(3) span:nth-child(1)::before {
+  font-family: "Font Awesome 6 Free";
+  content: '\\f192';
+  display: none;
+}
+
+svg {
+  width: 15px;
+  margin-right: 3px;
+}
+"""
+
     def __call__(self, ctx=None, *args, **kwargs):
         return HTML(f"""
-            <div class="row nbprint-example-finance-stock-ptupdate">
-                <div class="column">
-                    <span class="nbprint-example-finance-stock-ptupdate-stockrating">Stock Rating</span>
-                    <span>{self.rating}</span>
-                </div>
-                <div class="column">
-                    <span class="nbprint-example-finance-stock-ptupdate-industryview">Industry View</span>
-                    <span>{self.view}</span>
-                </div>
-                <div class="column">
-                    <span class="nbprint-example-finance-stock-ptupdate-pricetarget">Price Target</span>
-                    <span>${self.price_target:.2f}</span>
-                </div>
+        <div class="row">
+            <div class="column">
+                <span class="stock-rating">Stock Rating</span>
+                <span>{self.rating}</span>
             </div>
+            <div class="column">
+                <span>Industry View</span>
+                <span>{self.view}</span>
+            </div>
+            <div class="column">
+                <span>Price Target</span>
+                <span>${self.price_target:.2f}</span>
+            </div>
+        </div>
         """)
 
 
 class ExampleFinanceStockHeadline(Content):
     text: str = ""
 
+    css: str = """
+:scope span {
+  font-size: 20px;
+}
+"""
+
     def __call__(self, ctx=None, *args, **kwargs):
         return HTML(f"""
-            <div class="nbprint-example-finance-stock-headline">
-                <span>{self.text}
-            </div>
+            <span>{self.text}</span>
         """)

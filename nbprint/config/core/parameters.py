@@ -9,6 +9,8 @@ from ..base import BaseModel, Role
 if TYPE_CHECKING:
     from .config import Configuration
 
+__all__ = ("Parameters",)
+
 
 class Parameters(BaseModel):
     tags: List[str] = Field(default=["parameters", "nbprint:parameters"])

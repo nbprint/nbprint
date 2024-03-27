@@ -7,6 +7,8 @@ from ..base import BaseModel, Role
 if TYPE_CHECKING:
     from .config import Configuration
 
+__all__ = ("Context",)
+
 
 class Context(BaseModel):
     tags: List[str] = Field(default=["nbprint:context"])

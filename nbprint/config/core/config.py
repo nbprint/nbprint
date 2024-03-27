@@ -15,6 +15,11 @@ from .context import Context
 from .outputs import Outputs
 from .parameters import Parameters
 
+__all__ = (
+    "Configuration",
+    "load",
+)
+
 
 class Configuration(BaseModel):
     name: str

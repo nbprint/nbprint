@@ -3,12 +3,10 @@ from pydantic import Field, validator
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from ..base import BaseModel, Role, SerializeAsAny, Type, _append_or_extend
+from ..common import Style
 
 if TYPE_CHECKING:
     from ..core import Configuration
-
-
-class Style(BaseModel): ...
 
 
 class Content(BaseModel):
