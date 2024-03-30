@@ -52,11 +52,13 @@ window.FontAwesomeConfig = {
     {% if cell.metadata["nbprint"].get("css", None) %}
     <style>
         /* TODO should we make this like `ignore` as a first-order attribute? */
-        {% if cell.metadata["nbprint"].get("role", "") != "configuration" %}
+        {% if cell.metadata["nbprint"].get("role", "") not in ("configuration", "page") %}
         @scope (.{{ cell.metadata["nbprint"]["element_selector"] }}) {
         {% endif %}
+
         {{ cell.metadata["nbprint"]["css"] }}
-        {% if cell.metadata["nbprint"].get("role", "") != "configuration" %}
+
+        {% if cell.metadata["nbprint"].get("role", "") not in ("configuration", "page") %}
         }
         {% endif %}
     </style>
@@ -67,6 +69,8 @@ window.FontAwesomeConfig = {
         document.addEventListener("nbprint-ready", async () => {
 
             // TODO formal entrypoint a la anywidget
+            // TODO put onto global nbprint so we can wait
+            // for all to be done before moving to pagedjs phase
             {{ cell.metadata["nbprint"]["esm"] }}
 
             typeof(render) !== undefined &&

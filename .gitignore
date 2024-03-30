@@ -160,4 +160,4 @@ $RECYCLE.BIN/
 nbprint/extension/*
 nbprint/templates/nbprint/static/*
 tmp.html
-examples/*/output/
+examples/output/

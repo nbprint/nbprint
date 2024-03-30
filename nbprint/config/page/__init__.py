@@ -1,14 +1,3 @@
-from .base import Page
-from .global_ import (
-    PageBottomLeftMargin,
-    PageBottomRightMargin,
-    PageFooter,
-    PageGlobal,
-    PageHeader,
-    PageLeftMargin,
-    PageRegionBase,
-    PageRightMargin,
-    PageTopLeftMargin,
-    PageTopRightMargin,
-)
-from .page_number import PageNumber
+from .base import *
+from .global_ import *
+from .page_number import *
