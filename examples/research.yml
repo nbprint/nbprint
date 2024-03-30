@@ -1,0 +1,35 @@
+---
+debug: false
+outputs:
+  type: nbprint:NBConvertOutputs
+  path_root: ./examples/output
+  target: "html"
+
+context:
+  type: nbprint.example:ExampleResearchReferencesContext
+
+content:
+  - type: nbprint.example:ExampleResearchHeader
+    content:
+      - type: nbprint.example:ExampleResearchTitle
+        title: "An Example Research Publication Title"
+
+      - type: nbprint.example:ExampleResearchAuthors
+        content:
+          - type: nbprint.example:ExampleResearchAuthor
+            name: John Smith
+            email: john.smith@columbia.edu
+          - type: nbprint.example:ExampleResearchAuthor
+            name: Jane Doe
+            email: jane.doe@columbia.edu
+          - type: nbprint.example:ExampleResearchAuthor
+            name: Joe Schmo
+            email: joe.schmo@columbia.edu
+
+  - type: nbprint.example:ExampleResearchBody
+    content:
+      - type: nbprint.example:ExampleResearchAbstract
+      - type: nbprint.example:ExampleResearchIntroduction
+      - type: nbprint.example:ExampleResearchSecondSection
+      - type: nbprint.example:ExampleResearchConclusion
+      - type: nbprint.example:ExampleResearchReferences

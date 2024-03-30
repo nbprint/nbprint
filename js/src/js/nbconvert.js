@@ -52,6 +52,7 @@ const build = async () => {
 document.addEventListener("DOMContentLoaded", async () => {
   // Process with NBPrint
   let nbprint = initializeNBPrint();
+
   await nbprint.process();
 
   if (nbprint.buildPagedJS()) {

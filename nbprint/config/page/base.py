@@ -4,6 +4,8 @@ from typing import List, Optional
 from ..base import BaseModel, Role
 from ..common import HorizontalAlignment, Justify, VerticalAlignment
 
+__all__ = ("Page",)
+
 
 class Page(BaseModel):
     vertical_alignment: Optional[VerticalAlignment] = None

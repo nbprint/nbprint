@@ -45,7 +45,7 @@
         width: calc(var(--pagedjs-width) + var(--screen-pages-spacing));
     }
 }
-
+/*
 @page {
     @top-left-corner {}
     @top-left {}
@@ -65,9 +65,8 @@
         content: counter(page);
     }
     @bottom-right-corner {}
-
     size: letter;
-}
+} */
 
 @media print {
     div.cell {

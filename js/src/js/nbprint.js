@@ -5,6 +5,7 @@ class NBPrint {
   }
 
   async process() {
+    // remap element hierarchy
     document.querySelectorAll("[data-nbprint-parent-id]").forEach((elem) => {
       // read the parent ID from the element
       let parent_id = elem.getAttribute("data-nbprint-parent-id");
@@ -18,6 +19,14 @@ class NBPrint {
         parent_elem.appendChild(elem);
       }
     });
+
+    // hoist global styles
+    let styles = Array.from(
+      document.querySelector("main").querySelectorAll("style"),
+    ).filter((val) => !val.textContent.includes("@scope"));
+    for (let style of styles) {
+      document.head.appendChild(style);
+    }
   }
 
   async postprocess() {

@@ -1,6 +1,5 @@
 ---
 # global config options
-css: "./examples/news/news.css"
 debug: false
 # end global config options
 
@@ -8,7 +7,7 @@ resources:
 
 outputs:
   type: nbprint:NBConvertOutputs
-  path_root: ./examples/news/output
+  path_root: ./examples/output
   target: "html"
 
 parameters:

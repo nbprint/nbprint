@@ -1,11 +1,10 @@
 from .content import (
-    ExampleFinanceReportAuthor,
+    ExampleFinanceAuthor,
     ExampleFinanceStockEarningsTable,
     ExampleFinanceStockHeadline,
-    ExampleFinanceStockHeadlineContent,
     ExampleFinanceStockPTUpdate,
     ExampleFinanceStockQuickStats,
-    ExampleFinanceTitleContent,
+    ExampleFinanceTitle,
 )
 from .context import ExampleFinanceContext
 from .parameters import ExampleFinanceParameters
