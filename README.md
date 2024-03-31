@@ -119,11 +119,11 @@ nbprint examples/basic.yaml basic
 
 This will create a Notebook output in our specified folder `examples/output`, as well as an html asset (since that is what we specified in the yaml file). Both will have the date as a suffix, which is also configureable in our yaml. We see the generated report notebook, which we can open and use for further experimentation or to investigate the report itself.
 
-<img src="https://github.com/timkpaine/nbprint/raw/main/docs/img/example-notebook.png?raw=true" alt="example notebook output" width="400"></a>
+<img src="https://github.com/timkpaine/nbprint/raw/main/docs/img/example-notebook.png?raw=true" alt="example notebook output" width="800"></a>
 
 We also see the html document itself, which will be rendered via [`pagedjs`](https://pagedjs.org) print preview.
 
-<img src="https://github.com/timkpaine/nbprint/raw/main/docs/img/example-basic.png?raw=true" alt="example basic output" width="400"></a>
+<img src="https://github.com/timkpaine/nbprint/raw/main/docs/img/example-basic.png?raw=true" alt="example basic output" width="800"></a>
 
 You can find a pdf form of this document [here](https://github.com/timkpaine/nbprint/raw/main/docs/img/example-basic.pdf?raw=true).
 
