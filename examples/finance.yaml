@@ -90,7 +90,7 @@ content:
             view: ${parameters.view}
             price_target: ${parameters.price_target}
 
-          - type: nbprint.example:ExampleFinanceStockHeadline
+          - type: nbprint.example:ExampleFinanceStockSubHeadline
             text: |
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.

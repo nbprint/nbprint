@@ -1,4 +1,3 @@
-from IPython.display import HTML
 from typing import Optional
 
 from ..base import BaseModel

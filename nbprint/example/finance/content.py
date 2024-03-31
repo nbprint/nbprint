@@ -326,7 +326,7 @@ svg {
         """)
 
 
-class ExampleFinanceStockHeadline(Content):
+class ExampleFinanceStockSubHeadline(Content):
     text: str = ""
 
     css: str = """

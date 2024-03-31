@@ -1,5 +1,5 @@
 from nbformat import NotebookNode
-from pydantic import Field, computed_field, validator
+from pydantic import Field, validator
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from ..base import BaseModel, _append_or_extend
