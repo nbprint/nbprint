@@ -3,11 +3,11 @@ debug: false
 resources:
   logo:
     type: nbprint:ContentImage
-    path: ./examples/basic/logo.jpg
+    path: ./examples/assets/generic-company-logo.jpg
 
 outputs:
   type: nbprint:NBConvertOutputs
-  path_root: ./examples/basic/output
+  path_root: ./examples/output
   target: "html"
 
 parameters:
@@ -44,8 +44,8 @@ content:
     vertical_alignment: "center"
     horizontal_alignment: "left"
     logo: ${resources.logo}
-    title: "Report for AAPL"
-    subtitle: "In this section we have some boilerplate stuff about Apple"
+    title: "A generic report"
+    subtitle: "In this section we have some boilerplate stuff"
 
   - type: nbprint:ContentTableOfContents
 

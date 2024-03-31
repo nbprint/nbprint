@@ -1,5 +1,5 @@
 from nbformat import NotebookNode
-from pydantic import validator
+from pydantic import Field, validator
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from ..base import BaseModel, _append_or_extend
@@ -9,9 +9,27 @@ from .page_number import PageNumber
 if TYPE_CHECKING:
     from ..core.config import Configuration
 
+__all__ = (
+    "PageRegionBase",
+    "PageTop",
+    "PageBottom",
+    "PageLeft",
+    "PageRight",
+    "PageTopLeft",
+    "PageTopRight",
+    "PageBottomLeft",
+    "PageBottomRight",
+    "PageGlobal",
+)
+
 
 class PageRegionBase(Page):
     page_number: Optional[PageNumber] = None
+    _base_css: str = "@page {{ @{region} {{ {content} }} }}"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.css = self._base_css.format(region=self._region, content=str(self.page_number or ""))
 
     def generate(
         self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str, *args, **kwargs
@@ -21,71 +39,94 @@ class PageRegionBase(Page):
         return cell
 
 
-class PageHeader(PageRegionBase): ...
+# TODO corners
+# TODO @left-top {}
+# TODO @left-bottom {}
+# TODO @right-top {}
+# TODO @right-bottom {}
 
 
-class PageFooter(PageRegionBase): ...
+class PageTop(PageRegionBase):
+    _region = "top-center"
 
 
-class PageLeftMargin(PageRegionBase): ...
+class PageBottom(PageRegionBase):
+    _region = "bottom-center"
 
 
-class PageRightMargin(PageRegionBase): ...
+class PageLeft(PageRegionBase):
+    _region = "left-middle"
 
 
-class PageTopLeftMargin(PageRegionBase): ...
+class PageRight(PageRegionBase):
+    _region = "right-middle"
 
 
-class PageTopRightMargin(PageRegionBase): ...
+class PageTopLeft(PageRegionBase):
+    _region = "top-left"
 
 
-class PageBottomLeftMargin(PageRegionBase): ...
+class PageTopRight(PageRegionBase):
+    _region = "top-right"
 
 
-class PageBottomRightMargin(PageRegionBase): ...
+class PageBottomLeft(PageRegionBase):
+    _region = "bottom-left"
+
+
+class PageBottomRight(PageRegionBase):
+    _region = "bottom-right"
+
+
+def _make_default_page_number() -> PageBottomRight:
+    return PageBottomRight(page_number=PageNumber())
 
 
 class PageGlobal(BaseModel):
-    header: Optional[PageHeader] = None
-    footer: Optional[PageFooter] = None
-    left: Optional[PageLeftMargin] = None
-    right: Optional[PageRightMargin] = None
-    top_left: Optional[PageTopLeftMargin] = None
-    top_right: Optional[PageTopRightMargin] = None
-    bottom_left: Optional[PageBottomLeftMargin] = None
-    bottom_right: Optional[PageBottomRightMargin] = None
+    top: Optional[PageTop] = None
+    bottom: Optional[PageBottom] = None
+    left: Optional[PageLeft] = None
+    right: Optional[PageRight] = None
+    top_left: Optional[PageTopLeft] = None
+    top_right: Optional[PageTopRight] = None
+    bottom_left: Optional[PageBottomLeft] = None
+    bottom_right: Optional[PageBottomRight] = Field(default_factory=_make_default_page_number)
 
-    @validator("header", pre=True)
-    def convert_header_from_obj(cls, v):
-        return BaseModel._to_type(v, PageHeader)
+    css: str = """
+@page { size: letter; }
+"""
 
-    @validator("footer", pre=True)
-    def convert_footer_from_obj(cls, v):
-        return BaseModel._to_type(v, PageFooter)
+    @validator("top", pre=True)
+    def convert_top_from_obj(cls, v):
+        return BaseModel._to_type(v, PageTop)
+
+    @validator("bottom", pre=True)
+    def convert_bottom_from_obj(cls, v):
+        return BaseModel._to_type(v, PageBottom)
 
     @validator("left", pre=True)
     def convert_left_from_obj(cls, v):
-        return BaseModel._to_type(v, PageLeftMargin)
+        return BaseModel._to_type(v, PageLeft)
 
     @validator("right", pre=True)
     def convert_right_from_obj(cls, v):
-        return BaseModel._to_type(v, PageRightMargin)
+        return BaseModel._to_type(v, PageRight)
 
     @validator("top_left", pre=True)
     def convert_top_left_from_obj(cls, v):
-        return BaseModel._to_type(v, PageTopLeftMargin)
+        return BaseModel._to_type(v, PageTopLeft)
 
     @validator("top_right", pre=True)
     def convert_top_right_from_obj(cls, v):
-        return BaseModel._to_type(v, PageTopRightMargin)
+        return BaseModel._to_type(v, PageTopRight)
 
     @validator("bottom_left", pre=True)
     def convert_bottom_left_from_obj(cls, v):
-        return BaseModel._to_type(v, PageBottomLeftMargin)
+        return BaseModel._to_type(v, PageBottomLeft)
 
     @validator("bottom_right", pre=True)
     def convert_bottom_right_from_obj(cls, v):
-        return BaseModel._to_type(v, PageBottomRightMargin)
+        return BaseModel._to_type(v, PageBottomRight)
 
     def generate(
         self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str = "page", *args, **kwargs
@@ -102,8 +143,8 @@ class PageGlobal(BaseModel):
         cells.append(main_cell)
 
         for attr in (
-            "header",
-            "footer",
+            "top",
+            "bottom",
             "left",
             "right",
             "top_left",
