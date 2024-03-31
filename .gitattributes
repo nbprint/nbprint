@@ -1,2 +1,6 @@
 examples/* linguist-documentation
-* text eol=lf
+docs/* linguist-documentation
+*.ipynb linguist-documentation
+Makefile linguist-documentation
+
+* text=auto eol=lf
