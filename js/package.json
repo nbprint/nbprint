@@ -28,8 +28,8 @@
     "pagedjs": "^0.4.3"
   },
   "devDependencies": {
-    "@finos/perspective-esbuild-plugin": "^2.9.0",
-    "@finos/perspective-workspace": "^2.9.0",
+    "@finos/perspective-esbuild-plugin": "^2.10.0",
+    "@finos/perspective-workspace": "^2.10.0",
     "@playwright/test": "^1.42.1",
     "@prospective.co/procss": "^0.1.15",
     "cpy": "^11.0.1",

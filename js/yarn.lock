@@ -132,27 +132,27 @@
   resolved "https://registry.yarnpkg.com/@esbuild/win32-x64/-/win32-x64-0.20.2.tgz#9c907b21e30a52db959ba4f80bb01a0cc403d5cc"
   integrity sha512-N49X4lJX27+l9jbLKSqZ6bKNjzQvHaT8IIFUy+YIqmXQdjYCToGWwOItDrfby14c78aDd5NHQl29xingXfCdLQ==
 
-"@finos/perspective-esbuild-plugin@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@finos/perspective-esbuild-plugin/-/perspective-esbuild-plugin-2.9.0.tgz#17103bda2cabd87c534db66d177d51fddf71de87"
-  integrity sha512-y2P7P913oBjGsvLG6YuHFUtj4pVGosDCtmfAuUcVKJ14mLSd3h9ZW/jUi3xfx1pLtSo7fJorkRiE1D4CNQD9bQ==
+"@finos/perspective-esbuild-plugin@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@finos/perspective-esbuild-plugin/-/perspective-esbuild-plugin-2.10.0.tgz#b5d960bb0cf27bf7ea70dd560991b4407aab7206"
+  integrity sha512-A05pGSDbxtRxiXr2XBHq+TyC0I4oK6yL4cqK13rn3tK0h4cax1Hv4uyxdEU0amfXaxc1sK1fvnSKDCKSxHqa4Q==
   dependencies:
     node-fetch "^2.6.7"
     tar "^6.1.11"
 
-"@finos/perspective-viewer@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@finos/perspective-viewer/-/perspective-viewer-2.9.0.tgz#77ff5c8e26e8b9dc82df1af85e33fb4aa7274acb"
-  integrity sha512-HWY0l4E3Zd5of4XW42PnX44gFg6eNzrV01P4N6Qa53VawH7qyt3V8jPsRQ2WOkUNQTq9b00qmAeFjaLSPz6VdA==
+"@finos/perspective-viewer@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@finos/perspective-viewer/-/perspective-viewer-2.10.0.tgz#aa6db62cb04e59f278bad10eb4f939b47a68c0eb"
+  integrity sha512-AWPduQl3/6kHWyDmBSZU7+IKvYnGz5GdMTc0gtW8jLB1p3tZcoiznyaK7BtfPEMDhOE0BNZP0hXuzN0bCtKXrg==
   dependencies:
-    "@finos/perspective" "^2.9.0"
+    "@finos/perspective" "^2.10.0"
 
-"@finos/perspective-workspace@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@finos/perspective-workspace/-/perspective-workspace-2.9.0.tgz#caeb56afbf139d8d89fad9ac1493c48a0517f510"
-  integrity sha512-odKY3B+3xl7b8rNsBfJymMNfbT2AcMlKZDeuuKacFTPV12YF+DWT7lDLWSA4nSK4HQXlMkLIaZyQyVALMHf8+A==
+"@finos/perspective-workspace@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@finos/perspective-workspace/-/perspective-workspace-2.10.0.tgz#57c471f9cc65e89d8551afec38d6efda11148cf1"
+  integrity sha512-XDveB874VULC8TVjiTcLdGFku5Z6HdnSQ9SCKqCdCykKKbLsaX3JzML1sLiqVeuSu/OowWCzDIOFkzQ57yjaiw==
   dependencies:
-    "@finos/perspective-viewer" "^2.9.0"
+    "@finos/perspective-viewer" "^2.10.0"
     "@lumino/algorithm" "^1.9.1"
     "@lumino/commands" "^1.20.0"
     "@lumino/domutils" "^1.8.1"
@@ -161,10 +161,10 @@
     "@lumino/widgets" "^1.37.0"
     lodash "^4.17.4"
 
-"@finos/perspective@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@finos/perspective/-/perspective-2.9.0.tgz#c57f5c290983bf07746f022ed309bb5a9fc8a4ca"
-  integrity sha512-O40EzleYRpmX2k8xwbcJfWlgi4QDJ2cUJlmEA0wG1LLVmSOQD7vFeQK9H2v6xQBwn6+/andpDLglrzDYCEBOHg==
+"@finos/perspective@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@finos/perspective/-/perspective-2.10.0.tgz#fe0e1b46b29e9861abcd3c2ef41b340a86dca915"
+  integrity sha512-8g6hsKhpS2gR7GYQWksNDm8kpymHZiSbJkC4HAp1dI95RArksr4U9CUAOnALgw8JI9B5CYI6b1SWQxbzCsTQ6A==
   dependencies:
     stoppable "1.1.0"
     ws "^6.1.2"

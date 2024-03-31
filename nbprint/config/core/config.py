@@ -25,9 +25,9 @@ class Configuration(BaseModel):
     name: str
     resources: Dict[str, BaseModel] = Field(default_factory=dict)
     outputs: Outputs
-    parameters: Parameters
-    page: PageGlobal
-    context: Context
+    parameters: Parameters = Field(default_factory=Parameters)
+    page: PageGlobal = Field(default_factory=PageGlobal)
+    context: Context = Field(default_factory=Context)
     content: List[Content] = Field(default_factory=list)
 
     # basic metadata

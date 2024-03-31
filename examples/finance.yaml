@@ -1,6 +1,6 @@
 ---
 # global config options
-css: "./examples/finance/finance.css"
+css: ".jp-RenderedHTMLCommon h1, .jp-RenderedHTMLCommon h2, .jp-RenderedHTMLCommon h3, .jp-RenderedHTMLCommon h4, .jp-RenderedHTMLCommon h5, .jp-RenderedHTMLCommon h6 { margin: 0 !important; }"
 debug: false
 # end global config options
 
@@ -8,7 +8,7 @@ resources:
 
 outputs:
   type: nbprint:NBConvertOutputs
-  path_root: ./examples/finance/output
+  path_root: ./examples/output
   target: "html"
 
 parameters:
@@ -30,7 +30,7 @@ context:
 page:
 
 content:
-  - type: nbprint.example:ExampleFinanceTitleContent
+  - type: nbprint.example:ExampleFinanceTitle
     title: "Jefferies Morgan"
     subtitle: "Research"
     date: "November 8, 2023 08:45 GMT"
@@ -79,7 +79,7 @@ content:
     content:
       - type: nbprint:ContentFlexColumnLayout
         content:
-          - type: nbprint.example:ExampleFinanceStockHeadlineContent
+          - type: nbprint.example:ExampleFinanceStockHeadline
             company_name: ${parameters.company_name}
             region: ${parameters.region}
             byline: "Solid Growth in both Domestic and International Markets"
@@ -90,7 +90,7 @@ content:
             view: ${parameters.view}
             price_target: ${parameters.price_target}
 
-          - type: nbprint.example:ExampleFinanceStockHeadline
+          - type: nbprint.example:ExampleFinanceStockSubHeadline
             text: |
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -100,14 +100,14 @@ content:
       - type: nbprint:ContentFlexColumnLayout
         classname: "nbprint-example-finance-rightbar"
         content:
-          - type: nbprint.example:ExampleFinanceReportAuthor
+          - type: nbprint.example:ExampleFinanceAuthor
             name: John Smith
             title: Equity Analyst
             email: John.Smith@jm.com
             phone: +1 212 867-5309
             color: ${parameters.color}
 
-          - type: nbprint.example:ExampleFinanceReportAuthor
+          - type: nbprint.example:ExampleFinanceAuthor
             name: Jane Doe
             title: Equity Analyst
             email: Jane.Doe@jm.com

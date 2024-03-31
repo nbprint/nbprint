@@ -3,7 +3,7 @@ from IPython.display import HTML
 from nbprint import Content
 
 
-class ExampleFinanceTitleContent(Content):
+class ExampleFinanceTitle(Content):
     title: str = ""
     subtitle: str = ""
     date: str = ""
@@ -46,7 +46,7 @@ span {
         """)
 
 
-class ExampleFinanceStockHeadlineContent(Content):
+class ExampleFinanceStockHeadline(Content):
     company_name: str = ""
     region: str = ""
     byline: str = ""
@@ -79,7 +79,7 @@ h1 {
         """)
 
 
-class ExampleFinanceReportAuthor(Content):
+class ExampleFinanceAuthor(Content):
     name: str = ""
     title: str = ""
     email: str = ""
@@ -326,7 +326,7 @@ svg {
         """)
 
 
-class ExampleFinanceStockHeadline(Content):
+class ExampleFinanceStockSubHeadline(Content):
     text: str = ""
 
     css: str = """
