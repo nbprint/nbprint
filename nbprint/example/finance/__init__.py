@@ -4,6 +4,7 @@ from .content import (
     ExampleFinanceStockHeadline,
     ExampleFinanceStockPTUpdate,
     ExampleFinanceStockQuickStats,
+    ExampleFinanceStockSubHeadline,
     ExampleFinanceTitle,
 )
 from .context import ExampleFinanceContext

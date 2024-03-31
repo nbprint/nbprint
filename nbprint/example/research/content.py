@@ -1,6 +1,4 @@
 from IPython.display import HTML
-from pydantic import validator
-from typing import List
 
 from nbprint import Content, Role
 
@@ -9,8 +7,10 @@ class ExampleResearchHeader(Content):
     role: Role = Role.LAYOUT
     css: str = """
 :scope {
+  padding-top: 50px;
   display: flex;
   flex-direction: column;
+  padding-bottom: 50px;
 }
 """
 
@@ -24,8 +24,6 @@ class ExampleResearchTitle(Content):
 
     css: str = """
 :scope {
-  margin-top: 50px;
-  margin-bottom: 50px;
 }
 
 h1 {
@@ -89,32 +87,28 @@ class ExampleResearchBody(Content):
     role: Role = Role.LAYOUT
     css: str = """
 :scope {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  width: 48%;
+  column-count: 2;
+  -webkit-column-count: 2;
+  column-gap: 1cm;
 }
 """
 
 
-class ExampleResearchAbstract(Content):
+class ExampleResearchSectionTitle(Content):
+    title: str
+
+    css: str = """
+  h1 {
+    padding-bottom: 10px;
+  }
+  """
+
     def __call__(self, ctx=None, *args, **kwargs):
-        return HTML(f"""
-            <h1>Abstract</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        """)
+        return HTML(f"<h1>{self.title}</h1>")
 
 
-class ExampleResearchIntroduction(Content): ...
+class ExampleResearchSectionText(Content):
+    text: str
 
-
-class ExampleResearchSecondSection(Content): ...
-
-
-class ExampleResearchConclusion(Content): ...
-
-
-class ExampleResearchReferences(Content): ...
+    def __call__(self, ctx=None, *args, **kwargs):
+        return HTML(f"<p>{self.text}</p>")
