@@ -1,4 +1,5 @@
 from IPython.display import HTML
+from pydantic import Field
 from typing import List
 
 from ..base import Role
@@ -27,7 +28,7 @@ function render(meta, elem) {
         });
     }
 }"""
-    attrs: dict = {"test": "abcd"}
+    attrs: dict = Field(default_factory=dict)
 
     def __call__(self, ctx=None, *args, **kwargs):
         # return empty html just for placeholder

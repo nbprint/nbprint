@@ -188,18 +188,11 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         """
         return self._base_generate(metadata=metadata, config=config, parent=parent, attr=attr, counter=counter)
 
-    def _base_generate_meta(self, metadata: dict = None) -> Optional[NotebookNode]:
-        cell = new_code_cell(metadata=metadata)
-        cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
-        # TODO consolidate with self.json()?
+    def _base_set_nbprint_metadata(self, cell: NotebookNode):
         cell.metadata.nbprint.id = self._id
         cell.metadata.nbprint.role = self.role or "undefined"
         cell.metadata.nbprint.type = self.type.to_string()
         cell.metadata.nbprint.ignore = self.ignore or False
-
-        cell.metadata.nbprint.data = self.json()
-
-        # TODO move these all to common method?
         cell.metadata.nbprint.css = self.css or ""
         cell.metadata.nbprint.esm = self.esm or ""
         cell.metadata.nbprint.class_selector = f'{cell.metadata.nbprint.type.replace(":", "-").replace(".", "-")}'
@@ -209,15 +202,20 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
             + (" ".join(self.classname) if isinstance(self.classname, list) else self.classname or "")
         )
         cell.metadata.nbprint.attrs = " ".join(f"{k}={dumps(v)}" for k, v in (self.attrs or {}).items())
+
+    def _base_generate_meta(self, metadata: dict = None) -> Optional[NotebookNode]:
+        cell = new_code_cell(metadata=metadata)
+        cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
+
+        # TODO consolidate with self.json()?
+        self._base_set_nbprint_metadata(cell)
+        cell.metadata.nbprint.data = self.json()
         return cell
 
     def _base_generate_md_meta(self, metadata: dict = None) -> Optional[NotebookNode]:
         cell = new_markdown_cell(metadata=metadata)
         cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
-        cell.metadata.nbprint.id = self._id
-        cell.metadata.nbprint.role = self.role or "undefined"
-        cell.metadata.nbprint.type = self.type.to_string()
-        cell.metadata.nbprint.ignore = self.ignore or False
+        self._base_set_nbprint_metadata(cell)
         return cell
 
     def _base_generate(
@@ -234,11 +232,13 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         assert config is not None
         self._recalculate_nb_var_name(config._nb_vars)
 
-        if parent and attr:
+        if parent:
+            # TODO should this go in a standard location?
             # set in metadata
             if parent.ignore is False:
                 cell.metadata.nbprint["parent-id"] = parent._id
 
+        if parent and attr:
             # now construct accessor
             value = ast.Attribute(value=ast.Name(id=parent.nb_var_name, ctx=ast.Load()), attr=attr, ctx=ast.Load())
 
@@ -299,8 +299,17 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         cell.source = source
         return cell
 
-    def _base_generate_md(self, metadata: Optional[dict] = None) -> Optional[NotebookNode]:
-        return self._base_generate_md_meta(metadata=metadata)
+    def _base_generate_md(self,
+        metadata: dict,
+        config: "Configuration",
+        parent: Optional["BaseModel"] = None
+    ) -> Optional[NotebookNode]:
+        cell = self._base_generate_md_meta(metadata=metadata)
+        # TODO should this go in a standard location?
+        # set in metadata
+        if parent and parent.ignore is False:
+            cell.metadata.nbprint["parent-id"] = parent._id
+        return cell
 
     def __repr__(self) -> str:
         # Truncate the output for now
