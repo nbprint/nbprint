@@ -7,7 +7,7 @@
 </a>
 <br/>
 
-A framework for building reports with [nbconvert](https://nbconvert.readthedocs.io).
+A framework for building print media with [nbconvert](https://nbconvert.readthedocs.io).
 
 [![Build Status](https://github.com/timkpaine/nbprint/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/timkpaine/nbprint/actions?query=workflow%3A%22Build+Status%22)
 [![Coverage](https://codecov.io/gh/timkpaine/nbprint/branch/main/graph/badge.svg?token=ag2j2TV2wE)](https://codecov.io/gh/timkpaine/nbprint)
@@ -15,6 +15,116 @@ A framework for building reports with [nbconvert](https://nbconvert.readthedocs.
 [![PyPI](https://img.shields.io/pypi/l/nbprint.svg)](https://pypi.python.org/pypi/nbprint)
 [![PyPI](https://img.shields.io/pypi/v/nbprint.svg)](https://pypi.python.org/pypi/nbprint)
 
+## Installation
+Install with `pip`:
+
+```bash
+pip install nbprint
+```
+
+Install with `conda`
+
+```bash
+conda install nbprint -c conda-forge
+```
+
 ## Background
+
+Jupyter Notebooks are widely used for reports via [`nbconvert`](https://nbconvert.readthedocs.io/en/latest/). Most efforts focus on building web reports / websites from notebooks, including [`Voilà`](https://github.com/voila-dashboards/voila) and [`Jupyter Book`](https://jupyterbook.org/en/stable/intro.html).
+
+Much less focus has been spent on print media - PDFs for reports, academic papers, newspapers, etc. There are many examples of `nbconvert` templates for academic papers, as well as projects like [`ipypublish`](https://github.com/chrisjsewell/ipypublish/tree/develop). Most of these efforts focus on $ \LaTeX $, and indeed `nbprint` itself started as convenience framework for formatting charts and tables similarly between html and pdf outputs.
+
+However, with recent releases to `nbconvert`, which now supports `webpdf` (printing as pdf from within a headless web browser), and with advances to the `@media print` CSS directive spearheaded by the lovely folks at [`pagedjs`](https://pagedjs.org), it is now possible to build print-oriented media on the web.
+
+This is the goal of `nbprint`. Using [`pagedjs`](https://pagedjs.org), `nbprint` provides templates and utilities for building web reports targetting print media. Beyong that, it provides infrastructure for parameterizing and configuring documents via [`pydantic`](https://docs.pydantic.dev/latest/), which makes designing and generating reports a breeze, even without knowledge of python.
+
+## Quickstart
+
+`nbprint` can be used purely via notebook metadata, but it also provides a `yaml`-based framework for configuration (via [`pydantic`](https://docs.pydantic.dev/latest/) and [`omegaconf`](https://github.com/omry/omegaconf)). This is particularly convenient when generating parameterized reports, for example when configuring a large number of hyperparameters for a model's evaluation report. This configuration also allows for easier iteration on a report's design and content.
+
+### Configuration
+Let's take a simple placeholder report.
+
+```yaml
+---
+debug: false
+outputs:
+  type: nbprint:NBConvertOutputs
+  path_root: ./examples/output
+  target: "html"
+
+content:
+  - type: nbprint:ContentMarkdown
+    content: |
+      # A Generic Report
+      ## A Subtitle
+    css: ":scope { text-align: center; }"
+
+  - type: nbprint:ContentPageBreak
+
+  - type: nbprint:ContentTableOfContents
+
+  - type: nbprint:ContentPageBreak
+
+  - type: nbprint:ContentMarkdown
+    content: |
+      # Section One
+      Lorem ipsum dolor sit amet.
+      ## Subsection One
+      Consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+      ## Subsection Two
+      Ut labore et dolore magna aliqua.
+
+  - type: nbprint:ContentPageBreak
+
+  - type: nbprint:ContentFlexRowLayout
+    sizes: [1, 1]
+    content:
+      - type: nbprint:ContentFlexColumnLayout
+        content:
+          - type: nbprint:ContentMarkdown
+            content: |
+              # Section Two
+              Lorem ipsum dolor sit amet.
+              ## Subsection One
+              Consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+
+      - type: nbprint:ContentFlexColumnLayout
+        content:
+          - type: nbprint:ContentMarkdown
+            content: |
+              # Section Three
+              Ut labore et dolore magna aliqua.
+              ## Subsection One
+              Ut enim ad minim veniam, quis nostrud.
+```
+
+Let's break this down step by step.
+
+
+First, we configure `debug: false`. This tells `nbprint` to run `pagedjs` print preview. We also set the output to run `nbconvert` and configure the folder for outputs to be placed.
+
+Next we fill in some content. Here we use a few components:
+- `ContentMarkdown` to generate Markdown cells
+- `ContentPageBreak` to split onto a new page in our pdf
+- `ContentTableOfContents` to create a table of contents. Note that this will work in both html preview, and pdf form!
+- `ContentFlexRowLayout` and `ContentFlexColumnLayout` to create some layout structure for our document.
+
+### Run
+We can now generate the report by running the CLI:
+
+```bash
+nbprint examples/basic.yaml basic
+```
+
+This will create a Notebook output in our specified folder `examples/output`, as well as an html asset (since that is what we specified in the yaml file). Both will have the date as a suffix, which is also configureable in our yaml. We see the generated report notebook, which we can open and use for further experimentation or to investigate the report itself.
+
+<img src="https://github.com/timkpaine/nbprint/raw/main/docs/img/example-notebook.png?raw=true" alt="example notebook output" width="400"></a>
+
+We also see the html document itself, which will be rendered via [`pagedjs`](https://pagedjs.org) print preview.
+
+<img src="https://github.com/timkpaine/nbprint/raw/main/docs/img/example-basic.png?raw=true" alt="example basic output" width="400"></a>
+
+You can find a pdf form of this document [here](https://github.com/timkpaine/nbprint/raw/main/docs/img/example-basic.pdf?raw=true).
 
 

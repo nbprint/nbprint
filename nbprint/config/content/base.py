@@ -77,7 +77,7 @@ class ContentMarkdown(Content):
         attr: str = "",
         counter: Optional[int] = None,
     ) -> Optional[Union[NotebookNode, List[NotebookNode]]]:
-        cell = super()._base_generate_md(metadata=metadata)
+        cell = super()._base_generate_md(metadata=metadata, config=config, parent=parent)
         cell.source = self.content
         return cell
 

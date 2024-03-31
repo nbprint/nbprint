@@ -78,6 +78,8 @@ body {
     /* overflow: visible !important; */
 }
 
+
+/* TODO move to index.less ? */
 .lm-Widget {
     overflow: auto !important;
 }
