@@ -65,7 +65,7 @@ h2:nth-child(2) {
 }
 
 h1 {
-  font-weight: lighter;
+  font-weight: lighter !important;
 }
 """
 
@@ -75,7 +75,7 @@ h1 {
             <h2 style="color: {self.color}; border-right: 2px solid {self.color}">{self.company_name}</h2>
             <h2 style="color: {self.color};">{self.region}</h2>
         </div>
-        <h1 class="nbprint-example-finance-heading-byline">{self.byline}</h1>
+        <h1>{self.byline}</h1>
         """)
 
 
@@ -278,7 +278,9 @@ div.row > div > span:nth-child(1) {
 }
 
 div.row > div > span:nth-child(2) {
-  font-size: 20px;
+  font-weight: lighter !important;
+  font-size: 17px;
+  padding-left: 5px;
 }
 
 div.row div:nth-child(1) span:nth-child(1)::before {
