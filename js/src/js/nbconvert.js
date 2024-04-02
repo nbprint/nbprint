@@ -1,10 +1,9 @@
 export * from "./components/table-of-content";
 import { createToc } from "./components/table-of-content";
-import { initializeNBPrint } from "./nbprint";
 import { Previewer, registerHandlers, Handler } from "pagedjs";
 import "@fortawesome/fontawesome-free/js/all";
 
-class handlers extends Handler {
+export class handlers extends Handler {
   constructor(chunker, polisher, caller) {
     super(chunker, polisher, caller);
   }
@@ -18,7 +17,7 @@ class handlers extends Handler {
   }
 }
 
-const build = async () => {
+export const build = async () => {
   const config = {
     auto: true,
     before: undefined,
@@ -48,23 +47,3 @@ const build = async () => {
     await config.after(done);
   }
 };
-
-document.addEventListener("DOMContentLoaded", async () => {
-  // Process with NBPrint
-  let nbprint = initializeNBPrint();
-
-  await nbprint.process();
-
-  if (nbprint.buildPagedJS()) {
-    // Build pagedjs
-    if (window.voila_process !== undefined) {
-      setTimeout(async () => {
-        await build();
-      }, 3000);
-    } else {
-      await build();
-    }
-  }
-
-  await nbprint.postprocess();
-});
