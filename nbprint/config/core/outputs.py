@@ -1,8 +1,8 @@
 from datetime import date, datetime
-from enum import Enum
 from nbformat import NotebookNode, write
 from pathlib import Path
 from pydantic import DirectoryPath, Field, validator
+from strenum import StrEnum
 from typing import TYPE_CHECKING, List, Literal, Optional, Union
 from uuid import uuid4
 
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 __all__ = ("OutputNaming", "Outputs", "NBConvertOutputs")
 
 
-class OutputNaming(str, Enum):
+class OutputNaming(StrEnum):
     name = "${name}"
     date = "${date}"
     datetime = "${datetime}"
