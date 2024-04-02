@@ -78,6 +78,7 @@ content:
     sizes: [5, 3]
     content:
       - type: nbprint:ContentFlexColumnLayout
+        css: ":scope { border-right: 1px solid black; margin-right: 5px; }"
         content:
           - type: nbprint.example:ExampleFinanceStockHeadline
             company_name: ${parameters.company_name}
@@ -98,7 +99,6 @@ content:
               nisi ut aliquip ex ea commodo consequat.
 
       - type: nbprint:ContentFlexColumnLayout
-        classname: "nbprint-example-finance-rightbar"
         content:
           - type: nbprint.example:ExampleFinanceAuthor
             name: John Smith
