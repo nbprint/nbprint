@@ -18,33 +18,20 @@ const BUILD = [
       ".css": "text",
       ".html": "text",
     },
-    outfile: "../nbprint/extension/index.js",
+    outfile: "./dist/index.js",
   },
   {
     define: {
       global: "window",
     },
-    entryPoints: ["src/js/nbconvert.js"],
+    entryPoints: ["src/js/embedded.js"],
     plugins: [],
     format: "esm",
     loader: {
       ".css": "text",
       ".html": "text",
     },
-    outfile: "../nbprint/templates/nbprint/static/embedded.js",
-  },
-  {
-    define: {
-      global: "window",
-    },
-    entryPoints: ["src/js/nbconvert.js"],
-    plugins: [],
-    format: "esm",
-    loader: {
-      ".css": "text",
-      ".html": "text",
-    },
-    outfile: "../nbprint/voila/static/embedded.js",
+    outfile: "./dist/embedded.js",
   },
 ];
 
@@ -57,8 +44,6 @@ function add(builder, path, path2) {
 }
 
 async function compile_css() {
-  fs.mkdirSync("../nbprint/extension", { recursive: true });
-  fs.mkdirSync("../nbprint/templates/nbprint/static", { recursive: true });
   const builder1 = new BuildCss("");
   add(builder1, "./src/less/index.less");
 
@@ -77,17 +62,26 @@ async function compile_css() {
 
 }
 
-async function cp_css(path) {
+async function cp_to_paths(path) {
   await cpy(path, "../nbprint/extension/", {flat: true});
   await cpy(path, "../nbprint/templates/nbprint/static/", {flat: true});
   await cpy(path, "../nbprint/voila/static/"), {flat: true};
 }
 
 async function build_all() {
-  await compile_css();
-  await cp_css("./src/css/*");
-  await cp_css("node_modules/\@fortawesome/fontawesome-free/css/fontawesome.min.css");
+  /* make directories */
+  fs.mkdirSync("../nbprint/extension", { recursive: true });
+  fs.mkdirSync("../nbprint/templates/nbprint/static", { recursive: true });
+  fs.mkdirSync("../nbprint/voila/static", { recursive: true });
+
+  /* Compile and copy JS */
   await Promise.all(BUILD.map(build)).catch(() => process.exit(1));
+  await cp_to_paths("./dist/*");
+
+  /* Compile and copy css */
+  await compile_css();
+  await cp_to_paths("./src/css/*");
+  await cp_to_paths("node_modules/\@fortawesome/fontawesome-free/css/fontawesome.min.css");
 }
 
 build_all();
