@@ -1,4 +1,4 @@
-from enum import StrEnum
+from strenum import StrEnum
 from typing import Optional
 
 from .css import _BaseCss
