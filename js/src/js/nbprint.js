@@ -1,4 +1,4 @@
-class NBPrint {
+export class NBPrint {
   constructor({ configuration, notebook_info }) {
     this._configuration = configuration;
     this._notebook_info = notebook_info;
