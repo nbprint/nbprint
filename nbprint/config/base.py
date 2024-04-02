@@ -1,5 +1,4 @@
 import ast
-from enum import StrEnum
 from importlib import import_module
 from IPython.display import DisplayObject
 from json import dumps, loads
@@ -8,6 +7,7 @@ from nbformat.v4 import new_code_cell, new_markdown_cell
 from pathlib import Path
 from pydantic import BaseModel, Field, PrivateAttr, SerializeAsAny, validator
 from pydantic._internal._model_construction import ModelMetaclass
+from strenum import StrEnum
 from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple, Type, Union
 from uuid import uuid4
 
@@ -299,10 +299,8 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         cell.source = source
         return cell
 
-    def _base_generate_md(self,
-        metadata: dict,
-        config: "Configuration",
-        parent: Optional["BaseModel"] = None
+    def _base_generate_md(
+        self, metadata: dict, config: "Configuration", parent: Optional["BaseModel"] = None
     ) -> Optional[NotebookNode]:
         cell = self._base_generate_md_meta(metadata=metadata)
         # TODO should this go in a standard location?
