@@ -1,4 +1,4 @@
-from IPython.display import Image, display
+from IPython.display import HTML, Image
 from pathlib import Path
 from pydantic import Field, FilePath, validator
 from typing import List, Optional
@@ -29,9 +29,10 @@ class ContentImage(Content):
 
     def __call__(self, ctx=None, *args, **kwargs):
         if self.path:
-            display(Image(filename=self.path))
+            img = Image(filename=self.path)
         else:
-            display(Image(data=self.content))
+            img = Image(data=self.content)
+        return HTML(f"""<img src="data:image/png;base64,{img._repr_png_()}">""")
 
     def __repr__(self) -> str:
         return f"Image(path='{self.path}', content=[{len(self.content)} bytes])"
