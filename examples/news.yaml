@@ -6,20 +6,20 @@ debug: false
 resources:
 
 outputs:
-  type: nbprint:NBConvertOutputs
+  _target_:  nbprint.NBConvertOutputs
   path_root: ./examples/output
   target: "html"
 
 parameters:
-  type: nbprint.example:ExampleNewsParameters
+  _target_:  nbprint.example.ExampleNewsParameters
 
 context:
-  type: nbprint.example:ExampleNewsContext
+  _target_:  nbprint.example.ExampleNewsContext
 
 page:
 
 content:
-  - type: nbprint.example:ExampleNewsHeadlineContent
+  - _target_:  nbprint.example.ExampleNewsHeadlineContent
     title: ""
     subtitle: ""
     date: "November 8, 2023 08:45 GMT"

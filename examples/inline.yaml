@@ -1,55 +1,31 @@
 ---
+_target_: nbprint.Configuration
 debug: false
-resources:
-  logo:
-    type: nbprint:ContentImage
-    path: ./examples/assets/generic-company-logo.jpg
-
 outputs:
-  type: nbprint:NBConvertOutputs
+  _target_: nbprint.NBConvertOutputs
   path_root: ./examples/output
   target: "html"
 
 parameters:
-  type: nbprint.example:ExampleParameters
+  _target_: nbprint.example.ExampleParameters
   ticker: "AAPL"
 
 context:
-  type: nbprint.example:ExampleContext
-
-page:
-  header:
-    content:
-      - type: nbprint:LayoutGlobal
-        justify: space-between
-        content:
-          - ${resources.logo}
-          - type: nbprint:TextComponent
-            content: American Banking Corporation & Co.
-            horizontal_alignment: right
-
-  footer:
-    content:
-      - type: nbprint:LayoutGlobal
-        justify: space-between
-        content:
-          - type: nbprint:TextComponent
-            content: For Institutional Clients Only
-            horizontal_alignment: left
-          - type: nbprint:LayoutPageNumber
-            horizontal_alignment: right
+  _target_: nbprint.example.ExampleContext
 
 content:
-  - type: nbprint.example:ExampleCoverPageContent
+  - _target_: nbprint.example.ExampleCoverPageContent
     vertical_alignment: "center"
     horizontal_alignment: "left"
-    logo: ${resources.logo}
+    logo:
+      _target_: nbprint.example.ExampleNBPrintLogo
+
     title: "A generic report"
     subtitle: "In this section we have some boilerplate stuff"
 
-  - type: nbprint:ContentTableOfContents
+  - _target_: nbprint.ContentTableOfContents
 
-  - type: nbprint:ContentMarkdown
+  - _target_: nbprint.ContentMarkdown
     content: |
       # Section One
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -82,9 +58,9 @@ content:
       > Block
       > Quotes
 
-  - type: nbprint:ContentPageBreak
+  - _target_: nbprint.ContentPageBreak
 
-  - type: nbprint.example:ExampleMarkdownBlock
+  - _target_: nbprint.example.ExampleMarkdownBlock
     # content: |
     #   # Performance
     #   Now some discussion of the performance, as well as some charts
@@ -92,7 +68,7 @@ content:
     #   ## A Chart
     #   A chart of some data
     #   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-  - type: nbprint:ContentCode
+  - _target_: nbprint.ContentCode
     content: |
       %matplotlib inline
       import pandas as pd
@@ -127,29 +103,29 @@ content:
                 ha='left');
       plt.show()
 
-  - type: nbprint:ContentPageBreak
+  - _target_: nbprint.ContentPageBreak
 
-  - type: nbprint:ContentMarkdown
+  - _target_: nbprint.ContentMarkdown
     content: |
       ## Some Widgets
       Some widgets, some ipywidgets and perspective
 
-  - type: nbprint:ContentCode
+  - _target_: nbprint.ContentCode
     content: |
       from ipywidgets import IntSlider
       IntSlider()
 
-  - type: nbprint:ContentCode
+  - _target_: nbprint.ContentCode
     content: |
       from perspective import PerspectiveWidget
       PerspectiveWidget(nbprint_ctx.df)
 
-  - type: nbprint:ContentMarkdown
+  - _target_: nbprint.ContentMarkdown
     content: |
       ## A Grid
       And A grid of the data
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-  - type: nbprint.example:ExampleCodeBlock
+  - _target_: nbprint.example.ExampleCodeBlock
     # content: |
     #   table(df[['A', 'B', 'C', 'D']],
     #   'Sample Table',

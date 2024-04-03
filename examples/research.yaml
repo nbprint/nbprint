@@ -1,50 +1,50 @@
 ---
 debug: false
 outputs:
-  type: nbprint:NBConvertOutputs
+  _target_:  nbprint.NBConvertOutputs
   path_root: ./examples/output
   target: "html"
 
 context:
-  type: nbprint.example:ExampleResearchReferencesContext
+  _target_:  nbprint.example.ExampleResearchReferencesContext
 
 content:
-  - type: nbprint.example:ExampleResearchHeader
+  - _target_:  nbprint.example.ExampleResearchHeader
     content:
-      - type: nbprint.example:ExampleResearchTitle
+      - _target_:  nbprint.example.ExampleResearchTitle
         title: "An Example Research Publication Title"
 
-      - type: nbprint.example:ExampleResearchAuthors
+      - _target_:  nbprint.example.ExampleResearchAuthors
         content:
-          - type: nbprint.example:ExampleResearchAuthor
+          - _target_:  nbprint.example.ExampleResearchAuthor
             name: John Smith
             email: john.smith@columbia.edu
-          - type: nbprint.example:ExampleResearchAuthor
+          - _target_:  nbprint.example.ExampleResearchAuthor
             name: Jane Doe
             email: jane.doe@columbia.edu
-          - type: nbprint.example:ExampleResearchAuthor
+          - _target_:  nbprint.example.ExampleResearchAuthor
             name: Joe Schmo
             email: joe.schmo@columbia.edu
 
-  - type: nbprint.example:ExampleResearchBody
+  - _target_:  nbprint.example.ExampleResearchBody
     content:
-      - type: nbprint.example:ExampleResearchSectionTitle
+      - _target_:  nbprint.example.ExampleResearchSectionTitle
         title: Abstract
-      - type: nbprint.example:ExampleResearchSectionText
+      - _target_:  nbprint.example.ExampleResearchSectionText
         text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      - type: nbprint.example:ExampleResearchSectionText
+      - _target_:  nbprint.example.ExampleResearchSectionText
         text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      - type: nbprint.example:ExampleResearchSectionTitle
+      - _target_:  nbprint.example.ExampleResearchSectionTitle
         title: 1. Introduction
-      - type: nbprint.example:ExampleResearchSectionText
+      - _target_:  nbprint.example.ExampleResearchSectionText
         text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      - type: nbprint.example:ExampleResearchSectionText
+      - _target_:  nbprint.example.ExampleResearchSectionText
         text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      - type: nbprint.example:ExampleResearchSectionText
+      - _target_:  nbprint.example.ExampleResearchSectionText
         text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      - type: nbprint.example:ExampleResearchSectionText
+      - _target_:  nbprint.example.ExampleResearchSectionText
         text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      - type: nbprint:ContentCode
+      - _target_:  nbprint.ContentCode
         content: |
           %matplotlib inline
           import pandas as pd
@@ -78,9 +78,9 @@ content:
                     wrap=True,
                     ha='left');
           plt.show()
-      - type: nbprint.example:ExampleResearchSectionText
+      - _target_:  nbprint.example.ExampleResearchSectionText
         text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      - type: nbprint.example:ExampleResearchSectionText
+      - _target_:  nbprint.example.ExampleResearchSectionText
         text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      - type: nbprint.example:ExampleResearchSectionText
+      - _target_:  nbprint.example.ExampleResearchSectionText
         text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

@@ -3,6 +3,8 @@ from typing import Dict, List, Optional
 
 from nbprint.config import Parameters
 
+__all__ = ("ExampleParameters",)
+
 
 class ExampleParameters(Parameters):
     ticker: str
