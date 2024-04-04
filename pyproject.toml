@@ -81,8 +81,8 @@ nbprint = "nbprint.cli:main"
 nbprint-hydra = "nbprint.cli:main_hydra"
 
 [project.urls]
-repository = "https://github.com/timkpaine/nbprint"
-homepage = "https://github.com/timkpaine/nbprint"
+repository = "https://github.com/nbprint/nbprint"
+homepage = "https://github.com/nbprint/nbprint"
 
 [tool.hatch.build]
 artifacts = [
