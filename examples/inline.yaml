@@ -1,6 +1,6 @@
 ---
-_target_: nbprint.Configuration
 debug: false
+_target_: nbprint.Configuration
 outputs:
   _target_: nbprint.NBConvertOutputs
   path_root: ./examples/output
@@ -12,6 +12,13 @@ parameters:
 
 context:
   _target_: nbprint.example.ExampleContext
+
+page:
+  _target_: nbprint.Page
+  bottom_left:
+    _target_: nbprint.example.ExampleLogoInFooter
+  bottom_right:
+    _target_: nbprint.PageRegion
 
 content:
   - _target_: nbprint.example.ExampleCoverPageContent
