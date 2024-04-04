@@ -14,16 +14,20 @@ context:
   _target_: nbprint.example.ExampleContext
 
 page:
-  _target_: nbprint.Page
+  _target_: nbprint.example.ExampleReportPage
   bottom_left:
     _target_: nbprint.example.ExampleLogoInFooter
   bottom_right:
     _target_: nbprint.PageRegion
+  bottom:
+    _target_: nbprint.PageRegion
+    content:
+      _target_: nbprint.PageRegionContent
+      content: "'Example Report'"
+
 
 content:
   - _target_: nbprint.example.ExampleCoverPageContent
-    vertical_alignment: "center"
-    horizontal_alignment: "left"
     logo:
       _target_: nbprint.example.ExampleNBPrintLogo
 
@@ -78,15 +82,13 @@ content:
   - _target_: nbprint.ContentCode
     content: |
       %matplotlib inline
-      import pandas as pd
       import matplotlib.pyplot as plt
       import superstore as sup
       import seaborn as sns
 
-      sns.set()
+      sns.set_theme(style="whitegrid", palette="pastel")
 
-
-      df = pd.DataFrame(sup.getTimeSeriesData())
+      df = sup.getTimeSeries()
 
       # add to context
       nbprint_ctx.df = df
