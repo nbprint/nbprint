@@ -2,6 +2,8 @@ from IPython.display import Markdown
 
 from nbprint import Content
 
+__all__ = ("ExampleMarkdownBlock",)
+
 
 class ExampleMarkdownBlock(Content):
     def __call__(self, ctx=None, *args, **kwargs):

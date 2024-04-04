@@ -1,3 +1,5 @@
+from hydra import compose, initialize_config_dir
+from hydra.utils import instantiate
 from nbformat import NotebookNode
 from nbformat.v4 import new_notebook
 from omegaconf import DictConfig, OmegaConf
@@ -108,7 +110,7 @@ class Configuration(BaseModel):
 
         # resources: Dict[str, SerializeAsAny[BaseModel]] = Field(default_factory=dict)
         # TODO omitting resources, referenced directly in yaml
-        # cell.metadata.nbprint.resources = {k: v.json() for k, v in self.resources.items()}
+        # cell.metadata.nbprint.resources = {k: v.model_dump_json(by_alias=True) for k, v in self.resources.items()}
 
         # outputs: SerializeAsAny[Outputs]
         # TODO skipping, consumed internally
@@ -139,8 +141,8 @@ class Configuration(BaseModel):
 
         # add resources
         # TODO do this or no?
-        # cell.metadata.nbprint.resources = {k: v.json() for k, v in self.resources.items()}
-        cell.metadata.nbprint.outputs = self.outputs.json()
+        # cell.metadata.nbprint.resources = {k: v.model_dump_json(by_alias=True) for k, v in self.resources.items()}
+        cell.metadata.nbprint.outputs = self.outputs.model_dump_json(by_alias=True)
         return cell
 
     def _generate_resources_cells(self, metadata: dict = None):
@@ -172,6 +174,13 @@ class Configuration(BaseModel):
             return Configuration(name=name, **container)
 
         raise TypeError(f"Path or model malformed: {path_or_model} {type(path_or_model)}")
+
+    @staticmethod
+    def load_hydra(folder, file, name):
+        with initialize_config_dir(version_base=None, config_dir=folder, job_name=name):
+            cfg = compose(config_name=file, overrides=[f"+name={name}"])
+            config = instantiate(cfg)
+            return config
 
     def run(self):
         gen = self.generate(self)

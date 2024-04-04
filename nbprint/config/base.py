@@ -31,7 +31,8 @@ class _SerializeAsAnyMeta(ModelMetaclass):
             if not field.startswith("__"):
                 annotations[field] = SerializeAsAny[annotation]
         namespaces["__annotations__"] = annotations
-        return super().__new__(self, name, bases, namespaces, **kwargs)
+        clz = super().__new__(self, name, bases, namespaces, **kwargs)
+        return clz
 
 
 class Type(BaseModel):
@@ -40,7 +41,7 @@ class Type(BaseModel):
 
     @classmethod
     def from_string(cls, str: str) -> "Type":
-        module, name = str.split(":")
+        module, name = str.rsplit(".", 1)
         return Type(module=module, name=name)
 
     def to_string(self) -> str:
@@ -66,7 +67,7 @@ class Role(StrEnum):
 
 class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
     # type info
-    type: Type
+    type: Type = Field(alias="_target_")
 
     # basic metadata
     tags: List[str] = Field(default_factory=list)
@@ -93,8 +94,8 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         validate_assignment: bool = True
 
     def __init__(self, **kwargs):
-        if "type" not in kwargs:
-            kwargs["type"] = Type(module=self.__class__.__module__, name=self.__class__.__name__)
+        if "_target_" not in kwargs:
+            kwargs["_target_"] = Type(module=self.__class__.__module__, name=self.__class__.__name__)
         super().__init__(**kwargs)
 
     @validator("css", pre=True)
@@ -145,7 +146,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         if value is None:
             value = {}
 
-        if model_type is None and "type" in value:
+        if model_type is None and "_target_" in value:
             # derive type from instantiation
             model_type = BaseModel
 
@@ -207,9 +208,9 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         cell = new_code_cell(metadata=metadata)
         cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
 
-        # TODO consolidate with self.json()?
+        # TODO consolidate with self.model_dump_json(by_alias=True)?
         self._base_set_nbprint_metadata(cell)
-        cell.metadata.nbprint.data = self.json()
+        cell.metadata.nbprint.data = self.model_dump_json(by_alias=True)
         return cell
 
     def _base_generate_md_meta(self, metadata: dict = None) -> Optional[NotebookNode]:
@@ -255,7 +256,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
                 )
             )
         else:
-            data = self.json()
+            data = self.model_dump_json(by_alias=True)
             mod.body.append(
                 ast.ImportFrom(
                     module=self.type.module,

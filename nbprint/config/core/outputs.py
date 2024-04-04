@@ -59,7 +59,7 @@ class Outputs(BaseModel):
     def _get_sha(self, config: "Configuration") -> str:
         import hashlib
 
-        m = hashlib.sha256(config.json())
+        m = hashlib.sha256(config.model_dump_json(by_alias=True))
         m.update(config)
         return m.hexdigest()
 

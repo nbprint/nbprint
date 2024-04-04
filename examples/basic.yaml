@@ -1,24 +1,24 @@
 ---
 debug: false
 outputs:
-  type: nbprint:NBConvertOutputs
+  _target_:  nbprint.NBConvertOutputs
   path_root: ./examples/output
   target: "html"
 
 content:
-  - type: nbprint:ContentMarkdown
+  - _target_:  nbprint.ContentMarkdown
     content: |
       # A Generic Report
       ## A Subtitle
     css: ":scope { text-align: center; }"
 
-  - type: nbprint:ContentPageBreak
+  - _target_:  nbprint.ContentPageBreak
 
-  - type: nbprint:ContentTableOfContents
+  - _target_:  nbprint.ContentTableOfContents
 
-  - type: nbprint:ContentPageBreak
+  - _target_:  nbprint.ContentPageBreak
 
-  - type: nbprint:ContentMarkdown
+  - _target_:  nbprint.ContentMarkdown
     content: |
       # Section One
       Lorem ipsum dolor sit amet.
@@ -27,23 +27,23 @@ content:
       ## Subsection Two
       Ut labore et dolore magna aliqua.
 
-  - type: nbprint:ContentPageBreak
+  - _target_:  nbprint.ContentPageBreak
 
-  - type: nbprint:ContentFlexRowLayout
+  - _target_:  nbprint.ContentFlexRowLayout
     sizes: [1, 1]
     content:
-      - type: nbprint:ContentFlexColumnLayout
+      - _target_:  nbprint.ContentFlexColumnLayout
         content:
-          - type: nbprint:ContentMarkdown
+          - _target_:  nbprint.ContentMarkdown
             content: |
               # Section Two
               Lorem ipsum dolor sit amet.
               ## Subsection One
               Consectetur adipiscing elit, sed do eiusmod tempor incididunt.
 
-      - type: nbprint:ContentFlexColumnLayout
+      - _target_:  nbprint.ContentFlexColumnLayout
         content:
-          - type: nbprint:ContentMarkdown
+          - _target_:  nbprint.ContentMarkdown
             content: |
               # Section Three
               Ut labore et dolore magna aliqua.
