@@ -22,9 +22,9 @@ class ExampleCoverPageContent(ContentCover):
     title: Optional[str] = ""
     subtitle: Optional[str] = ""
 
-    def __call__(self, ctx=None, *args, **kwargs):
+    def __call__(self, *args, **kwargs):
         return HTML(f"""
-            {self.logo(ctx=ctx, *args, **kwargs)._repr_html_()}
+            {self.logo()._repr_html_()}
             <h1>{self.title}</h1>
             <h2>{self.subtitle}</h2>
             <p class="pagebreak"></p>

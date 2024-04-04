@@ -91,9 +91,9 @@ window.FontAwesomeConfig = {
         <div class="{{ cell.metadata["nbprint"]["class"] }}" {{ cell.metadata["nbprint"]["attrs"] }} data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}" data-nbprint-parent-id="{{ cell.metadata["nbprint"].get("parent-id", "") }}">
 
         <!-- TODO should we make this like `ignore` as a first-order attribute? -->
-        {% if cell.metadata["nbprint"].get("role", "content") == "content" %}
+        <!-- if cell.metadata["nbprint"].get("role", "content") == "content" %} -->
         {{ super() }}
-        {% endif %}
+        <!-- endif -->
 
         </div>
     {% endif %}
