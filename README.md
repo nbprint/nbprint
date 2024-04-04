@@ -1,16 +1,16 @@
-<a href="https://github.com/timkpaine/nbprint#gh-light-mode-only">
-  <img src="https://github.com/timkpaine/nbprint/raw/main/docs/img/logo-light.png?raw=true#gh-light-mode-only" alt="nbprint" width="400"></a>
+<a href="https://github.com/nbprint/nbprint#gh-light-mode-only">
+  <img src="https://github.com/nbprint/nbprint/raw/main/docs/img/logo-light.png?raw=true#gh-light-mode-only" alt="nbprint" width="400"></a>
 </a>
-<a href="https://github.com/timkpaine/nbprint#gh-dark-mode-only">
-  <img src="https://github.com/timkpaine/nbprint/raw/main/docs/img/logo-dark.png?raw=true#gh-dark-mode-only" alt="nbprint" width="400"></a>
+<a href="https://github.com/nbprint/nbprint#gh-dark-mode-only">
+  <img src="https://github.com/nbprint/nbprint/raw/main/docs/img/logo-dark.png?raw=true#gh-dark-mode-only" alt="nbprint" width="400"></a>
 </a>
 <br/>
 
 A framework for building print media with [nbconvert](https://nbconvert.readthedocs.io).
 
-[![Build Status](https://github.com/timkpaine/nbprint/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/timkpaine/nbprint/actions?query=workflow%3A%22Build+Status%22)
-[![Coverage](https://codecov.io/gh/timkpaine/nbprint/branch/main/graph/badge.svg?token=ag2j2TV2wE)](https://codecov.io/gh/timkpaine/nbprint)
-[![GitHub issues](https://img.shields.io/github/issues/timkpaine/nbprint.svg)](https://github.com/timkpaine/nbprint/issues)
+[![Build Status](https://github.com/nbprint/nbprint/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/nbprint/nbprint/actions?query=workflow%3A%22Build+Status%22)
+[![Coverage](https://codecov.io/gh/nbprint/nbprint/branch/main/graph/badge.svg?token=ag2j2TV2wE)](https://codecov.io/gh/nbprint/nbprint)
+[![GitHub issues](https://img.shields.io/github/issues/nbprint/nbprint.svg)](https://github.com/nbprint/nbprint/issues)
 [![PyPI](https://img.shields.io/pypi/l/nbprint.svg)](https://pypi.python.org/pypi/nbprint)
 [![PyPI](https://img.shields.io/pypi/v/nbprint.svg)](https://pypi.python.org/pypi/nbprint)
 
@@ -118,13 +118,13 @@ nbprint examples/basic.yaml basic
 
 This will create a Notebook output in our specified folder `examples/output`, as well as an html asset (since that is what we specified in the yaml file). Both will have the date as a suffix, which is also configureable in our yaml. We see the generated report notebook, which we can open and use for further experimentation or to investigate the report itself.
 
-<img src="https://github.com/timkpaine/nbprint/raw/main/docs/img/example-notebook.png?raw=true" alt="example notebook output" width="800"></a>
+<img src="https://github.com/nbprint/nbprint/raw/main/docs/img/example-notebook.png?raw=true" alt="example notebook output" width="800"></a>
 
 We also see the html document itself, which will be rendered via [`pagedjs`](https://pagedjs.org) print preview.
 
-<img src="https://github.com/timkpaine/nbprint/raw/main/docs/img/example-basic.png?raw=true" alt="example basic output" width="800"></a>
+<img src="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.png?raw=true" alt="example basic output" width="800"></a>
 
-You can find a pdf form of this document [here](https://github.com/timkpaine/nbprint/raw/main/docs/img/example-basic.pdf?raw=true).
+You can find a pdf form of this document [here](https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.pdf?raw=true).
 
 
 ## Development
