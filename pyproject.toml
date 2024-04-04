@@ -40,6 +40,7 @@ classifiers = [
 
 dependencies = [
     "dominate",
+    "hydra-core",
     "ipywidgets",
     "nbconvert>=7.11.0",
     "nbformat",
@@ -52,9 +53,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-hydra = [
-    "hydra-core",
-]
 develop = [
     "check-manifest",
     "isort>=5,<6",
@@ -62,8 +60,6 @@ develop = [
     # test
     "pytest",
     "pytest-cov",
-    # hydra
-    "hydra-core",
     # notebook deps
     "matplotlib",
     "pandas",
@@ -78,7 +74,6 @@ test = [
 
 [project.scripts]
 nbprint = "nbprint.cli:main"
-nbprint-hydra = "nbprint.cli:main_hydra"
 
 [project.urls]
 repository = "https://github.com/nbprint/nbprint"

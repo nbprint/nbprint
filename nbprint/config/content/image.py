@@ -27,12 +27,15 @@ class ContentImage(Content):
             v = v.read_bytes()
         return v
 
-    def __call__(self, ctx=None, *args, **kwargs):
+    def as_base64(self):
         if self.path:
             img = Image(filename=self.path)
         else:
             img = Image(data=self.content)
-        return HTML(f"""<img src="data:image/png;base64,{img._repr_png_()}">""")
+        return img._repr_png_()
+
+    def __call__(self, ctx=None, *args, **kwargs):
+        return HTML(f"""<img src="data:image/png;base64,{self.as_base64()}">""")
 
     def __repr__(self) -> str:
         return f"Image(path='{self.path}', content=[{len(self.content)} bytes])"

@@ -2,7 +2,6 @@ from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
 from nbformat import NotebookNode
 from nbformat.v4 import new_notebook
-from omegaconf import DictConfig, OmegaConf
 from pathlib import Path
 from pprint import pprint
 from pydantic import Field, PrivateAttr, validator
@@ -167,20 +166,17 @@ class Configuration(BaseModel):
             path_or_model = Path(path_or_model).resolve()
 
         if isinstance(path_or_model, Path):
-            path_or_model = OmegaConf.load(path_or_model)
+            path_or_model = path_or_model.resolve()
+            folder = str(path_or_model.parent)
+            file = str(path_or_model.name)
 
-        if isinstance(path_or_model, DictConfig):
-            container = OmegaConf.to_container(path_or_model, resolve=True, throw_on_missing=True)
-            return Configuration(name=name, **container)
-
+            with initialize_config_dir(version_base=None, config_dir=folder, job_name=name):
+                cfg = compose(config_name=file, overrides=[f"+name={name}"])
+                config = instantiate(cfg)
+                if isinstance(config, dict):
+                    config = Configuration(**config)
+                return config
         raise TypeError(f"Path or model malformed: {path_or_model} {type(path_or_model)}")
-
-    @staticmethod
-    def load_hydra(folder, file, name):
-        with initialize_config_dir(version_base=None, config_dir=folder, job_name=name):
-            cfg = compose(config_name=file, overrides=[f"+name={name}"])
-            config = instantiate(cfg)
-            return config
 
     def run(self):
         gen = self.generate(self)
