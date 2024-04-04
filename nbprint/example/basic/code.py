@@ -1,5 +1,7 @@
 from nbprint import Content, table
 
+__all__ = ("ExampleCodeBlock",)
+
 
 class ExampleCodeBlock(Content):
     def __call__(self, ctx=None, *args, **kwargs):

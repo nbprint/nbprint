@@ -1,7 +1,20 @@
-from IPython.display import HTML, display
+import os.path
+from IPython.display import HTML
+from pydantic import FilePath
 from typing import Optional
 
 from nbprint import ContentCover, ContentImage
+
+__all__ = (
+    "ExampleNBPrintLogo",
+    "ExampleCoverPageContent",
+)
+
+
+class ExampleNBPrintLogo(ContentImage):
+    path: FilePath = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "..", "..", "docs", "img", "logo-light.png")
+    )
 
 
 class ExampleCoverPageContent(ContentCover):
@@ -10,7 +23,9 @@ class ExampleCoverPageContent(ContentCover):
     subtitle: Optional[str] = ""
 
     def __call__(self, ctx=None, *args, **kwargs):
-        self.logo(ctx=ctx, *args, **kwargs)
-        display(HTML(f"<h1>{self.title}</h1>"))
-        display(HTML(f"<h2>{self.subtitle}</h2>"))
-        display(HTML('<p class="pagebreak"></p>'))
+        return HTML(f"""
+            {self.logo(ctx=ctx, *args, **kwargs)._repr_html_()}
+            <h1>{self.title}</h1>
+            <h2>{self.subtitle}</h2>
+            <p class="pagebreak"></p>
+        """)

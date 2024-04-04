@@ -7,12 +7,12 @@ debug: false
 resources:
 
 outputs:
-  type: nbprint:NBConvertOutputs
+  _target_:  nbprint.NBConvertOutputs
   path_root: ./examples/output
   target: "html"
 
 parameters:
-  type: nbprint.example:ExampleFinanceParameters
+  _target_:  nbprint.example.ExampleFinanceParameters
   ticker: "ABCD"
   company_name: "ABCD Inc."
   sector: "Autos & Shared Mobility"
@@ -25,12 +25,12 @@ parameters:
   price_target: 10.0
 
 context:
-  type: nbprint.example:ExampleFinanceContext
+  _target_:  nbprint.example.ExampleFinanceContext
 
 page:
 
 content:
-  - type: nbprint.example:ExampleFinanceTitle
+  - _target_:  nbprint.example.ExampleFinanceTitle
     title: "Jefferies Morgan"
     subtitle: "Research"
     date: "November 8, 2023 08:45 GMT"
@@ -74,47 +74,47 @@ content:
             style: italic
             color: grey
 
-  - type: nbprint:ContentFlexRowLayout
+  - _target_:  nbprint.ContentFlexRowLayout
     sizes: [5, 3]
     content:
-      - type: nbprint:ContentFlexColumnLayout
+      - _target_:  nbprint.ContentFlexColumnLayout
         css: ":scope { border-right: 1px solid black; margin-right: 5px; }"
         content:
-          - type: nbprint.example:ExampleFinanceStockHeadline
+          - _target_:  nbprint.example.ExampleFinanceStockHeadline
             company_name: ${parameters.company_name}
             region: ${parameters.region}
             byline: "Solid Growth in both Domestic and International Markets"
             color: ${parameters.color}
 
-          - type: nbprint.example:ExampleFinanceStockPTUpdate
+          - _target_:  nbprint.example.ExampleFinanceStockPTUpdate
             rating: ${parameters.rating}
             view: ${parameters.view}
             price_target: ${parameters.price_target}
 
-          - type: nbprint.example:ExampleFinanceStockSubHeadline
+          - _target_:  nbprint.example.ExampleFinanceStockSubHeadline
             text: |
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua.
               Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
               nisi ut aliquip ex ea commodo consequat.
 
-      - type: nbprint:ContentFlexColumnLayout
+      - _target_:  nbprint.ContentFlexColumnLayout
         content:
-          - type: nbprint.example:ExampleFinanceAuthor
+          - _target_:  nbprint.example.ExampleFinanceAuthor
             name: John Smith
             title: Equity Analyst
             email: John.Smith@jm.com
             phone: +1 212 867-5309
             color: ${parameters.color}
 
-          - type: nbprint.example:ExampleFinanceAuthor
+          - _target_:  nbprint.example.ExampleFinanceAuthor
             name: Jane Doe
             title: Equity Analyst
             email: Jane.Doe@jm.com
             phone: +1 212 867-5309
             color: ${parameters.color}
 
-          - type: nbprint.example:ExampleFinanceStockQuickStats
+          - _target_:  nbprint.example.ExampleFinanceStockQuickStats
             color: ${parameters.color}
             ticker: ${parameters.ticker}
             company_name: ${parameters.company_name}
@@ -130,4 +130,4 @@ content:
             range_min: 4.35
             range_max: 8.25
 
-          - type: nbprint.example:ExampleFinanceStockEarningsTable
+          - _target_:  nbprint.example.ExampleFinanceStockEarningsTable
