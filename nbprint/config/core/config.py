@@ -12,7 +12,7 @@ from typing import Dict, List, Union
 from ... import __version__
 from ..base import BaseModel, Role, Type, _append_or_extend
 from ..content import Content
-from ..page import PageGlobal
+from ..page import Page
 from .context import Context
 from .outputs import Outputs
 from .parameters import Parameters
@@ -28,7 +28,7 @@ class Configuration(BaseModel):
     resources: Dict[str, BaseModel] = Field(default_factory=dict)
     outputs: Outputs
     parameters: Parameters = Field(default_factory=Parameters)
-    page: PageGlobal = Field(default_factory=PageGlobal)
+    page: Page = Field(default_factory=Page)
     context: Context = Field(default_factory=Context)
     content: List[Content] = Field(default_factory=list)
 
@@ -61,7 +61,7 @@ class Configuration(BaseModel):
 
     @validator("page", pre=True)
     def convert_page_from_obj(cls, v):
-        return BaseModel._to_type(v, PageGlobal)
+        return BaseModel._to_type(v, Page)
 
     @validator("context", pre=True)
     def convert_context_from_obj(cls, v):
