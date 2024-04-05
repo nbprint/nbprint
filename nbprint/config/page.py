@@ -1,5 +1,5 @@
 from nbformat import NotebookNode
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from .base import BaseModel, Role, Type, _append_or_extend
@@ -82,51 +82,51 @@ class Page(BaseModel):
         ret.css += base_css_scope
         return ret
 
-    @validator("top", pre=True)
+    @field_validator("top", mode="before")
     def convert_top_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "top-center")
 
-    @validator("top_left", pre=True)
+    @field_validator("top_left", mode="before")
     def convert_top_left_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "top-left")
 
-    @validator("top_right", pre=True)
+    @field_validator("top_right", mode="before")
     def convert_top_right_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "top-right")
 
-    @validator("bottom", pre=True)
+    @field_validator("bottom", mode="before")
     def convert_bottom_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "bottom-center")
 
-    @validator("bottom_left", pre=True)
+    @field_validator("bottom_left", mode="before")
     def convert_bottom_left_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "bottom-left")
 
-    @validator("bottom_right", pre=True)
+    @field_validator("bottom_right", mode="before")
     def convert_bottom_right_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "bottom-right")
 
-    @validator("left", pre=True)
+    @field_validator("left", mode="before")
     def convert_left_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "left-center")
 
-    @validator("left_top", pre=True)
+    @field_validator("left_top", mode="before")
     def convert_left_top_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "left-top")
 
-    @validator("left_bottom", pre=True)
+    @field_validator("left_bottom", mode="before")
     def convert_left_bottom_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "left-bottom")
 
-    @validator("right", pre=True)
+    @field_validator("right", mode="before")
     def convert_right_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "right-center")
 
-    @validator("right_top", pre=True)
+    @field_validator("right_top", mode="before")
     def convert_right_top_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "right-top")
 
-    @validator("right_bottom", pre=True)
+    @field_validator("right_bottom", mode="before")
     def convert_right_bottom_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "right-bottom")
 
@@ -173,7 +173,7 @@ class Page(BaseModel):
                 raise Exception("got null cell, investigate!")
         return cells
 
-    @validator("pages", pre=True)
+    @field_validator("pages", mode="before")
     def convert_pages_from_obj(cls, v):
         if v is None:
             return []
