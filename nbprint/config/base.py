@@ -98,7 +98,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
             kwargs["_target_"] = Type(module=self.__class__.__module__, name=self.__class__.__name__)
         super().__init__(**kwargs)
 
-    @field_validator("css", pre=True)
+    @field_validator("css", mode="before")
     def convert_css_string_or_path_to_string_or_path(cls, v):
         if isinstance(v, str):
             if v.strip().endswith(".css"):
@@ -106,7 +106,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
                 v = Path(v).resolve().read_text()
         return v
 
-    @field_validator("esm", pre=True)
+    @field_validator("esm", mode="before")
     def convert_esm_string_or_path_to_string_or_path(cls, v):
         if isinstance(v, str):
             v = v.strip()
@@ -115,7 +115,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
                 v = Path(v).resolve().read_text()
         return v
 
-    @field_validator("type", pre=True)
+    @field_validator("type", mode="before")
     def convert_type_string_to_module_and_name(cls, v):
         if isinstance(v, str):
             return Type.from_string(v)

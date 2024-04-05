@@ -41,7 +41,7 @@ class Configuration(BaseModel):
     _nb_var_name: str = PrivateAttr(default="nbprint_config")
     _nb_vars: set = PrivateAttr(default_factory=set)
 
-    @field_validator("resources", pre=True)
+    @field_validator("resources", mode="before")
     def convert_resources_from_obj(cls, value):
         if value is None:
             value = {}
@@ -50,23 +50,23 @@ class Configuration(BaseModel):
                 value[k] = BaseModel._to_type(v)
         return value
 
-    @field_validator("outputs", pre=True)
+    @field_validator("outputs", mode="before")
     def convert_outputs_from_obj(cls, v):
         return BaseModel._to_type(v, Outputs)
 
-    @field_validator("parameters", pre=True)
+    @field_validator("parameters", mode="before")
     def convert_parameters_from_obj(cls, v):
         return BaseModel._to_type(v, Parameters)
 
-    @field_validator("page", pre=True)
+    @field_validator("page", mode="before")
     def convert_page_from_obj(cls, v):
         return BaseModel._to_type(v, Page)
 
-    @field_validator("context", pre=True)
+    @field_validator("context", mode="before")
     def convert_context_from_obj(cls, v):
         return BaseModel._to_type(v, Context)
 
-    @field_validator("content", pre=True)
+    @field_validator("content", mode="before")
     def convert_content_from_obj(cls, v):
         if v is None:
             return []
@@ -173,7 +173,7 @@ class Configuration(BaseModel):
             with initialize_config_dir(version_base=None, config_dir=folder, job_name=name):
                 cfg = compose(config_name=file, overrides=[f"+name={name}"])
                 config = instantiate(cfg)
-                if isinstance(config, dict):
+                if not isinstance(config, Configuration):
                     config = Configuration(**config)
                 return config
         raise TypeError(f"Path or model malformed: {path_or_model} {type(path_or_model)}")

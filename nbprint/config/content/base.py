@@ -53,7 +53,7 @@ class Content(BaseModel):
                 raise Exception("got null cell, investigate!")
         return cells
 
-    @field_validator("content", pre=True)
+    @field_validator("content", mode="before")
     def convert_content_from_obj(cls, v):
         if v is None:
             return []

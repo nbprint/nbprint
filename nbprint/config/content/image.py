@@ -11,13 +11,13 @@ class ContentImage(Content):
     content: Optional[bytes] = b""
     tags: List[str] = Field(default=["nbprint:content", "nbprint:content:image"])
 
-    @field_validator("path", pre=True)
+    @field_validator("path", mode="before")
     def convert_path_from_obj(cls, v):
         if isinstance(v, str):
             v = Path(v).resolve()
         return v
 
-    @field_validator("content", pre=True)
+    @field_validator("content", mode="before")
     def convert_content_from_obj(cls, v):
         if v is None:
             return b""
