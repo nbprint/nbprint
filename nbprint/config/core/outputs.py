@@ -30,7 +30,7 @@ class Outputs(BaseModel):
     role: Role = Role.OUTPUTS
     ignore: bool = True
 
-    @field_validator("path_root", pre=True)
+    @field_validator("path_root", mode="before")
     def convert_str_to_path(cls, v):
         if isinstance(v, str):
             v = Path(v)
