@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from nbformat import NotebookNode, write
 from pathlib import Path
-from pydantic import DirectoryPath, Field, validator
+from pydantic import DirectoryPath, Field, field_validator
 from strenum import StrEnum
 from typing import TYPE_CHECKING, List, Literal, Optional, Union
 from uuid import uuid4
@@ -30,7 +30,7 @@ class Outputs(BaseModel):
     role: Role = Role.OUTPUTS
     ignore: bool = True
 
-    @validator("path_root", pre=True)
+    @field_validator("path_root", mode="before")
     def convert_str_to_path(cls, v):
         if isinstance(v, str):
             v = Path(v)

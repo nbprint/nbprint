@@ -2,10 +2,9 @@ from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
 from nbformat import NotebookNode
 from nbformat.v4 import new_notebook
-from omegaconf import DictConfig, OmegaConf
 from pathlib import Path
 from pprint import pprint
-from pydantic import Field, PrivateAttr, validator
+from pydantic import Field, PrivateAttr, field_validator
 from sys import version_info
 from typing import Dict, List, Union
 
@@ -42,7 +41,7 @@ class Configuration(BaseModel):
     _nb_var_name: str = PrivateAttr(default="nbprint_config")
     _nb_vars: set = PrivateAttr(default_factory=set)
 
-    @validator("resources", pre=True)
+    @field_validator("resources", mode="before")
     def convert_resources_from_obj(cls, value):
         if value is None:
             value = {}
@@ -51,23 +50,23 @@ class Configuration(BaseModel):
                 value[k] = BaseModel._to_type(v)
         return value
 
-    @validator("outputs", pre=True)
+    @field_validator("outputs", mode="before")
     def convert_outputs_from_obj(cls, v):
         return BaseModel._to_type(v, Outputs)
 
-    @validator("parameters", pre=True)
+    @field_validator("parameters", mode="before")
     def convert_parameters_from_obj(cls, v):
         return BaseModel._to_type(v, Parameters)
 
-    @validator("page", pre=True)
+    @field_validator("page", mode="before")
     def convert_page_from_obj(cls, v):
         return BaseModel._to_type(v, Page)
 
-    @validator("context", pre=True)
+    @field_validator("context", mode="before")
     def convert_context_from_obj(cls, v):
         return BaseModel._to_type(v, Context)
 
-    @validator("content", pre=True)
+    @field_validator("content", mode="before")
     def convert_content_from_obj(cls, v):
         if v is None:
             return []
@@ -167,20 +166,17 @@ class Configuration(BaseModel):
             path_or_model = Path(path_or_model).resolve()
 
         if isinstance(path_or_model, Path):
-            path_or_model = OmegaConf.load(path_or_model)
+            path_or_model = path_or_model.resolve()
+            folder = str(path_or_model.parent)
+            file = str(path_or_model.name)
 
-        if isinstance(path_or_model, DictConfig):
-            container = OmegaConf.to_container(path_or_model, resolve=True, throw_on_missing=True)
-            return Configuration(name=name, **container)
-
+            with initialize_config_dir(version_base=None, config_dir=folder, job_name=name):
+                cfg = compose(config_name=file, overrides=[f"+name={name}"])
+                config = instantiate(cfg)
+                if not isinstance(config, Configuration):
+                    config = Configuration(**config)
+                return config
         raise TypeError(f"Path or model malformed: {path_or_model} {type(path_or_model)}")
-
-    @staticmethod
-    def load_hydra(folder, file, name):
-        with initialize_config_dir(version_base=None, config_dir=folder, job_name=name):
-            cfg = compose(config_name=file, overrides=[f"+name={name}"])
-            config = instantiate(cfg)
-            return config
 
     def run(self):
         gen = self.generate(self)

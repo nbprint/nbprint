@@ -1,5 +1,5 @@
 from nbformat import NotebookNode
-from pydantic import Field, validator
+from pydantic import Field, field_validator
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from ..base import BaseModel, Role, SerializeAsAny, Type, _append_or_extend
@@ -53,7 +53,7 @@ class Content(BaseModel):
                 raise Exception("got null cell, investigate!")
         return cells
 
-    @validator("content", pre=True)
+    @field_validator("content", mode="before")
     def convert_content_from_obj(cls, v):
         if v is None:
             return []
