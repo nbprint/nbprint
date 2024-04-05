@@ -5,7 +5,7 @@ from json import dumps, loads
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
 from pathlib import Path
-from pydantic import BaseModel, Field, PrivateAttr, SerializeAsAny, validator
+from pydantic import BaseModel, Field, PrivateAttr, SerializeAsAny, field_validator
 from pydantic._internal._model_construction import ModelMetaclass
 from strenum import StrEnum
 from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple, Type, Union
@@ -98,7 +98,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
             kwargs["_target_"] = Type(module=self.__class__.__module__, name=self.__class__.__name__)
         super().__init__(**kwargs)
 
-    @validator("css", pre=True)
+    @field_validator("css", pre=True)
     def convert_css_string_or_path_to_string_or_path(cls, v):
         if isinstance(v, str):
             if v.strip().endswith(".css"):
@@ -106,7 +106,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
                 v = Path(v).resolve().read_text()
         return v
 
-    @validator("esm", pre=True)
+    @field_validator("esm", pre=True)
     def convert_esm_string_or_path_to_string_or_path(cls, v):
         if isinstance(v, str):
             v = v.strip()
@@ -115,7 +115,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
                 v = Path(v).resolve().read_text()
         return v
 
-    @validator("type", pre=True)
+    @field_validator("type", pre=True)
     def convert_type_string_to_module_and_name(cls, v):
         if isinstance(v, str):
             return Type.from_string(v)
