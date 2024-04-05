@@ -1,6 +1,6 @@
 from IPython.display import HTML, Image
 from pathlib import Path
-from pydantic import Field, FilePath, validator
+from pydantic import Field, FilePath, field_validator
 from typing import List, Optional
 
 from .base import Content
@@ -11,13 +11,13 @@ class ContentImage(Content):
     content: Optional[bytes] = b""
     tags: List[str] = Field(default=["nbprint:content", "nbprint:content:image"])
 
-    @validator("path", pre=True)
+    @field_validator("path", pre=True)
     def convert_path_from_obj(cls, v):
         if isinstance(v, str):
             v = Path(v).resolve()
         return v
 
-    @validator("content", pre=True)
+    @field_validator("content", pre=True)
     def convert_content_from_obj(cls, v):
         if v is None:
             return b""

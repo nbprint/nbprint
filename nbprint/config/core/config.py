@@ -4,7 +4,7 @@ from nbformat import NotebookNode
 from nbformat.v4 import new_notebook
 from pathlib import Path
 from pprint import pprint
-from pydantic import Field, PrivateAttr, validator
+from pydantic import Field, PrivateAttr, field_validator
 from sys import version_info
 from typing import Dict, List, Union
 
@@ -41,7 +41,7 @@ class Configuration(BaseModel):
     _nb_var_name: str = PrivateAttr(default="nbprint_config")
     _nb_vars: set = PrivateAttr(default_factory=set)
 
-    @validator("resources", pre=True)
+    @field_validator("resources", pre=True)
     def convert_resources_from_obj(cls, value):
         if value is None:
             value = {}
@@ -50,23 +50,23 @@ class Configuration(BaseModel):
                 value[k] = BaseModel._to_type(v)
         return value
 
-    @validator("outputs", pre=True)
+    @field_validator("outputs", pre=True)
     def convert_outputs_from_obj(cls, v):
         return BaseModel._to_type(v, Outputs)
 
-    @validator("parameters", pre=True)
+    @field_validator("parameters", pre=True)
     def convert_parameters_from_obj(cls, v):
         return BaseModel._to_type(v, Parameters)
 
-    @validator("page", pre=True)
+    @field_validator("page", pre=True)
     def convert_page_from_obj(cls, v):
         return BaseModel._to_type(v, Page)
 
-    @validator("context", pre=True)
+    @field_validator("context", pre=True)
     def convert_context_from_obj(cls, v):
         return BaseModel._to_type(v, Context)
 
-    @validator("content", pre=True)
+    @field_validator("content", pre=True)
     def convert_content_from_obj(cls, v):
         if v is None:
             return []
