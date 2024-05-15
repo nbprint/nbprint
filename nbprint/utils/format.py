@@ -44,17 +44,6 @@ def newpage():
     return _html(str(p))
 
 
-def table(df, title="", footnote=""):
-    """helper to display a table"""
-    ret = ""
-    if title:
-        ret += "### {}\n".format(title)
-    ret += df.to_html()
-    if footnote:
-        ret += "\n" + footnote + "\n"
-    return _html(ret)
-
-
 def pagenum():
     """display a page number (latex only)"""
     # TODO
