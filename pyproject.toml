@@ -61,6 +61,7 @@ develop = [
     "pytest",
     "pytest-cov",
     # notebook deps
+    "great_tables",
     "matplotlib",
     "pandas",
     "perspective-python",
