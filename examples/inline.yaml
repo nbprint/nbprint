@@ -36,6 +36,10 @@ content:
 
   - _target_: nbprint.ContentTableOfContents
 
+  - _target_: nbprint.PandasDisplayConfiguration
+  - _target_: nbprint.SeabornDisplayConfiguration
+    palette: pastel
+
   - _target_: nbprint.ContentMarkdown
     content: |
       # Section One
@@ -84,11 +88,8 @@ content:
       %matplotlib inline
       import matplotlib.pyplot as plt
       import superstore as sup
-      import seaborn as sns
 
-      sns.set_theme(style="whitegrid", palette="pastel")
-
-      df = sup.getTimeSeries()
+      df = sup.getTimeSeries(20, ncol=7)
 
       # add to context
       nbprint_ctx.df = df
@@ -135,8 +136,4 @@ content:
       And A grid of the data
       Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
   - _target_: nbprint.example.ExampleCodeBlock
-    # content: |
-    #   table(df[['A', 'B', 'C', 'D']],
-    #   'Sample Table',
-    #   'This is where authors provide additional information about the data, including whatever notes are needed.'))
 
