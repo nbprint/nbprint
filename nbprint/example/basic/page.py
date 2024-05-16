@@ -2,7 +2,7 @@ import os.path
 from IPython.display import HTML, Image
 from pydantic import Field, FilePath
 
-from nbprint import ContentImage, Page, PageRegion, PageRegionContent
+from nbprint import ContentImage, Page, PageRegion, PageRegionContent, Role
 
 from .cover import ExampleNBPrintLogo
 
@@ -44,6 +44,7 @@ class ExampleReportPage(Page):
     bottom_left: PageRegion = Field(default=ExampleLogoInFooter())
     bottom: PageRegion = Field(default=PageRegion(content=PageRegionContent(content="Example Report")))
     bottom_right: PageRegion = Field(default=PageRegion())
+    role: Role = Role.PAGE
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

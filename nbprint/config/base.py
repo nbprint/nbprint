@@ -194,6 +194,21 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         cell.metadata.nbprint.role = self.role or "undefined"
         cell.metadata.nbprint.type = self.type.to_string()
         cell.metadata.nbprint.ignore = self.ignore or False
+        if cell.metadata.nbprint.ignore and self.role in (Role.PARAMETERS,):
+            # Don't collapse
+            ...
+        elif cell.metadata.nbprint.ignore or self.role in (
+            Role.CONFIGURATION,
+            Role.CONTEXT,
+            Role.PAGE,
+            Role.UNDEFINED,
+        ):
+            # Collapse cell by default
+            cell.metadata["jupyter"] = {
+                "source_hidden": True,
+                "outputs_hidden": True,
+            }
+            cell.metadata.collapsed = True
         cell.metadata.nbprint.css = self.css or ""
         cell.metadata.nbprint.esm = self.esm or ""
         cell.metadata.nbprint.class_selector = f'{cell.metadata.nbprint.type.replace(":", "-").replace(".", "-")}'

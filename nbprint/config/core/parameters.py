@@ -14,7 +14,7 @@ __all__ = ("Parameters",)
 
 class Parameters(BaseModel):
     tags: List[str] = Field(default=["parameters", "nbprint:parameters"])
-    role: Role = Role.CONTENT
+    role: Role = Role.PARAMETERS
     ignore: bool = True
 
     def generate(self, metadata: dict, config: "Configuration", *args, **kwargs) -> NotebookNode:
