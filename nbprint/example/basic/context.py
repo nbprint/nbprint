@@ -7,4 +7,5 @@ __all__ = ("ExampleContext",)
 
 
 class ExampleContext(Context):
+    string: str = ""
     df: Optional[pd.DataFrame] = None

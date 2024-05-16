@@ -7,7 +7,7 @@ __all__ = ("ExampleParameters",)
 
 
 class ExampleParameters(Parameters):
-    ticker: str
+    string: str
     a: Optional[int] = 4
     b: Optional[float] = 4.5
     c: List[int] = Field(default=[1, 2, 3])
