@@ -1,0 +1,6 @@
+# @package _global_
+
+outputs:
+  _target_: nbprint.NBConvertOutputs
+  path_root: ./output
+  target: "html"
