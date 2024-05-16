@@ -1,0 +1,10 @@
+defaults:
+  # https://hydra.cc/docs/configure_hydra/logging/
+  - config/default
+  - outputs/nbconvert
+  - parameters/default
+  - context/default
+  - page/default
+  - override hydra/job_logging: custom
+  - override hydra/hydra_logging: custom
+  - _self_
