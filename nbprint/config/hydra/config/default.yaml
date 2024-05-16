@@ -1,0 +1,8 @@
+# @package _global_
+
+defaults:
+  - _self_
+
+_target_: nbprint.Configuration
+debug: false
+

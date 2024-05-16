@@ -2,6 +2,7 @@ import os.path
 import pytest
 
 from nbprint import Configuration
+from nbprint.cli import run_hydra
 
 
 def _example_folder_does_not_exist():
@@ -30,3 +31,10 @@ def test_finance_e2e():
 def test_research_e2e():
     config = Configuration.load("examples/research.yaml", "research")
     config.run()
+
+
+@pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
+@pytest.mark.parametrize("parameters", ("string1", "string2"))
+def test_hydra_e2e(parameters):
+    run_hydra("examples/hydra", ["+config=inline", "+page=report", f"+parameters={parameters}"])
+    run_hydra("examples/hydra", ["+config=inline", "+page=report", f"+parameters={parameters}"])

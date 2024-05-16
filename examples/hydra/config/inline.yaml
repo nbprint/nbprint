@@ -1,30 +1,19 @@
----
+# @package _global_
+
+defaults:
+  - _self_
+
+name: inline
 debug: false
 _target_: nbprint.Configuration
+
 outputs:
   _target_: nbprint.NBConvertOutputs
   path_root: ./examples/output
   target: "html"
 
-parameters:
-  _target_: nbprint.example.ExampleParameters
-  string: "STRING"
-
 context:
   _target_: nbprint.example.ExampleContext
-
-page:
-  _target_: nbprint.example.ExampleReportPage
-  bottom_left:
-    _target_: nbprint.example.ExampleLogoInFooter
-  bottom_right:
-    _target_: nbprint.PageRegion
-  bottom:
-    _target_: nbprint.PageRegion
-    content:
-      _target_: nbprint.PageRegionContent
-      content: "'Example Report'"
-
 
 content:
   - _target_: nbprint.ContentCode
