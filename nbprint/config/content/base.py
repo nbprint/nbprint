@@ -1,3 +1,4 @@
+from IPython.display import HTML
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
 from typing import TYPE_CHECKING, List, Optional, Union
@@ -64,6 +65,9 @@ class Content(BaseModel):
                 elif isinstance(element, dict):
                     v[i] = BaseModel._to_type(element)
         return v
+
+    def __call__(self, *args, **kwargs):
+        return HTML("")
 
 
 class ContentMarkdown(Content):
