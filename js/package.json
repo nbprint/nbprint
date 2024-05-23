@@ -1,6 +1,6 @@
 {
   "name": "nbprint",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "A framework for customizing NBConvert templates and building reports",
   "repository": "git@github.com:nbprint/nbprint.git",
   "author": "Tim Paine <t.paine154@gmail.com>",
