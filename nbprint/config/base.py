@@ -168,6 +168,10 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         """
         return self
 
+    def render(self, config: "Configuration") -> None:
+        """Called during notebook generation only, this should run any necessary post-processing. Pre-processing should go in __init__"""
+        ...
+
     def generate(
         self,
         metadata: dict,
@@ -242,6 +246,9 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         attr: str = "",
         counter: Optional[int] = None,
     ) -> Optional[NotebookNode]:
+        # trigger any pre-cell generation logic
+        self.render(config=config)
+
         cell = self._base_generate_meta(metadata=metadata)
         mod = ast.Module(body=[], type_ignores=[])
 
@@ -318,6 +325,9 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
     def _base_generate_md(
         self, metadata: dict, config: "Configuration", parent: Optional["BaseModel"] = None
     ) -> Optional[NotebookNode]:
+        # trigger any pre-cell generation logic
+        self.render(config=config)
+
         cell = self._base_generate_md_meta(metadata=metadata)
         # TODO should this go in a standard location?
         # set in metadata
