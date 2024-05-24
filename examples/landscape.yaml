@@ -1,0 +1,81 @@
+---
+debug: false
+_target_: nbprint.Configuration
+outputs:
+  _target_: nbprint.NBConvertOutputs
+  path_root: ./examples/output
+  target: "html"
+
+parameters:
+  _target_: nbprint.example.ExampleParameters
+  string: "STRING"
+
+context:
+  _target_: nbprint.example.ExampleContext
+
+page:
+  _target_: nbprint.example.ExampleReportPage
+  orientation: landscape
+  bottom_left:
+    _target_: nbprint.example.ExampleLogoInFooter
+  bottom_right:
+    _target_: nbprint.PageRegion
+  bottom:
+    _target_: nbprint.PageRegion
+    content:
+      _target_: nbprint.PageRegionContent
+      content: "'Example Report'"
+
+
+content:
+  - _target_: nbprint.ContentCode
+    content: |
+      nbprint_ctx.string = string
+
+  - _target_: nbprint.example.ExampleCoverPageContent
+    logo:
+      _target_: nbprint.example.ExampleNBPrintLogo
+
+    title: "A generic report"
+    subtitle: "In this section we have some boilerplate stuff"
+
+  - _target_: nbprint.ContentTableOfContents
+
+  - _target_: nbprint.PandasDisplayConfiguration
+  - _target_: nbprint.SeabornDisplayConfiguration
+    palette: pastel
+
+  - _target_: nbprint.ContentMarkdown
+    content: |
+      # Section One
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+      ## Subsection One
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+      ## Subsection Two
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+      ### Sub Sub1
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+      #### Sub Sub Sub3
+
+      ##### Sub Sub Sub3
+
+        * Item 1
+        * Item 2
+          1. Item 2a
+          2. Item 2b
+
+      [Link](www.google.com)
+
+      *some* other **stuff**
+
+      ```python
+      print("Hello World!")
+      ```
+      > Block
+      > Quotes
+
+  - _target_: nbprint.ContentPageBreak

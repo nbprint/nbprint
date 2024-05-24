@@ -22,6 +22,12 @@ def test_inline_e2e():
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
+def test_landscape_e2e():
+    config = Configuration.load("examples/landscape.yaml", "landscape")
+    config.run()
+
+
+@pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
 def test_finance_e2e():
     config = Configuration.load("examples/finance.yaml", "finance")
     config.run()
