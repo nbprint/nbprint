@@ -97,6 +97,38 @@ jobs:
     - name: Upload coverage
       uses: codecov/codecov-action@v4
 
+    - name: Upload generated reports
+      uses: actions/upload-artifact@v4
+      id: upload-reports
+      with:
+        name: reports
+        path: 'examples/output/*.html'
+        if-no-files-found: error
+
+    - name: Find comment for generated reports
+      uses: peter-evans/find-comment@v2
+      id: find-comment
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-author: 'github-actions[bot]'
+      if: github.event_name == 'pull_request'
+
+    - name: Update comment for generated reports
+      uses: peter-evans/create-or-update-comment@v3
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-id: ${{ steps.find-comment.outputs.comment-id }}
+        edit-mode: replace
+        body: |-
+            ![badge]
+
+            Build Successful! You can find a link to the downloadable artifact below.
+
+            | Name     | Link                    |
+            | -------- | ----------------------- |
+            | Download | [reports](${{ steps.upload-reports.outputs.artifact-url }}) |
+      if: github.event_name == 'pull_request'
+
     - name: Twine check
       run: make dist
 

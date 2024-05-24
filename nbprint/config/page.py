@@ -3,7 +3,7 @@ from pydantic import Field, field_validator
 from typing import TYPE_CHECKING, List, Optional, Union
 
 from .base import BaseModel, Role, Type, _append_or_extend
-from .common import Style
+from .common import PageOrientation, PageSize, Style
 
 if TYPE_CHECKING:
     from .core.config import Configuration
@@ -68,11 +68,12 @@ class Page(BaseModel):
     right_top: Optional[PageRegion] = None
     right_bottom: Optional[PageRegion] = None
 
+    size: Optional[PageSize] = Field(default=PageSize.letter)
+    orientation: Optional[PageOrientation] = Field(default=PageOrientation.portrait)
+
     pages: Optional[List["Page"]] = Field(default_factory=list)
 
-    css: str = """
-@page { size: letter; }
-"""
+    css: str = ""
 
     @classmethod
     def convert_region_from_obj(cls, v, region):
@@ -129,6 +130,15 @@ class Page(BaseModel):
     @field_validator("right_bottom", mode="before")
     def convert_right_bottom_from_obj(cls, v):
         return Page.convert_region_from_obj(v, "right-bottom")
+
+    def render(self, config) -> None:
+        if "@page { size:" not in self.css:
+            self.css = (
+                self.css
+                + f"""
+@page {{ size: {self.size.value} {self.orientation.value}; }}
+            """
+            )
 
     def generate(
         self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str = "page", *args, **kwargs
