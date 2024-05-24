@@ -121,13 +121,9 @@ jobs:
         comment-id: ${{ steps.find-comment.outputs.comment-id }}
         edit-mode: replace
         body: |-
-            ![badge]
-
-            Build Successful! You can find a link to the downloadable artifact below.
-
             | Name     | Link                    |
             | -------- | ----------------------- |
-            | Download | [reports](${{ steps.upload-reports.outputs.artifact-url }}) |
+            | Test Reports | [download](${{ steps.upload-reports.outputs.artifact-url }}) |
       if: matrix.os == 'ubuntu-latest' && github.event_name == 'pull_request'
 
     - name: Twine check
