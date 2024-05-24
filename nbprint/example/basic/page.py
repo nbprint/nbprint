@@ -2,7 +2,7 @@ import os.path
 from IPython.display import HTML, Image
 from pydantic import Field, FilePath
 
-from nbprint import ContentImage, Page, PageRegion, PageRegionContent, Role
+from nbprint import Configuration, ContentImage, Page, PageOrientation, PageRegion, PageRegionContent, Role
 
 from .cover import ExampleNBPrintLogo
 
@@ -54,8 +54,6 @@ class ExampleReportPage(Page):
     background-image: url("data:image/png;base64,{ExampleBookIcon().as_base64()}");
     background-size: 50%;
     background-repeat: no-repeat;
-    background-position-y: 75%;
-    background-position-x: 50%;
 }}
 
 .pagedjs_first_page div.pagedjs_margin-bottom {{
@@ -65,4 +63,21 @@ class ExampleReportPage(Page):
 .pagedjs_margin-bottom-center > pagedjs_margin-content::after {{
     font-weight: bold;
 }}
+"""
+
+    def render(self, config: Configuration) -> None:
+        super().render(config=config)
+        if config.page.orientation == PageOrientation.landscape:
+            self.css += """
+.pagedjs_first_page {
+    background-position-y: 85%;
+    background-position-x: 95%;
+}
+"""
+        else:
+            self.css += """
+.pagedjs_first_page {
+    background-position-y: 75%;
+    background-position-x: 50%;
+}
 """
