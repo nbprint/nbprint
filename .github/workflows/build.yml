@@ -105,7 +105,7 @@ jobs:
         path: 'examples/output/*.html'
         if-no-files-found: error
         overwrite: true
-      if: matrix.os == 'ubuntu-latest' && github.event_name == 'pull_request'
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
 
     - name: Find comment for generated reports
       uses: peter-evans/find-comment@v2
@@ -113,7 +113,7 @@ jobs:
       with:
         issue-number: ${{ github.event.pull_request.number }}
         comment-author: 'github-actions[bot]'
-      if: matrix.os == 'ubuntu-latest' && github.event_name == 'pull_request'
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
 
     - name: Update comment for generated reports
       uses: peter-evans/create-or-update-comment@v3
@@ -125,7 +125,7 @@ jobs:
             | Name     | Link                    |
             | -------- | ----------------------- |
             | Test Reports | [download](${{ steps.upload-reports.outputs.artifact-url }}) |
-      if: matrix.os == 'ubuntu-latest' && github.event_name == 'pull_request'
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
 
     - name: Twine check
       run: make dist
