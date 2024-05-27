@@ -1,9 +1,19 @@
 from IPython.display import HTML
 
-from nbprint import Content, Role
+from nbprint import Content, ContentFlexColumnLayout, ContentFlexRowLayout, Role
+
+__all__ = (
+    "ExampleResearchHeader",
+    "ExampleResearchTitle",
+    "ExampleResearchAuthor",
+    "ExampleResearchAuthors",
+    "ExampleResearchBody",
+    "ExampleResearchSectionTitle",
+    "ExampleResearchSectionText",
+)
 
 
-class ExampleResearchHeader(Content):
+class ExampleResearchHeader(ContentFlexColumnLayout):
     role: Role = Role.LAYOUT
     css: str = """
 :scope {
@@ -69,18 +79,7 @@ div.column > span:nth-child(2) {
         """)
 
 
-class ExampleResearchAuthors(Content):
-    role: Role = Role.LAYOUT
-    css: str = """
-:scope {
-  display: flex;
-  flex-direction: row;
-  margin: auto;
-}
-    """
-
-    def __call__(self, ctx=None, *args, **kwargs):
-        return HTML("")
+class ExampleResearchAuthors(ContentFlexRowLayout): ...
 
 
 class ExampleResearchBody(Content):
@@ -92,6 +91,10 @@ class ExampleResearchBody(Content):
   column-gap: 1cm;
 }
 """
+
+    def __call__(self, ctx=None, *args, **kwargs):
+        # return empty html just for placeholder
+        return HTML("")
 
 
 class ExampleResearchSectionTitle(Content):
