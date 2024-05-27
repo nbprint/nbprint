@@ -13,6 +13,7 @@ window.FontAwesomeConfig = {
 
 
 {{ resources.include_js("static/embedded.js", True) }}
+
 {{ super() }}
 {%- endblock html_head_js -%}
 
@@ -66,6 +67,7 @@ window.FontAwesomeConfig = {
 
     {% if cell.metadata["nbprint"].get("esm", None) %}
     <script type="module">
+
         document.addEventListener("nbprint-ready", async () => {
 
             // TODO formal entrypoint a la anywidget
@@ -91,9 +93,9 @@ window.FontAwesomeConfig = {
         <div class="{{ cell.metadata["nbprint"]["class"] }}" {{ cell.metadata["nbprint"]["attrs"] }} data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}" data-nbprint-parent-id="{{ cell.metadata["nbprint"].get("parent-id", "") }}">
 
         <!-- TODO should we make this like `ignore` as a first-order attribute? -->
-        <!-- if cell.metadata["nbprint"].get("role", "content") == "content" %} -->
+        <!-- { % if cell.metadata["nbprint"].get("role", "content") == "content" % } -->
         {{ super() }}
-        <!-- endif -->
+        <!-- { % endif % } -->
 
         </div>
     {% endif %}
@@ -118,3 +120,7 @@ window.FontAwesomeConfig = {
 
 {% block output_area_prompt %}
 {% endblock output_area_prompt %}
+
+{% block footer %}
+{{ super() }}
+{% endblock footer %}

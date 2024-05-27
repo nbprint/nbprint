@@ -1,3 +1,5 @@
+import { build as buildpagedjs } from "./nbconvert";
+
 export class NBPrint {
   constructor({ configuration, notebook_info }) {
     this._configuration = configuration;
@@ -27,10 +29,24 @@ export class NBPrint {
     for (let style of styles) {
       document.head.appendChild(style);
     }
+
+    const myEvent = new CustomEvent("nbprint-ready", {
+      detail: {
+        nbprint: this,
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: false,
+    });
+    document.dispatchEvent(myEvent);
+  }
+
+  async build() {
+    await buildpagedjs();
   }
 
   async postprocess() {
-    const myEvent = new CustomEvent("nbprint-ready", {
+    const myEvent = new CustomEvent("nbprint-done", {
       detail: {
         nbprint: this,
       },
@@ -54,8 +70,22 @@ export function initializeNBPrint() {
 
   // set global for use in templates
   window.NBPRINT = nbp;
+  window._n = nbp;
 
   // alert in console for now
   console.debug("NBPrint Initialized!");
+
+  // dispatch initialization event
+  const myEvent = new CustomEvent("nbprint-initialized", {
+    detail: {
+      nbprint: nbp,
+    },
+    bubbles: true,
+    cancelable: true,
+    composed: false,
+  });
+  document.dispatchEvent(myEvent);
+
+  // return object
   return nbp;
 }
