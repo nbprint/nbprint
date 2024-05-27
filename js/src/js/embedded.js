@@ -10,13 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (nbprint.buildPagedJS()) {
     // Build pagedjs
-    // if (window.voila_process !== undefined) {
-    //   setTimeout(async () => {
-    //     await build();
-    //   }, 3000);
-    // } else {
     await nbprint.build();
-    // }
   }
 
   await nbprint.postprocess();
