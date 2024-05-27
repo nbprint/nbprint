@@ -1,10 +1,2 @@
-from .content import (
-    ExampleResearchAuthor,
-    ExampleResearchAuthors,
-    ExampleResearchBody,
-    ExampleResearchHeader,
-    ExampleResearchSectionText,
-    ExampleResearchSectionTitle,
-    ExampleResearchTitle,
-)
+from .content import *
 from .context import ExampleResearchReferencesContext

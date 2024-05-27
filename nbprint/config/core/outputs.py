@@ -1,3 +1,4 @@
+import os
 from datetime import date, datetime
 from nbformat import NotebookNode, write
 from pathlib import Path
@@ -98,6 +99,10 @@ class NBConvertOutputs(Outputs):
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
         from nbconvert.nbconvertapp import main
 
+        # set for convenience
+        os.environ["PSP_JUPYTER_HTML_EXPORT"] = "1"
+
+        # run the nbconvert
         notebook = super().run(config=config, gen=gen)
         main([notebook, f"--to={self.target}", f"--template={self.template}", "--execute"])
 
