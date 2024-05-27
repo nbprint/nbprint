@@ -480,7 +480,7 @@ span:nth-child(2) {
     def __call__(self, ctx=None, *args, **kwargs):
         return HTML("""
   <div class="column">
-    <span>Jefferies Morgan does and seeks to do business with companies covered in Jefferies Morgan Research. As a result, investors should be aware that the firm may have a conflict of interest that could affect the objectivity of Morgan Stanley Research. Investors should consider Jefferies Morgan Research as only a single factor in making their investment decision.</span>
+    <span>Jefferies Morgan does and seeks to do business with companies covered in Jefferies Morgan Research. As a result, investors should be aware that the firm may have a conflict of interest that could affect the objectivity of Jefferies Morgan Research. Investors should consider Jefferies Morgan Research as only a single factor in making their investment decision.</span>
     <span>For analyst certification and other important disclosures, refer to the Disclosure Section, located at the end of this report.</span>
   </div>
         """)
