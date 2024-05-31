@@ -77,8 +77,8 @@ test = [
 nbprint = "nbprint.cli:main"
 
 [project.urls]
-repository = "https://github.com/nbprint/nbprint"
-homepage = "https://github.com/nbprint/nbprint"
+Repository = "https://github.com/nbprint/nbprint"
+Homepage = "https://github.com/nbprint/nbprint"
 
 [tool.hatch.build]
 artifacts = [
