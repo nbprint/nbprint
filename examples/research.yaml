@@ -15,6 +15,7 @@ content:
         title: "An Example Research Publication Title"
 
       - _target_:  nbprint.example.ExampleResearchAuthors
+        sizes: [1, 1, 1]
         content:
           - _target_:  nbprint.example.ExampleResearchAuthor
             name: John Smith
