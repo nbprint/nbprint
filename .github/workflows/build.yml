@@ -42,13 +42,6 @@ jobs:
         cache: "pip"
         cache-dependency-path: 'pyproject.toml'
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-        cache-dependency-path: js/yarn.lock
-
     - name: Install pandoc via brew
       run: brew install pandoc
       if: ${{ matrix.os == 'macos-latest' }}
@@ -57,8 +50,11 @@ jobs:
       run: sudo apt install pandoc
       if: ${{ matrix.os == 'ubuntu-latest' }}
 
-    - name: Install yarn
-      run: npm install -g yarn
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        package_json_file: js/package.json
 
     - name: Install dependencies
       run: make develop
