@@ -6,7 +6,7 @@ build:  ## build python/javascript
 
 develop:  ## install to site-packages in editable mode
 	python -m pip install --upgrade build pip setuptools twine wheel
-	cd js; yarn && npx playwright install
+	cd js; pnpm install && npx playwright install
 	python -m pip install -e .[develop]
 
 install:  ## install to site-packages
@@ -19,7 +19,7 @@ testpy: ## clean and Make unit tests
 	python -m pytest -v nbprint/tests --junitxml=junit.xml --cov=nbprint --cov-report=xml:.coverage.xml --cov-branch --cov-fail-under=0 --cov-report term-missing
 
 testjs: ## clean and Make js tests
-	cd js; yarn test
+	cd js; pnpm test
 
 test: tests
 tests: testpy testjs ## run the tests
@@ -33,7 +33,7 @@ lintpy:  ## lint python with ruff and isort
 	python -m ruff format --check nbprint setup.py
 
 lintjs:  ## lint javascript with eslint
-	cd js; yarn lint
+	cd js; pnpm lint
 
 lint: lintpy lintjs  ## run linters
 
@@ -42,7 +42,7 @@ fixpy:  ## autoformat python with ruff and isort
 	python -m ruff format nbprint setup.py
 
 fixjs:  ## autoformat javascript with eslint
-	cd js; yarn fix
+	cd js; pnpm fix
 
 fix: fixpy fixjs  ## run black/tslint fix
 format: fix
@@ -70,7 +70,7 @@ clean: ## clean the repository
 	find . -name ".ipynb_checkpoints" | xargs  rm -rf
 	rm -rf .coverage coverage *.xml build dist *.egg-info lib node_modules .pytest_cache *.egg-info
 	rm -rf nbprint/extension
-	cd js && yarn clean
+	cd js && pnpm clean
 	git clean -fd
 
 ###########
