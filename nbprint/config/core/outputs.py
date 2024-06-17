@@ -94,17 +94,34 @@ class Outputs(BaseModel):
 
 class NBConvertOutputs(Outputs):
     target: Optional[Literal["ipynb", "html", "pdf"]] = "html"  # TODO nbconvert types
+    execute: Optional[bool] = True
+    timeout: Optional[int] = 600
     template: Optional[str] = "nbprint"
 
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
-        from nbconvert.nbconvertapp import main
+        from nbconvert.nbconvertapp import main as execute_nbconvert
 
         # set for convenience
         os.environ["PSP_JUPYTER_HTML_EXPORT"] = "1"
 
         # run the nbconvert
         notebook = super().run(config=config, gen=gen)
-        main([notebook, f"--to={self.target}", f"--template={self.template}", "--execute"])
+
+        cmd = [
+            notebook,
+            f"--to={self.target}",
+            f"--template={self.template}",
+        ]
+
+        if self.execute:
+            cmd.extend(
+                [
+                    "--execute",
+                    f"--ExecutePreprocessor.timeout={self.timeout}",
+                ]
+            )
+
+        execute_nbconvert(cmd)
 
 
 # class PapermillOutputs(NBConvertOutputs):

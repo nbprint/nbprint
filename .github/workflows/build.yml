@@ -18,6 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  contents: write
   checks: write
   pull-requests: write
 
@@ -121,7 +122,7 @@ jobs:
             | Name     | Link                    |
             | -------- | ----------------------- |
             | Test Reports | [download](${{ steps.upload-reports.outputs.artifact-url }}) |
-      if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'nbprint/nbprint'
 
     - name: Twine check
       run: make dist
