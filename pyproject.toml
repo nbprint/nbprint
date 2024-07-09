@@ -54,6 +54,7 @@ dependencies = [
 
 [project.optional-dependencies]
 develop = [
+    "bump-my-version",
     "hatchling>=1.20",
     "hatch-jupyter-builder",
     "isort>=5,<6",
@@ -83,6 +84,26 @@ nbprint = "nbprint.cli:main"
 [project.urls]
 Repository = "https://github.com/nbprint/nbprint"
 Homepage = "https://github.com/nbprint/nbprint"
+
+[tool.bumpversion]
+current_version = "0.1.10"
+commit = true
+tag = false
+
+[[tool.bumpversion.files]]
+filename = "nbprint/__init__.py"
+search = '__version__ = "{current_version}"'
+replace = '__version__ = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "js/package.json"
+search = '"version": "{current_version}"'
+replace = '"version": "{new_version}"'
 
 [tool.hatch.build]
 artifacts = [
