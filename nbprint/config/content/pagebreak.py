@@ -1,12 +1,17 @@
 from IPython.display import HTML, display
 from pydantic import Field
-from typing import List
 
 from .base import Content
 
 
 class ContentPageBreak(Content):
-    tags: List[str] = Field(default=["nbprint:content", "nbprint:content:pagebreak"])
+    """Class to represent placeholder for pagedjs page-break directive."""
 
-    def __call__(self, ctx=None, *args, **kwargs):
+    tags: list[str] = Field(default=["nbprint:content", "nbprint:content:pagebreak"])
+
+    def __call__(self, *_, **__) -> None:
+        """Create HTML compatible table of contents div block.
+
+        Note: requires custom CSS
+        """
         display(HTML('<p class="pagebreak"></p>'))

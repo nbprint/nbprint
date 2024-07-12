@@ -1,8 +1,8 @@
 from IPython.display import HTML
 from pydantic import Field
-from typing import List
 
-from ..base import Role
+from nbprint.config.base import Role
+
 from .base import Content
 
 __all__ = (
@@ -14,9 +14,11 @@ __all__ = (
 
 
 class _ContentFlexLayout(Content):
+    """Private class to represent a generic flex layout."""
+
     # component to split into certain number of columns
     # count: int = 1
-    sizes: List[float] = []
+    sizes: list[float] = Field(default_factory=list)
 
     # override role
     role: Role = Role.LAYOUT
@@ -54,21 +56,27 @@ function render(meta, elem) {
 """
     attrs: dict = Field(default_factory=dict)
 
-    def __call__(self, ctx=None, *args, **kwargs):
+    def __call__(self, *_, **__) -> HTML:
+        """Generate IPython HTML for object."""
         # return empty html just for placeholder
         return HTML("")
 
 
 class ContentLayout(Content):
+    """Class to represent a generic layout, does no html or css configuration."""
+
     # override role
     role: Role = Role.LAYOUT
 
-    def __call__(self, ctx=None, *args, **kwargs):
+    def __call__(self, *_, **__) -> HTML:
+        """Generate IPython HTML for object."""
         # return empty html just for placeholder
         return HTML("")
 
 
 class ContentInlineLayout(Content):
+    """Class to represent a div with block display and inline layout."""
+
     # override role
     role: Role = Role.LAYOUT
 
@@ -93,18 +101,22 @@ function render(meta, elem) {
 """
     attrs: dict = Field(default_factory=dict)
 
-    def __call__(self, ctx=None, *args, **kwargs):
-        # return empty html just for placeholder
+    def __call__(self, *_, **__) -> HTML:
+        """Generate IPython HTML for object."""
         return HTML("")
 
 
 class ContentFlexColumnLayout(_ContentFlexLayout):
+    """Class to represent a div with flex column layout."""
+
     css: str = """
 :scope { display: flex; flex-direction: column; break-inside: auto; }
 """
 
 
 class ContentFlexRowLayout(_ContentFlexLayout):
+    """Class to represent a div with flex row layout."""
+
     css: str = """
 :scope { display: flex; flex-direction: row; break-inside: auto; }
 """

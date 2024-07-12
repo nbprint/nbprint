@@ -1,31 +1,37 @@
+from __future__ import annotations
+
 from IPython.display import HTML
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
-from typing import TYPE_CHECKING, List, Optional, Union
+from typing import TYPE_CHECKING
 
-from ..base import BaseModel, Role, SerializeAsAny, Type, _append_or_extend
-from ..common import Style
+from nbprint.config.base import BaseModel, Role, SerializeAsAny, Type, _append_or_extend
+from nbprint.config.common import Style
+from nbprint.config.exceptions import NBPrintGenerationError
 
 if TYPE_CHECKING:
-    from ..core import Configuration
+    from nbprint.config.core import Configuration
 
 
 class Content(BaseModel):
-    content: Optional[Union[str, List[SerializeAsAny[BaseModel]]]] = ""
-    tags: List[str] = Field(default=["nbprint:content"])
+    """Class representing some notebook cell content."""
+
+    content: str | list[SerializeAsAny[BaseModel]] = Field(default="")
+    tags: list[str] = Field(default=["nbprint:content"])
     role: Role = Role.CONTENT
 
     # used by lots of things
-    style: Optional[Style] = None
+    style: Style | None = None
 
-    def generate(
+    def generate(  # noqa: PLR0913
         self,
-        metadata: Optional[dict] = None,
-        config: Optional["Configuration"] = None,
-        parent: Optional["BaseModel"] = None,
+        metadata: dict | None = None,
+        config: Configuration | None = None,
+        parent: BaseModel | None = None,
         attr: str = "",
-        counter: Optional[int] = None,
-    ) -> Optional[Union[NotebookNode, List[NotebookNode]]]:
+        counter: int | None = None,
+    ) -> NotebookNode | list[NotebookNode] | None:
+        """Generate notebook code cells for content."""
         # make a cell for yourself
         self_cell = super().generate(
             metadata=metadata,
@@ -51,11 +57,14 @@ class Content(BaseModel):
                 )
         for cell in cells:
             if cell is None:
-                raise Exception("got null cell, investigate!")
+                msg = "got null cell, investigate!"
+                raise NBPrintGenerationError(msg)
         return cells
 
     @field_validator("content", mode="before")
-    def convert_content_from_obj(cls, v):
+    @classmethod
+    def convert_content_from_obj(cls, v) -> BaseModel:
+        """Helper method to create a content object from a dict."""
         if v is None:
             return []
         if isinstance(v, list):
@@ -63,27 +72,32 @@ class Content(BaseModel):
                 if isinstance(element, str):
                     v[i] = Content(type=Type.from_string(element))
                 elif isinstance(element, dict):
-                    v[i] = BaseModel._to_type(element)
+                    v[i] = BaseModel._to_type(element)  # noqa: SLF001
         return v
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *_, **__) -> HTML:
+        """Generate IPython HTML for object."""
         return HTML("")
 
 
 class ContentMarkdown(Content):
-    content: Optional[str] = ""
+    """Class representing some notebook markdown cell content."""
+
+    content: str = Field(default="")
 
     def generate(
         self,
-        metadata: Optional[dict] = None,
-        config: Optional["Configuration"] = None,
-        parent: Optional["BaseModel"] = None,
-        attr: str = "",
-        counter: Optional[int] = None,
-    ) -> Optional[Union[NotebookNode, List[NotebookNode]]]:
+        metadata: dict | None = None,
+        config: Configuration | None = None,
+        parent: BaseModel | None = None,
+        *_,
+        **__,
+    ) -> NotebookNode | list[NotebookNode] | None:
+        """Generate notebook markdown cells for content."""
         cell = super()._base_generate_md(metadata=metadata, config=config, parent=parent)
         cell.source = self.content
         return cell
 
 
-class ContentCode(Content): ...
+class ContentCode(Content):
+    """Class representing some notebook code cell content."""

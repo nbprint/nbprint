@@ -1,4 +1,6 @@
-from ..base import BaseModel
+from nbprint.config.base import BaseModel
+
+__all__ = ("_BaseCss",)
 
 
 class _BaseCss(BaseModel):

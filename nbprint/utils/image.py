@@ -1,8 +1,12 @@
+"""Utility code to render images."""
+
+from __future__ import annotations
+
 from IPython.display import Image
 
 
-def image(data=None, path=None, **kwargs):
-    """display a image"""
+def image(data: str | bytes | None = None, path: str | None = None, **kwargs) -> Image:
+    """Display a image."""
     # measure in pixels for html, but cm for latex
     width = kwargs.get("width", "")
     height = kwargs.get("height", "")
@@ -15,13 +19,13 @@ def image(data=None, path=None, **kwargs):
         elif not isinstance(width, str):
             # assume in pixels, get cm
 
-            # TODO assume 96 DPI
-            widthcm = "{}cm".format(int(width / 36))
+            # TODO: assume 96 DPI
+            widthcm = f"{int(width / 36)}cm"
         else:
             # assume already in cm, get pixels
             width, widthcm = float(width.replace("cm", "")), width
 
-            # TODO assume 96 DPI
+            # TODO: assume 96 DPI
             width = int(width * 36)
             kwargs["width"] = width
     else:
@@ -33,14 +37,14 @@ def image(data=None, path=None, **kwargs):
         elif not isinstance(height, str):
             # assume in pixels, get cm
 
-            # TODO assume 96 DPI
-            heightcm = "{}cm".format(int(height / 36))
+            # TODO: assume 96 DPI
+            heightcm = f"{int(height / 36)}cm"
 
         else:
             # assume already in cm, get pixels
             height, heightcm = float(height.replace("cm", "")), height
 
-            # TODO assume 96 DPI
+            # TODO: assume 96 DPI
             height = int(height * 36)
             kwargs["height"] = height
     else:

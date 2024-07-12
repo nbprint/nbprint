@@ -2,22 +2,21 @@ import ast
 from json import dumps
 from nbformat import NotebookNode
 from pydantic import Field
-from typing import TYPE_CHECKING, List
 
-from ..base import BaseModel, Role
-
-if TYPE_CHECKING:
-    from .config import Configuration
+from nbprint.config.base import BaseModel, Role
 
 __all__ = ("Parameters",)
 
 
 class Parameters(BaseModel):
-    tags: List[str] = Field(default=["parameters", "nbprint:parameters"])
+    """Class representing the input parameters for a notebook."""
+
+    tags: list[str] = Field(default=["parameters", "nbprint:parameters"])
     role: Role = Role.PARAMETERS
     ignore: bool = True
 
-    def generate(self, metadata: dict, config: "Configuration", *args, **kwargs) -> NotebookNode:
+    def generate(self, metadata: dict, *_, **__) -> NotebookNode:
+        """Generate cell for parameters, must be first cell."""
         cell = self._base_generate_meta(metadata=metadata)
         # if nb_vars:
         #     # add parameter variable

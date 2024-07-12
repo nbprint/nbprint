@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from pydantic_extra_types.color import Color
 from strenum import StrEnum
-from typing import Literal, Optional
+from typing import Literal
 
 from .css import _BaseCss
 
@@ -15,33 +17,37 @@ __all__ = (
 
 Unset = Literal["unset"]
 
-# TODO
+# TODO: implement
 # class Size:
-# cm	Centimeters	1cm = 37.8px = 25.2/64in
-# mm	Millimeters	1mm = 1/10th of 1cm
-# Q	Quarter-millimeters	1Q = 1/40th of 1cm
-# in	Inches	1in = 2.54cm = 96px
-# pc	Picas	1pc = 1/6th of 1in
-# pt	Points	1pt = 1/72nd of 1in
-# px	Pixels	1px = 1/96th of 1in
-# em	Font size of the parent, in the case of typographical properties like font-size, and font size of the element itself, in the case of other properties like width.
-# ex	x-height of the element's font.
-# ch	The advance measure (width) of the glyph "0" of the element's font.
-# rem	Font size of the root element.
-# lh	Line height of the element.
-# rlh	Line height of the root element. When used on the font-size or line-height properties of the root element, it refers to the properties' initial value.
-# vw	1% of the viewport's width.
-# vh	1% of the viewport's height.
-# vmin	1% of the viewport's smaller dimension.
-# vmax	1% of the viewport's larger dimension.
-# vb	1% of the size of the initial containing block in the direction of the root element's block axis.
-# vi	1% of the size of the initial containing block in the direction of the root element's inline axis.
-# svw, svh	1% of the small viewport's width and height, respectively.
-# lvw, lvh	1% of the large viewport's width and height, respectively.
-# dvw, dvh	1% of the dynamic viewport's width and height, respectively.
+# cm Centimeters 1cm = 37.8px = 25.2/64in
+# mm Millimeters 1mm = 1/10th of 1cm
+# Q Quarter-millimeters 1Q = 1/40th of 1cm
+# in Inches 1in = 2.54cm = 96px
+# pc Picas 1pc = 1/6th of 1in
+# pt Points 1pt = 1/72nd of 1in
+# px Pixels 1px = 1/96th of 1in
+# em Font size of the parent, in the case of typographical properties like font-size,
+#       and font size of the element itself, in the case of other properties like width.
+# ex x-height of the element's font.
+# ch The advance measure (width) of the glyph "0" of the element's font.
+# rem Font size of the root element.
+# lh Line height of the element.
+# rlh Line height of the root element. When used on the font-size or line-height properties of the root element,
+#          it refers to the properties' initial value.
+# vw 1% of the viewport's width.
+# vh 1% of the viewport's height.
+# vmin 1% of the viewport's smaller dimension.
+# vmax 1% of the viewport's larger dimension.
+# vb 1% of the size of the initial containing block in the direction of the root element's block axis.
+# vi 1% of the size of the initial containing block in the direction of the root element's inline axis.
+# svw,svh 1% of the small viewport's width and height, respectively.
+# lvw,lvh 1% of the large viewport's width and height, respectively.
+# dvw,dvh 1% of the dynamic viewport's width and height, respectively.
 
 
 class Element(StrEnum):
+    """Enumeration of supported html elements."""
+
     div = "div"
     span = "span"
     p = "p"
@@ -54,6 +60,8 @@ class Element(StrEnum):
 
 
 class PseudoClass(StrEnum):
+    """Enumeration of supported css pseudoclass selectors."""
+
     active = "active"
     checked = "checked"
     disabled = "disabled"
@@ -69,11 +77,11 @@ class PseudoClass(StrEnum):
     last_child = "last-child"
     # :last-of-type
     # :link
-    # :not(selector)	:not(p)	Selects every element that is not a <p> element
-    # :nth-child(n)	p:nth-child(2)	Selects every <p> element that is the second child of its parent
-    # :nth-last-child(n)	p:nth-last-child(2)	Selects every <p> element that is the second child of its parent, counting from the last child
-    # :nth-last-of-type(n)	p:nth-last-of-type(2)	Selects every <p> element that is the second <p> element of its parent, counting from the last child
-    # :nth-of-type(n)	p:nth-of-type(2)	Selects every <p> element that is the second <p> element of its parent
+    # :not(selector) :not(p)	Selects every element that is not a <p> element
+    # :nth-child(n) p:nth-child(2)	Selects every <p> element that is the second child of its parent
+    # :nth-last-child(n) p:nth-last-child(2) Selects every <p> element that is the second child of its parent, counting from the last child
+    # :nth-last-of-type(n) p:nth-last-of-type(2) Selects every <p> element that is the second <p> element of its parent, counting from the last child
+    # :nth-of-type(n) p:nth-of-type(2) Selects every <p> element that is the second <p> element of its parent
     # :only-of-type
     # :only-child
     # :optional
@@ -88,6 +96,8 @@ class PseudoClass(StrEnum):
 
 
 class PseudoElement(StrEnum):
+    """Enumeration of supported css pseudoelement selectors."""
+
     after = "after"
     # backdrop = "backdrop"
     before = "before"
@@ -107,6 +117,8 @@ class PseudoElement(StrEnum):
 
 
 class Direction(StrEnum):
+    """Enumeration of supported css directions."""
+
     left = "left"
     right = "right"
     top = "top"
@@ -114,7 +126,9 @@ class Direction(StrEnum):
 
 
 class _DirectionalSize(_BaseCss):
-    right: Optional[int] = None
-    left: Optional[int] = None
-    top: Optional[int] = None
-    bottom: Optional[int] = None
+    """Helper class to hold direction quantities, in pixels."""
+
+    right: int | None = None
+    left: int | None = None
+    top: int | None = None
+    bottom: int | None = None
