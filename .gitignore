@@ -49,6 +49,7 @@ coverage.xml
 .pytest_cache
 .ruff_cache
 js/playwright-report
+js/test-results
 
 # Translations
 *.mo

@@ -1,21 +1,28 @@
+from __future__ import annotations
+
 from strenum import StrEnum
-from typing import Optional, Union
 
 from .common import Color
 from .css import _BaseCss
 
 
 class FontWeight(StrEnum):
+    """Enumeration for `font-weight` css attribute."""
+
     normal = "normal"
     bold = "bold"
 
 
 class FontStyle(StrEnum):
+    """Enumeration for `font-style` css attribute."""
+
     normal = "normal"
     italic = "italic"
 
 
 class TextDecoration(StrEnum):
+    """Enumeration for `text-decoration` css attribute."""
+
     none = "none"
     underline = "underline"
     overline = "overline"
@@ -24,35 +31,42 @@ class TextDecoration(StrEnum):
 
 
 class TextTransform(StrEnum):
+    """Enumeration for `text-transform` css attribute."""
+
     capitalize = "capitalize"
     lowercase = "lowercase"
     uppercase = "uppercase"
 
 
 class FontFamily(StrEnum):
+    """Enumeration for `font-family` css attribute."""
+
     serif = "serif"
     sans_serif = "sans-serif"
     monospace = "monospace"
 
 
 class Font(_BaseCss):
-    family: Optional[Union[FontFamily, str]] = None
-    size: Optional[int] = None
-    transform: Optional[TextTransform] = None
+    """Class to represent text formatting attributes, mapped to one or more css rules."""
 
-    # TODO multiple decorations and color decorations
+    family: FontFamily | str | None = None
+    size: int | None = None
+    transform: TextTransform | None = None
+
+    # TODO: multiple decorations and color decorations
     # text-decoration-color
     # text-decoration-line
     # text-decoration-style
     # text-decoration-thickness
 
-    decoration: Optional[TextDecoration] = None
+    decoration: TextDecoration | None = None
 
-    style: Optional[FontStyle] = None
-    weight: Optional[FontWeight] = None
-    color: Optional[Color] = None
+    style: FontStyle | None = None
+    weight: FontWeight | None = None
+    color: Color | None = None
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Convert font rules to css rules."""
         ret = ""
         if self.family:
             ret += f"font-family: {self.family};\n"
@@ -71,4 +85,5 @@ class Font(_BaseCss):
         return ret.strip()
 
 
-class Text(Font): ...
+class Text(Font):
+    """Class to represent text formatting attributes, mapped to one or more css rules."""

@@ -7,22 +7,26 @@ __all__ = (
 
 
 class PageSize(StrEnum):
-    A0 = "A0"  # 841 × 1189 mm
-    A1 = "A1"  # 594 × 841 mm
-    A2 = "A2"  # 420 × 594 mm
-    A3 = "A3"  # 297 × 420 mm
-    A4 = "A4"  # 210 × 297 mm
-    A5 = "A5"  # 148 × 210 mm
-    A6 = "A6"  # 105 × 148 mm
-    A7 = "A7"  # 74 × 105 mm
-    A10 = "A10"  # 26 × 37 mm
-    B4 = "B4"  # 250 × 353 mm
-    B5 = "B5"  # 176 × 250 mm
-    letter = "letter"  # 8.5 × 11 in
-    legal = "legal"  # 8.5 × 14 in
-    ledger = "ledger"  # 11 × 17 in
+    """Class to represent available print-oriented media standard page sizes."""
+
+    A0 = "A0"  # 841 x 1189 mm
+    A1 = "A1"  # 594 x 841 mm
+    A2 = "A2"  # 420 x 594 mm
+    A3 = "A3"  # 297 x 420 mm
+    A4 = "A4"  # 210 x 297 mm
+    A5 = "A5"  # 148 x 210 mm
+    A6 = "A6"  # 105 x 148 mm
+    A7 = "A7"  # 74 x 105 mm
+    A10 = "A10"  # 26 x 37 mm
+    B4 = "B4"  # 250 x 353 mm
+    B5 = "B5"  # 176 x 250 mm
+    letter = "letter"  # 8.5 x 11 in
+    legal = "legal"  # 8.5 x 14 in
+    ledger = "ledger"  # 11 x 17 in
 
 
 class PageOrientation(StrEnum):
+    """Class to represent orientation of print pages."""
+
     portrait = "portrait"
     landscape = "landscape"

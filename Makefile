@@ -28,7 +28,6 @@ tests: testpy testjs ## run the tests
 # Linting #
 ###########
 lintpy:  ## lint python with ruff and isort
-	python -m isort --check nbprint setup.py
 	python -m ruff check nbprint setup.py
 	python -m ruff format --check nbprint setup.py
 
@@ -38,7 +37,7 @@ lintjs:  ## lint javascript with eslint
 lint: lintpy lintjs  ## run linters
 
 fixpy:  ## autoformat python with ruff and isort
-	python -m isort nbprint setup.py
+	python -m ruff check --fix nbprint setup.py
 	python -m ruff format nbprint setup.py
 
 fixjs:  ## autoformat javascript with eslint

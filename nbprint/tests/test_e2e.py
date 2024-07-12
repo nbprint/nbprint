@@ -1,12 +1,12 @@
-import os.path
 import pytest
+from pathlib import Path
 
 from nbprint import Configuration
 from nbprint.cli import run_hydra
 
 
 def _example_folder_does_not_exist():
-    return not os.path.exists("examples")
+    return not Path("examples").exists()
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
@@ -40,7 +40,7 @@ def test_research_e2e():
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
-@pytest.mark.parametrize("parameters", ("string1", "string2"))
+@pytest.mark.parametrize("parameters", ("string1", "string2"))  # noqa: PT007: https://github.com/pytest-dev/pytest/issues/719
 def test_hydra_e2e(parameters):
     run_hydra("examples/hydra", ["+config=inline", "+page=report", f"+parameters={parameters}"])
     run_hydra("examples/hydra", ["+config=inline", "+page=report", f"+parameters={parameters}"])

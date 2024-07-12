@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 from strenum import StrEnum
-from typing import Optional
 
 from .css import _BaseCss
 
@@ -15,23 +16,31 @@ __all__ = (
 
 
 class FlexDirection(StrEnum):
+    """Enumeration of possible `flex-direction` css options."""
+
     row = "row"
     column = "column"
 
 
 class VerticalAlignment(StrEnum):
+    """Enumeration of possible `align-*` css options."""
+
     top = "top"
     center = "center"
     bottom = "bottom"
 
 
 class HorizontalAlignment(StrEnum):
+    """Enumeration of possible `align-*` css options."""
+
     left = "left"
     center = "center"
     right = "right"
 
 
 class Justify(StrEnum):
+    """Enumeration of possible `justify-*` css options."""
+
     normal = "normal"
     center = "center"
     start = "start"
@@ -44,15 +53,21 @@ class Justify(StrEnum):
 
 
 class DisplayKind(StrEnum):
+    """Enumeration of possible `display` css options."""
+
     none = "none"
     flex = "flex"
 
 
 class FlexOptions(_BaseCss):
-    flex_direction: Optional[FlexDirection]
-    justify: Optional[Justify]
+    """Helper class to aggregate of css `flex` configuration."""
+
+    flex_direction: FlexDirection | None
+    justify: Justify | None
 
 
 class Display(_BaseCss):
-    display: Optional[DisplayKind]
-    flex_options: Optional[FlexOptions]
+    """Helper class to aggregate of css `display` configuration."""
+
+    display: DisplayKind | None
+    flex_options: FlexOptions | None

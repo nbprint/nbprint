@@ -1,7 +1,9 @@
-from pydantic import model_validator
-from typing import Optional, Union
+from __future__ import annotations
 
-from ..base import BaseModel
+from pydantic import model_validator
+
+from nbprint.config.base import BaseModel
+
 from .border import Border
 from .common import Element, PseudoClass, PseudoElement
 from .spacing import Spacing
@@ -9,23 +11,28 @@ from .text import Font
 
 
 class Scope(BaseModel):
-    element: Optional[Union[Element, str]] = ""
+    """Class to represent a css scope selection."""
 
-    id: Optional[str] = ""
-    classname: Optional[str] = ""
+    element: Element | str | None = ""
 
-    selector: Optional[str] = ""
+    id: str | None = ""
+    classname: str | None = ""
 
-    pseudoclass: Optional[PseudoClass] = ""
-    pseudoelement: Optional[PseudoElement] = ""
+    selector: str | None = ""
+
+    pseudoclass: PseudoClass | None = ""
+    pseudoelement: PseudoElement | None = ""
 
     @model_validator(mode="after")
-    def check_any_set(self) -> "Scope":
+    def check_any_set(self) -> Scope:
+        """Helper method to test if any css rules are set, to determin if return should be empty string."""
         if all(element in ("", None) for element in (self.element, self.classname, self.id, self.selector)):
-            raise ValueError("Must set one of {element, classname, id, selector}")
+            msg = "Must set one of {element, classname, id, selector}"
+            raise ValueError(msg)
         return self
 
     def __str__(self) -> str:
+        """Convert scoping rules to css string."""
         ret = ""
         if self.element:
             ret = f"{self.element}"
@@ -43,12 +50,15 @@ class Scope(BaseModel):
 
 
 class Style(BaseModel):
-    scope: Optional[Scope] = None
-    spacing: Optional[Spacing] = None
-    font: Optional[Font] = None
-    border: Optional[Border] = None
+    """Class to represent a generic css style block."""
+
+    scope: Scope | None = None
+    spacing: Spacing | None = None
+    font: Font | None = None
+    border: Border | None = None
 
     def __str__(self) -> str:
+        """Convert style rules to css string."""
         ret = f"{self.scope} {{\n"
         for part in (self.spacing, self.font, self.border):
             if part:
