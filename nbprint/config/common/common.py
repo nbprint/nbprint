@@ -1,6 +1,7 @@
+from typing import Literal, Optional
+
 from pydantic_extra_types.color import Color
 from strenum import StrEnum
-from typing import Literal, Optional
 
 from .css import _BaseCss
 

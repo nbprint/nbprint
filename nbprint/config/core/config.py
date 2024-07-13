@@ -1,12 +1,13 @@
+from pathlib import Path
+from pprint import pprint
+from sys import version_info
+from typing import Dict, List, Union
+
 from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
 from nbformat import NotebookNode
 from nbformat.v4 import new_notebook
-from pathlib import Path
-from pprint import pprint
 from pydantic import Field, PrivateAttr, field_validator
-from sys import version_info
-from typing import Dict, List, Union
 
 from ... import __version__
 from ..base import BaseModel, Role, Type, _append_or_extend
@@ -103,9 +104,7 @@ class Configuration(BaseModel):
 
         # now do the context object
         # pass in parent=self, attr=context so we do config.context
-        _append_or_extend(
-            nb.cells, self.context.generate(metadata=base_meta.copy(), config=self, parent=self, attr="context")
-        )
+        _append_or_extend(nb.cells, self.context.generate(metadata=base_meta.copy(), config=self, parent=self, attr="context"))
 
         # resources: Dict[str, SerializeAsAny[BaseModel]] = Field(default_factory=dict)
         # TODO omitting resources, referenced directly in yaml
@@ -116,9 +115,7 @@ class Configuration(BaseModel):
 
         # now setup the page layout
         # pass in parent=self, attr=page so we do config.page
-        _append_or_extend(
-            nb.cells, self.page.generate(metadata=base_meta.copy(), config=self, parent=self, attr="page")
-        )
+        _append_or_extend(nb.cells, self.page.generate(metadata=base_meta.copy(), config=self, parent=self, attr="page"))
 
         # now iterate through the content, recursively generating
         for i, content in enumerate(self.content):

@@ -1,6 +1,7 @@
+from typing import TYPE_CHECKING, List, Optional, Union
+
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
-from typing import TYPE_CHECKING, List, Optional, Union
 
 from .base import BaseModel, Role, Type, _append_or_extend
 from .common import PageOrientation, PageSize, Style
@@ -46,9 +47,7 @@ class PageRegion(BaseModel):
     role: Role = Role.PAGE
     ignore: bool = True
 
-    def generate(
-        self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str, *args, **kwargs
-    ) -> NotebookNode:
+    def generate(self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str, *args, **kwargs) -> NotebookNode:
         cell = super().generate(metadata=metadata, config=config, parent=parent, attr=attr)
         cell.metadata.tags.append(f"nbprint:page:{attr}")
         return cell
@@ -170,9 +169,7 @@ class Page(BaseModel):
         ):
             if getattr(self, attr) is not None:
                 # pass in `self` as `parent here`
-                _append_or_extend(
-                    cells, getattr(self, attr).generate(metadata=metadata, config=config, parent=self, attr=attr)
-                )
+                _append_or_extend(cells, getattr(self, attr).generate(metadata=metadata, config=config, parent=self, attr=attr))
         for i, cell in enumerate(self.pages):
             _append_or_extend(
                 cells,
