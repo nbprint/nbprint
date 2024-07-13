@@ -45,10 +45,7 @@ class TestStyles:
                 )
             ),
         )
-        assert (
-            str(s)
-            == "h1 {\npadding-right: 15px;\nfont-family: sans-serif;\nfont-size: 25px;\nborder-right: 2px solid black;\n}"
-        )
+        assert str(s) == "h1 {\npadding-right: 15px;\nfont-family: sans-serif;\nfont-size: 25px;\nborder-right: 2px solid black;\n}"
 
     def test_basic_style_text_padding_border2(self):
         s = Style(
@@ -64,10 +61,7 @@ class TestStyles:
             spacing=Spacing(padding=Padding(left=15)),
         )
 
-        assert (
-            str(s)
-            == "h2 {\npadding-left: 15px;\nfont-family: sans-serif;\nfont-size: 12px;\ntext-transform: uppercase;\nfont-weight: bold;\n}"
-        )
+        assert str(s) == "h2 {\npadding-left: 15px;\nfont-family: sans-serif;\nfont-size: 12px;\ntext-transform: uppercase;\nfont-weight: bold;\n}"
 
     def test_basic_style_text_padding_border3(self):
         s = Style(

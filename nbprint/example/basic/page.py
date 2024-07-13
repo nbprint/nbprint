@@ -1,4 +1,5 @@
 import os.path
+
 from IPython.display import HTML, Image
 from pydantic import Field, FilePath
 
@@ -35,9 +36,7 @@ class ExampleLogoInFooter(PageRegion):
 
 
 class ExampleBookIcon(ContentImage):
-    path: FilePath = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "..", "..", "examples", "assets", "book.png")
-    )
+    path: FilePath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "examples", "assets", "book.png"))
 
 
 class ExampleReportPage(Page):

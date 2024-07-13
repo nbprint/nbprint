@@ -1,7 +1,8 @@
-from IPython.display import HTML, Image
 from pathlib import Path
-from pydantic import Field, FilePath, field_validator
 from typing import List, Optional
+
+from IPython.display import HTML, Image
+from pydantic import Field, FilePath, field_validator
 
 from .base import Content
 

@@ -1,11 +1,12 @@
 import os
 from datetime import date, datetime
-from nbformat import NotebookNode, write
 from pathlib import Path
-from pydantic import DirectoryPath, Field, field_validator
-from strenum import StrEnum
 from typing import TYPE_CHECKING, List, Literal, Optional, Union
 from uuid import uuid4
+
+from nbformat import NotebookNode, write
+from pydantic import DirectoryPath, Field, field_validator
+from strenum import StrEnum
 
 from ..base import BaseModel, Role
 
@@ -66,10 +67,7 @@ class Outputs(BaseModel):
 
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
         # create file or folder path
-        file = str(
-            Path(self.path_root).resolve()
-            / ("".join([x.value if isinstance(x, OutputNaming) else x for x in self.naming]) + ".ipynb")
-        )
+        file = str(Path(self.path_root).resolve() / ("".join([x.value if isinstance(x, OutputNaming) else x for x in self.naming]) + ".ipynb"))
 
         _pattern_map = {
             OutputNaming.name: self._get_name,
@@ -86,9 +84,7 @@ class Outputs(BaseModel):
             write(gen, fp)
         return file
 
-    def generate(
-        self, metadata: dict, config: "Configuration", parent: BaseModel, attr: str = "", *args, **kwargs
-    ) -> NotebookNode:
+    def generate(self, metadata: dict, config: "Configuration", parent: BaseModel, attr: str = "", *args, **kwargs) -> NotebookNode:
         return super().generate(metadata=metadata, config=config, parent=parent, attr="outputs", *args, **kwargs)
 
 

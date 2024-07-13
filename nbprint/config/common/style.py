@@ -1,5 +1,6 @@
-from pydantic import model_validator
 from typing import Optional, Union
+
+from pydantic import model_validator
 
 from ..base import BaseModel
 from .border import Border

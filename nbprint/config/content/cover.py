@@ -1,5 +1,6 @@
-from pydantic import Field
 from typing import List
+
+from pydantic import Field
 
 from .base import Content
 

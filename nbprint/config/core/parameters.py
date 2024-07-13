@@ -1,8 +1,9 @@
 import ast
 from json import dumps
+from typing import TYPE_CHECKING, List
+
 from nbformat import NotebookNode
 from pydantic import Field
-from typing import TYPE_CHECKING, List
 
 from ..base import BaseModel, Role
 
