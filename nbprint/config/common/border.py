@@ -1,5 +1,6 @@
-from strenum import StrEnum
 from typing import Optional, Union
+
+from strenum import StrEnum
 
 from .common import Color
 from .css import _BaseCss
@@ -48,7 +49,5 @@ class Border(_BaseCss):
 
     def __str__(self) -> str:
         return "\n".join(
-            f"border-{direction}: {getattr(self, direction, '')};"
-            for direction in ("right", "left", "top", "bottom")
-            if getattr(self, direction, "")
+            f"border-{direction}: {getattr(self, direction, '')};" for direction in ("right", "left", "top", "bottom") if getattr(self, direction, "")
         ).strip()

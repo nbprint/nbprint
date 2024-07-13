@@ -1,15 +1,16 @@
 import ast
 from importlib import import_module
-from IPython.display import DisplayObject
 from json import dumps, loads
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple, Type, Union
+from uuid import uuid4
+
+from IPython.display import DisplayObject
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
-from pathlib import Path
 from pydantic import BaseModel, Field, PrivateAttr, SerializeAsAny, field_validator
 from pydantic._internal._model_construction import ModelMetaclass
 from strenum import StrEnum
-from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple, Type, Union
-from uuid import uuid4
 
 if TYPE_CHECKING:
     from ..config import Configuration
@@ -217,9 +218,8 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         cell.metadata.nbprint.esm = self.esm or ""
         cell.metadata.nbprint.class_selector = f'{cell.metadata.nbprint.type.replace(":", "-").replace(".", "-")}'
         cell.metadata.nbprint.element_selector = f"{cell.metadata.nbprint.class_selector}-{self._id}"
-        cell.metadata.nbprint["class"] = (
-            f"nbprint {cell.metadata.nbprint.class_selector} {cell.metadata.nbprint.element_selector} "
-            + (" ".join(self.classname) if isinstance(self.classname, list) else self.classname or "")
+        cell.metadata.nbprint["class"] = f"nbprint {cell.metadata.nbprint.class_selector} {cell.metadata.nbprint.element_selector} " + (
+            " ".join(self.classname) if isinstance(self.classname, list) else self.classname or ""
         )
         cell.metadata.nbprint.attrs = " ".join(f"{k}={dumps(v)}" for k, v in (self.attrs or {}).items())
 
@@ -291,9 +291,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
                 ast.Assign(
                     targets=[ast.Name(id=self.nb_var_name, ctx=ast.Store())],
                     value=ast.Call(
-                        func=ast.Attribute(
-                            value=ast.Name(id=self.type.name, ctx=ast.Load()), attr="from_json", ctx=ast.Load()
-                        ),
+                        func=ast.Attribute(value=ast.Name(id=self.type.name, ctx=ast.Load()), attr="from_json", ctx=ast.Load()),
                         args=[ast.parse(dumps(data), mode="eval").body],
                         keywords=[],
                     ),
@@ -322,9 +320,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         cell.source = source
         return cell
 
-    def _base_generate_md(
-        self, metadata: dict, config: "Configuration", parent: Optional["BaseModel"] = None
-    ) -> Optional[NotebookNode]:
+    def _base_generate_md(self, metadata: dict, config: "Configuration", parent: Optional["BaseModel"] = None) -> Optional[NotebookNode]:
         # trigger any pre-cell generation logic
         self.render(config=config)
 
