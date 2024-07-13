@@ -1,6 +1,7 @@
+from typing import List
+
 from IPython.display import HTML, display
 from pydantic import Field
-from typing import List
 
 from .base import Content
 

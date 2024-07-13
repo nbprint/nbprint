@@ -57,7 +57,6 @@ develop = [
     "bump-my-version",
     "hatchling>=1.20",
     "hatch-jupyter-builder",
-    "isort>=5,<6",
     "jupyterlab>=4,<5",
     "ruff>=0.5.0,<0.6",
     "twine",
@@ -170,23 +169,121 @@ path = "js"
 build_cmd = "build"
 npm = "pnpm"
 
-[tool.isort]
-combine_as_imports = true
-include_trailing_comma = true
-line_length = 120
-profile = "black"
-
-default_section = "THIRDPARTY"
-sections = "FUTURE,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
-
-known_first_party = "nbprint"
-
 [tool.pytest.ini_options]
 asyncio_mode = "strict"
 testpaths = "nbprint/tests"
 
 [tool.ruff]
-line-length = 120
+line-length = 150
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    # TODO remove first
+    "A001",
+    "A002",
+    "ANN201",
+    "ANN204",
+    "ANN205",
+    "ANN206",
+    "ARG002",
+    "B008",
+    "B026",
+    "D101",
+    "D102",
+    "D103",
+    "D105",
+    "D106",
+    "D107",
+    "D205",
+    "D400",
+    "D403",
+    "D407",
+    "D413",
+    "D415",
+    "D417",
+    "E501",
+    "EM101",
+    "EM102",
+    "FA100",
+    "I001",
+    "INP001",
+    "N804",
+    "N805",
+    "N818",
+    "PIE790",
+    "PIE810",
+    "PLR1704",
+    "PLR0913",
+    "PT007",
+    "PTH100",
+    "PTH110",
+    "PTH118",
+    "PTH120",
+    "PTH123",
+    "RET504",
+    "RUF003",
+    "RUF005",
+    "RUF012",
+    "RUF013",
+    "S101",
+    "SIM102",
+    "SIM108",
+    "SLF001",
+    "TD004",
+    "TD005",
+    "TID252",
+    "TRY002",
+    "TRY003",
+    "T203",
+    "UP006",
+    "UP032",
+    "UP035",
+    # TODO remove later
+    "ANN001",
+    "ANN202",
+    "D100",
+    "D104",
+    "ERA001",
+
+    "ANN002", # missing-type-args - Missing type annotation for *{name}
+    "ANN003", # missing-type-kwargs - Missing type annotation for **{name}
+    "COM812", # missing-trailing-comma - Trailing comma missing
+    "D203", # one-blank-line-before-class - 1 blank line required before class docstring
+    "D213", # multi-line-summary-second-line - Multi-line docstring summary should start at the second line
+    "D401", # non-imperative-mood - First line of docstring should be in imperative mood: "{first_line}"
+    "DTZ",  # flake8-datetimez
+    "FIX002", # line-contains-todo - Line contains TODO, consider resolving the issue
+    "ISC001", # single-line-implicit-string-concatenation - Implicitly concatenated string literals on one line
+    "TCH001", # typing-only-first-party-import Move application import {} into a type-checking block
+    "TCH002", # typing-only-third-party-import Move third-party import {} into a type-checking block
+    "TD002", # missing-todo-author - Missing author in TODO; try: # TODO(<author_name>): ... or # TODO @<author_name>: ...
+    "TD003", # missing-todo-link - Missing issue link on the line following this TODO
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+default-section = "third-party"
+known-first-party = ["nbprint"]
+section-order = [
+    "future",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403"]
+"nbprint/tests/*" = [
+    "ANN",
+    "D",
+    "S101",
+]
+"nbprint/example/*" = [
+    "ANN",
+    "ARG",
+    "D",
+    "E501",
+    "ERA",
+    "S101",
+]

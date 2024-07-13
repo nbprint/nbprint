@@ -1,6 +1,7 @@
+from typing import List, Optional
+
 from IPython.display import Markdown
 from pydantic import Field
-from typing import List, Optional
 
 from ..common import FontStyle, FontWeight, HorizontalAlignment, TextDecoration, VerticalAlignment
 from .base import Content

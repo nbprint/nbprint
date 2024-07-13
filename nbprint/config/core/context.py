@@ -1,6 +1,7 @@
+from typing import TYPE_CHECKING, List
+
 from nbformat import NotebookNode
 from pydantic import Field, PrivateAttr
-from typing import TYPE_CHECKING, List
 
 from ..base import BaseModel, Role
 
@@ -24,8 +25,6 @@ class Context(BaseModel):
         extra: str = "allow"
         validate_assignment: bool = False
 
-    def generate(
-        self, metadata: dict, config: "Configuration", parent: BaseModel, attr: str = "", *args, **kwargs
-    ) -> NotebookNode:
+    def generate(self, metadata: dict, config: "Configuration", parent: BaseModel, attr: str = "", *args, **kwargs) -> NotebookNode:
         self._context_generated = True
         return super().generate(metadata=metadata, config=config, parent=parent, attr=attr, *args, **kwargs)
