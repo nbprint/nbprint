@@ -16,7 +16,7 @@ def image(data=None, path=None, **kwargs) -> Image:
             # assume in pixels, get cm
 
             # TODO assume 96 DPI
-            widthcm = "{}cm".format(int(width / 36))
+            widthcm = f"{int(width / 36)}cm"
         else:
             # assume already in cm, get pixels
             width, widthcm = float(width.replace("cm", "")), width
@@ -34,7 +34,7 @@ def image(data=None, path=None, **kwargs) -> Image:
             # assume in pixels, get cm
 
             # TODO assume 96 DPI
-            heightcm = "{}cm".format(int(height / 36))
+            heightcm = f"{int(height / 36)}cm"
 
         else:
             # assume already in cm, get pixels

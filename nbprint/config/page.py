@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
@@ -21,7 +21,7 @@ class PageRegionContent(BaseModel):
     content: Optional[str] = ""
 
     # common
-    tags: List[str] = Field(default=["nbprint:page"])
+    tags: list[str] = Field(default=["nbprint:page"])
     role: Role = Role.PAGE
     ignore: bool = True
 
@@ -43,7 +43,7 @@ class PageRegion(BaseModel):
     css: str = ""
 
     # common
-    tags: List[str] = Field(default=["nbprint:page"])
+    tags: list[str] = Field(default=["nbprint:page"])
     role: Role = Role.PAGE
     ignore: bool = True
 
@@ -70,7 +70,7 @@ class Page(BaseModel):
     size: Optional[PageSize] = Field(default=PageSize.letter)
     orientation: Optional[PageOrientation] = Field(default=PageOrientation.portrait)
 
-    pages: Optional[List["Page"]] = Field(default_factory=list)
+    pages: Optional[list["Page"]] = Field(default_factory=list)
 
     css: str = ""
 
@@ -141,7 +141,7 @@ class Page(BaseModel):
 
     def generate(
         self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str = "page", *args, **kwargs
-    ) -> Optional[Union[NotebookNode, List[NotebookNode]]]:
+    ) -> Optional[Union[NotebookNode, list[NotebookNode]]]:
         cells = []
 
         # parent and config should be equal for the global page layout
