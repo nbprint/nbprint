@@ -233,9 +233,6 @@ ignore = [
     "TRY002",
     "TRY003",
     "T203",
-    "UP006",
-    "UP032",
-    "UP035",
     # TODO remove later
     "ANN001",
     "ANN202",

@@ -1,5 +1,3 @@
-from typing import List
-
 from IPython.display import HTML
 from pydantic import Field
 
@@ -17,7 +15,7 @@ __all__ = (
 class _ContentFlexLayout(Content):
     # component to split into certain number of columns
     # count: int = 1
-    sizes: List[float] = []
+    sizes: list[float] = []
 
     # override role
     role: Role = Role.LAYOUT
@@ -55,7 +53,7 @@ function render(meta, elem) {
 """
     attrs: dict = Field(default_factory=dict)
 
-    def __call__(self, ctx=None, *args, **kwargs):
+    def __call__(self, *_, **__):
         # return empty html just for placeholder
         return HTML("")
 
@@ -64,7 +62,7 @@ class ContentLayout(Content):
     # override role
     role: Role = Role.LAYOUT
 
-    def __call__(self, ctx=None, *args, **kwargs):
+    def __call__(self, *_, **__):
         # return empty html just for placeholder
         return HTML("")
 
@@ -94,7 +92,7 @@ function render(meta, elem) {
 """
     attrs: dict = Field(default_factory=dict)
 
-    def __call__(self, ctx=None, *args, **kwargs):
+    def __call__(self, *_, **__):
         # return empty html just for placeholder
         return HTML("")
 

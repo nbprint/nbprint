@@ -1,7 +1,7 @@
 from pathlib import Path
 from pprint import pprint
 from sys import version_info
-from typing import Dict, List, Union
+from typing import Union
 
 from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
@@ -25,15 +25,15 @@ __all__ = (
 
 class Configuration(BaseModel):
     name: str
-    resources: Dict[str, BaseModel] = Field(default_factory=dict)
+    resources: dict[str, BaseModel] = Field(default_factory=dict)
     outputs: Outputs
     parameters: Parameters = Field(default_factory=Parameters)
     page: Page = Field(default_factory=Page)
     context: Context = Field(default_factory=Context)
-    content: List[Content] = Field(default_factory=list)
+    content: list[Content] = Field(default_factory=list)
 
     # basic metadata
-    tags: List[str] = Field(default=["nbprint:config"])
+    tags: list[str] = Field(default=["nbprint:config"])
     role: Role = Role.CONFIGURATION
     ignore: bool = True
     debug: bool = True
@@ -43,7 +43,7 @@ class Configuration(BaseModel):
     _nb_vars: set = PrivateAttr(default_factory=set)
 
     @field_validator("resources", mode="before")
-    def convert_resources_from_obj(cls, value) -> Dict[str, BaseModel]:
+    def convert_resources_from_obj(cls, value) -> dict[str, BaseModel]:
         if value is None:
             value = {}
         if isinstance(value, dict):
@@ -79,7 +79,7 @@ class Configuration(BaseModel):
                     v[i] = BaseModel._to_type(element)
         return v
 
-    def generate(self, extra_metadata: dict = None) -> List[NotebookNode]:
+    def generate(self, extra_metadata: dict = None) -> list[NotebookNode]:
         nb = new_notebook()
         nb.metadata.nbprint = {}
         nb.metadata.nbprint.version = __version__

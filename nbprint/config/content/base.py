@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List, Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 from IPython.display import HTML
 from nbformat import NotebookNode
@@ -12,8 +12,8 @@ if TYPE_CHECKING:
 
 
 class Content(BaseModel):
-    content: Optional[Union[str, List[SerializeAsAny[BaseModel]]]] = ""
-    tags: List[str] = Field(default=["nbprint:content"])
+    content: Optional[Union[str, list[SerializeAsAny[BaseModel]]]] = ""
+    tags: list[str] = Field(default=["nbprint:content"])
     role: Role = Role.CONTENT
 
     # used by lots of things
@@ -26,7 +26,7 @@ class Content(BaseModel):
         parent: Optional["BaseModel"] = None,
         attr: str = "",
         counter: Optional[int] = None,
-    ) -> Optional[Union[NotebookNode, List[NotebookNode]]]:
+    ) -> Optional[Union[NotebookNode, list[NotebookNode]]]:
         # make a cell for yourself
         self_cell = super().generate(
             metadata=metadata,
@@ -81,7 +81,7 @@ class ContentMarkdown(Content):
         parent: Optional["BaseModel"] = None,
         attr: str = "",
         counter: Optional[int] = None,
-    ) -> Optional[Union[NotebookNode, List[NotebookNode]]]:
+    ) -> Optional[Union[NotebookNode, list[NotebookNode]]]:
         cell = super()._base_generate_md(metadata=metadata, config=config, parent=parent)
         cell.source = self.content
         return cell
