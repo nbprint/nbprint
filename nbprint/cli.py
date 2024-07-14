@@ -10,12 +10,12 @@ from typer import Argument, Typer
 from .config import Configuration
 
 
-def run(path: Path, name: str):
+def run(path: Path, name: str) -> None:
     config = Configuration.load(path, name)
     config.run()
 
 
-def run_hydra(config_dir="", overrides: Optional[List[str]] = Argument(None)):
+def run_hydra(config_dir="", overrides: Optional[List[str]] = Argument(None)) -> None:
     with initialize_config_dir(config_dir=os.path.join(os.path.dirname(__file__), "config", "hydra"), version_base=None):
         if config_dir:
             cfg = compose(config_name="conf", overrides=[], return_hydra_config=True)
@@ -29,7 +29,7 @@ def run_hydra(config_dir="", overrides: Optional[List[str]] = Argument(None)):
         config.run()
 
 
-def main():
+def main() -> None:
     app = Typer()
     app.command("run")(run)
     app.command("hydra")(run_hydra)

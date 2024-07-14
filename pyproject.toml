@@ -180,9 +180,6 @@ line-length = 150
 select = ["ALL"]
 ignore = [
     # TODO remove first
-    "A001",
-    "A002",
-    "ANN201",
     "ANN204",
     "ANN205",
     "ANN206",

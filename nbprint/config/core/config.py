@@ -43,7 +43,7 @@ class Configuration(BaseModel):
     _nb_vars: set = PrivateAttr(default_factory=set)
 
     @field_validator("resources", mode="before")
-    def convert_resources_from_obj(cls, value):
+    def convert_resources_from_obj(cls, value) -> Dict[str, BaseModel]:
         if value is None:
             value = {}
         if isinstance(value, dict):
@@ -52,23 +52,23 @@ class Configuration(BaseModel):
         return value
 
     @field_validator("outputs", mode="before")
-    def convert_outputs_from_obj(cls, v):
+    def convert_outputs_from_obj(cls, v) -> Outputs:
         return BaseModel._to_type(v, Outputs)
 
     @field_validator("parameters", mode="before")
-    def convert_parameters_from_obj(cls, v):
+    def convert_parameters_from_obj(cls, v) -> Parameters:
         return BaseModel._to_type(v, Parameters)
 
     @field_validator("page", mode="before")
-    def convert_page_from_obj(cls, v):
+    def convert_page_from_obj(cls, v) -> Page:
         return BaseModel._to_type(v, Page)
 
     @field_validator("context", mode="before")
-    def convert_context_from_obj(cls, v):
+    def convert_context_from_obj(cls, v) -> Context:
         return BaseModel._to_type(v, Context)
 
     @field_validator("content", mode="before")
-    def convert_content_from_obj(cls, v):
+    def convert_content_from_obj(cls, v) -> Content:
         if v is None:
             return []
         if isinstance(v, list):
@@ -175,7 +175,7 @@ class Configuration(BaseModel):
                 return config
         raise TypeError(f"Path or model malformed: {path_or_model} {type(path_or_model)}")
 
-    def run(self):
+    def run(self) -> None:
         gen = self.generate(self)
         if self.debug:
             pprint(gen)

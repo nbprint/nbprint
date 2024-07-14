@@ -13,13 +13,13 @@ class ContentImage(Content):
     tags: List[str] = Field(default=["nbprint:content", "nbprint:content:image"])
 
     @field_validator("path", mode="before")
-    def convert_path_from_obj(cls, v):
+    def convert_path_from_obj(cls, v) -> Path:
         if isinstance(v, str):
             v = Path(v).resolve()
         return v
 
     @field_validator("content", mode="before")
-    def convert_content_from_obj(cls, v):
+    def convert_content_from_obj(cls, v) -> bytes:
         if v is None:
             return b""
         if v and isinstance(v, str):
@@ -28,7 +28,7 @@ class ContentImage(Content):
             v = v.read_bytes()
         return v
 
-    def as_base64(self):
+    def as_base64(self) -> str:
         if self.path:
             img = Image(filename=self.path)
         else:
