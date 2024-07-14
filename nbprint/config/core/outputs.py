@@ -33,7 +33,7 @@ class Outputs(BaseModel):
     ignore: bool = True
 
     @field_validator("path_root", mode="before")
-    def convert_str_to_path(cls, v):
+    def convert_str_to_path(cls, v) -> Path:
         if isinstance(v, str):
             v = Path(v)
         if isinstance(v, Path):

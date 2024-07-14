@@ -2,16 +2,13 @@ from io import BytesIO
 
 import dominate.tags as dt
 import dominate.util as du
-from IPython.display import HTML, display
-from ipywidgets import Box, Output
+from IPython.display import HTML
 from nbconvert.filters.pandoc import convert_pandoc
 
 from .image import Image
 
-_p = print
 
-
-def _html(text, color=""):
+def _html(text, color="") -> HTML:
     """print in html"""
     text = convert_pandoc(text, "markdown+tex_math_double_backslash", "html")
 
@@ -25,30 +22,16 @@ def _html(text, color=""):
     return HTML(str(d))
 
 
-def print(text, **kwargs):
-    """wrapper around printing"""
-    if not isinstance(text, str):
-        display(text)
-        return
-    display(_html(text, **kwargs))
-
-
-def hr():
+def hr() -> HTML:
     """horizontal rule"""
     return HTML(str(dt.hr()))
 
 
-def newpage():
+def newpage() -> HTML:
     """make a new page. in html, this just does a horizontal rule"""
     p = dt.p()
     p.attributes["style"] = "page-break-before: always;"
     return _html(str(p))
-
-
-def pagenum():
-    """display a page number (latex only)"""
-    # TODO
-    return "[pagenum]"
 
 
 def _make(text, h_type, **kwargs):
@@ -57,57 +40,31 @@ def _make(text, h_type, **kwargs):
     return h
 
 
-def p(text, **kwargs):
+def p(text, **kwargs) -> HTML:
     return HTML(str(_make(text, "p", **kwargs)))
 
 
-def h1(text, **kwargs):
+def h1(text, **kwargs) -> HTML:
     return HTML(str(_make(text, "h1", **kwargs)))
 
 
-def h2(text, **kwargs):
+def h2(text, **kwargs) -> HTML:
     return HTML(str(_make(text, "h2", **kwargs)))
 
 
-def h3(text, **kwargs):
+def h3(text, **kwargs) -> HTML:
     return HTML(str(_make(text, "h3", **kwargs)))
 
 
-def h4(text, **kwargs):
+def h4(text, **kwargs) -> HTML:
     return HTML(str(_make(text, "h4", **kwargs)))
 
 
-def h5(text, **kwargs):
+def h5(text, **kwargs) -> HTML:
     return HTML(str(_make(text, "h5", **kwargs)))
 
 
-def _grid(items_and_weights):
-    d = dt.div()
-    d.attributes["style"] = "display: flex; flex-direction: row;"
-
-    for val, width in items_and_weights:
-        if isinstance(val, Image):
-            sd = dt.img()
-            sd.set_attribute("src", "data:image/png;base64,{}".format(val._repr_png_()))
-        else:
-            raw_html = val._repr_html_()
-            sd = dt.div(du.raw(raw_html))
-        sd.attributes["style"] = "flex: {};".format(width)
-        d.appendChild(sd)
-    return HTML(str(d))
-
-
-def grid(items_and_weights):
-    children = []
-    for val, width in items_and_weights:
-        out = Output(layout={"flex": str(width)})
-        children.append(out)
-        with out:
-            print(val)
-    return Box(children, layout={"display": "flex", "flex-direction": "row"})
-
-
-def plot(fig):
+def plot(fig) -> Image:
     imgdata = BytesIO()
     fig.savefig(imgdata)
     imgdata.seek(0)
