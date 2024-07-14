@@ -1,9 +1,9 @@
-from typing import Optional
-
 from IPython.display import Markdown
 from pydantic import Field
+from typing import Optional
 
-from ..common import FontStyle, FontWeight, HorizontalAlignment, TextDecoration, VerticalAlignment
+from nbprint.config.common import FontStyle, FontWeight, HorizontalAlignment, TextDecoration, VerticalAlignment
+
 from .base import Content
 
 
@@ -17,5 +17,5 @@ class TextComponent(Content):
 
     tags: list[str] = Field(default=["nbprint:content"])
 
-    def __call__(self, *_, **__):
+    def __call__(self, **_) -> Markdown:
         return Markdown(self.text)

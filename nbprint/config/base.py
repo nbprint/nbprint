@@ -1,21 +1,19 @@
 import ast
-from importlib import import_module
-from json import dumps, loads
-from pathlib import Path
-from typing import TYPE_CHECKING, Any, Optional, Union
 from collections.abc import Mapping
-from uuid import uuid4
-
+from importlib import import_module
 from IPython.display import DisplayObject
+from json import dumps, loads
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
+from pathlib import Path
 from pydantic import BaseModel, Field, PrivateAttr, SerializeAsAny, field_validator
 from pydantic._internal._model_construction import ModelMetaclass
 from strenum import StrEnum
+from typing import TYPE_CHECKING, Any, Optional, Union
+from uuid import uuid4
 
 if TYPE_CHECKING:
-    from ..config import Configuration
-    from .core.context import Context
+    from nbprint.config import Configuration
 
 __all__ = (
     "Type",
@@ -27,14 +25,13 @@ __all__ = (
 
 # https://github.com/pydantic/pydantic/issues/6423#issuecomment-1967475432
 class _SerializeAsAnyMeta(ModelMetaclass):
-    def __new__(self, name: str, bases: tuple[type], namespaces: dict[str, Any], **kwargs):
+    def __new__(cls, name: str, bases: tuple[type], namespaces: dict[str, Any], **kwargs) -> ModelMetaclass:
         annotations: dict = namespaces.get("__annotations__", {}).copy()
         for field, annotation in annotations.items():
             if not field.startswith("__"):
                 annotations[field] = SerializeAsAny[annotation]
         namespaces["__annotations__"] = annotations
-        clz = super().__new__(self, name, bases, namespaces, **kwargs)
-        return clz
+        return super().__new__(cls, name, bases, namespaces, **kwargs)
 
 
 class Type(BaseModel):
@@ -91,33 +88,37 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
     _id: str = PrivateAttr(default_factory=lambda: str(uuid4()).replace("-", ""))
 
     class Config:
+        """Pydantic configuration object."""
+
         arbitrary_types_allowed: bool = False
         extra: str = "ignore"
         validate_assignment: bool = True
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs) -> None:
         if "_target_" not in kwargs:
             kwargs["_target_"] = Type(module=self.__class__.__module__, name=self.__class__.__name__)
         super().__init__(**kwargs)
 
     @field_validator("css", mode="before")
+    @classmethod
     def convert_css_string_or_path_to_string_or_path(cls, v) -> str:
-        if isinstance(v, str):
-            if v.strip().endswith(".css"):
-                # TODO resolve relative to class?
-                v = Path(v).resolve().read_text()
+        if isinstance(v, str) and v.strip().endswith(".css"):
+            # TODO: resolve relative to class?
+            v = Path(v).resolve().read_text()
         return v
 
     @field_validator("esm", mode="before")
+    @classmethod
     def convert_esm_string_or_path_to_string_or_path(cls, v) -> str:
         if isinstance(v, str):
             v = v.strip()
-            if v.endswith(".js") or v.endswith(".mjs"):
-                # TODO resolve relative to class?
+            if v.endswith((".js", ".mjs")):
+                # TODO: resolve relative to class?
                 v = Path(v).resolve().read_text()
         return v
 
     @field_validator("type", mode="before")
+    @classmethod
     def convert_type_string_to_module_and_name(cls, v) -> Type:
         if isinstance(v, str):
             return Type.from_string(v)
@@ -132,7 +133,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
             return name.replace("nbprint", "nbprint_")
         return f"nbprint_{name}"
 
-    def _recalculate_nb_var_name(self, nb_vars: set):
+    def _recalculate_nb_var_name(self, nb_vars: set) -> None:
         attempt = 0
         test_nb_var_name = self.nb_var_name
         while test_nb_var_name in nb_vars:
@@ -144,7 +145,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         nb_vars.add(self._nb_var_name)
 
     @staticmethod
-    def _to_type(value, model_type=None):
+    def _to_type(value, model_type=None) -> BaseModel:
         if value is None:
             value = {}
 
@@ -158,21 +159,22 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         return value
 
     @classmethod
-    def from_json(cls, json):
+    def from_json(cls, json) -> BaseModel:
         data = loads(json)
         return cls(**data)
 
-    def __call__(self, ctx: "Context" = None, *args, **kwargs) -> Optional[DisplayObject]:
+    def __call__(self, **_) -> Optional[DisplayObject]:
         """Execute this model inside of a notebook
 
         Args:
+        ----
             ctx (_type_, optional): _description_. Defaults to None.
+
         """
         return self
 
-    def render(self, config: "Configuration") -> None:
+    def render(self, **_) -> None:
         """Called during notebook generation only, this should run any necessary post-processing. Pre-processing should go in __init__"""
-        ...
 
     def generate(
         self,
@@ -181,21 +183,23 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         parent: Optional["BaseModel"] = None,
         attr: str = "",
         counter: Optional[int] = None,
-        *args,
-        **kwargs,
+        **_,
     ) -> Optional[Union[NotebookNode, list[NotebookNode]]]:
         """Generate a notebook node for this model.
         This will be called before the runtime of the notebook, use it for code generation.
 
         Args:
+        ----
             metadata (dict): common cell metadata
 
         Returns:
+        -------
             NotebookNode: the content of the notebook node
+
         """
         return self._base_generate(metadata=metadata, config=config, parent=parent, attr=attr, counter=counter)
 
-    def _base_set_nbprint_metadata(self, cell: NotebookNode):
+    def _base_set_nbprint_metadata(self, cell: NotebookNode) -> None:
         cell.metadata.nbprint.id = self._id
         cell.metadata.nbprint.role = self.role or "undefined"
         cell.metadata.nbprint.type = self.type.to_string()
@@ -224,16 +228,16 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         )
         cell.metadata.nbprint.attrs = " ".join(f"{k}={dumps(v)}" for k, v in (self.attrs or {}).items())
 
-    def _base_generate_meta(self, metadata: dict = None) -> Optional[NotebookNode]:
+    def _base_generate_meta(self, metadata: Optional[dict] = None) -> Optional[NotebookNode]:
         cell = new_code_cell(metadata=metadata)
         cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
 
-        # TODO consolidate with self.model_dump_json(by_alias=True)?
+        # TODO: consolidate with self.model_dump_json(by_alias=True)?
         self._base_set_nbprint_metadata(cell)
         cell.metadata.nbprint.data = self.model_dump_json(by_alias=True)
         return cell
 
-    def _base_generate_md_meta(self, metadata: dict = None) -> Optional[NotebookNode]:
+    def _base_generate_md_meta(self, metadata: Optional[dict] = None) -> Optional[NotebookNode]:
         cell = new_markdown_cell(metadata=metadata)
         cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
         self._base_set_nbprint_metadata(cell)
@@ -256,11 +260,10 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         assert config is not None
         self._recalculate_nb_var_name(config._nb_vars)
 
-        if parent:
-            # TODO should this go in a standard location?
+        if parent and parent.ignore is False:
+            # TODO: should this go in a standard location?
             # set in metadata
-            if parent.ignore is False:
-                cell.metadata.nbprint["parent-id"] = parent._id
+            cell.metadata.nbprint["parent-id"] = parent._id
 
         if parent and attr:
             # now construct accessor
@@ -300,10 +303,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
                 )
             )
 
-        if config and config.context and config.context._context_generated:
-            call_with_context = config.context.nb_var_name
-        else:
-            call_with_context = "None"
+        call_with_context = config.context.nb_var_name if config and config.context and config.context._context_generated else "None"
 
         mod.body.append(
             ast.Expr(
@@ -326,7 +326,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         self.render(config=config)
 
         cell = self._base_generate_md_meta(metadata=metadata)
-        # TODO should this go in a standard location?
+        # TODO: should this go in a standard location?
         # set in metadata
         if parent and parent.ignore is False:
             cell.metadata.nbprint["parent-id"] = parent._id
