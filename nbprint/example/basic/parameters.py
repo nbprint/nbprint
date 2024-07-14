@@ -1,6 +1,5 @@
-from typing import Optional
-
 from pydantic import Field
+from typing import Optional
 
 from nbprint.config import Parameters
 

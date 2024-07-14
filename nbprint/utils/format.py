@@ -1,7 +1,6 @@
-from io import BytesIO
-
 import dominate.tags as dt
 import dominate.util as du
+from io import BytesIO
 from IPython.display import HTML
 from nbconvert.filters.pandoc import convert_pandoc
 
@@ -9,7 +8,7 @@ from .image import Image
 
 
 def _html(text, color="") -> HTML:
-    """print in html"""
+    """Print in html"""
     text = convert_pandoc(text, "markdown+tex_math_double_backslash", "html")
 
     if color:
@@ -23,18 +22,18 @@ def _html(text, color="") -> HTML:
 
 
 def hr() -> HTML:
-    """horizontal rule"""
+    """Horizontal rule"""
     return HTML(str(dt.hr()))
 
 
 def newpage() -> HTML:
-    """make a new page. in html, this just does a horizontal rule"""
+    """Make a new page. in html, this just does a horizontal rule"""
     p = dt.p()
     p.attributes["style"] = "page-break-before: always;"
     return _html(str(p))
 
 
-def _make(text, h_type, **kwargs):
+def _make(text, h_type, **kwargs) -> dt.html_tag:
     h = getattr(dt, h_type)(text)
     h.attributes.update(**kwargs)
     return h

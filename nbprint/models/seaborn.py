@@ -1,7 +1,6 @@
-from typing import Literal, Union
-
 from IPython.display import HTML
 from pydantic import Field
+from typing import Literal, Union
 
 from nbprint import Content
 
@@ -13,7 +12,7 @@ class SeabornDisplayConfiguration(Content):
     context: Literal["paper", "notebook", "talk", "poster"] = Field(default="notebook")
     palette: Union[str, list[str]] = Field(default="tab10")
 
-    def __call__(self, *_, **__):
+    def __call__(self, **_) -> HTML:
         import seaborn as sns
 
         sns.set_theme(self.context, self.style, self.palette)

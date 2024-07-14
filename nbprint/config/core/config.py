@@ -1,18 +1,19 @@
-from pathlib import Path
-from pprint import pprint
-from sys import version_info
-from typing import Union
-
 from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
 from nbformat import NotebookNode
 from nbformat.v4 import new_notebook
+from pathlib import Path
+from pprint import pprint
 from pydantic import Field, PrivateAttr, field_validator
+from sys import version_info
+from typing import Optional, Union
 
-from ... import __version__
-from ..base import BaseModel, Role, Type, _append_or_extend
-from ..content import Content
-from ..page import Page
+from nbprint import __version__
+from nbprint.config.base import BaseModel, Role, Type, _append_or_extend
+from nbprint.config.content import Content
+from nbprint.config.exceptions import NBPrintPathOrModelMalformedError
+from nbprint.config.page import Page
+
 from .context import Context
 from .outputs import Outputs
 from .parameters import Parameters
@@ -43,6 +44,7 @@ class Configuration(BaseModel):
     _nb_vars: set = PrivateAttr(default_factory=set)
 
     @field_validator("resources", mode="before")
+    @classmethod
     def convert_resources_from_obj(cls, value) -> dict[str, BaseModel]:
         if value is None:
             value = {}
@@ -52,22 +54,27 @@ class Configuration(BaseModel):
         return value
 
     @field_validator("outputs", mode="before")
+    @classmethod
     def convert_outputs_from_obj(cls, v) -> Outputs:
         return BaseModel._to_type(v, Outputs)
 
     @field_validator("parameters", mode="before")
+    @classmethod
     def convert_parameters_from_obj(cls, v) -> Parameters:
         return BaseModel._to_type(v, Parameters)
 
     @field_validator("page", mode="before")
+    @classmethod
     def convert_page_from_obj(cls, v) -> Page:
         return BaseModel._to_type(v, Page)
 
     @field_validator("context", mode="before")
+    @classmethod
     def convert_context_from_obj(cls, v) -> Context:
         return BaseModel._to_type(v, Context)
 
     @field_validator("content", mode="before")
+    @classmethod
     def convert_content_from_obj(cls, v) -> Content:
         if v is None:
             return []
@@ -79,7 +86,7 @@ class Configuration(BaseModel):
                     v[i] = BaseModel._to_type(element)
         return v
 
-    def generate(self, extra_metadata: dict = None) -> list[NotebookNode]:
+    def generate(self, **_) -> list[NotebookNode]:
         nb = new_notebook()
         nb.metadata.nbprint = {}
         nb.metadata.nbprint.version = __version__
@@ -106,12 +113,12 @@ class Configuration(BaseModel):
         # pass in parent=self, attr=context so we do config.context
         _append_or_extend(nb.cells, self.context.generate(metadata=base_meta.copy(), config=self, parent=self, attr="context"))
 
-        # resources: Dict[str, SerializeAsAny[BaseModel]] = Field(default_factory=dict)
-        # TODO omitting resources, referenced directly in yaml
+        # resources: dict[str, SerializeAsAny[BaseModel]] = Field(default_factory=dict)
+        # TODO: omitting resources, referenced directly in yaml
         # cell.metadata.nbprint.resources = {k: v.model_dump_json(by_alias=True) for k, v in self.resources.items()}
 
         # outputs: SerializeAsAny[Outputs]
-        # TODO skipping, consumed internally
+        # TODO: skipping, consumed internally
 
         # now setup the page layout
         # pass in parent=self, attr=page so we do config.page
@@ -136,12 +143,12 @@ class Configuration(BaseModel):
         cell.metadata.nbprint.debug = self.debug
 
         # add resources
-        # TODO do this or no?
+        # TODO: do this or no?
         # cell.metadata.nbprint.resources = {k: v.model_dump_json(by_alias=True) for k, v in self.resources.items()}
         cell.metadata.nbprint.outputs = self.outputs.model_dump_json(by_alias=True)
         return cell
 
-    def _generate_resources_cells(self, metadata: dict = None):
+    def _generate_resources_cells(self, metadata: Optional[dict] = None) -> NotebookNode:
         cell = super()._base_generate(metadata=metadata, config=None)
 
         # omit the data
@@ -150,7 +157,6 @@ class Configuration(BaseModel):
         # add resources
         # mod = ast.Module(body=[], type_ignores=[])
         # for k, v in self.resources.items():
-        #     # TODO
         #     ...
         return cell
 
@@ -159,7 +165,7 @@ class Configuration(BaseModel):
         if isinstance(path_or_model, Configuration):
             return path_or_model
 
-        if isinstance(path_or_model, str) and (path_or_model.endswith(".yml") or path_or_model.endswith(".yaml")):
+        if isinstance(path_or_model, str) and path_or_model.endswith((".yml", ".yaml")):
             path_or_model = Path(path_or_model).resolve()
 
         if isinstance(path_or_model, Path):
@@ -173,10 +179,10 @@ class Configuration(BaseModel):
                 if not isinstance(config, Configuration):
                     config = Configuration(**config)
                 return config
-        raise TypeError(f"Path or model malformed: {path_or_model} {type(path_or_model)}")
+        raise NBPrintPathOrModelMalformedError(path_or_model)
 
     def run(self) -> None:
-        gen = self.generate(self)
+        gen = self.generate()
         if self.debug:
             pprint(gen)
         self.outputs.run(self, gen)
