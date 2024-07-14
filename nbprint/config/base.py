@@ -2,7 +2,8 @@ import ast
 from importlib import import_module
 from json import dumps, loads
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple, Type as BaseType, Union
+from typing import TYPE_CHECKING, Any, Optional, Union
+from collections.abc import Mapping
 from uuid import uuid4
 
 from IPython.display import DisplayObject
@@ -26,7 +27,7 @@ __all__ = (
 
 # https://github.com/pydantic/pydantic/issues/6423#issuecomment-1967475432
 class _SerializeAsAnyMeta(ModelMetaclass):
-    def __new__(self, name: str, bases: Tuple[type], namespaces: Dict[str, Any], **kwargs):
+    def __new__(self, name: str, bases: tuple[type], namespaces: dict[str, Any], **kwargs):
         annotations: dict = namespaces.get("__annotations__", {}).copy()
         for field, annotation in annotations.items():
             if not field.startswith("__"):
@@ -48,7 +49,7 @@ class Type(BaseModel):
     def to_string(self) -> str:
         return f"{self.module}:{self.name}"
 
-    def type(self) -> BaseType["Type"]:
+    def type(self) -> type["Type"]:
         return getattr(import_module(self.module), self.name)
 
     def load(self, **kwargs) -> "Type":
@@ -71,7 +72,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
     type: Type = Field(alias="_target_")
 
     # basic metadata
-    tags: List[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
     role: Role = Role.UNDEFINED
     ignore: bool = False
 
@@ -79,7 +80,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
     # This is designed to match anywidget
     css: Optional[Union[str, Path]] = Field(default="")
     esm: Optional[Union[str, Path]] = Field(default="")
-    classname: Optional[Union[str, List[str]]] = Field(default="")
+    classname: Optional[Union[str, list[str]]] = Field(default="")
     attrs: Optional[Mapping[str, str]] = Field(default_factory=dict)
 
     # internals
@@ -182,7 +183,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         counter: Optional[int] = None,
         *args,
         **kwargs,
-    ) -> Optional[Union[NotebookNode, List[NotebookNode]]]:
+    ) -> Optional[Union[NotebookNode, list[NotebookNode]]]:
         """Generate a notebook node for this model.
         This will be called before the runtime of the notebook, use it for code generation.
 
@@ -336,7 +337,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         return f"<{self.__class__.__name__}>"
 
 
-def _append_or_extend(cells: list, cell_or_cells: Union[NotebookNode, List[NotebookNode]]) -> None:
+def _append_or_extend(cells: list, cell_or_cells: Union[NotebookNode, list[NotebookNode]]) -> None:
     if isinstance(cell_or_cells, list):
         cells.extend(cell_or_cells)
     elif cell_or_cells:

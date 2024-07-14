@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
 from nbformat import NotebookNode
 from pydantic import Field, PrivateAttr
@@ -12,7 +12,7 @@ __all__ = ("Context",)
 
 
 class Context(BaseModel):
-    tags: List[str] = Field(default=["nbprint:context"])
+    tags: list[str] = Field(default=["nbprint:context"])
     role: Role = Role.CONTEXT
     ignore: bool = True
 

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 
 from IPython.display import Markdown
 from pydantic import Field
@@ -15,7 +15,7 @@ class TextComponent(Content):
     font_style: Optional[FontStyle] = None
     text_decoration: Optional[TextDecoration] = None
 
-    tags: List[str] = Field(default=["nbprint:content"])
+    tags: list[str] = Field(default=["nbprint:content"])
 
-    def __call__(self, ctx=None, *args, **kwargs):
+    def __call__(self, *_, **__):
         return Markdown(self.text)
