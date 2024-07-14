@@ -2,7 +2,7 @@ import ast
 from importlib import import_module
 from json import dumps, loads
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple, Type, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Mapping, Optional, Tuple, Type as BaseType, Union
 from uuid import uuid4
 
 from IPython.display import DisplayObject
@@ -41,14 +41,14 @@ class Type(BaseModel):
     name: str
 
     @classmethod
-    def from_string(cls, str: str) -> "Type":
-        module, name = str.rsplit(".", 1)
+    def from_string(cls, st: str) -> "Type":
+        module, name = st.rsplit(".", 1)
         return Type(module=module, name=name)
 
     def to_string(self) -> str:
         return f"{self.module}:{self.name}"
 
-    def type(self) -> Type["Type"]:
+    def type(self) -> BaseType["Type"]:
         return getattr(import_module(self.module), self.name)
 
     def load(self, **kwargs) -> "Type":
@@ -100,7 +100,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         super().__init__(**kwargs)
 
     @field_validator("css", mode="before")
-    def convert_css_string_or_path_to_string_or_path(cls, v):
+    def convert_css_string_or_path_to_string_or_path(cls, v) -> str:
         if isinstance(v, str):
             if v.strip().endswith(".css"):
                 # TODO resolve relative to class?
@@ -108,7 +108,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         return v
 
     @field_validator("esm", mode="before")
-    def convert_esm_string_or_path_to_string_or_path(cls, v):
+    def convert_esm_string_or_path_to_string_or_path(cls, v) -> str:
         if isinstance(v, str):
             v = v.strip()
             if v.endswith(".js") or v.endswith(".mjs"):
@@ -117,13 +117,13 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         return v
 
     @field_validator("type", mode="before")
-    def convert_type_string_to_module_and_name(cls, v):
+    def convert_type_string_to_module_and_name(cls, v) -> Type:
         if isinstance(v, str):
             return Type.from_string(v)
         return v
 
     @property
-    def nb_var_name(self):
+    def nb_var_name(self) -> str:
         if self._nb_var_name:
             return self._nb_var_name
         name = self.__class__.__name__.lower()

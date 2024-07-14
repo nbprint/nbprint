@@ -1,7 +1,7 @@
 from IPython.display import Image
 
 
-def image(data=None, path=None, **kwargs):
+def image(data=None, path=None, **kwargs) -> Image:
     """display a image"""
     # measure in pixels for html, but cm for latex
     width = kwargs.get("width", "")

@@ -75,7 +75,7 @@ class Page(BaseModel):
     css: str = ""
 
     @classmethod
-    def convert_region_from_obj(cls, v, region):
+    def convert_region_from_obj(cls, v, region) -> PageRegion:
         ret = BaseModel._to_type(v, PageRegion)
         ret._region = region
         base_css_scope = "@page {{ @{region} {{ {content} }} }}".format(region=region, content=str(ret.content or ""))
@@ -83,51 +83,51 @@ class Page(BaseModel):
         return ret
 
     @field_validator("top", mode="before")
-    def convert_top_from_obj(cls, v):
+    def convert_top_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "top-center")
 
     @field_validator("top_left", mode="before")
-    def convert_top_left_from_obj(cls, v):
+    def convert_top_left_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "top-left")
 
     @field_validator("top_right", mode="before")
-    def convert_top_right_from_obj(cls, v):
+    def convert_top_right_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "top-right")
 
     @field_validator("bottom", mode="before")
-    def convert_bottom_from_obj(cls, v):
+    def convert_bottom_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "bottom-center")
 
     @field_validator("bottom_left", mode="before")
-    def convert_bottom_left_from_obj(cls, v):
+    def convert_bottom_left_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "bottom-left")
 
     @field_validator("bottom_right", mode="before")
-    def convert_bottom_right_from_obj(cls, v):
+    def convert_bottom_right_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "bottom-right")
 
     @field_validator("left", mode="before")
-    def convert_left_from_obj(cls, v):
+    def convert_left_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "left-center")
 
     @field_validator("left_top", mode="before")
-    def convert_left_top_from_obj(cls, v):
+    def convert_left_top_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "left-top")
 
     @field_validator("left_bottom", mode="before")
-    def convert_left_bottom_from_obj(cls, v):
+    def convert_left_bottom_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "left-bottom")
 
     @field_validator("right", mode="before")
-    def convert_right_from_obj(cls, v):
+    def convert_right_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "right-center")
 
     @field_validator("right_top", mode="before")
-    def convert_right_top_from_obj(cls, v):
+    def convert_right_top_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "right-top")
 
     @field_validator("right_bottom", mode="before")
-    def convert_right_bottom_from_obj(cls, v):
+    def convert_right_bottom_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "right-bottom")
 
     def render(self, config) -> None:
@@ -181,7 +181,7 @@ class Page(BaseModel):
         return cells
 
     @field_validator("pages", mode="before")
-    def convert_pages_from_obj(cls, v):
+    def convert_pages_from_obj(cls, v) -> "Page":
         if v is None:
             return []
         if isinstance(v, list):
