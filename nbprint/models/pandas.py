@@ -12,7 +12,7 @@ class PandasDisplayConfiguration(Content):
     max_columns: Optional[int] = Field(default=None)
     max_rows: int = Field(default=100)
 
-    def __call__(self, ctx=None, *args, **kwargs):
+    def __call__(self, *_, **__):
         import pandas as pd
 
         pd.set_option("display.max_columns", self.max_columns)

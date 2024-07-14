@@ -1,7 +1,7 @@
 import os
 from datetime import date, datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Literal, Optional, Union
+from typing import TYPE_CHECKING, Literal, Optional, Union
 from uuid import uuid4
 
 from nbformat import NotebookNode, write
@@ -26,9 +26,9 @@ class OutputNaming(StrEnum):
 
 class Outputs(BaseModel):
     path_root: DirectoryPath
-    naming: List[Union[OutputNaming, str]] = [OutputNaming.name, "-", OutputNaming.date]
+    naming: list[Union[OutputNaming, str]] = [OutputNaming.name, "-", OutputNaming.date]
 
-    tags: List[str] = Field(default=["nbprint:outputs"])
+    tags: list[str] = Field(default=["nbprint:outputs"])
     role: Role = Role.OUTPUTS
     ignore: bool = True
 

@@ -14,7 +14,7 @@ def _html(text, color="") -> HTML:
 
     if color:
         d = dt.div()
-        d.attributes["style"] = "color: {};".format(color)
+        d.attributes["style"] = f"color: {color};"
         d.appendChild(du.raw(text))
     else:
         d = du.raw(text)

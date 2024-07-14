@@ -27,7 +27,7 @@ class ExampleLogoInFooter(PageRegion):
 }
 """
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *_, **__):
         if self.logo.path:
             img = Image(filename=self.logo.path)
         else:
