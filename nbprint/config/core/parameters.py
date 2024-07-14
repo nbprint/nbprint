@@ -1,14 +1,9 @@
 import ast
 from json import dumps
-from typing import TYPE_CHECKING
-
 from nbformat import NotebookNode
 from pydantic import Field
 
-from ..base import BaseModel, Role
-
-if TYPE_CHECKING:
-    from .config import Configuration
+from nbprint.config.base import BaseModel, Role
 
 __all__ = ("Parameters",)
 
@@ -18,7 +13,7 @@ class Parameters(BaseModel):
     role: Role = Role.PARAMETERS
     ignore: bool = True
 
-    def generate(self, metadata: dict, config: "Configuration", *_, **__) -> NotebookNode:
+    def generate(self, metadata: dict, **_) -> NotebookNode:
         cell = self._base_generate_meta(metadata=metadata)
         # if nb_vars:
         #     # add parameter variable

@@ -7,5 +7,5 @@ from .base import Content
 class ContentPageBreak(Content):
     tags: list[str] = Field(default=["nbprint:content", "nbprint:content:pagebreak"])
 
-    def __call__(self, ctx=None, *args, **kwargs):
+    def __call__(self, **_) -> None:
         display(HTML('<p class="pagebreak"></p>'))

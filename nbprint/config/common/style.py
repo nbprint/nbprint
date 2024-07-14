@@ -1,8 +1,9 @@
+from pydantic import model_validator
 from typing import Optional, Union
 
-from pydantic import model_validator
+from nbprint.config.base import BaseModel
+from nbprint.config.exceptions import NBPrintBadScopeError
 
-from ..base import BaseModel
 from .border import Border
 from .common import Element, PseudoClass, PseudoElement
 from .spacing import Spacing
@@ -23,7 +24,7 @@ class Scope(BaseModel):
     @model_validator(mode="after")
     def check_any_set(self) -> "Scope":
         if all(element in ("", None) for element in (self.element, self.classname, self.id, self.selector)):
-            raise ValueError("Must set one of {element, classname, id, selector}")
+            raise NBPrintBadScopeError
         return self
 
     def __str__(self) -> str:

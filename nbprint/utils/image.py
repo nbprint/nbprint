@@ -2,7 +2,7 @@ from IPython.display import Image
 
 
 def image(data=None, path=None, **kwargs) -> Image:
-    """display a image"""
+    """Display a image"""
     # measure in pixels for html, but cm for latex
     width = kwargs.get("width", "")
     height = kwargs.get("height", "")
@@ -15,13 +15,13 @@ def image(data=None, path=None, **kwargs) -> Image:
         elif not isinstance(width, str):
             # assume in pixels, get cm
 
-            # TODO assume 96 DPI
+            # TODO: assume 96 DPI
             widthcm = f"{int(width / 36)}cm"
         else:
             # assume already in cm, get pixels
             width, widthcm = float(width.replace("cm", "")), width
 
-            # TODO assume 96 DPI
+            # TODO: assume 96 DPI
             width = int(width * 36)
             kwargs["width"] = width
     else:
@@ -33,14 +33,14 @@ def image(data=None, path=None, **kwargs) -> Image:
         elif not isinstance(height, str):
             # assume in pixels, get cm
 
-            # TODO assume 96 DPI
+            # TODO: assume 96 DPI
             heightcm = f"{int(height / 36)}cm"
 
         else:
             # assume already in cm, get pixels
             height, heightcm = float(height.replace("cm", "")), height
 
-            # TODO assume 96 DPI
+            # TODO: assume 96 DPI
             height = int(height * 36)
             kwargs["height"] = height
     else:

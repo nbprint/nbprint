@@ -1,14 +1,13 @@
 import os
 from datetime import date, datetime
+from nbformat import NotebookNode, write
 from pathlib import Path
+from pydantic import DirectoryPath, Field, field_validator
+from strenum import StrEnum
 from typing import TYPE_CHECKING, Literal, Optional, Union
 from uuid import uuid4
 
-from nbformat import NotebookNode, write
-from pydantic import DirectoryPath, Field, field_validator
-from strenum import StrEnum
-
-from ..base import BaseModel, Role
+from nbprint.config.base import BaseModel, Role
 
 if TYPE_CHECKING:
     from .config import Configuration
@@ -26,13 +25,14 @@ class OutputNaming(StrEnum):
 
 class Outputs(BaseModel):
     path_root: DirectoryPath
-    naming: list[Union[OutputNaming, str]] = [OutputNaming.name, "-", OutputNaming.date]
+    naming: list[Union[OutputNaming, str]] = Field(default=[OutputNaming.name, "-", OutputNaming.date])
 
     tags: list[str] = Field(default=["nbprint:outputs"])
     role: Role = Role.OUTPUTS
     ignore: bool = True
 
     @field_validator("path_root", mode="before")
+    @classmethod
     def convert_str_to_path(cls, v) -> Path:
         if isinstance(v, str):
             v = Path(v)
@@ -41,7 +41,7 @@ class Outputs(BaseModel):
             return v
         raise TypeError
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.path_root = self.path_root.resolve()
         self.path_root.mkdir(parents=True, exist_ok=True)
@@ -49,13 +49,13 @@ class Outputs(BaseModel):
     def _get_name(self, config: "Configuration") -> str:
         return config.name
 
-    def _get_date(self, config: "Configuration") -> str:
+    def _get_date(self, **_) -> str:
         return date.today().isoformat()
 
-    def _get_datetime(self, config: "Configuration") -> str:
+    def _get_datetime(self, **_) -> str:
         return datetime.now().isoformat()
 
-    def _get_uuid(self, config: "Configuration") -> str:
+    def _get_uuid(self, **_) -> str:
         return uuid4()
 
     def _get_sha(self, config: "Configuration") -> str:
@@ -78,18 +78,18 @@ class Outputs(BaseModel):
         }
         for pattern in OutputNaming:
             if pattern.value in str(file):
-                file = file.replace(pattern.value, _pattern_map[pattern](config))
+                file = file.replace(pattern.value, _pattern_map[pattern](config=config))
 
         with open(file, "w") as fp:
             write(gen, fp)
         return file
 
-    def generate(self, metadata: dict, config: "Configuration", parent: BaseModel, attr: str = "", *args, **kwargs) -> NotebookNode:
-        return super().generate(metadata=metadata, config=config, parent=parent, attr="outputs", *args, **kwargs)
+    def generate(self, metadata: dict, config: "Configuration", parent: BaseModel, **kwargs) -> NotebookNode:
+        return super().generate(metadata=metadata, config=config, parent=parent, attr="outputs", **kwargs)
 
 
 class NBConvertOutputs(Outputs):
-    target: Optional[Literal["ipynb", "html", "pdf"]] = "html"  # TODO nbconvert types
+    target: Optional[Literal["ipynb", "html", "pdf"]] = "html"  # TODO: nbconvert types
     execute: Optional[bool] = True
     timeout: Optional[int] = 600
     template: Optional[str] = "nbprint"

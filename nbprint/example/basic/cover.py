@@ -1,8 +1,7 @@
 import os.path
-from typing import Optional
-
 from IPython.display import HTML
 from pydantic import FilePath
+from typing import Optional
 
 from nbprint import ContentCover, ContentImage
 
