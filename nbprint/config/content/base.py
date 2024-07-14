@@ -56,7 +56,7 @@ class Content(BaseModel):
         return cells
 
     @field_validator("content", mode="before")
-    def convert_content_from_obj(cls, v):
+    def convert_content_from_obj(cls, v) -> "Content":
         if v is None:
             return []
         if isinstance(v, list):
