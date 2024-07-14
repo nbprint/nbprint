@@ -1,6 +1,5 @@
-from typing import Optional, Union
-
 from strenum import StrEnum
+from typing import Optional, Union
 
 from .common import Color
 from .css import _BaseCss
@@ -41,7 +40,7 @@ class Font(_BaseCss):
     size: Optional[int] = None
     transform: Optional[TextTransform] = None
 
-    # TODO multiple decorations and color decorations
+    # TODO: multiple decorations and color decorations
     # text-decoration-color
     # text-decoration-line
     # text-decoration-style
@@ -53,7 +52,7 @@ class Font(_BaseCss):
     weight: Optional[FontWeight] = None
     color: Optional[Color] = None
 
-    def __str__(self):
+    def __str__(self) -> str:
         ret = ""
         if self.family:
             ret += f"font-family: {self.family};\n"

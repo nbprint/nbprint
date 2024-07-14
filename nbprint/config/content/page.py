@@ -1,7 +1,8 @@
 from IPython.display import HTML
 from pydantic import Field
 
-from ..base import Role
+from nbprint.config.base import Role
+
 from .base import Content
 
 __all__ = (
@@ -15,7 +16,7 @@ __all__ = (
 class _ContentFlexLayout(Content):
     # component to split into certain number of columns
     # count: int = 1
-    sizes: list[float] = []
+    sizes: list[float] = Field(default=[])
 
     # override role
     role: Role = Role.LAYOUT
@@ -36,10 +37,10 @@ function render(meta, elem) {
         if (!size)
             return;
 
-        // TODO these are hacks to determin
+        // TODO:these are hacks to determin
         // if it should be included
         let output_children = (child.querySelector(".jp-OutputArea-output") || {}).children || [];
-        if (Array.from(child.classList).includes("nbprint")) {
+        if (Array.from(child.classlist).includes("nbprint")) {
             child.style.flex = `${size}`;
             size_index += 1;
         } else if (Array.from(output_children).length > 0) {
@@ -53,7 +54,7 @@ function render(meta, elem) {
 """
     attrs: dict = Field(default_factory=dict)
 
-    def __call__(self, *_, **__):
+    def __call__(self, **_) -> HTML:
         # return empty html just for placeholder
         return HTML("")
 
@@ -62,7 +63,7 @@ class ContentLayout(Content):
     # override role
     role: Role = Role.LAYOUT
 
-    def __call__(self, *_, **__):
+    def __call__(self, **_) -> HTML:
         # return empty html just for placeholder
         return HTML("")
 
@@ -77,10 +78,10 @@ function render(meta, elem) {
     let data = JSON.parse(meta.data);
 
     Array.from(elem.children).forEach((child) => {
-        // TODO these are hacks to determin
+        // TODO:these are hacks to determin
         // if it should be included
         let output_children = (child.querySelector(".jp-OutputArea-output") || {}).children || [];
-        if (Array.from(child.classList).includes("nbprint")) {
+        if (Array.from(child.classlist).includes("nbprint")) {
             child.style.display = "inline-block";
             child.style.float = "left";
         } else if (Array.from(output_children).length > 0) {
@@ -92,7 +93,7 @@ function render(meta, elem) {
 """
     attrs: dict = Field(default_factory=dict)
 
-    def __call__(self, *_, **__):
+    def __call__(self, **_) -> HTML:
         # return empty html just for placeholder
         return HTML("")
 
