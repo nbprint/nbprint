@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from __future__ import annotations
 
 from strenum import StrEnum
 
@@ -33,7 +33,7 @@ class BorderLineWidth(StrEnum):
 
 
 class BorderStyle(_BaseCss):
-    width: Union[BorderLineWidth, int]
+    width: BorderLineWidth | int
     style: BorderLineStyle
     color: Color
 
@@ -42,10 +42,10 @@ class BorderStyle(_BaseCss):
 
 
 class Border(_BaseCss):
-    right: Optional[BorderStyle] = None
-    left: Optional[BorderStyle] = None
-    top: Optional[BorderStyle] = None
-    bottom: Optional[BorderStyle] = None
+    right: BorderStyle | None = None
+    left: BorderStyle | None = None
+    top: BorderStyle | None = None
+    bottom: BorderStyle | None = None
 
     def __str__(self) -> str:
         return "\n".join(

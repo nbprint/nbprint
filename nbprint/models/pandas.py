@@ -1,4 +1,4 @@
-from typing import Optional
+from __future__ import annotations
 
 from IPython.display import HTML
 from pydantic import Field
@@ -9,7 +9,7 @@ __all__ = ("PandasDisplayConfiguration",)
 
 
 class PandasDisplayConfiguration(Content):
-    max_columns: Optional[int] = Field(default=None)
+    max_columns: int | None = Field(default=None)
     max_rows: int = Field(default=100)
 
     def __call__(self, *_, **__):

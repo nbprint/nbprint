@@ -1,19 +1,20 @@
-from typing import Optional
+from __future__ import annotations
 
 from IPython.display import Markdown
 from pydantic import Field
 
-from ..common import FontStyle, FontWeight, HorizontalAlignment, TextDecoration, VerticalAlignment
+from nbprint.config.common import FontStyle, FontWeight, HorizontalAlignment, TextDecoration, VerticalAlignment
+
 from .base import Content
 
 
 class TextComponent(Content):
-    text: Optional[str] = ""
-    horizontal_alignment: Optional[HorizontalAlignment] = None
-    vertical_alignment: Optional[VerticalAlignment] = None
-    font_weight: Optional[FontWeight] = None
-    font_style: Optional[FontStyle] = None
-    text_decoration: Optional[TextDecoration] = None
+    text: str | None = ""
+    horizontal_alignment: HorizontalAlignment | None = None
+    vertical_alignment: VerticalAlignment | None = None
+    font_weight: FontWeight | None = None
+    font_style: FontStyle | None = None
+    text_decoration: TextDecoration | None = None
 
     tags: list[str] = Field(default=["nbprint:content"])
 

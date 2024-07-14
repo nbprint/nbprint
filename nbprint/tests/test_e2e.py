@@ -1,5 +1,4 @@
 import os.path
-
 import pytest
 
 from nbprint import Configuration

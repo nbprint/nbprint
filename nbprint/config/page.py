@@ -1,10 +1,12 @@
-from typing import TYPE_CHECKING, Optional, Union
+from __future__ import annotations
 
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
+from typing import TYPE_CHECKING
 
 from .base import BaseModel, Role, Type, _append_or_extend
 from .common import PageOrientation, PageSize, Style
+from .exceptions import NBPrintNullCellError
 
 if TYPE_CHECKING:
     from .core.config import Configuration
@@ -18,7 +20,7 @@ __all__ = (
 
 
 class PageRegionContent(BaseModel):
-    content: Optional[str] = ""
+    content: str | None = ""
 
     # common
     tags: list[str] = Field(default=["nbprint:page"])
@@ -32,13 +34,13 @@ class PageRegionContent(BaseModel):
 
 
 class PageNumber(PageRegionContent):
-    content: Optional[str] = "counter(page)"
+    content: str | None = "counter(page)"
 
 
 class PageRegion(BaseModel):
     _region: str = ""
-    content: Optional[PageRegionContent] = Field(default_factory=PageNumber)
-    style: Optional[Style] = None
+    content: PageRegionContent | None = Field(default_factory=PageNumber)
+    style: Style | None = None
 
     css: str = ""
 
@@ -47,30 +49,30 @@ class PageRegion(BaseModel):
     role: Role = Role.PAGE
     ignore: bool = True
 
-    def generate(self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str, *args, **kwargs) -> NotebookNode:
+    def generate(self, metadata: dict, config: Configuration, parent: BaseModel, attr: str, *args, **kwargs) -> NotebookNode:
         cell = super().generate(metadata=metadata, config=config, parent=parent, attr=attr)
         cell.metadata.tags.append(f"nbprint:page:{attr}")
         return cell
 
 
 class Page(BaseModel):
-    top: Optional[PageRegion] = None
-    top_left: Optional[PageRegion] = None
-    top_right: Optional[PageRegion] = None
-    bottom: Optional[PageRegion] = None
-    bottom_left: Optional[PageRegion] = None
-    bottom_right: Optional[PageRegion] = None
-    left: Optional[PageRegion] = None
-    left_top: Optional[PageRegion] = None
-    left_bottom: Optional[PageRegion] = None
-    right: Optional[PageRegion] = None
-    right_top: Optional[PageRegion] = None
-    right_bottom: Optional[PageRegion] = None
+    top: PageRegion | None = None
+    top_left: PageRegion | None = None
+    top_right: PageRegion | None = None
+    bottom: PageRegion | None = None
+    bottom_left: PageRegion | None = None
+    bottom_right: PageRegion | None = None
+    left: PageRegion | None = None
+    left_top: PageRegion | None = None
+    left_bottom: PageRegion | None = None
+    right: PageRegion | None = None
+    right_top: PageRegion | None = None
+    right_bottom: PageRegion | None = None
 
-    size: Optional[PageSize] = Field(default=PageSize.letter)
-    orientation: Optional[PageOrientation] = Field(default=PageOrientation.portrait)
+    size: PageSize | None = Field(default=PageSize.letter)
+    orientation: PageOrientation | None = Field(default=PageOrientation.portrait)
 
-    pages: Optional[list["Page"]] = Field(default_factory=list)
+    pages: list[Page] | None = Field(default_factory=list)
 
     css: str = ""
 
@@ -83,50 +85,62 @@ class Page(BaseModel):
         return ret
 
     @field_validator("top", mode="before")
+    @classmethod
     def convert_top_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "top-center")
 
     @field_validator("top_left", mode="before")
+    @classmethod
     def convert_top_left_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "top-left")
 
     @field_validator("top_right", mode="before")
+    @classmethod
     def convert_top_right_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "top-right")
 
     @field_validator("bottom", mode="before")
+    @classmethod
     def convert_bottom_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "bottom-center")
 
     @field_validator("bottom_left", mode="before")
+    @classmethod
     def convert_bottom_left_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "bottom-left")
 
     @field_validator("bottom_right", mode="before")
+    @classmethod
     def convert_bottom_right_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "bottom-right")
 
     @field_validator("left", mode="before")
+    @classmethod
     def convert_left_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "left-center")
 
     @field_validator("left_top", mode="before")
+    @classmethod
     def convert_left_top_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "left-top")
 
     @field_validator("left_bottom", mode="before")
+    @classmethod
     def convert_left_bottom_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "left-bottom")
 
     @field_validator("right", mode="before")
+    @classmethod
     def convert_right_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "right-center")
 
     @field_validator("right_top", mode="before")
+    @classmethod
     def convert_right_top_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "right-top")
 
     @field_validator("right_bottom", mode="before")
+    @classmethod
     def convert_right_bottom_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "right-bottom")
 
@@ -140,8 +154,8 @@ class Page(BaseModel):
             )
 
     def generate(
-        self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str = "page", *args, **kwargs
-    ) -> Optional[Union[NotebookNode, list[NotebookNode]]]:
+        self, metadata: dict, config: Configuration, parent: BaseModel, attr: str = "page", *args, **kwargs
+    ) -> NotebookNode | list[NotebookNode] | None:
         cells = []
 
         # parent and config should be equal for the global page layout
@@ -153,7 +167,7 @@ class Page(BaseModel):
         main_cell.metadata.nbprint.ignore = True
         cells.append(main_cell)
 
-        for attr in (
+        for set_attr in (
             "top",
             "top_left",
             "top_right",
@@ -167,9 +181,9 @@ class Page(BaseModel):
             "right_top",
             "right_bottom",
         ):
-            if getattr(self, attr) is not None:
+            if getattr(self, set_attr) is not None:
                 # pass in `self` as `parent here`
-                _append_or_extend(cells, getattr(self, attr).generate(metadata=metadata, config=config, parent=self, attr=attr))
+                _append_or_extend(cells, getattr(self, set_attr).generate(metadata=metadata, config=config, parent=self, attr=set_attr))
         for i, cell in enumerate(self.pages):
             _append_or_extend(
                 cells,
@@ -177,11 +191,12 @@ class Page(BaseModel):
             )
         for cell in cells:
             if cell is None:
-                raise Exception("got null cell, investigate!")
+                raise NBPrintNullCellError
         return cells
 
     @field_validator("pages", mode="before")
-    def convert_pages_from_obj(cls, v) -> "Page":
+    @classmethod
+    def convert_pages_from_obj(cls, v) -> Page:
         if v is None:
             return []
         if isinstance(v, list):

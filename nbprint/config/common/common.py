@@ -1,7 +1,8 @@
-from typing import Literal, Optional
+from __future__ import annotations
 
 from pydantic_extra_types.color import Color
 from strenum import StrEnum
+from typing import Literal
 
 from .css import _BaseCss
 
@@ -16,7 +17,6 @@ __all__ = (
 
 Unset = Literal["unset"]
 
-# TODO
 # class Size:
 # cm	Centimeters	1cm = 37.8px = 25.2/64in
 # mm	Millimeters	1mm = 1/10th of 1cm
@@ -115,7 +115,7 @@ class Direction(StrEnum):
 
 
 class _DirectionalSize(_BaseCss):
-    right: Optional[int] = None
-    left: Optional[int] = None
-    top: Optional[int] = None
-    bottom: Optional[int] = None
+    right: int | None = None
+    left: int | None = None
+    top: int | None = None
+    bottom: int | None = None

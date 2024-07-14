@@ -1,24 +1,26 @@
-from pathlib import Path
-from typing import Optional
+from __future__ import annotations
 
 from IPython.display import HTML, Image
+from pathlib import Path
 from pydantic import Field, FilePath, field_validator
 
 from .base import Content
 
 
 class ContentImage(Content):
-    path: Optional[FilePath] = None
-    content: Optional[bytes] = b""
+    path: FilePath | None = None
+    content: bytes | None = b""
     tags: list[str] = Field(default=["nbprint:content", "nbprint:content:image"])
 
     @field_validator("path", mode="before")
+    @classmethod
     def convert_path_from_obj(cls, v) -> Path:
         if isinstance(v, str):
             v = Path(v).resolve()
         return v
 
     @field_validator("content", mode="before")
+    @classmethod
     def convert_content_from_obj(cls, v) -> bytes:
         if v is None:
             return b""
@@ -29,10 +31,7 @@ class ContentImage(Content):
         return v
 
     def as_base64(self) -> str:
-        if self.path:
-            img = Image(filename=self.path)
-        else:
-            img = Image(data=self.content)
+        img = Image(filename=self.path) if self.path else Image(data=self.content)
         return img._repr_png_()
 
     def __call__(self, *_, **__):

@@ -1,6 +1,6 @@
-import os.path
-from typing import Optional
+from __future__ import annotations
 
+import os.path
 from IPython.display import HTML
 from pydantic import FilePath
 
@@ -17,9 +17,9 @@ class ExampleNBPrintLogo(ContentImage):
 
 
 class ExampleCoverPageContent(ContentCover):
-    logo: Optional[ContentImage]
-    title: Optional[str] = ""
-    subtitle: Optional[str] = ""
+    logo: ContentImage | None
+    title: str | None = ""
+    subtitle: str | None = ""
 
     def __call__(self, ctx=None, *args, **kwargs):
         return HTML(f"""

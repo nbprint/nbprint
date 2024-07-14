@@ -1,8 +1,10 @@
-from typing import Optional, Union
+from __future__ import annotations
 
 from pydantic import model_validator
 
-from ..base import BaseModel
+from nbprint.config.base import BaseModel
+from nbprint.config.exceptions import NBPrintBadScopeError
+
 from .border import Border
 from .common import Element, PseudoClass, PseudoElement
 from .spacing import Spacing
@@ -10,20 +12,20 @@ from .text import Font
 
 
 class Scope(BaseModel):
-    element: Optional[Union[Element, str]] = ""
+    element: Element | str | None = ""
 
-    id: Optional[str] = ""
-    classname: Optional[str] = ""
+    id: str | None = ""
+    classname: str | None = ""
 
-    selector: Optional[str] = ""
+    selector: str | None = ""
 
-    pseudoclass: Optional[PseudoClass] = ""
-    pseudoelement: Optional[PseudoElement] = ""
+    pseudoclass: PseudoClass | None = ""
+    pseudoelement: PseudoElement | None = ""
 
     @model_validator(mode="after")
-    def check_any_set(self) -> "Scope":
+    def check_any_set(self) -> Scope:
         if all(element in ("", None) for element in (self.element, self.classname, self.id, self.selector)):
-            raise ValueError("Must set one of {element, classname, id, selector}")
+            raise NBPrintBadScopeError
         return self
 
     def __str__(self) -> str:
@@ -44,10 +46,10 @@ class Scope(BaseModel):
 
 
 class Style(BaseModel):
-    scope: Optional[Scope] = None
-    spacing: Optional[Spacing] = None
-    font: Optional[Font] = None
-    border: Optional[Border] = None
+    scope: Scope | None = None
+    spacing: Spacing | None = None
+    font: Font | None = None
+    border: Border | None = None
 
     def __str__(self) -> str:
         ret = f"{self.scope} {{\n"

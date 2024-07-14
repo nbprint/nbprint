@@ -179,7 +179,7 @@ line-length = 150
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-    # TODO remove first
+    # TODO: remove first
     "ANN204",
     "ANN205",
     "ANN206",
@@ -202,15 +202,6 @@ ignore = [
     "E501",
     "EM101",
     "EM102",
-    "FA100",
-    "I001",
-    "INP001",
-    "N804",
-    "N805",
-    "N818",
-    "PIE790",
-    "PIE810",
-    "PLR1704",
     "PLR0913",
     "PT007",
     "PTH100",
@@ -218,22 +209,9 @@ ignore = [
     "PTH118",
     "PTH120",
     "PTH123",
-    "RET504",
-    "RUF003",
-    "RUF005",
-    "RUF012",
-    "RUF013",
     "S101",
-    "SIM102",
-    "SIM108",
     "SLF001",
-    "TD004",
-    "TD005",
-    "TID252",
-    "TRY002",
-    "TRY003",
-    "T203",
-    # TODO remove later
+    # TODO: remove later
     "ANN001",
     "ANN202",
     "D100",
@@ -251,7 +229,7 @@ ignore = [
     "ISC001", # single-line-implicit-string-concatenation - Implicitly concatenated string literals on one line
     "TCH001", # typing-only-first-party-import Move application import {} into a type-checking block
     "TCH002", # typing-only-third-party-import Move third-party import {} into a type-checking block
-    "TD002", # missing-todo-author - Missing author in TODO; try: # TODO(<author_name>): ... or # TODO @<author_name>: ...
+    "TD002", # missing-todo-author - Missing author in TODO; try: # TODO(<author_name>): ... or # TODO: @<author_name>: ...
     "TD003", # missing-todo-link - Missing issue link on the line following this TODO
 ]
 

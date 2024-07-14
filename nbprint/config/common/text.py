@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from __future__ import annotations
 
 from strenum import StrEnum
 
@@ -37,21 +37,21 @@ class FontFamily(StrEnum):
 
 
 class Font(_BaseCss):
-    family: Optional[Union[FontFamily, str]] = None
-    size: Optional[int] = None
-    transform: Optional[TextTransform] = None
+    family: FontFamily | str | None = None
+    size: int | None = None
+    transform: TextTransform | None = None
 
-    # TODO multiple decorations and color decorations
+    # TODO: multiple decorations and color decorations
     # text-decoration-color
     # text-decoration-line
     # text-decoration-style
     # text-decoration-thickness
 
-    decoration: Optional[TextDecoration] = None
+    decoration: TextDecoration | None = None
 
-    style: Optional[FontStyle] = None
-    weight: Optional[FontWeight] = None
-    color: Optional[Color] = None
+    style: FontStyle | None = None
+    weight: FontWeight | None = None
+    color: Color | None = None
 
     def __str__(self):
         ret = ""

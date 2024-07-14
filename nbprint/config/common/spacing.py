@@ -1,4 +1,4 @@
-from typing import Optional
+from __future__ import annotations
 
 from .common import _DirectionalSize
 from .css import _BaseCss
@@ -29,8 +29,8 @@ class Margin(_DirectionalSize):
 
 
 class Spacing(_BaseCss):
-    padding: Optional[Padding] = None
-    margin: Optional[Margin] = None
+    padding: Padding | None = None
+    margin: Margin | None = None
 
     def __str__(self) -> str:
         ret = ""

@@ -1,11 +1,10 @@
 import ast
 from json import dumps
-from typing import TYPE_CHECKING
-
 from nbformat import NotebookNode
 from pydantic import Field
+from typing import TYPE_CHECKING
 
-from ..base import BaseModel, Role
+from nbprint.config.base import BaseModel, Role
 
 if TYPE_CHECKING:
     from .config import Configuration

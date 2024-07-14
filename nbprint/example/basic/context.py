@@ -1,4 +1,4 @@
-from typing import Optional
+from __future__ import annotations
 
 import pandas as pd
 
@@ -9,4 +9,4 @@ __all__ = ("ExampleContext",)
 
 class ExampleContext(Context):
     string: str = ""
-    df: Optional[pd.DataFrame] = None
+    df: pd.DataFrame | None = None

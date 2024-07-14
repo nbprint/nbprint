@@ -1,5 +1,4 @@
 import os.path
-
 from IPython.display import HTML, Image
 from pydantic import Field, FilePath
 
@@ -28,10 +27,7 @@ class ExampleLogoInFooter(PageRegion):
 """
 
     def __call__(self, *_, **__):
-        if self.logo.path:
-            img = Image(filename=self.logo.path)
-        else:
-            img = Image(data=self.logo.content)
+        img = Image(filename=self.logo.path) if self.logo.path else Image(data=self.logo.content)
         return HTML(f"""<img class="footer-logo" src="data:image/png;base64,{img._repr_png_()}">""")
 
 

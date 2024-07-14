@@ -1,20 +1,22 @@
-import ast
-from importlib import import_module
-from json import dumps, loads
-from pathlib import Path
-from typing import TYPE_CHECKING, Any, Optional, Union
-from collections.abc import Mapping
-from uuid import uuid4
+from __future__ import annotations
 
+import ast
+from collections.abc import Mapping
+from importlib import import_module
 from IPython.display import DisplayObject
+from json import dumps, loads
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
+from pathlib import Path
 from pydantic import BaseModel, Field, PrivateAttr, SerializeAsAny, field_validator
 from pydantic._internal._model_construction import ModelMetaclass
 from strenum import StrEnum
+from typing import TYPE_CHECKING, Any
+from uuid import uuid4
 
 if TYPE_CHECKING:
-    from ..config import Configuration
+    from nbprint.config import Configuration
+
     from .core.context import Context
 
 __all__ = (
@@ -27,14 +29,13 @@ __all__ = (
 
 # https://github.com/pydantic/pydantic/issues/6423#issuecomment-1967475432
 class _SerializeAsAnyMeta(ModelMetaclass):
-    def __new__(self, name: str, bases: tuple[type], namespaces: dict[str, Any], **kwargs):
+    def __new__(cls, name: str, bases: tuple[type], namespaces: dict[str, Any], **kwargs):
         annotations: dict = namespaces.get("__annotations__", {}).copy()
         for field, annotation in annotations.items():
             if not field.startswith("__"):
                 annotations[field] = SerializeAsAny[annotation]
         namespaces["__annotations__"] = annotations
-        clz = super().__new__(self, name, bases, namespaces, **kwargs)
-        return clz
+        return super().__new__(cls, name, bases, namespaces, **kwargs)
 
 
 class Type(BaseModel):
@@ -42,17 +43,17 @@ class Type(BaseModel):
     name: str
 
     @classmethod
-    def from_string(cls, st: str) -> "Type":
+    def from_string(cls, st: str) -> Type:
         module, name = st.rsplit(".", 1)
         return Type(module=module, name=name)
 
     def to_string(self) -> str:
         return f"{self.module}:{self.name}"
 
-    def type(self) -> type["Type"]:
+    def type(self) -> type[Type]:
         return getattr(import_module(self.module), self.name)
 
-    def load(self, **kwargs) -> "Type":
+    def load(self, **kwargs) -> Type:
         return self.type()(**kwargs)
 
 
@@ -78,14 +79,14 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
 
     # frontend code
     # This is designed to match anywidget
-    css: Optional[Union[str, Path]] = Field(default="")
-    esm: Optional[Union[str, Path]] = Field(default="")
-    classname: Optional[Union[str, list[str]]] = Field(default="")
-    attrs: Optional[Mapping[str, str]] = Field(default_factory=dict)
+    css: str | Path | None = Field(default="")
+    esm: str | Path | None = Field(default="")
+    classname: str | list[str] | None = Field(default="")
+    attrs: Mapping[str, str] | None = Field(default_factory=dict)
 
     # internals
     # Variable to use inside notebook for this model
-    _nb_var_name: Optional[str] = PrivateAttr(default="")
+    _nb_var_name: str | None = PrivateAttr(default="")
 
     # id to use to reconstitute dom during page building
     _id: str = PrivateAttr(default_factory=lambda: str(uuid4()).replace("-", ""))
@@ -101,23 +102,25 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         super().__init__(**kwargs)
 
     @field_validator("css", mode="before")
+    @classmethod
     def convert_css_string_or_path_to_string_or_path(cls, v) -> str:
-        if isinstance(v, str):
-            if v.strip().endswith(".css"):
-                # TODO resolve relative to class?
-                v = Path(v).resolve().read_text()
+        if isinstance(v, str) and v.strip().endswith(".css"):
+            # TODO: resolve relative to class?
+            v = Path(v).resolve().read_text()
         return v
 
     @field_validator("esm", mode="before")
+    @classmethod
     def convert_esm_string_or_path_to_string_or_path(cls, v) -> str:
         if isinstance(v, str):
             v = v.strip()
-            if v.endswith(".js") or v.endswith(".mjs"):
-                # TODO resolve relative to class?
+            if v.endswith((".js", ".mjs")):
+                # TODO: resolve relative to class?
                 v = Path(v).resolve().read_text()
         return v
 
     @field_validator("type", mode="before")
+    @classmethod
     def convert_type_string_to_module_and_name(cls, v) -> Type:
         if isinstance(v, str):
             return Type.from_string(v)
@@ -162,7 +165,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         data = loads(json)
         return cls(**data)
 
-    def __call__(self, ctx: "Context" = None, *args, **kwargs) -> Optional[DisplayObject]:
+    def __call__(self, ctx: Context = None, *args, **kwargs) -> DisplayObject | None:
         """Execute this model inside of a notebook
 
         Args:
@@ -170,20 +173,19 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         """
         return self
 
-    def render(self, config: "Configuration") -> None:
+    def render(self, config: Configuration) -> None:
         """Called during notebook generation only, this should run any necessary post-processing. Pre-processing should go in __init__"""
-        ...
 
     def generate(
         self,
         metadata: dict,
-        config: Optional["Configuration"],
-        parent: Optional["BaseModel"] = None,
+        config: Configuration | None,
+        parent: BaseModel | None = None,
         attr: str = "",
-        counter: Optional[int] = None,
+        counter: int | None = None,
         *args,
         **kwargs,
-    ) -> Optional[Union[NotebookNode, list[NotebookNode]]]:
+    ) -> NotebookNode | list[NotebookNode] | None:
         """Generate a notebook node for this model.
         This will be called before the runtime of the notebook, use it for code generation.
 
@@ -224,16 +226,16 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         )
         cell.metadata.nbprint.attrs = " ".join(f"{k}={dumps(v)}" for k, v in (self.attrs or {}).items())
 
-    def _base_generate_meta(self, metadata: dict = None) -> Optional[NotebookNode]:
+    def _base_generate_meta(self, metadata: dict | None = None) -> NotebookNode | None:
         cell = new_code_cell(metadata=metadata)
         cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
 
-        # TODO consolidate with self.model_dump_json(by_alias=True)?
+        # TODO: consolidate with self.model_dump_json(by_alias=True)?
         self._base_set_nbprint_metadata(cell)
         cell.metadata.nbprint.data = self.model_dump_json(by_alias=True)
         return cell
 
-    def _base_generate_md_meta(self, metadata: dict = None) -> Optional[NotebookNode]:
+    def _base_generate_md_meta(self, metadata: dict | None = None) -> NotebookNode | None:
         cell = new_markdown_cell(metadata=metadata)
         cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
         self._base_set_nbprint_metadata(cell)
@@ -242,11 +244,11 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
     def _base_generate(
         self,
         metadata: dict,
-        config: "Configuration",
-        parent: Optional["BaseModel"] = None,
+        config: Configuration,
+        parent: BaseModel | None = None,
         attr: str = "",
-        counter: Optional[int] = None,
-    ) -> Optional[NotebookNode]:
+        counter: int | None = None,
+    ) -> NotebookNode | None:
         # trigger any pre-cell generation logic
         self.render(config=config)
 
@@ -256,11 +258,10 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         assert config is not None
         self._recalculate_nb_var_name(config._nb_vars)
 
-        if parent:
-            # TODO should this go in a standard location?
+        if parent and parent.ignore is False:
+            # TODO: should this go in a standard location?
             # set in metadata
-            if parent.ignore is False:
-                cell.metadata.nbprint["parent-id"] = parent._id
+            cell.metadata.nbprint["parent-id"] = parent._id
 
         if parent and attr:
             # now construct accessor
@@ -300,10 +301,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
                 )
             )
 
-        if config and config.context and config.context._context_generated:
-            call_with_context = config.context.nb_var_name
-        else:
-            call_with_context = "None"
+        call_with_context = config.context.nb_var_name if config and config.context and config.context._context_generated else "None"
 
         mod.body.append(
             ast.Expr(
@@ -321,12 +319,12 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         cell.source = source
         return cell
 
-    def _base_generate_md(self, metadata: dict, config: "Configuration", parent: Optional["BaseModel"] = None) -> Optional[NotebookNode]:
+    def _base_generate_md(self, metadata: dict, config: Configuration, parent: BaseModel | None = None) -> NotebookNode | None:
         # trigger any pre-cell generation logic
         self.render(config=config)
 
         cell = self._base_generate_md_meta(metadata=metadata)
-        # TODO should this go in a standard location?
+        # TODO: should this go in a standard location?
         # set in metadata
         if parent and parent.ignore is False:
             cell.metadata.nbprint["parent-id"] = parent._id
@@ -337,7 +335,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         return f"<{self.__class__.__name__}>"
 
 
-def _append_or_extend(cells: list, cell_or_cells: Union[NotebookNode, list[NotebookNode]]) -> None:
+def _append_or_extend(cells: list, cell_or_cells: NotebookNode | list[NotebookNode]) -> None:
     if isinstance(cell_or_cells, list):
         cells.extend(cell_or_cells)
     elif cell_or_cells:

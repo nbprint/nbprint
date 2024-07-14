@@ -1,7 +1,6 @@
-from io import BytesIO
-
 import dominate.tags as dt
 import dominate.util as du
+from io import BytesIO
 from IPython.display import HTML
 from nbconvert.filters.pandoc import convert_pandoc
 
