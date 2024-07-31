@@ -1,6 +1,14 @@
 ---
 # global config options
-css: ".jp-RenderedHTMLCommon h1, .jp-RenderedHTMLCommon h2, .jp-RenderedHTMLCommon h3, .jp-RenderedHTMLCommon h4, .jp-RenderedHTMLCommon h5, .jp-RenderedHTMLCommon h6 { margin: 0 !important; }"
+css:  |
+  .jp-RenderedHTMLCommon { padding-right: 0px; }
+  .jp-RenderedHTMLCommon h1, .jp-RenderedHTMLCommon h2, .jp-RenderedHTMLCommon h3, .jp-RenderedHTMLCommon h4, .jp-RenderedHTMLCommon h5, .jp-RenderedHTMLCommon h6 { margin: 0 !important; }
+  .jp-RenderedHTMLCommon>*:last-child { margin-bottom: 0px; }
+  .pagedjs_page {
+    --pagedjs-margin-right: 0.2in !important;
+    --pagedjs-margin-bottom: 0.05in !important;
+    --pagedjs-margin-left: 0.2in !important;
+  }
 debug: false
 # end global config options
 
@@ -23,6 +31,7 @@ parameters:
   rating: Overweight
   view: In-Line
   price_target: 10.0
+  price_target_old: 9.0
 
 context:
   _target_:  nbprint.example.ExampleFinanceContext
@@ -30,104 +39,136 @@ context:
 page:
 
 content:
-  - _target_:  nbprint.example.ExampleFinanceTitle
-    title: "Jefferies Morgan"
-    subtitle: "Research"
-    date: "November 8, 2023 08:45 GMT"
-    styles:
-      - scope:
-          element: div
-          classname: row
-        spacing:
-          padding:
-            bottom: 10
-      - scope:
-          element: h1
-        text:
-          font:
-            family: sans-serif
-            size: 25
-        spacing:
-          padding:
-            right: 15
-        border:
-          right:
-            width: 2
-            style: solid
-            color: black
-      - scope:
-          element: h2
-        text:
-          font:
-            family: sans-serif
-            size: 12
-            transform: uppercase
-            weight: bold
-        spacing:
-          padding:
-            left: 15
-      - scope:
-          element: span
-        text:
-          font:
-            size: 15
-            style: italic
-            color: grey
-
-  - _target_:  nbprint.ContentFlexRowLayout
-    sizes: [5, 3]
+  - _target_:  nbprint.ContentFlexColumnLayout
     content:
-      - _target_:  nbprint.ContentFlexColumnLayout
-        css: ":scope { border-right: 1px solid black; margin-right: 5px; }"
+      - _target_:  nbprint.example.ExampleFinanceTitle
+        title: "Jefferies Morgan"
+        subtitle: "Research"
+        date: "November 8, 2023 08:45 GMT"
+        styles:
+          - scope:
+              element: div
+              classname: row
+          - scope:
+              element: h1
+            text:
+              font:
+                family: sans-serif
+                size: 25
+            spacing:
+              padding:
+                right: 15
+            border:
+              right:
+                width: 2
+                style: solid
+                color: black
+          - scope:
+              element: h2
+            text:
+              font:
+                family: sans-serif
+                size: 12
+                transform: uppercase
+                weight: bold
+            spacing:
+              padding:
+                left: 15
+          - scope:
+              element: span
+            text:
+              font:
+                size: 15
+                style: italic
+                color: grey
+
+      - _target_:  nbprint.ContentFlexRowLayout
+        sizes: [5, 3]
         content:
-          - _target_:  nbprint.example.ExampleFinanceStockHeadline
-            company_name: ${parameters.company_name}
-            region: ${parameters.region}
-            byline: "Solid Growth in both Domestic and International Markets"
-            color: ${parameters.color}
+          - _target_:  nbprint.ContentFlexColumnLayout
+            css: |
+              :scope { border-right: 1px solid black; padding-right: 10px; display: flex; flex-direction: column; break-inside: auto; }
 
-          - _target_:  nbprint.example.ExampleFinanceStockPTUpdate
-            rating: ${parameters.rating}
-            view: ${parameters.view}
-            price_target: ${parameters.price_target}
+            content:
+              - _target_:  nbprint.example.ExampleFinanceStockHeadline
+                company_name: ${parameters.company_name}
+                region: ${parameters.region}
+                byline: "Solid Growth in both Domestic and International Markets"
+                color: ${parameters.color}
 
-          - _target_:  nbprint.example.ExampleFinanceStockSubHeadline
-            text: |
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
+              - _target_:  nbprint.example.ExampleFinanceStockPTUpdate
+                rating: ${parameters.rating}
+                view: ${parameters.view}
+                price_target: ${parameters.price_target}
 
-      - _target_:  nbprint.ContentFlexColumnLayout
-        content:
-          - _target_:  nbprint.example.ExampleFinanceAuthor
-            name: John Smith
-            title: Equity Analyst
-            email: John.Smith@jm.com
-            phone: +1 212 867-5309
-            color: ${parameters.color}
+              - _target_:  nbprint.example.ExampleFinanceStockSubHeadline
+                text: |
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                  eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-          - _target_:  nbprint.example.ExampleFinanceAuthor
-            name: Jane Doe
-            title: Equity Analyst
-            email: Jane.Doe@jm.com
-            phone: +1 212 867-5309
-            color: ${parameters.color}
+              - _target_:  nbprint.example.ExampleFinanceStockWhatsChanged
+                company_name: ${parameters.company_name}
+                ticker: ${parameters.ticker}
+                color: ${parameters.color}
+                price_target: ${parameters.price_target}
+                price_target_old: ${parameters.price_target_old}
 
-          - _target_:  nbprint.example.ExampleFinanceStockQuickStats
-            color: ${parameters.color}
-            ticker: ${parameters.ticker}
-            company_name: ${parameters.company_name}
-            sector: ${parameters.sector}
-            country: ${parameters.country}
+              - _target_:  nbprint.example.ExampleFinanceStockBody
+                our_take: |
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-            rating: ${parameters.rating}
-            view: ${parameters.view}
-            price_target: ${parameters.price_target}
+                review: |
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-            share_price: 7.59
-            market_cap: 1,024
-            range_min: 4.35
-            range_max: 8.25
+                outlook: |
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-          - _target_:  nbprint.example.ExampleFinanceStockEarningsTable
+          - _target_:  nbprint.ContentInlineLayout
+            css: ":scope { padding-left: 10px; }"
+            content:
+              - _target_:  nbprint.example.ExampleFinanceAuthor
+                name: John Smith
+                title: Equity Analyst
+                email: John.Smith@jm.com
+                phone: +1 212 867-5309
+                color: ${parameters.color}
+
+              - _target_:  nbprint.example.ExampleFinanceAuthor
+                name: Jane Doe
+                title: Equity Analyst
+                email: Jane.Doe@jm.com
+                phone: +1 212 867-5309
+                color: ${parameters.color}
+
+              - _target_:  nbprint.example.ExampleFinanceStockQuickStats
+                color: ${parameters.color}
+                ticker: ${parameters.ticker}
+                company_name: ${parameters.company_name}
+                sector: ${parameters.sector}
+                country: ${parameters.country}
+
+                rating: ${parameters.rating}
+                view: ${parameters.view}
+                price_target: ${parameters.price_target}
+
+                share_price: 7.59
+                market_cap: 1,024
+                range_min: 4.35
+                range_max: 8.25
+
+
+              - _target_:  nbprint.example.ExampleFinanceStockEarningsTable
+
+              - _target_: nbprint.example.ExampleFinanceFirstPageDisclosures
+
+
+  - _target_: nbprint.ContentPageBreak
+
+  - _target_:  nbprint.example.ExampleFinanceDisclosures
