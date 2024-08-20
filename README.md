@@ -48,24 +48,24 @@ Let's take a simple placeholder report.
 ---
 debug: false
 outputs:
-  type: nbprint:NBConvertOutputs
+  _target_: nbprint:NBConvertOutputs
   path_root: ./examples/output
   target: "html"
 
 content:
-  - type: nbprint:ContentMarkdown
+  - _target_: nbprint:ContentMarkdown
     content: |
       # A Generic Report
       ## A Subtitle
     css: ":scope { text-align: center; }"
 
-  - type: nbprint:ContentPageBreak
+  - _target_: nbprint:ContentPageBreak
 
-  - type: nbprint:ContentTableOfContents
+  - _target_: nbprint:ContentTableOfContents
 
-  - type: nbprint:ContentPageBreak
+  - _target_: nbprint:ContentPageBreak
 
-  - type: nbprint:ContentMarkdown
+  - _target_: nbprint:ContentMarkdown
     content: |
       # Section One
       Lorem ipsum dolor sit amet.
@@ -74,23 +74,23 @@ content:
       ## Subsection Two
       Ut labore et dolore magna aliqua.
 
-  - type: nbprint:ContentPageBreak
+  - _target_: nbprint:ContentPageBreak
 
-  - type: nbprint:ContentFlexRowLayout
+  - _target_: nbprint:ContentFlexRowLayout
     sizes: [1, 1]
     content:
-      - type: nbprint:ContentFlexColumnLayout
+      - _target_: nbprint:ContentFlexColumnLayout
         content:
-          - type: nbprint:ContentMarkdown
+          - _target_: nbprint:ContentMarkdown
             content: |
               # Section Two
               Lorem ipsum dolor sit amet.
               ## Subsection One
               Consectetur adipiscing elit, sed do eiusmod tempor incididunt.
 
-      - type: nbprint:ContentFlexColumnLayout
+      - _target_: nbprint:ContentFlexColumnLayout
         content:
-          - type: nbprint:ContentMarkdown
+          - _target_: nbprint:ContentMarkdown
             content: |
               # Section Three
               Ut labore et dolore magna aliqua.
@@ -113,7 +113,7 @@ Next we fill in some content. Here we use a few components:
 We can now generate the report by running the CLI:
 
 ```bash
-nbprint examples/basic.yaml basic
+nbprint run examples/basic.yaml basic
 ```
 
 This will create a Notebook output in our specified folder `examples/output`, as well as an html asset (since that is what we specified in the yaml file). Both will have the date as a suffix, which is also configureable in our yaml. We see the generated report notebook, which we can open and use for further experimentation or to investigate the report itself.
