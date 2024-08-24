@@ -1,5 +1,6 @@
-from strenum import StrEnum
 from typing import Optional
+
+from strenum import StrEnum
 
 from .css import _BaseCss
 

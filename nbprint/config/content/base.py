@@ -1,7 +1,8 @@
+from typing import TYPE_CHECKING, Optional, Union
+
 from IPython.display import HTML
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
-from typing import TYPE_CHECKING, Optional, Union
 
 from nbprint.config.base import BaseModel, Role, SerializeAsAny, Type, _append_or_extend
 from nbprint.config.common import Style
