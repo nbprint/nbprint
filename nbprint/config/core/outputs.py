@@ -1,11 +1,12 @@
 import os
 from datetime import date, datetime
-from nbformat import NotebookNode, write
 from pathlib import Path
-from pydantic import DirectoryPath, Field, field_validator
-from strenum import StrEnum
 from typing import TYPE_CHECKING, Literal, Optional, Union
 from uuid import uuid4
+
+from nbformat import NotebookNode, write
+from pydantic import DirectoryPath, Field, field_validator
+from strenum import StrEnum
 
 from nbprint.config.base import BaseModel, Role
 

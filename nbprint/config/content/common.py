@@ -1,6 +1,7 @@
+from typing import Optional
+
 from IPython.display import Markdown
 from pydantic import Field
-from typing import Optional
 
 from nbprint.config.common import FontStyle, FontWeight, HorizontalAlignment, TextDecoration, VerticalAlignment
 

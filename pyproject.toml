@@ -227,6 +227,7 @@ default-section = "third-party"
 known-first-party = ["nbprint"]
 section-order = [
     "future",
+    "standard-library",
     "third-party",
     "first-party",
     "local-folder",
