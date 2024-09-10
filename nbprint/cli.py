@@ -1,10 +1,11 @@
 import os
 import os.path
+from pathlib import Path
+from typing import Optional
+
 from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
-from pathlib import Path
 from typer import Argument, Typer
-from typing import Optional
 
 from .config import Configuration
 

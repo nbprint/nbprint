@@ -1,6 +1,7 @@
+from typing import TYPE_CHECKING
+
 from nbformat import NotebookNode
 from pydantic import Field, PrivateAttr
-from typing import TYPE_CHECKING
 
 from nbprint.config.base import BaseModel, Role
 

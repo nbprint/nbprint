@@ -1,12 +1,13 @@
+from pathlib import Path
+from pprint import pprint
+from sys import version_info
+from typing import Optional, Union
+
 from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
 from nbformat import NotebookNode
 from nbformat.v4 import new_notebook
-from pathlib import Path
-from pprint import pprint
 from pydantic import Field, PrivateAttr, field_validator
-from sys import version_info
-from typing import Optional, Union
 
 from nbprint import __version__
 from nbprint.config.base import BaseModel, Role, Type, _append_or_extend

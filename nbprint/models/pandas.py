@@ -1,6 +1,7 @@
+from typing import Optional
+
 from IPython.display import HTML
 from pydantic import Field
-from typing import Optional
 
 from nbprint import Content
 
