@@ -68,7 +68,7 @@ develop = [
     "great_tables",
     "matplotlib",
     "pandas",
-    "perspective-python",
+    "perspective-python>=2,<3",
     "seaborn",
     "superstore",
 ]
@@ -227,6 +227,7 @@ default-section = "third-party"
 known-first-party = ["nbprint"]
 section-order = [
     "future",
+    "standard-library",
     "third-party",
     "first-party",
     "local-folder",

@@ -1,6 +1,7 @@
+from typing import Literal, Union
+
 from IPython.display import HTML
 from pydantic import Field
-from typing import Literal, Union
 
 from nbprint import Content
 

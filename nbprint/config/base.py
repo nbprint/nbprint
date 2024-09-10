@@ -1,16 +1,17 @@
 import ast
 from collections.abc import Mapping
 from importlib import import_module
-from IPython.display import DisplayObject
 from json import dumps, loads
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, Optional, Union
+from uuid import uuid4
+
+from IPython.display import DisplayObject
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
-from pathlib import Path
 from pydantic import BaseModel, Field, PrivateAttr, SerializeAsAny, field_validator
 from pydantic._internal._model_construction import ModelMetaclass
 from strenum import StrEnum
-from typing import TYPE_CHECKING, Any, Optional, Union
-from uuid import uuid4
 
 if TYPE_CHECKING:
     from nbprint.config import Configuration

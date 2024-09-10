@@ -1,6 +1,7 @@
+from typing import TYPE_CHECKING, Optional, Union
+
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
-from typing import TYPE_CHECKING, Optional, Union
 
 from .base import BaseModel, Role, Type, _append_or_extend
 from .common import PageOrientation, PageSize, Style
