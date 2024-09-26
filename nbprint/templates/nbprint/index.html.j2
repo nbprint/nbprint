@@ -1,4 +1,10 @@
 {%- extends 'lab/index.html.j2' -%}
+{% from 'mathjax_override.html.j2' import mathjax_custom %}
+
+{%- block html_head_js_mathjax -%}
+{{ mathjax_custom(resources.mathjax_url) }}
+{%- endblock html_head_js_mathjax -%}
+
 
 {%- block html_head_js -%}
 
