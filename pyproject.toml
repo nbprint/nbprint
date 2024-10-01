@@ -68,7 +68,7 @@ develop = [
     "great_tables",
     "matplotlib",
     "pandas",
-    "perspective-python>=2,<3",
+    "perspective-python>=2,<4",
     "seaborn",
     "superstore",
 ]
