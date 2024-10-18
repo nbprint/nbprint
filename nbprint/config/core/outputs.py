@@ -90,10 +90,19 @@ class Outputs(BaseModel):
 
 
 class NBConvertOutputs(Outputs):
-    target: Optional[Literal["ipynb", "html", "pdf"]] = "html"  # TODO: nbconvert types
+    target: Optional[Literal["ipynb", "html", "pdf", "webpdf"]] = "html"  # TODO: nbconvert types
     execute: Optional[bool] = True
     timeout: Optional[int] = 600
     template: Optional[str] = "nbprint"
+
+    @field_validator("target", mode="before")
+    @classmethod
+    def validate_target(cls, v) -> str:
+        if v is None:
+            return "html"
+        if v == "pdf":
+            return "webpdf"
+        return v
 
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
         from nbconvert.nbconvertapp import main as execute_nbconvert
