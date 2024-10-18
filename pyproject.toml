@@ -42,7 +42,7 @@ dependencies = [
     "dominate",
     "hydra-core",
     "ipywidgets",
-    "nbconvert>=7.11.0",
+    "nbconvert[webpdf]>=7.11.0",
     "nbformat",
     "notebook",
     "omegaconf",
