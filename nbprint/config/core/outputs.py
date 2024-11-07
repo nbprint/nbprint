@@ -34,11 +34,6 @@ class Outputs(BaseModel):
             return v
         raise TypeError
 
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self.path_root = self.path_root.resolve()
-        self.path_root.mkdir(parents=True, exist_ok=True)
-
     def _get_name(self, config: "Configuration") -> str:
         return config.name
 

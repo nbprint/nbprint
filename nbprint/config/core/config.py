@@ -11,7 +11,7 @@ from pydantic import Field, PrivateAttr, field_validator, model_validator
 from typing_extensions import Self
 
 from nbprint import __version__
-from nbprint.config.base import BaseModel, Role, Type, _append_or_extend
+from nbprint.config.base import BaseModel, Role, _append_or_extend
 from nbprint.config.content import Content
 from nbprint.config.exceptions import NBPrintPathOrModelMalformedError
 from nbprint.config.page import Page
@@ -83,7 +83,7 @@ class Configuration(BaseModel):
         if isinstance(v, list):
             for i, element in enumerate(v):
                 if isinstance(element, str):
-                    v[i] = Content(type=Type.from_string(element))
+                    v[i] = Content(type_=element)
                 elif isinstance(element, dict):
                     v[i] = BaseModel._to_type(element)
         return v

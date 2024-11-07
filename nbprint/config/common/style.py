@@ -10,6 +10,11 @@ from .common import Element, PseudoClass, PseudoElement
 from .spacing import Spacing
 from .text import Font
 
+__all__ = (
+    "Scope",
+    "Style",
+)
+
 
 class Scope(BaseModel):
     element: Optional[Union[Element, str]] = ""

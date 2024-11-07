@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Optional, Union
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
 
-from .base import BaseModel, Role, Type, _append_or_extend
+from .base import BaseModel, Role, _append_or_extend
 from .common import PageOrientation, PageSize, Style
 from .exceptions import NBPrintNullCellError
 
@@ -201,7 +201,7 @@ class Page(BaseModel):
         if isinstance(v, list):
             for i, element in enumerate(v):
                 if isinstance(element, str):
-                    v[i] = Page(type=Type.from_string(element))
+                    v[i] = Page(type_=element)
                 elif isinstance(element, dict):
                     v[i] = BaseModel._to_type(element)
         return v
