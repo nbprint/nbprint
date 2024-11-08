@@ -1,0 +1,13 @@
+defaults:
+  - config: inline
+  - page: report
+  - parameters: string1
+  - _self_
+
+outputs:
+  path_root: ./examples/output
+
+hydra:
+  searchpath:
+    - file://examples/hydra
+
