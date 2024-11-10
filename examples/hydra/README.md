@@ -8,8 +8,8 @@ This lets use easily run our same report with different layours or inputs:
 
 ```bash
 # Parameter set 1
-nbprint hydra --config-dir=examples/hydra +config=inline +page=report +parameters=string1
+nbprint hydra --path=examples/hydra.yaml config=inline page=report parameters=string1
 
 # Parameter set 2
-nbprint hydra --config-dir=examples/hydra +config=inline +page=report +parameters=string1
+nbprint hydra --path=examples/hydra config=inline page=report parameters=string1
 ```

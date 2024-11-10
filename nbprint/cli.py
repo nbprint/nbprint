@@ -1,5 +1,3 @@
-import os
-import os.path
 from pathlib import Path
 from typing import Optional
 
@@ -15,14 +13,10 @@ def run(path: Path, name: str) -> None:
     config.run()
 
 
-def run_hydra(config_dir="", overrides: Optional[list[str]] = Argument(None)) -> None:  # noqa: B008
-    with initialize_config_dir(config_dir=os.path.join(os.path.dirname(__file__), "config", "hydra"), version_base=None):
-        if config_dir:
-            cfg = compose(config_name="conf", overrides=[], return_hydra_config=True)
-            searchpaths = cfg["hydra"]["searchpath"]
-            searchpaths.append(config_dir)
-            overrides = [*overrides.copy(), f"hydra.searchpath=[{','.join(searchpaths)}]"]
-        cfg = compose(config_name="conf", overrides=overrides)
+def run_hydra(path: str = "", overrides: Optional[list[str]] = Argument(None)) -> None:  # noqa: B008
+    path = Path(path)
+    with initialize_config_dir(config_dir=str(path.parent.absolute()), version_base=None):
+        cfg = compose(config_name=str(path.name), overrides=overrides)
         config = instantiate(cfg)
         if not isinstance(config, Configuration):
             config = Configuration(**config)
