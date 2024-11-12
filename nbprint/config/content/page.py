@@ -37,10 +37,10 @@ function render(meta, elem) {
         if (!size)
             return;
 
-        // TODO:these are hacks to determin
+        // TODO:these are hacks to determine
         // if it should be included
         let output_children = (child.querySelector(".jp-OutputArea-output") || {}).children || [];
-        if (Array.from(child.classlist).includes("nbprint")) {
+        if (Array.from(child.classList).includes("nbprint")) {
             child.style.flex = `${size}`;
             size_index += 1;
         } else if (Array.from(output_children).length > 0) {
@@ -78,10 +78,10 @@ function render(meta, elem) {
     let data = JSON.parse(meta.data);
 
     Array.from(elem.children).forEach((child) => {
-        // TODO:these are hacks to determin
+        // TODO:these are hacks to determine
         // if it should be included
         let output_children = (child.querySelector(".jp-OutputArea-output") || {}).children || [];
-        if (Array.from(child.classlist).includes("nbprint")) {
+        if (Array.from(child.classList).includes("nbprint")) {
             child.style.display = "inline-block";
             child.style.float = "left";
         } else if (Array.from(output_children).length > 0) {
