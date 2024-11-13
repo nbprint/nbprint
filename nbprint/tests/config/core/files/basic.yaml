@@ -1,0 +1,14 @@
+defaults:
+  - _self_
+
+name: "basic"
+
+outputs:
+  _target_: nbprint.NBConvertOutputs
+  naming: "{{name}}-{{date}}-{{datetime}}-{{uuid}}-{{sha}}"
+  path_root: .pytest_cache/garbage
+
+hydra:
+  searchpath:
+    - file://examples/hydra
+
