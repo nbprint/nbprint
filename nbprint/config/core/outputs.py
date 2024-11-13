@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Literal, Optional, Union
 from uuid import uuid4
 
-from nbformat import NotebookNode, write
+from nbformat import NotebookNode
 from pydantic import DirectoryPath, Field, field_validator
 from strenum import StrEnum
 
@@ -81,9 +81,9 @@ class Outputs(BaseModel):
             if pattern.value in str(file):
                 file = file.replace(pattern.value, _pattern_map[pattern](config=config))
 
-        with open(file, "w") as fp:
-            write(gen, fp)
-        return file
+        path = Path(file)
+        path.write_text(gen)
+        return path
 
     def generate(self, metadata: dict, config: "Configuration", parent: BaseModel, **kwargs) -> NotebookNode:
         return super().generate(metadata=metadata, config=config, parent=parent, attr="outputs", **kwargs)
@@ -114,7 +114,7 @@ class NBConvertOutputs(Outputs):
         notebook = super().run(config=config, gen=gen)
 
         cmd = [
-            notebook,
+            str(notebook),
             f"--to={self.target}",
             f"--template={self.template}",
         ]
@@ -128,6 +128,7 @@ class NBConvertOutputs(Outputs):
             )
 
         execute_nbconvert(cmd)
+        return Path(str(notebook).replace(".ipynb", f".{self.target}"))
 
 
 # class PapermillOutputs(NBConvertOutputs):
