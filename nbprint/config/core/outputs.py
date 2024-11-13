@@ -25,7 +25,7 @@ class OutputNaming(StrEnum):
 
 
 class Outputs(BaseModel):
-    path_root: DirectoryPath
+    path_root: DirectoryPath = Field(default=Path.cwd())
     naming: list[Union[OutputNaming, str]] = Field(default=[OutputNaming.name, "-", OutputNaming.date])
 
     tags: list[str] = Field(default=["nbprint:outputs"])

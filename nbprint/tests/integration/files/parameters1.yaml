@@ -1,0 +1,23 @@
+defaults:
+  - _self_
+name: "test"
+outputs:
+  _target_: nbprint.NBConvertOutputs
+
+parameters:
+  _target_: nbprint.example.ExampleParametersVariousTypes
+  a: true
+  b: "string"
+  c: 5
+  d: 1.2
+  e: "2020-01-01"
+  f: "2020-01-01T01:01:01.123456"
+  g:
+    _target_: nbprint.example.ExampleParameters
+    string: "string"
+    a: 1
+
+hydra:
+  searchpath:
+    - file://examples/hydra
+
