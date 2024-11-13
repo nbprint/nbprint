@@ -8,12 +8,13 @@ from typer import Argument, Typer
 from .config import Configuration
 
 
-def run(path: Path, name: str) -> None:
+def run(path: Path, name: str, dry_run: bool = False) -> Configuration:
     config = Configuration.load(path, name)
-    config.run()
+    config.run(dry_run=dry_run)
+    return config
 
 
-def run_hydra(path: str = "", overrides: Optional[list[str]] = Argument(None)) -> None:  # noqa: B008
+def run_hydra(path: str = "", overrides: Optional[list[str]] = Argument(None), dry_run: bool = False) -> Configuration:  # noqa: B008
     path = Path(path)
     if not isinstance(overrides, list):
         # maybe running via python, reset
@@ -23,7 +24,8 @@ def run_hydra(path: str = "", overrides: Optional[list[str]] = Argument(None)) -
         config = instantiate(cfg)
         if not isinstance(config, Configuration):
             config = Configuration(**config)
-        config.run()
+        config.run(dry_run=dry_run)
+    return config
 
 
 def main() -> None:

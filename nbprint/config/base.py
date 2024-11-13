@@ -252,6 +252,8 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         attr: str = "",
         counter: Optional[int] = None,
     ) -> Optional[NotebookNode]:
+        from nbprint.config import Configuration
+
         # trigger any pre-cell generation logic
         self.render(config=config)
 
@@ -304,7 +306,14 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
                 )
             )
 
-        call_with_context = config.context.nb_var_name if config and config.context and config.context._context_generated else "None"
+        # Determine whether to pass context into the call.
+        # If we have a config object, and that config object has a context, and we've previously made the context object,
+        # and we ourselves are not a config, then pass in
+        call_with_context = (
+            config.context.nb_var_name
+            if config and config.context and config.context._context_generated and not isinstance(self, Configuration)
+            else "None"
+        )
 
         mod.body.append(
             ast.Expr(
