@@ -15,6 +15,9 @@ def run(path: Path, name: str) -> None:
 
 def run_hydra(path: str = "", overrides: Optional[list[str]] = Argument(None)) -> None:  # noqa: B008
     path = Path(path)
+    if not isinstance(overrides, list):
+        # maybe running via python, reset
+        overrides = []
     with initialize_config_dir(config_dir=str(path.parent.absolute()), version_base=None):
         cfg = compose(config_name=str(path.name), overrides=overrides)
         config = instantiate(cfg)
