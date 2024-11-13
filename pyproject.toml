@@ -213,6 +213,7 @@ ignore = [
     "D213", # multi-line-summary-second-line - Multi-line docstring summary should start at the second line
     "D401", # non-imperative-mood - First line of docstring should be in imperative mood: "{first_line}"
     "DTZ",  # flake8-datetimez
+    "FBT", # flake8-boolean-trap
     "FIX002", # line-contains-todo - Line contains TODO, consider resolving the issue
     "ISC001", # single-line-implicit-string-concatenation - Implicitly concatenated string literals on one line
     "TCH001", # typing-only-first-party-import Move application import {} into a type-checking block
@@ -239,6 +240,7 @@ section-order = [
     "ANN",
     "D",
     "S101",
+    "PLR2004",
 ]
 "nbprint/example/*" = [
     "ANN",
