@@ -1,32 +1,24 @@
 import os
 from datetime import date, datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, Optional, Union
+from typing import TYPE_CHECKING, Literal, Optional
 from uuid import uuid4
 
-from nbformat import NotebookNode
+from jinja2 import Template
+from nbformat import NotebookNode, writes
 from pydantic import DirectoryPath, Field, field_validator
-from strenum import StrEnum
 
 from nbprint.config.base import BaseModel, Role
 
 if TYPE_CHECKING:
     from .config import Configuration
 
-__all__ = ("OutputNaming", "Outputs", "NBConvertOutputs")
-
-
-class OutputNaming(StrEnum):
-    name = "${name}"
-    date = "${date}"
-    datetime = "${datetime}"
-    uuid = "${uuid}"
-    sha = "${sha}"
+__all__ = ("Outputs", "NBConvertOutputs")
 
 
 class Outputs(BaseModel):
     path_root: DirectoryPath = Field(default=Path.cwd())
-    naming: list[Union[OutputNaming, str]] = Field(default=[OutputNaming.name, "-", OutputNaming.date])
+    naming: str = Field(default="{{name}}-{{date}}")
 
     tags: list[str] = Field(default=["nbprint:outputs"])
     role: Role = Role.OUTPUTS
@@ -62,28 +54,20 @@ class Outputs(BaseModel):
     def _get_sha(self, config: "Configuration") -> str:
         import hashlib
 
-        m = hashlib.sha256(config.model_dump_json(by_alias=True))
-        m.update(config)
-        return m.hexdigest()
+        return hashlib.sha256(config.model_dump_json(by_alias=True).encode()).hexdigest()
 
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
         # create file or folder path
-        file = str(Path(self.path_root).resolve() / ("".join([x.value if isinstance(x, OutputNaming) else x for x in self.naming]) + ".ipynb"))
-
-        _pattern_map = {
-            OutputNaming.name: self._get_name,
-            OutputNaming.date: self._get_date,
-            OutputNaming.datetime: self._get_datetime,
-            OutputNaming.uuid: self._get_uuid,
-            OutputNaming.sha: self._get_sha,
-        }
-        for pattern in OutputNaming:
-            if pattern.value in str(file):
-                file = file.replace(pattern.value, _pattern_map[pattern](config=config))
-
-        path = Path(file)
-        path.write_text(gen)
-        return path
+        name = Template(self.naming).render(
+            name=self._get_name(config=config),
+            date=self._get_date(config=config),
+            datetime=self._get_datetime(config=config),
+            uuid=self._get_uuid(config=config),
+            sha=self._get_sha(config=config),
+        )
+        file = Path(str(Path(self.path_root).resolve() / f"{name}.ipynb"))
+        file.write_text(writes(gen))
+        return file
 
     def generate(self, metadata: dict, config: "Configuration", parent: BaseModel, **kwargs) -> NotebookNode:
         return super().generate(metadata=metadata, config=config, parent=parent, attr="outputs", **kwargs)
