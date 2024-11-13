@@ -9,7 +9,7 @@ build-backend = "hatchling.build"
 [project]
 name = "nbprint"
 description = "A framework for customizing NBConvert templates and building reports"
-version = "0.2.1"
+version = "0.2.2"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.9"
@@ -85,7 +85,7 @@ Repository = "https://github.com/nbprint/nbprint"
 Homepage = "https://github.com/nbprint/nbprint"
 
 [tool.bumpversion]
-current_version = "0.2.1"
+current_version = "0.2.2"
 commit = true
 tag = false
 
