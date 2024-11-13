@@ -21,7 +21,9 @@ class Parameters(BaseModel):
         #     nb_vars.add(k)
 
         mod = ast.Module(body=[], type_ignores=[])
-        for i, (k, v) in enumerate(self.dict().items()):
+        # NOTE: use model_dump(mode="json") here to be compatible with
+        # papermill-based json parameters
+        for i, (k, v) in enumerate(self.model_dump(mode="json").items()):
             if k in ("type", "tags", "role", "ignore"):
                 continue
             mod.body.append(
