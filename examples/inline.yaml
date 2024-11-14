@@ -131,7 +131,7 @@ content:
 
   - _target_: nbprint.ContentCode
     content: |
-      from perspective import PerspectiveWidget
+      from perspective.widget import PerspectiveWidget
       PerspectiveWidget(nbprint_ctx.df)
 
   - _target_: nbprint.ContentMarkdown
