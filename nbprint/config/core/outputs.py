@@ -91,9 +91,6 @@ class NBConvertOutputs(Outputs):
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
         from nbconvert.nbconvertapp import main as execute_nbconvert
 
-        # set for convenience
-        os.environ["PSP_JUPYTER_HTML_EXPORT"] = "1"
-
         # run the nbconvert
         notebook = super().run(config=config, gen=gen)
 
@@ -111,6 +108,9 @@ class NBConvertOutputs(Outputs):
                 ]
             )
 
+        # We have some cheats here because we have to
+        os.environ["_NBPRINT_IN_NBCONVERT"] = "1"
+        os.environ["PSP_JUPYTER_HTML_EXPORT"] = "1"
         execute_nbconvert(cmd)
         return Path(str(notebook).replace(".ipynb", f".{self.target}"))
 
