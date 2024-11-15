@@ -1,0 +1,20 @@
+---
+debug: false
+outputs:
+  _target_:  nbprint.NBConvertOutputs
+  path_root: ./examples/output
+  target: "html"
+
+content:
+  - _target_:  nbprint.ContentMarkdown
+    content: |
+      # Plotly Test
+    css: ":scope { text-align: center; }"
+
+  - _target_: nbprint.PlotlyRendererConfiguration
+
+  - _target_: nbprint.ContentCode
+    content: |
+      import plotly.express as px
+      fig = px.scatter(x=[0,1,2,3,4], y=[0,1,4,9,16], title="Interactive Plot")
+      fig.show()

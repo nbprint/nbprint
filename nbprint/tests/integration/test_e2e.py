@@ -11,32 +11,9 @@ def _example_folder_does_not_exist():
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
-def test_basic_e2e():
-    config = Configuration.load("examples/basic.yaml", "basic")
-    config.run()
-
-
-@pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
-def test_inline_e2e():
-    config = Configuration.load("examples/inline.yaml", "inline")
-    config.run()
-
-
-@pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
-def test_landscape_e2e():
-    config = Configuration.load("examples/landscape.yaml", "landscape")
-    config.run()
-
-
-@pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
-def test_finance_e2e():
-    config = Configuration.load("examples/finance.yaml", "finance")
-    config.run()
-
-
-@pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
-def test_research_e2e():
-    config = Configuration.load("examples/research.yaml", "research")
+@pytest.mark.parametrize("template", ("basic", "inline", "landscape", "finance", "research", "plotly"))
+def test_e2e(template):
+    config = Configuration.load(f"examples/{template}.yaml", template)
     config.run()
 
 

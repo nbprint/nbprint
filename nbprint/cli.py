@@ -3,27 +3,51 @@ from typing import Optional
 
 from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
+from omegaconf import OmegaConf
 from typer import Argument, Typer
 
 from .config import Configuration
 
-
-def run(path: Path, name: str, dry_run: bool = False) -> Configuration:
-    config = Configuration.load(path, name)
-    config.run(dry_run=dry_run)
-    return config
+__all__ = ("run", "cfg", "run_hydra", "main")
 
 
-def run_hydra(path: str = "", overrides: Optional[list[str]] = Argument(None), dry_run: bool = False) -> Configuration:  # noqa: B008
+def run(path: Path, name: str = "", dry_run: bool = False) -> Configuration:
+    return run_hydra(path=path, overrides=name.split(" "), dry_run=dry_run)
+
+
+def cfg(path: Path, name: str = "", dry_run: bool = False) -> Configuration:
+    return run_hydra(path=path, overrides=name.split(" "), cfg=True, dry_run=dry_run)
+
+
+def run_hydra(
+    path: str,
+    overrides: Optional[list[str]] = Argument(None),
+    cfg: bool = False,
+    dry_run: bool = False,
+) -> Configuration:
+    # convert to Path
     path = Path(path)
+
     if not isinstance(overrides, list):
         # maybe running via python, reset
         overrides = []
+
+    # prune any empty strings
+    overrides = [o for o in overrides if o]
+
     with initialize_config_dir(config_dir=str(path.parent.absolute()), version_base=None):
-        cfg = compose(config_name=str(path.name), overrides=overrides)
-        config = instantiate(cfg)
+        hydra_config = compose(config_name=str(path.name), overrides=overrides)
+
+        # bridge hydra and non-hydra
+        extras = {"name": path.name.replace(".yaml", "").replace(".yml", "")} if "name" not in hydra_config else {}
+        config = instantiate(hydra_config, **extras)
         if not isinstance(config, Configuration):
             config = Configuration(**config)
+
+    # mimic hydra cfg
+    if cfg:
+        print(OmegaConf.to_yaml(config.model_dump(mode="json")))  # noqa: T201
+    else:
         config.run(dry_run=dry_run)
     return config
 
@@ -31,5 +55,6 @@ def run_hydra(path: str = "", overrides: Optional[list[str]] = Argument(None), d
 def main() -> None:
     app = Typer()
     app.command("run")(run)
+    app.command("cfg")(cfg)
     app.command("hydra")(run_hydra)
     app()
