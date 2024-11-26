@@ -17,6 +17,9 @@ class Content(BaseModel):
     tags: list[str] = Field(default=["nbprint:content"])
     role: Role = Role.CONTENT
 
+    # cell magics
+    magics: Optional[list[str]] = Field(default_factory=list, description="List of cell magics to apply to the cell")
+
     # used by lots of things
     style: Optional[Style] = None
 
@@ -54,6 +57,13 @@ class Content(BaseModel):
         for cell in cells:
             if cell is None:
                 raise NBPrintNullCellError
+
+        # prefix cells with magics
+        for cell in cells:
+            cell: NotebookNode
+            if self.magics:
+                for magic in self.magics:
+                    cell.source = f"%%{magic}\n{cell.source}"
         return cells
 
     @field_validator("content", mode="before")
