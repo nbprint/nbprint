@@ -48,6 +48,7 @@ def run_hydra(
     if cfg:
         print(OmegaConf.to_yaml(config.model_dump(mode="json")))  # noqa: T201
     else:
+        # TODO: return file?
         config.run(dry_run=dry_run)
     return config
 

@@ -56,7 +56,7 @@ class Outputs(BaseModel):
 
         return hashlib.sha256(config.model_dump_json(by_alias=True).encode()).hexdigest()
 
-    def run(self, config: "Configuration", gen: NotebookNode) -> Path:
+    def _get_notebook_path(self, config: "Configuration") -> Path:
         # create file or folder path
         name = Template(self.naming).render(
             name=self._get_name(config=config),
@@ -65,7 +65,14 @@ class Outputs(BaseModel):
             uuid=self._get_uuid(config=config),
             sha=self._get_sha(config=config),
         )
-        file = Path(str(Path(self.path_root).resolve() / f"{name}.ipynb"))
+        return Path(str(Path(self.path_root).resolve() / f"{name}.ipynb"))
+
+    def resolve_output(self, config: "Configuration") -> Path:
+        return self._get_notebook_path(config=config)
+
+    def run(self, config: "Configuration", gen: NotebookNode) -> Path:
+        # create file or folder path
+        file = self._get_notebook_path(config=config)
         file.write_text(writes(gen))
         return file
 
@@ -87,6 +94,13 @@ class NBConvertOutputs(Outputs):
         if v == "pdf":
             return "webpdf"
         return v
+
+    def resolve_output(self, config: "Configuration") -> Path:
+        # get original notebook
+        original = str(super().resolve_output(config=config))
+        if self.target == "ipynb":
+            return Path(original.replace(".ipynb", ".nbconvert.ipynb"))
+        return Path(original.replace(".ipynb", f".{self.target}"))
 
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
         from nbconvert.nbconvertapp import main as execute_nbconvert
@@ -112,7 +126,7 @@ class NBConvertOutputs(Outputs):
         os.environ["_NBPRINT_IN_NBCONVERT"] = "1"
         os.environ["PSP_JUPYTER_HTML_EXPORT"] = "1"
         execute_nbconvert(cmd)
-        return Path(str(notebook).replace(".ipynb", f".{self.target}"))
+        return self.resolve_output(config=config)
 
 
 # class PapermillOutputs(NBConvertOutputs):
