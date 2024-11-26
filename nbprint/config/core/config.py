@@ -7,7 +7,8 @@ from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
 from nbformat import NotebookNode
 from nbformat.v4 import new_notebook
-from pydantic import Field, PrivateAttr, field_validator
+from pydantic import Field, PrivateAttr, field_validator, model_validator
+from typing_extensions import Self
 
 from nbprint import __version__
 from nbprint.config.base import BaseModel, Role, Type, _append_or_extend
@@ -86,6 +87,10 @@ class Configuration(BaseModel):
                 elif isinstance(element, dict):
                     v[i] = BaseModel._to_type(element)
         return v
+
+    @model_validator(mode="after")
+    def _attach_params_to_context(self) -> Self:
+        self.context.parameters = self.parameters
 
     def generate(self, **_) -> list[NotebookNode]:
         nb = new_notebook()
