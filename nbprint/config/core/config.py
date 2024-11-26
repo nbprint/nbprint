@@ -182,15 +182,17 @@ class Configuration(BaseModel):
                 return config
         raise NBPrintPathOrModelMalformedError(path_or_model)
 
-    def run(self, dry_run: bool = False) -> None:
+    def run(self, dry_run: bool = False) -> Optional[Path]:
         gen = self.generate()
         if self.debug:
             pprint(gen)
+            ret = None
         if not dry_run:
-            self.outputs.run(self, gen)
+            ret = self.outputs.run(self, gen)
 
         # reset in case we want to run again
         self._reset()
+        return ret
 
     def _reset(self) -> None:
         # reset ourselves in case we need to rerun
