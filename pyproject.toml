@@ -50,6 +50,7 @@ dependencies = [
     "pydantic_extra_types",
     "strenum",
     "typer",
+    "typing-extensions",
 ]
 
 [project.optional-dependencies]
