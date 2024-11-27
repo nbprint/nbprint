@@ -14,7 +14,7 @@ readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.9"
 authors = [
-    { name = "Tim Paine", email = "t.paine154@gmail.com" },
+    { name = "Tim Paine", email = "3105306+timkpaine@users.noreply.github.com" },
 ]
 keywords = [
     "Jupyter",
