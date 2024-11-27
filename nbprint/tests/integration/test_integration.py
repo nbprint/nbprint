@@ -16,3 +16,7 @@ def test_integrations(file):
         nb = reads(output, as_version=4)
         assert nb.cells[-1].source == '%%capture\nprint("test1")\nimport logging\nlogging.critical("test!")\n'
         assert nb.cells[-1].outputs == []
+
+    if file.name == "plugins.yaml":
+        output = res.outputs.resolve_output(res).read_text()
+        assert "Example Page Content from Plugin" in output

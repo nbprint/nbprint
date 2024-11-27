@@ -68,6 +68,7 @@ develop = [
     # notebook deps
     "great_tables",
     "matplotlib",
+    "nbprint-example-plugin",
     "pandas",
     "perspective-python>=3",
     "plotly",
@@ -117,31 +118,30 @@ artifacts = [
 src = "/"
 
 [tool.hatch.build.targets.sdist]
+packages = [
+    "nbprint",
+    "hydra_plugins",
+]
 include = [
-    "/nbprint",
-    "/js",
     "LICENSE",
     "README.md",
 ]
 exclude = [
     "/.github",
     "/.gitignore",
-    "/.mypy_cache",
-    "/.ruff_cache",
     "/dist",
     "/examples",
     "/js/node_modules",
 ]
 
 [tool.hatch.build.targets.wheel]
-include = [
-    "/nbprint",
+packages = [
+    "nbprint",
+    "hydra_plugins",
 ]
 exclude = [
     "/.github",
     "/.gitignore",
-    "/.mypy_cache",
-    "/.ruff_cache",
     "/pyproject.toml",
     "/dist",
     "/examples",
