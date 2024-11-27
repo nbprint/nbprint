@@ -163,3 +163,6 @@ nbprint/templates/nbprint/static/*
 nbprint/voila/static/*
 tmp.html
 examples/output/
+
+# Plugins testing
+nbprint_example_plugin*
