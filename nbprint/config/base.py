@@ -1,57 +1,25 @@
 import ast
 from collections.abc import Mapping
-from importlib import import_module
 from json import dumps, loads
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, List, Optional, Union
 from uuid import uuid4
 
+from ccflow import BaseModel as FlowBaseModel, PyObjectPath
 from IPython.display import DisplayObject
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
-from pydantic import BaseModel, Field, PrivateAttr, SerializeAsAny, field_validator
-from pydantic._internal._model_construction import ModelMetaclass
+from pydantic import Field, PrivateAttr, field_validator
 from strenum import StrEnum
 
 if TYPE_CHECKING:
     from nbprint.config import Configuration
 
 __all__ = (
-    "Type",
     "Role",
     "BaseModel",
     "_append_or_extend",
 )
-
-
-# https://github.com/pydantic/pydantic/issues/6423#issuecomment-1967475432
-class _SerializeAsAnyMeta(ModelMetaclass):
-    def __new__(cls, name: str, bases: tuple[type], namespaces: dict[str, Any], **kwargs) -> ModelMetaclass:
-        annotations: dict = namespaces.get("__annotations__", {}).copy()
-        for field, annotation in annotations.items():
-            if not field.startswith("__"):
-                annotations[field] = SerializeAsAny[annotation]
-        namespaces["__annotations__"] = annotations
-        return super().__new__(cls, name, bases, namespaces, **kwargs)
-
-
-class Type(BaseModel):
-    module: str
-    name: str
-
-    @classmethod
-    def from_string(cls, st: str) -> "Type":
-        module, name = st.rsplit(".", 1)
-        return Type(module=module, name=name)
-
-    def to_string(self) -> str:
-        return f"{self.module}:{self.name}"
-
-    def type(self) -> type["Type"]:
-        return getattr(import_module(self.module), self.name)
-
-    def load(self, **kwargs) -> "Type":
-        return self.type()(**kwargs)
 
 
 class Role(StrEnum):
@@ -65,12 +33,9 @@ class Role(StrEnum):
     LAYOUT = "layout"
 
 
-class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
-    # type info
-    type: Type = Field(alias="_target_")
-
+class BaseModel(FlowBaseModel):
     # basic metadata
-    tags: list[str] = Field(default_factory=list)
+    tags: List[str] = Field(default_factory=list)
     role: Role = Role.UNDEFINED
     ignore: bool = False
 
@@ -97,7 +62,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
 
     def __init__(self, **kwargs) -> None:
         if "_target_" not in kwargs:
-            kwargs["_target_"] = Type(module=self.__class__.__module__, name=self.__class__.__name__)
+            kwargs["_target_"] = f"{self.__class__.__module__}.{self.__class__.__name__}"
         super().__init__(**kwargs)
 
     @field_validator("css", mode="before")
@@ -116,13 +81,6 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
             if v.endswith((".js", ".mjs")):
                 # TODO: resolve relative to class?
                 v = Path(v).resolve().read_text()
-        return v
-
-    @field_validator("type", mode="before")
-    @classmethod
-    def convert_type_string_to_module_and_name(cls, v) -> Type:
-        if isinstance(v, str):
-            return Type.from_string(v)
         return v
 
     @property
@@ -146,21 +104,23 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
         nb_vars.add(self._nb_var_name)
 
     @staticmethod
-    def _to_type(value, model_type=None) -> BaseModel:
+    def _to_type(value, model_type=None) -> "BaseModel":
         if value is None:
             value = {}
 
-        if model_type is None and "_target_" in value:
+        if "_target_" in value:
             # derive type from instantiation
+            model_type = PyObjectPath(value["_target_"]).object
+        elif model_type is None:
             model_type = BaseModel
 
         if isinstance(value, dict):
-            return model_type(**value).type.load(**value)
+            return model_type(**value)
 
         return value
 
     @classmethod
-    def from_json(cls, json) -> BaseModel:
+    def from_json(cls, json) -> "BaseModel":
         data = loads(json)
         return cls(**data)
 
@@ -203,7 +163,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
     def _base_set_nbprint_metadata(self, cell: NotebookNode) -> None:
         cell.metadata.nbprint.id = self._id
         cell.metadata.nbprint.role = self.role or "undefined"
-        cell.metadata.nbprint.type = self.type.to_string()
+        cell.metadata.nbprint.type_ = str(self.type_)
         cell.metadata.nbprint.ignore = self.ignore or False
         if cell.metadata.nbprint.ignore and self.role in (Role.PARAMETERS,):
             # Don't collapse
@@ -222,7 +182,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
             cell.metadata.collapsed = True
         cell.metadata.nbprint.css = self.css or ""
         cell.metadata.nbprint.esm = self.esm or ""
-        cell.metadata.nbprint.class_selector = f'{cell.metadata.nbprint.type.replace(":", "-").replace(".", "-")}'
+        cell.metadata.nbprint.class_selector = f'{cell.metadata.nbprint.type_.replace(".", "-")}'
         cell.metadata.nbprint.element_selector = f"{cell.metadata.nbprint.class_selector}-{self._id}"
         cell.metadata.nbprint["class"] = f"nbprint {cell.metadata.nbprint.class_selector} {cell.metadata.nbprint.element_selector} " + (
             " ".join(self.classname) if isinstance(self.classname, list) else self.classname or ""
@@ -286,10 +246,11 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
             )
         else:
             data = self.model_dump_json(by_alias=True)
+            module, name = str(self.type_).rsplit(".", 1)
             mod.body.append(
                 ast.ImportFrom(
-                    module=self.type.module,
-                    names=[ast.alias(name=self.type.name)],
+                    module=module,
+                    names=[ast.alias(name=name)],
                     level=0,
                 )
             )
@@ -298,7 +259,7 @@ class BaseModel(BaseModel, metaclass=_SerializeAsAnyMeta):
                 ast.Assign(
                     targets=[ast.Name(id=self.nb_var_name, ctx=ast.Store())],
                     value=ast.Call(
-                        func=ast.Attribute(value=ast.Name(id=self.type.name, ctx=ast.Load()), attr="from_json", ctx=ast.Load()),
+                        func=ast.Attribute(value=ast.Name(id=name, ctx=ast.Load()), attr="from_json", ctx=ast.Load()),
                         args=[ast.parse(dumps(data), mode="eval").body],
                         keywords=[],
                     ),

@@ -2,9 +2,9 @@ from typing import TYPE_CHECKING, Optional, Union
 
 from IPython.display import HTML
 from nbformat import NotebookNode
-from pydantic import Field, field_validator
+from pydantic import Field, SerializeAsAny, field_validator
 
-from nbprint.config.base import BaseModel, Role, SerializeAsAny, Type, _append_or_extend
+from nbprint.config.base import BaseModel, Role, _append_or_extend
 from nbprint.config.common import Style
 from nbprint.config.exceptions import NBPrintNullCellError
 
@@ -74,7 +74,7 @@ class Content(BaseModel):
         if isinstance(v, list):
             for i, element in enumerate(v):
                 if isinstance(element, str):
-                    v[i] = Content(type=Type.from_string(element))
+                    v[i] = Content(type_=element)
                 elif isinstance(element, dict):
                     v[i] = BaseModel._to_type(element)
         return v
