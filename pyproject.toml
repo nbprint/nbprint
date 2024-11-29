@@ -39,6 +39,7 @@ classifiers = [
 ]
 
 dependencies = [
+    "ccflow>=0.4.0",
     "dominate",
     "hydra-core",
     "ipywidgets",
@@ -208,6 +209,8 @@ ignore = [
     "PT007",
     "S101",
     "T203",
+    "UP006",
+    "UP035",
 
     "ANN002", # missing-type-args - Missing type annotation for *{name}
     "ANN003", # missing-type-kwargs - Missing type annotation for **{name}
