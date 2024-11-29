@@ -35,11 +35,11 @@ Despite being the primary goal of early notebook conversion efforts, in recent y
 
 However, with recent releases to `nbconvert`, which now supports `webpdf` (printing as pdf from within a headless web browser), and with advances to the `@media print` CSS directive spearheaded by the lovely folks at [`pagedjs`](https://pagedjs.org), it is now much easier to build publication ready print-oriented media on the web.
 
-This is the goal of `nbprint`. Using [`pagedjs`](https://pagedjs.org), `nbprint` provides templates and utilities for building web reports targetting print media. Beyong that, it provides infrastructure for parameterizing and configuring documents via [`pydantic`](https://docs.pydantic.dev/latest/), which makes designing and generating reports a breeze, even without knowledge of Python.
+This is the goal of `nbprint`. Using [`pagedjs`](https://pagedjs.org), `nbprint` provides templates and utilities for building web reports targetting print media. Beyong that, it provides infrastructure for parameterizing and configuring documents via [`pydantic`](https://docs.pydantic.dev/latest/), which makes designing and generating reports a breeze, even without knowledge of Python. Documents are modular and can be easily composed via [`hydra`](https://hydra.cc). 
 
 ## Quickstart
 
-`nbprint` can be used purely via notebook metadata, but it also provides a `yaml`-based framework for configuration (via [`pydantic`](https://docs.pydantic.dev/latest/) and [`omegaconf`](https://github.com/omry/omegaconf)). This is particularly convenient when generating parameterized reports, for example when configuring a large number of hyperparameters for a model's evaluation report. This configuration also allows for easier iteration on a report's design and content.
+`nbprint` can be used purely via notebook metadata, but it also provides a `yaml`-based framework for configuration (via [`pydantic`](https://docs.pydantic.dev/latest/), [`hydra`](https://hydra.cc), and [`omegaconf`](https://github.com/omry/omegaconf)). This is particularly convenient when generating parameterized reports, for example when configuring a large number of hyperparameters for a model's evaluation report. This configuration also allows for easier iteration on a report's design and content.
 
 ### Configuration
 Let's take a simple placeholder report.
@@ -140,6 +140,7 @@ You can find a pdf form of this document [here](https://github.com/nbprint/nbpri
 Additionally, this project relies heavily on:
 
 - [pydantic](https://docs.pydantic.dev/latest/): Pydantic is the most widely used data validation library for Python.
+- [hydra](https://hydra.cc): Hydra is a framework for dynamically creating hierarchical configuration by composition, with the ability to override through config files and the command line
 - [omegaconf](https://github.com/omry/omegaconf): OmegaConf is a hierarchical configuration system, with support for merging configurations from multiple sources
 - [typer](https://typer.tiangolo.com): Typer is a library for building CLI applications based on Python type hints
 
