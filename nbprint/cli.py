@@ -8,7 +8,7 @@ from typer import Argument, Typer
 
 from .config import Configuration
 
-__all__ = ("run", "cfg", "run_hydra", "main")
+__all__ = ("cfg", "main", "run", "run_hydra")
 
 
 def run(path: Path, name: str = "", dry_run: bool = False) -> Configuration:
