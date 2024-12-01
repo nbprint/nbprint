@@ -3,13 +3,13 @@ from IPython.display import HTML
 from nbprint import Content, ContentFlexColumnLayout, ContentFlexRowLayout, Role
 
 __all__ = (
-    "ExampleResearchHeader",
-    "ExampleResearchTitle",
     "ExampleResearchAuthor",
     "ExampleResearchAuthors",
     "ExampleResearchBody",
-    "ExampleResearchSectionTitle",
+    "ExampleResearchHeader",
     "ExampleResearchSectionText",
+    "ExampleResearchSectionTitle",
+    "ExampleResearchTitle",
 )
 
 

@@ -6,13 +6,13 @@ from .common import Color
 from .css import _BaseCss
 
 __all__ = (
-    "FontWeight",
+    "Font",
+    "FontFamily",
     "FontStyle",
+    "FontWeight",
+    "Text",
     "TextDecoration",
     "TextTransform",
-    "FontFamily",
-    "Font",
-    "Text",
 )
 
 

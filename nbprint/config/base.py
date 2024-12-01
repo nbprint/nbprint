@@ -16,8 +16,8 @@ if TYPE_CHECKING:
     from nbprint.config import Configuration
 
 __all__ = (
-    "Role",
     "BaseModel",
+    "Role",
     "_append_or_extend",
 )
 

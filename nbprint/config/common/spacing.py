@@ -4,8 +4,8 @@ from .common import _DirectionalSize
 from .css import _BaseCss
 
 __all__ = (
-    "Padding",
     "Margin",
+    "Padding",
     "Spacing",
 )
 

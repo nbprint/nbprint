@@ -6,10 +6,10 @@ from .common import Color
 from .css import _BaseCss
 
 __all__ = (
+    "Border",
     "BorderLineStyle",
     "BorderLineWidth",
     "BorderStyle",
-    "Border",
 )
 
 
