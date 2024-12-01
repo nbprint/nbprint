@@ -7,8 +7,8 @@ from pydantic import FilePath
 from nbprint import ContentCover, ContentImage
 
 __all__ = (
-    "ExampleNBPrintLogo",
     "ExampleCoverPageContent",
+    "ExampleNBPrintLogo",
 )
 
 

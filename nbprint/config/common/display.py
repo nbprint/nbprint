@@ -5,13 +5,13 @@ from strenum import StrEnum
 from .css import _BaseCss
 
 __all__ = (
+    "Display",
+    "DisplayKind",
     "FlexDirection",
-    "VerticalAlignment",
+    "FlexOptions",
     "HorizontalAlignment",
     "Justify",
-    "DisplayKind",
-    "FlexOptions",
-    "Display",
+    "VerticalAlignment",
 )
 
 

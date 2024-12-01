@@ -4,6 +4,9 @@ from nbprint import Content
 
 __all__ = (
     "ExampleFinanceAuthor",
+    "ExampleFinanceDisclosures",
+    "ExampleFinanceFirstPageDisclosures",
+    "ExampleFinanceStockBody",
     "ExampleFinanceStockEarningsTable",
     "ExampleFinanceStockHeadline",
     "ExampleFinanceStockPTUpdate",
@@ -11,9 +14,6 @@ __all__ = (
     "ExampleFinanceStockSubHeadline",
     "ExampleFinanceStockWhatsChanged",
     "ExampleFinanceTitle",
-    "ExampleFinanceStockBody",
-    "ExampleFinanceFirstPageDisclosures",
-    "ExampleFinanceDisclosures",
 )
 
 

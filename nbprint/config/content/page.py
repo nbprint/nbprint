@@ -6,10 +6,10 @@ from nbprint.config.base import Role
 from .base import Content
 
 __all__ = (
-    "ContentLayout",
-    "ContentInlineLayout",
     "ContentFlexColumnLayout",
     "ContentFlexRowLayout",
+    "ContentInlineLayout",
+    "ContentLayout",
 )
 
 

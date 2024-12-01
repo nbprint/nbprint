@@ -1,8 +1,8 @@
 from strenum import StrEnum
 
 __all__ = (
-    "PageSize",
     "PageOrientation",
+    "PageSize",
 )
 
 
