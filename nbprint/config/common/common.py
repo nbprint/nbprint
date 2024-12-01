@@ -7,11 +7,11 @@ from .css import _BaseCss
 
 __all__ = (
     "Color",  # reexport
-    "Unset",
-    "Element",
     "Direction",
+    "Element",
     "PseudoClass",
     "PseudoElement",
+    "Unset",
 )
 
 Unset = Literal["unset"]

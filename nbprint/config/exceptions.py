@@ -1,11 +1,11 @@
 __all__ = (
-    "NBPrintGenerationError",
-    "NBPrintConfigurationError",
-    "NBPrintNullCellError",
     "NBPrintBadScopeError",
-    "NBPrintPathOrModelMalformedError",
-    "NBPrintGenerationError",
     "NBPrintConfigurationError",
+    "NBPrintConfigurationError",
+    "NBPrintGenerationError",
+    "NBPrintGenerationError",
+    "NBPrintNullCellError",
+    "NBPrintPathOrModelMalformedError",
 )
 
 

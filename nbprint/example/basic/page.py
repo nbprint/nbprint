@@ -8,8 +8,8 @@ from nbprint import Configuration, ContentImage, Page, PageOrientation, PageRegi
 from .cover import ExampleNBPrintLogo
 
 __all__ = (
-    "ExampleLogoInFooter",
     "ExampleBookIcon",
+    "ExampleLogoInFooter",
     "ExampleReportPage",
 )
 
