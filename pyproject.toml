@@ -212,6 +212,7 @@ ignore = [
     "UP006",
     "UP035",
 
+    "A005", # module shadowing standard library
     "ANN002", # missing-type-args - Missing type annotation for *{name}
     "ANN003", # missing-type-kwargs - Missing type annotation for **{name}
     "B008",  # function-call-in-default-argument

@@ -182,7 +182,7 @@ class BaseModel(FlowBaseModel):
             cell.metadata.collapsed = True
         cell.metadata.nbprint.css = self.css or ""
         cell.metadata.nbprint.esm = self.esm or ""
-        cell.metadata.nbprint.class_selector = f'{cell.metadata.nbprint.type_.replace(".", "-")}'
+        cell.metadata.nbprint.class_selector = f"{cell.metadata.nbprint.type_.replace('.', '-')}"
         cell.metadata.nbprint.element_selector = f"{cell.metadata.nbprint.class_selector}-{self._id}"
         cell.metadata.nbprint["class"] = f"nbprint {cell.metadata.nbprint.class_selector} {cell.metadata.nbprint.element_selector} " + (
             " ".join(self.classname) if isinstance(self.classname, list) else self.classname or ""
