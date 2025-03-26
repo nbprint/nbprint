@@ -181,7 +181,7 @@ class Configuration(BaseModel):
 
             with initialize_config_dir(version_base=None, config_dir=folder, job_name=name):
                 cfg = compose(config_name=file, overrides=[f"+name={name}"])
-                config = instantiate(cfg)
+                config = instantiate(cfg, _convert_="all")
                 if not isinstance(config, Configuration):
                     config = Configuration(**config)
                 return config
@@ -189,9 +189,9 @@ class Configuration(BaseModel):
 
     def run(self, dry_run: bool = False) -> Optional[Path]:
         gen = self.generate()
+        ret = None
         if self.debug:
             pprint(gen)
-            ret = None
         if not dry_run:
             ret = self.outputs.run(self, gen)
 
