@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, Optional
 
 import pandas as pd
 
@@ -10,3 +10,4 @@ __all__ = ("ExampleContext",)
 class ExampleContext(Context):
     string: str = ""
     df: Optional[pd.DataFrame] = None
+    params: Dict[str, Any] = {}
