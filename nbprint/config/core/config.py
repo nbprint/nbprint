@@ -91,6 +91,7 @@ class Configuration(BaseModel):
     @model_validator(mode="after")
     def _attach_params_to_context(self) -> Self:
         self.context.parameters = self.parameters
+        return self
 
     def generate(self, **_) -> list[NotebookNode]:
         nb = new_notebook()
