@@ -9,9 +9,15 @@
     --screen-pages-spacing: 5mm;
 }
 
+/* non paged-js mode */
+body > main {
+    background-color: white;
+    padding: 5px;
+    margin: 0px;
+}
+
 @media screen, pagedjs-ignore {
     body {
-        background-color: var(--background) !important;
         margin: var(--screen-pages-spacing) auto 0 auto;
     }
     .pagedjs_pages {
