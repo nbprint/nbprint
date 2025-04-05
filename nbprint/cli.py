@@ -39,7 +39,7 @@ def run_hydra(
         hydra_config = compose(config_name=str(path.name), overrides=overrides)
 
         # bridge hydra and non-hydra
-        extras = {"name": path.name.replace(".yaml", "").replace(".yml", "")} if "name" not in hydra_config else {}
+        extras = {"name": path.name.replace(".yaml", "")} if "name" not in hydra_config else {}
         config = instantiate(hydra_config, **extras)
         if not isinstance(config, Configuration):
             config = Configuration(**config)
