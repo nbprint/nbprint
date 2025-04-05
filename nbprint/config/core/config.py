@@ -13,7 +13,7 @@ from typing_extensions import Self
 from nbprint import __version__
 from nbprint.config.base import BaseModel, Role, _append_or_extend
 from nbprint.config.content import Content
-from nbprint.config.exceptions import NBPrintPathOrModelMalformedError
+from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
 from nbprint.config.page import Page
 
 from .context import Context
@@ -174,7 +174,10 @@ class Configuration(BaseModel):
         if isinstance(path_or_model, Configuration):
             return path_or_model
 
-        if isinstance(path_or_model, str) and path_or_model.endswith((".yml", ".yaml")):
+        if isinstance(path_or_model, str) and path_or_model.endswith(".yml"):
+            raise NBPrintPathIsYamlError(path_or_model)
+
+        if isinstance(path_or_model, str) and path_or_model.endswith(".yaml"):
             path_or_model = Path(path_or_model).resolve()
 
         if isinstance(path_or_model, Path):
