@@ -11,7 +11,7 @@ def _example_folder_does_not_exist():
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
-@pytest.mark.parametrize("template", ("basic", "inline", "landscape", "finance", "research", "plotly"))
+@pytest.mark.parametrize("template", ("basic", "inline", "landscape", "finance", "research", "plotly", "customsize", "nonpagedjs"))
 def test_e2e(template):
     config = Configuration.load(f"examples/{template}.yaml", template)
     config.run()
