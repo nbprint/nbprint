@@ -5,6 +5,7 @@ __all__ = (
     "NBPrintGenerationError",
     "NBPrintGenerationError",
     "NBPrintNullCellError",
+    "NBPrintPathIsYamlError",
     "NBPrintPathOrModelMalformedError",
 )
 
@@ -28,3 +29,8 @@ class NBPrintBadScopeError(NBPrintConfigurationError):
 class NBPrintPathOrModelMalformedError(NBPrintConfigurationError):
     def __init__(self, path_or_model, *args, **kwargs) -> None:
         super().__init__(f"Path or model malformed: {path_or_model} {type(path_or_model)}", *args, **kwargs)
+
+
+class NBPrintPathIsYamlError(NBPrintConfigurationError):
+    def __init__(self, path_or_model, *args, **kwargs) -> None:
+        super().__init__(f"Config ends in .yml, must be .yaml: {path_or_model}", *args, **kwargs)
