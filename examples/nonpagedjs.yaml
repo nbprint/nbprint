@@ -1,0 +1,16 @@
+---
+debug: false
+pagedjs: false
+_target_: nbprint.Configuration
+outputs:
+  _target_: nbprint.NBConvertOutputs
+  path_root: ./examples/output
+  target: "html"
+
+content:
+  - _target_: nbprint.ContentCode
+    content: |
+      from superstore import superstore
+      df = superstore()
+      for i in range(100):
+        print(df)

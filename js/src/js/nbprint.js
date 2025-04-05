@@ -57,8 +57,15 @@ export class NBPrint {
     document.dispatchEvent(myEvent);
   }
 
+  debug() {
+    return this._configuration.debug;
+  }
+
   buildPagedJS() {
-    return !this._configuration.debug;
+    return (
+      this._configuration.pagedjs !== false &&
+      this._configuration.debug !== true
+    );
   }
 }
 

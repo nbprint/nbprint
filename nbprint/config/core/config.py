@@ -39,6 +39,7 @@ class Configuration(BaseModel):
     tags: list[str] = Field(default=["nbprint:config"])
     role: Role = Role.CONFIGURATION
     ignore: bool = True
+    pagedjs: bool = True
     debug: bool = True
 
     # internals
@@ -148,6 +149,7 @@ class Configuration(BaseModel):
 
         # add extras
         cell.metadata.nbprint.debug = self.debug
+        cell.metadata.nbprint.pagedjs = self.pagedjs
 
         # add resources
         # TODO: do this or no?

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Optional, Tuple, Union
 
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
@@ -68,7 +68,7 @@ class Page(BaseModel):
     right_top: Optional[PageRegion] = None
     right_bottom: Optional[PageRegion] = None
 
-    size: Optional[PageSize] = Field(default=PageSize.letter)
+    size: Optional[Union[PageSize, Tuple[float, float]]] = Field(default=PageSize.letter)
     orientation: Optional[PageOrientation] = Field(default=PageOrientation.portrait)
 
     pages: Optional[list["Page"]] = Field(default_factory=list)
@@ -145,12 +145,20 @@ class Page(BaseModel):
 
     def render(self, **_) -> None:
         if "@page { size:" not in self.css:
-            self.css = (
-                self.css
-                + f"""
-@page {{ size: {self.size.value} {self.orientation.value}; }}
-            """
-            )
+            if isinstance(self.size, tuple):
+                self.css = (
+                    self.css
+                    + f"""
+    @page {{ size: {self.size[0]}in {self.size[1]}in; }}
+                """
+                )
+            else:
+                self.css = (
+                    self.css
+                    + f"""
+    @page {{ size: {self.size.value} {self.orientation.value}; }}
+                """
+                )
 
     def generate(
         self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str = "page", **_
