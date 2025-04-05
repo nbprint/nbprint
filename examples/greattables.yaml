@@ -1,0 +1,22 @@
+---
+debug: false
+outputs:
+  _target_:  nbprint.NBConvertOutputs
+  path_root: ./examples/output
+  target: "html"
+
+content:
+  - _target_:  nbprint.ContentMarkdown
+    content: |
+      # Great Tables Test
+
+  - _target_: nbprint.ContentCode
+    content: |
+      from superstore import superstore
+      from great_tables import GT
+
+      (
+        GT(superstore())
+        .tab_header(title="Superstore", subtitle="Example Data")
+        .opt_align_table_header(align="left")
+      )
