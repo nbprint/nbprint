@@ -8,14 +8,12 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nbprint"
-description = "A framework for customizing NBConvert templates and building reports"
 version = "0.5.1"
+authors = [{name = "the nbprint authors", email = "t.paine154@gmail.com"}]
+description = "A framework for customizing NBConvert templates and building reports"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.9"
-authors = [
-    { name = "Tim Paine", email = "3105306+timkpaine@users.noreply.github.com" },
-]
 keywords = [
     "Jupyter",
     "JupyterLab",
@@ -30,11 +28,14 @@ classifiers = [
     "Framework :: Jupyter",
     "Framework :: Jupyter :: JupyterLab",
     "Programming Language :: Python",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "License :: OSI Approved :: Apache Software License",
 ]
 
@@ -56,11 +57,13 @@ dependencies = [
 
 [project.optional-dependencies]
 develop = [
+    "build",
     "bump-my-version",
+    "check-manifest",
     "hatchling>=1.20",
     "hatch-jupyter-builder",
     "jupyterlab>=4,<5",
-    "ruff>=0.5.0,<0.12",
+    "ruff>=0.9.0,<0.12",
     "twine",
     "wheel",
     # test
@@ -109,6 +112,30 @@ filename = "js/package.json"
 search = '"version": "{current_version}"'
 replace = '"version": "{new_version}"'
 
+[tool.check-manifest]
+ignore = [
+    ".copier-answers.yml",
+    "js/pnpm-lock.yaml",
+    "Makefile",
+    "nbprint/extension/**/*",
+    "docs/**/*",
+    "js/dist/**/*",
+]
+
+[tool.coverage.run]
+branch = true
+omit = [
+    "nbprint/tests/integration/",
+]
+[tool.coverage.report]
+exclude_also = [
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "@(abc\\.)?abstractmethod",
+]
+ignore_errors = true
+fail_under = 50
+
 [tool.hatch.build]
 artifacts = [
     "nbprint/templates",
@@ -122,6 +149,7 @@ src = "/"
 packages = [
     "nbprint",
     "hydra_plugins",
+    "js",
 ]
 include = [
     "LICENSE",
@@ -132,6 +160,7 @@ exclude = [
     "/.gitignore",
     "/dist",
     "/examples",
+    "/js/dist",
     "/js/node_modules",
 ]
 
@@ -174,8 +203,9 @@ build_cmd = "build"
 npm = "pnpm"
 
 [tool.pytest.ini_options]
+addopts = ["-vvv", "--junitxml=junit.xml"]
 asyncio_mode = "strict"
-testpaths = "nbprint/tests"
+testpaths = "{{module}}/tests"
 
 [tool.ruff]
 line-length = 150
