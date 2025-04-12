@@ -1,80 +1,150 @@
-###############
-# Build Tools #
-###############
-build:  ## build python/javascript
-	python -m build .
+#########
+# BUILD #
+#########
+.PHONY: develop-py develop-js develop
+develop-py:
+	uv pip install -e .[develop]
 
-develop:  ## install to site-packages in editable mode
-	python -m pip install --upgrade build pip setuptools twine wheel
-	cd js; pnpm install && npx playwright install
-	python -m pip install -e .[develop]
+develop-js:
+	cd js; pnpm install
+	cd js; pnpm exec playwright install
 
-install:  ## install to site-packages
-	python -m pip install .
+develop: develop-js develop-py  ## setup project for development
 
-###########
-# Testing #
-###########
-testpy: ## clean and Make unit tests
-	python -m pytest -v nbprint/tests --junitxml=junit.xml --cov=nbprint --cov-report=xml:.coverage.xml --cov-branch --cov-fail-under=0 --cov-report term-missing
+.PHONY: build-py build-js build
+build-py:
+	python -m build -w -n
 
-testjs: ## clean and Make js tests
-	cd js; pnpm test
+build-js:
+	cd js; pnpm build
 
-test: tests
-tests: testpy testjs ## run the tests
+build: build-js build-py  ## build the project
 
-###########
-# Linting #
-###########
-lintpy:  ## lint python with ruff and isort
-	python -m ruff check nbprint setup.py
-	python -m ruff format --check nbprint setup.py
+.PHONY: install
+install:  ## install python library
+	uv pip install .
 
-lintjs:  ## lint javascript with eslint
+#########
+# LINTS #
+#########
+.PHONY: lint-py lint-js lint lints
+lint-py:  ## run python linter with ruff
+	python -m ruff check nbprint
+	python -m ruff format --check nbprint
+
+lint-js:  ## run js linter
 	cd js; pnpm lint
 
-lint: lintpy lintjs  ## run linters
+lint: lint-js lint-py  ## run project linters
 
-fixpy:  ## autoformat python with ruff and isort
-	python -m ruff check --fix nbprint setup.py
-	python -m ruff format nbprint setup.py
+# alias
+lints: lint
 
-fixjs:  ## autoformat javascript with eslint
+.PHONY: fix-py fix-js fix format
+fix-py:  ## fix python formatting with ruff
+	python -m ruff check --fix nbprint
+	python -m ruff format nbprint
+
+fix-js:  ## fix js formatting
 	cd js; pnpm fix
 
-fix: fixpy fixjs  ## run black/tslint fix
+fix: fix-js fix-py  ## run project autoformatters
+
+# alias
 format: fix
 
 ################
-# Distribution #
+# Other Checks #
 ################
-dist: clean build  ## create dists
+.PHONY: check-manifest checks check
+
+check-manifest:  ## check python sdist manifest with check-manifest
+	check-manifest -v
+
+checks: check-manifest
+
+# alias
+check: checks
+
+#########
+# TESTS #
+#########
+.PHONY: test-py tests-py coverage-py
+test-py:  ## run python tests
+	python -m pytest -v nbprint/tests
+
+# alias
+tests-py: test-py
+
+coverage-py:  ## run python tests and collect test coverage
+	python -m pytest -v nbprint/tests --cov=nbprint --cov-report term-missing --cov-report xml
+
+.PHONY: test-js tests-js coverage-js
+test-js:  ## run js tests
+	cd js; pnpm test
+
+# alias
+tests-js: test-js
+
+coverage-js: test-js  ## run js tests and collect test coverage
+
+.PHONY: test coverage tests
+test: test-py test-js  ## run all tests
+coverage: coverage-py coverage-js  ## run all tests and collect test coverage
+
+# alias
+tests: test
+
+###########
+# VERSION #
+###########
+.PHONY: show-version patch minor major
+
+show-version:  ## show current library version
+	@bump-my-version show current_version
+
+patch:  ## bump a patch version
+	@bump-my-version bump patch
+
+minor:  ## bump a minor version
+	@bump-my-version bump minor
+
+major:  ## bump a major version
+	@bump-my-version bump major
+
+########
+# DIST #
+########
+.PHONY: dist dist-py dist-js dist-check publish
+
+dist-py:  # build python dists
+	python -m build -w -s
+
+dist-js:  # build js dists
+	cd js; pnpm pack
+
+dist-check:  ## run python dist checker with twine
 	python -m twine check dist/*
 
-publishpy:  ## dist to pypi
-	python -m twine upload dist/* --skip-existing
+dist: clean build dist-js dist-py dist-check  ## build all dists
 
-publishjs:  ## dist to npm
-	cd js; npm publish || echo "can't publish - might already exist"
+publish: dist  # publish python assets
 
-publish: dist publishpy publishjs  ## dist to pypi and npm
+#########
+# CLEAN #
+#########
+.PHONY: deep-clean clean
 
-############
-# Cleaning #
-############
+deep-clean: ## clean everything from the repository
+	git clean -fdx
+
 clean: ## clean the repository
-	find . -name "__pycache__" | xargs  rm -rf
-	find . -name "*.pyc" | xargs rm -rf
-	find . -name ".ipynb_checkpoints" | xargs  rm -rf
-	rm -rf .coverage coverage *.xml build dist *.egg-info lib node_modules .pytest_cache *.egg-info
-	rm -rf nbprint/extension
-	cd js && pnpm clean
-	git clean -fd
+	rm -rf .coverage coverage cover htmlcov logs build dist *.egg-info
 
-###########
-# Helpers #
-###########
+############################################################################################
+
+.PHONY: help
+
 # Thanks to Francoise at marmelab.com for this
 .DEFAULT_GOAL := help
 help:
@@ -82,5 +152,3 @@ help:
 
 print-%:
 	@echo '$*=$($*)'
-
-.PHONY: testjs testpy tests test lintpy lintjs lint fixpy fixjs fix format build develop install labextension dist publishpy publishjs publish docs clean
