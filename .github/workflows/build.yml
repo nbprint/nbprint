@@ -40,16 +40,9 @@ jobs:
       with:
         version: ${{ matrix.python-version }}
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+    - uses: actions-ext/node/setup@main
       with:
-        node-version: ${{ matrix.node-version }}
-
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        version: 9
-        package_json_file: js/package.json
+        version: 20.x
 
     - name: Install pandoc via brew
       run: brew install pandoc
