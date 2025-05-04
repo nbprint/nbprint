@@ -204,8 +204,12 @@ npm = "pnpm"
 
 [tool.pytest.ini_options]
 addopts = ["-vvv", "--junitxml=junit.xml"]
+<<<<<<< before updating
 asyncio_mode = "strict"
 testpaths = "{{module}}/tests"
+=======
+testpaths = "nbprint/tests"
+>>>>>>> after updating
 
 [tool.ruff]
 line-length = 150
