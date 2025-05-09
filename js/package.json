@@ -1,10 +1,6 @@
 {
   "name": "nbprint",
-<<<<<<< before updating
   "version": "0.5.1",
-=======
-  "version": "0.1.0",
->>>>>>> after updating
   "description": "A framework for customizing NBConvert templates and building reports",
   "repository": "git@github.com:nbprint/nbprint.git",
   "author": "Tim Paine <3105306+timkpaine@users.noreply.github.com>",
@@ -33,27 +29,13 @@
     "pagedjs": "^0.4.3"
   },
   "devDependencies": {
-<<<<<<< before updating
     "@finos/perspective-esbuild-plugin": "^3.1.4",
-    "@playwright/test": "^1.44.1",
-    "@prospective.co/procss": "^0.1.15",
-    "cpy": "^11.0.1",
-    "esbuild": "^0.25.0",
-    "esbuild-plugin-less": "^1.3.4",
-    "http-server": "^14.1.1",
-    "prettier": "^3.3.0"
-=======
-    "@finos/perspective-esbuild-plugin": "^3.1.3",
     "@playwright/test": "^1.47.0",
     "@prospective.co/procss": "^0.1.16",
-    "cpy": "^11.1.0",
+    "cpy": "^11.0.1",
     "esbuild": "^0.25.3",
     "esbuild-plugin-less": "^1.3.21",
     "http-server": "^14.1.1",
-    "nodemon": "^3.1.10",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^3.3.3",
-    "typescript": "^5.6.2"
->>>>>>> after updating
+    "prettier": "^3.3.3"
   }
 }
