@@ -107,8 +107,20 @@ ENV/
 .AppleDouble
 .LSOverride
 
+<<<<<<< before updating
 # Thumbnails
 ._*
+=======
+# Documentation
+docs/_build/
+/site
+docs/api
+docs/index.md
+docs/html
+docs/jupyter_execute
+index.md
+_template/labextension
+>>>>>>> after updating
 
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
