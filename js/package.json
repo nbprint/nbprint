@@ -29,16 +29,6 @@
     "pagedjs": "^0.4.3"
   },
   "devDependencies": {
-<<<<<<< before updating
-    "@finos/perspective-esbuild-plugin": "^3.1.4",
-    "@playwright/test": "^1.47.0",
-    "@prospective.co/procss": "^0.1.16",
-    "cpy": "^11.0.1",
-    "esbuild": "^0.25.3",
-    "esbuild-plugin-less": "^1.3.21",
-    "http-server": "^14.1.1",
-    "prettier": "^3.3.3"
-=======
     "@finos/perspective-esbuild-plugin": "^3.2.1",
     "@playwright/test": "^1.52.0",
     "@prospective.co/procss": "^0.1.16",
@@ -46,10 +36,6 @@
     "esbuild": "^0.25.4",
     "esbuild-plugin-less": "^1.3.22",
     "http-server": "^14.1.1",
-    "nodemon": "^3.1.10",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^3.5.3",
-    "typescript": "^5.8.3"
->>>>>>> after updating
+    "prettier": "^3.5.3"
   }
 }
