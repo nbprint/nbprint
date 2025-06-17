@@ -7,11 +7,10 @@ on:
     tags:
       - v*
     paths-ignore:
+      - docs/
       - LICENSE
       - README.md
   pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 concurrency:
@@ -19,7 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
   checks: write
   pull-requests: write
 
@@ -29,9 +28,10 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.9"]
-        node-version: [20.x]
+        # os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
+        python-version: [3.9, 3.11]
+        node-version: [18.x]
 
     steps:
     - uses: actions/checkout@v4
@@ -44,23 +44,26 @@ jobs:
       with:
         version: 20.x
 
+    - name: Install pandoc via brew
+      run: brew install pandoc
+      if: ${{ matrix.os == 'macos-latest' }}
+
+    - name: Install pandoc via apt
+      run: sudo apt install pandoc
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+
     - name: Install dependencies
       run: make develop
-
-    - name: Lint
-      run: make lint
-      if: matrix.os == 'ubuntu-latest'
-
-    - name: Checks
-      run: make checks
-      if: matrix.os == 'ubuntu-latest'
 
     - name: Build
       run: make build
 
+    - name: Lint
+      run: make lint
+
     - name: Test
-      run: make coverage
-      if: matrix.os == 'ubuntu-latest'
+      run: make tests
+      if: ${{ matrix.os == 'ubuntu-latest' }}
 
     - name: Upload test results
       uses: actions/upload-artifact@v4
@@ -77,17 +80,36 @@ jobs:
 
     - name: Upload coverage
       uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
 
-    - name: Make dist
+    - name: Upload generated reports
+      uses: actions/upload-artifact@v4
+      id: upload-reports
+      with:
+        name: reports
+        path: 'examples/output/*.html'
+        if-no-files-found: error
+        overwrite: true
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
+
+    - name: Find comment for generated reports
+      uses: peter-evans/find-comment@v3
+      id: find-comment
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-author: 'github-actions[bot]'
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
+
+    - name: Update comment for generated reports
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        comment-id: ${{ steps.find-comment.outputs.comment-id }}
+        edit-mode: replace
+        body: |-
+            | Name     | Link                    |
+            | -------- | ----------------------- |
+            | Test Reports | [download](${{ steps.upload-reports.outputs.artifact-url }}) |
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'nbprint/nbprint'
+
+    - name: Twine check
       run: make dist
-      if: matrix.os == 'ubuntu-latest'
-
-    - uses: actions/upload-artifact@v4
-      with:
-        name: dist-${{matrix.os}}
-        path: dist
-      if: matrix.os == 'ubuntu-latest'
-
-
