@@ -8,17 +8,11 @@
 
 A framework for building print media with [nbconvert](https://nbconvert.readthedocs.io).
 
-<<<<<<< before updating
-[![Build Status](https://github.com/nbprint/nbprint/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/nbprint/nbprint/actions?query=workflow%3A%22Build+Status%22)
+[![Build Status](https://github.com/nbprint/nbprint/actions/workflows/build.yaml/badge.svg?branch=main&event=push)](https://github.com/nbprint/nbprint/actions/workflows/build.yaml)
 [![Coverage](https://codecov.io/gh/nbprint/nbprint/branch/main/graph/badge.svg?token=ag2j2TV2wE)](https://app.codecov.io/gh/nbprint/nbprint/tree/main)
 [![GitHub issues](https://img.shields.io/github/issues/nbprint/nbprint.svg)](https://github.com/nbprint/nbprint/issues)
-[![PyPI](https://img.shields.io/pypi/l/nbprint.svg)](https://pypi.python.org/pypi/nbprint)
-=======
-[![Build Status](https://github.com/nbprint/nbprint/actions/workflows/build.yaml/badge.svg?branch=main&event=push)](https://github.com/nbprint/nbprint/actions/workflows/build.yaml)
-[![codecov](https://codecov.io/gh/nbprint/nbprint/branch/main/graph/badge.svg)](https://codecov.io/gh/nbprint/nbprint)
 [![License](https://img.shields.io/github/license/nbprint/nbprint)](https://github.com/nbprint/nbprint)
->>>>>>> after updating
-[![PyPI](https://img.shields.io/pypi/v/nbprint.svg)](https://pypi.python.org/pypi/nbprint)
+[![PyPI](https://img.shields.io/pypi/l/nbprint.svg)](https://pypi.python.org/pypi/nbprint)
 
 ## Installation
 Install with `pip`:
