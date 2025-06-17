@@ -3,9 +3,6 @@ docs/* linguist-documentation
 *.ipynb linguist-documentation
 Makefile linguist-documentation
 
-<<<<<<< before updating
-* text=auto eol=lf
-=======
 *.css text=auto eol=lf
 *.html text=auto eol=lf
 *.js text=auto eol=lf
@@ -16,4 +13,3 @@ Makefile linguist-documentation
 *.toml text=auto eol=lf
 *.ts text=auto eol=lf
 *.yaml text=auto eol=lf
->>>>>>> after updating
