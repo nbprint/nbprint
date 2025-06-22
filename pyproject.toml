@@ -165,6 +165,7 @@ exclude = [
 ]
 
 [tool.hatch.build.targets.wheel]
+<<<<<<< before updating
 packages = [
     "nbprint",
     "hydra_plugins",
@@ -182,6 +183,12 @@ exclude = [
 "nbprint/templates/nbprint" = "share/jupyter/nbconvert/templates/nbprint"
 "nbprint/extension" = "share/jupyter/labextensions/nbprint"
 "nbprint/voila" = "share/jupyter/voila/templates/nbprint_voila"
+=======
+packages = ["nbprint"]
+exclude = [
+    "/js"
+]
+>>>>>>> after updating
 
 [tool.hatch.build.hooks.jupyter-builder]
 build-function = "hatch_jupyter_builder.npm_builder"
