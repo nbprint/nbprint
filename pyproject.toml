@@ -44,6 +44,7 @@ dependencies = [
     "dominate",
     "hydra-core",
     "ipywidgets",
+    "lerna",
     "nbconvert[webpdf]>=7.11.0",
     "nbformat",
     "notebook",
@@ -84,6 +85,9 @@ test = [
     "pytest",
     "pytest-cov",
 ]
+
+[project.entry-points."hydra.lernaplugins"]
+nbprint = "nbprint.plugin"
 
 [project.scripts]
 nbprint = "nbprint.cli:main"
@@ -148,7 +152,6 @@ src = "/"
 [tool.hatch.build.targets.sdist]
 packages = [
     "nbprint",
-    "hydra_plugins",
     "js",
 ]
 include = [
@@ -167,7 +170,6 @@ exclude = [
 [tool.hatch.build.targets.wheel]
 packages = [
     "nbprint",
-    "hydra_plugins",
 ]
 exclude = [
     "/.github",
