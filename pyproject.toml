@@ -86,6 +86,9 @@ test = [
     "pytest-cov",
 ]
 
+[project.entry-points."hydra.lernaplugins"]
+nbprint = "nbprint.plugin"
+
 [project.scripts]
 nbprint = "nbprint.cli:main"
 
