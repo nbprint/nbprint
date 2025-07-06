@@ -275,6 +275,7 @@ section-order = [
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401", "F403"]
+<<<<<<< before updating
 "nbprint/tests/*" = [
     "ANN",
     "D",
@@ -289,3 +290,5 @@ section-order = [
     "ERA",
     "S101",
 ]
+=======
+>>>>>>> after updating

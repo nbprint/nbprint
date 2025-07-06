@@ -112,8 +112,10 @@ ENV/
 ._*
 =======
 # Documentation
-docs/_build/
 /site
+index.md
+docs/_build/
+docs/src/_build/
 docs/api
 docs/index.md
 docs/html
