@@ -25,7 +25,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.5.2",
+    "@fortawesome/fontawesome-free": "^7.0.0",
     "pagedjs": "^0.4.3"
   },
   "devDependencies": {
