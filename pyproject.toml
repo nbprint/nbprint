@@ -1,10 +1,6 @@
 [build-system]
-requires = [
-    "hatchling>=1.20",
-    "hatch-jupyter-builder",
-    "jupyterlab>=4,<5",
-]
-build-backend = "hatchling.build"
+requires = ["hatchling", "hatch-js"]
+build-backend="hatchling.build"
 
 [project]
 name = "nbprint"
@@ -61,10 +57,12 @@ develop = [
     "build",
     "bump-my-version",
     "check-manifest",
-    "hatchling>=1.20",
-    "hatch-jupyter-builder",
-    "jupyterlab>=4,<5",
-    "ruff>=0.9.0,<0.13",
+    "codespell>=2.4,<2.5",
+    "hatch-js",
+    "hatchling",
+    "mdformat>=0.7.22,<0.8",
+    "mdformat-tables>=1",
+    "ruff",
     "twine",
     "wheel",
     # test
@@ -100,6 +98,7 @@ Homepage = "https://github.com/nbprint/nbprint"
 current_version = "0.5.1"
 commit = true
 tag = false
+commit_args = "-s"
 
 [[tool.bumpversion.files]]
 filename = "nbprint/__init__.py"
@@ -121,6 +120,7 @@ ignore = [
     ".copier-answers.yaml",
     "js/pnpm-lock.yaml",
     "Makefile",
+    ".vscode/*",
     "nbprint/extension/**/*",
     "docs/**/*",
     "js/dist/**/*",
@@ -185,24 +185,15 @@ exclude = [
 "nbprint/extension" = "share/jupyter/labextensions/nbprint"
 "nbprint/voila" = "share/jupyter/voila/templates/nbprint_voila"
 
-[tool.hatch.build.hooks.jupyter-builder]
-build-function = "hatch_jupyter_builder.npm_builder"
-ensured-targets = [
-    "nbprint/templates/nbprint/static/nbprint.css",
-    "nbprint/extension/index.js",
-]
-skip-if-exists = [
-    "nbprint/templates/nbprint/static/nbprint.css",
-    "nbprint/extension/index.js",
-]
-dependencies = [
-    "hatch-jupyter-builder>=0.5.0",
-]
-
-[tool.hatch.build.hooks.jupyter-builder.build-kwargs]
+[tool.hatch.build.hooks.hatch-js]
 path = "js"
+install_cmd = "install"
 build_cmd = "build"
-npm = "pnpm"
+tool = "pnpm"
+targets = [
+    "nbprint/templates/nbprint/static/nbprint.css",
+    "nbprint/extension/index.js",
+]
 
 [tool.pytest.ini_options]
 addopts = ["-vvv", "--junitxml=junit.xml"]
