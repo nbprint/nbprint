@@ -139,10 +139,13 @@ js/dist
 js/lib
 js/node_modules
 js/*.tgz
+nbprint/extension
 
 # Jupyter
 .ipynb_checkpoints
 .autoversion
+!nbprint/extension/nbprint.json
+!nbprint/extension/install.json
 nbprint/nbextension
 nbprint/labextension
 
