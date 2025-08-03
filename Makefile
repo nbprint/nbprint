@@ -5,13 +5,7 @@
 develop-py:
 	uv pip install -e .[develop]
 
-<<<<<<< before updating
-develop-js:
-	cd js; pnpm install
-	cd js; pnpm exec playwright install
-=======
 develop-js: requirements-js
->>>>>>> after updating
 
 develop: develop-js develop-py  ## setup project for development
 
