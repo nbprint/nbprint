@@ -17,7 +17,6 @@ A framework for building print media with [nbconvert](https://nbconvert.readthed
 ## Installation
 Install with `pip`:
 
-<<<<<<< before updating
 ```bash
 pip install nbprint
 ```
@@ -147,7 +146,6 @@ Additionally, this project relies heavily on:
 
 ## License
 This software is licensed under the Apache 2.0 license. See the [LICENSE](LICENSE) file for details.
-=======
+
 > [!NOTE]
 > This library was generated using [copier](https://copier.readthedocs.io/en/stable/) from the [Base Python Project Template repository](https://github.com/python-project-templates/base).
->>>>>>> after updating
