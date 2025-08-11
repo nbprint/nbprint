@@ -168,22 +168,8 @@ exclude = [
 ]
 
 [tool.hatch.build.targets.wheel]
-<<<<<<< before updating
-packages = [
-    "nbprint",
-]
-exclude = [
-    "/.github",
-    "/.gitignore",
-    "/pyproject.toml",
-    "/dist",
-    "/examples",
-    "/js/node_modules"
-]
-=======
 packages = ["nbprint"]
 exclude = ["/js"]
->>>>>>> after updating
 
 [tool.hatch.build.targets.wheel.shared-data]
 "nbprint/templates/nbprint" = "share/jupyter/nbconvert/templates/nbprint"
