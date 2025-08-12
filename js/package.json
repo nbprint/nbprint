@@ -13,8 +13,8 @@
   "scripts": {
     "build": "node build.mjs",
     "clean": "rm -rf dist playwright-report ../nbprint/extension",
-    "lint": "prettier --check \"src/js/*.js\" \"src/css/*.css\" \"src/less/*.less\" \"tests/*.spec.js\" \"*.js\" \"*.json\"",
-    "fix": "prettier --write  \"src/js/*.js\" \"src/css/*.css\" \"src/less/*.less\" \"tests/*.spec.js\" \"*.js\" \"*.json\"",
+    "lint": "prettier --check \"src/**/*.{js,ts,jsx,tsx,less,css}\" \"tests/**/*\" \"*.mjs\" \"*.json\"",
+    "fix": "prettier  --write \"src/**/*.{js,ts,jsx,tsx,less,css}\" \"tests/**/*\" \"*.mjs\" \"*.json\"",
     "preinstall": "npx only-allow pnpm",
     "prepack": "pnpm run build",
     "start:tests": "http-server -p 3000 ",
