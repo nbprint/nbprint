@@ -20,7 +20,6 @@ export function createToc(config) {
         return tocElementDiv.compareDocumentPosition(elem) & 0x04;
       });
 
-
       titleElement.forEach((element) => {
         // add classes to the element
         element.classList.add("title-element");
@@ -29,7 +28,6 @@ export function createToc(config) {
         tocElementNbr++;
         // set ID to avoid dupes
         element.id = "title-element-" + tocElementNbr;
-
       });
     }
 

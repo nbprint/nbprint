@@ -1,10 +1,9 @@
-import {NodeModulesExternal} from "@finos/perspective-esbuild-plugin/external.js";
+import { NodeModulesExternal } from "@finos/perspective-esbuild-plugin/external.js";
 import { build } from "@finos/perspective-esbuild-plugin/build.js";
 import { BuildCss } from "@prospective.co/procss/target/cjs/procss.js";
 import cpy from "cpy";
 import fs from "fs";
-import { createRequire } from 'node:module';
-
+import { createRequire } from "node:module";
 
 const BUILD = [
   {
@@ -37,10 +36,7 @@ const BUILD = [
 
 const require = createRequire(import.meta.url);
 function add(builder, path, path2) {
-  builder.add(
-      path,
-      fs.readFileSync(require.resolve(path2 || path)).toString()
-  );
+  builder.add(path, fs.readFileSync(require.resolve(path2 || path)).toString());
 }
 
 async function compile_css() {
@@ -50,22 +46,15 @@ async function compile_css() {
   const css = builder1.compile().get("index.css");
 
   // write to extension
-  fs.writeFileSync(
-    "../nbprint/extension/index.css",
-    css,
-  );
+  fs.writeFileSync("../nbprint/extension/index.css", css);
   // write to template
-  fs.writeFileSync(
-    "../nbprint/templates/nbprint/static/nbprint.css",
-    css,
-  );
-
+  fs.writeFileSync("../nbprint/templates/nbprint/static/nbprint.css", css);
 }
 
 async function cp_to_paths(path) {
-  await cpy(path, "../nbprint/extension/", {flat: true});
-  await cpy(path, "../nbprint/templates/nbprint/static/", {flat: true});
-  await cpy(path, "../nbprint/voila/static/"), {flat: true};
+  await cpy(path, "../nbprint/extension/", { flat: true });
+  await cpy(path, "../nbprint/templates/nbprint/static/", { flat: true });
+  (await cpy(path, "../nbprint/voila/static/"), { flat: true });
 }
 
 async function build_all() {
@@ -81,7 +70,9 @@ async function build_all() {
   /* Compile and copy css */
   await compile_css();
   await cp_to_paths("./src/css/*");
-  await cp_to_paths("node_modules/\@fortawesome/fontawesome-free/css/fontawesome.min.css");
+  await cp_to_paths(
+    "node_modules/\@fortawesome/fontawesome-free/css/fontawesome.min.css",
+  );
 }
 
 build_all();
