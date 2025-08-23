@@ -21,6 +21,7 @@ keywords = [
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: Apache Software License",
     "Framework :: Jupyter",
     "Framework :: Jupyter :: JupyterLab",
     "Programming Language :: Python",
@@ -32,11 +33,7 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-<<<<<<< before updating
-    "License :: OSI Approved :: Apache Software License",
-=======
     "Programming Language :: Python :: 3.14",
->>>>>>> after updating
 ]
 
 dependencies = [
