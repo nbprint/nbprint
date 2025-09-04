@@ -189,7 +189,7 @@ class Configuration(BaseModel):
                 cfg = compose(config_name=file, overrides=[f"+name={name}"])
                 config = instantiate(cfg, _convert_="all")
                 if not isinstance(config, Configuration):
-                    config = Configuration(**config)
+                    config = Configuration.model_validate(config)
                 return config
         raise NBPrintPathOrModelMalformedError(path_or_model)
 
