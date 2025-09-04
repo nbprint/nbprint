@@ -55,6 +55,9 @@ jobs:
     - name: Install dependencies
       run: make develop
 
+    - name: Install chromium
+      run: playwright install chromium
+
     - name: Build
       run: make build
 
@@ -81,12 +84,22 @@ jobs:
     - name: Upload coverage
       uses: codecov/codecov-action@v5
 
-    - name: Upload generated reports
+    - name: Upload generated reports (html)
       uses: actions/upload-artifact@v4
-      id: upload-reports
+      id: upload-reports-html
       with:
         name: reports
         path: 'examples/output/*.html'
+        if-no-files-found: error
+        overwrite: true
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
+
+    - name: Upload generated reports (pdf)
+      uses: actions/upload-artifact@v4
+      id: upload-reports-pdf
+      with:
+        name: reports
+        path: 'examples/output/*.pdf'
         if-no-files-found: error
         overwrite: true
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
@@ -106,9 +119,10 @@ jobs:
         comment-id: ${{ steps.find-comment.outputs.comment-id }}
         edit-mode: replace
         body: |-
-            | Name     | Link                    |
-            | -------- | ----------------------- |
-            | Test Reports | [download](${{ steps.upload-reports.outputs.artifact-url }}) |
+            | Name                | Link                                                              |
+            | :------------------ | :---------------------------------------------------------------- |
+            | Test Reports (HTML) | [download](${{ steps.upload-reports-html.outputs.artifact-url }}) |
+            | Test Reports (PDF)  | [download](${{ steps.upload-reports-pdf.outputs.artifact-url }})  |
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'nbprint/nbprint'
 
     - name: Twine check
