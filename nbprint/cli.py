@@ -42,7 +42,7 @@ def run_hydra(
         extras = {"name": path.name.replace(".yaml", "")} if "name" not in hydra_config else {}
         config = instantiate(hydra_config, **extras)
         if not isinstance(config, Configuration):
-            config = Configuration(**config)
+            config = Configuration.model_validate(config)
 
     # mimic hydra cfg
     if cfg:
