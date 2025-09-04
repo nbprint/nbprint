@@ -13,9 +13,8 @@ parameters:
 context:
   _target_: nbprint.example.ExampleContext
   params:
-    my_list:
-      - "item1"
-      - "item2"
+    key1: item1
+    key2: item2
 
 page:
   _target_: nbprint.example.ExampleReportPage

@@ -21,3 +21,9 @@ def test_e2e(template):
 @pytest.mark.parametrize("parameters", ("string1", "string2"))
 def test_hydra_e2e(parameters):
     run_hydra("examples/hydra.yaml", ["config=inline", "page=report", f"parameters={parameters}"])
+
+
+@pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
+@pytest.mark.parametrize("template", ("basic", "inline", "landscape", "finance", "research", "plotly", "customsize", "nonpagedjs", "greattables"))
+def test_pdf(template):
+    run_hydra(f"examples/{template}.yaml", ["++outputs.target=webpdf"])
