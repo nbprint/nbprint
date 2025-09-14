@@ -146,6 +146,7 @@ nbprint/extension
 # Jupyter
 .ipynb_checkpoints
 .autoversion
+Untitled*.ipynb
 !nbprint/extension/nbprint.json
 !nbprint/extension/install.json
 nbprint/nbextension
