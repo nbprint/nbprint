@@ -41,7 +41,7 @@ dependencies = [
     "dominate",
     "hydra-core",
     "ipywidgets",
-    "lerna",
+    "lerna>=1.1.0",
     "nbconvert[webpdf]>=7.11.0",
     "nbformat",
     "notebook",
@@ -86,7 +86,7 @@ test = [
 ]
 
 [project.entry-points."hydra.lernaplugins"]
-nbprint = "nbprint.plugin"
+nbprint = "pkg:nbprint.config.hydra"
 
 [project.scripts]
 nbprint = "nbprint.cli:main"
