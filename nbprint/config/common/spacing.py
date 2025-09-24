@@ -13,18 +13,14 @@ __all__ = (
 class Padding(_DirectionalSize):
     def __str__(self) -> str:
         return "\n".join(
-            f"padding-{direction}: {getattr(self, direction, '')}px;"
-            for direction in ("right", "left", "top", "bottom")
-            if getattr(self, direction, "")
+            f"padding-{direction}: {getattr(self, direction, '')}px;" for direction in ("right", "left", "top", "bottom") if getattr(self, direction, "")
         ).strip()
 
 
 class Margin(_DirectionalSize):
     def __str__(self) -> str:
         return "\n".join(
-            f"margin-{direction}: {getattr(self, direction, '')}px;"
-            for direction in ("right", "left", "top", "bottom")
-            if getattr(self, direction, "")
+            f"margin-{direction}: {getattr(self, direction, '')}px;" for direction in ("right", "left", "top", "bottom") if getattr(self, direction, "")
         ).strip()
 
 
