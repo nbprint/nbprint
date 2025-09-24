@@ -271,9 +271,7 @@ class BaseModel(FlowBaseModel):
         # If we have a config object, and that config object has a context, and we've previously made the context object,
         # and we ourselves are not a config, then pass in
         call_with_context = (
-            config.context.nb_var_name
-            if config and config.context and config.context._context_generated and not isinstance(self, Configuration)
-            else "None"
+            config.context.nb_var_name if config and config.context and config.context._context_generated and not isinstance(self, Configuration) else "None"
         )
 
         mod.body.append(
