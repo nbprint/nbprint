@@ -9,7 +9,7 @@ from ccflow import BaseModel as FlowBaseModel, PyObjectPath
 from IPython.display import DisplayObject
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
-from pydantic import Field, PrivateAttr, field_validator
+from pydantic import ConfigDict, Field, PrivateAttr, field_validator
 from strenum import StrEnum
 
 if TYPE_CHECKING:
@@ -53,12 +53,11 @@ class BaseModel(FlowBaseModel):
     # id to use to reconstitute dom during page building
     _id: str = PrivateAttr(default_factory=lambda: str(uuid4()).replace("-", ""))
 
-    class Config:
-        """Pydantic configuration object."""
-
-        arbitrary_types_allowed: bool = False
-        extra: str = "ignore"
-        validate_assignment: bool = True
+    model_config = ConfigDict(
+        validate_assignment=True,
+        extra="ignore",
+        arbitrary_types_allowed=False,
+    )
 
     def __init__(self, **kwargs) -> None:
         if "_target_" not in kwargs:
