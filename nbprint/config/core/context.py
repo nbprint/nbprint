@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Optional
 
 from nbformat import NotebookNode
-from pydantic import Field, PrivateAttr
+from pydantic import ConfigDict, Field, PrivateAttr
 
 from nbprint.config.base import BaseModel, Role
 
@@ -23,12 +23,11 @@ class Context(BaseModel):
     _nb_var_name: str = PrivateAttr(default="nbprint_ctx")
     _context_generated: bool = PrivateAttr(default=False)
 
-    class Config:
-        """Pydantic configuration object."""
-
-        arbitrary_types_allowed: bool = True
-        extra: str = "allow"
-        validate_assignment: bool = False
+    model_config = ConfigDict(
+        validate_assignment=False,
+        extra="allow",
+        arbitrary_types_allowed=True,
+    )
 
     def generate(self, metadata: dict, config: "Configuration", parent: BaseModel, attr: str = "", **kwargs) -> NotebookNode:
         self._context_generated = True
