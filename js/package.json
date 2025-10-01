@@ -32,7 +32,7 @@
     "@finos/perspective-esbuild-plugin": "^3.2.1",
     "@playwright/test": "^1.54.2",
     "@prospective.co/procss": "^0.1.17",
-    "cpy": "^11.1.0",
+    "cpy": "^12.0.1",
     "esbuild": "^0.25.5",
     "esbuild-plugin-less": "^1.3.25",
     "http-server": "^14.1.1",
