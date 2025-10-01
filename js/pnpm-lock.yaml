@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@fortawesome/fontawesome-free':
         specifier: ^7.0.0
-        version: 7.0.0
+        version: 7.0.1
       pagedjs:
         specifier: ^0.4.3
         version: 0.4.3
@@ -203,8 +203,8 @@ packages:
   '@finos/perspective-esbuild-plugin@3.2.1':
     resolution: {integrity: sha512-6EqacFm5rGA0EtzD2p9RuxtVLEci9AEC4NPiOCpqFdgxxX8Msv8LlL7Ml3opxyaEeKpndVsLFdOD5U+PNaaa+A==}
 
-  '@fortawesome/fontawesome-free@7.0.0':
-    resolution: {integrity: sha512-X48nISrSOa89zu2VMljC4XaRf8NmgTwQBVHfS2Nu5G00ZwM31oOVrAtGxZF3b6wDYf9lJsf/Eq4cCSFKIkOWPQ==}
+  '@fortawesome/fontawesome-free@7.0.1':
+    resolution: {integrity: sha512-RLmb9U6H2rJDnGxEqXxzy7ANPrQz7WK2/eTjdZqyU9uRU5W+FkAec9uU5gTYzFBH7aoXIw2WTJSCJR4KPlReQw==}
     engines: {node: '>=6'}
 
   '@nodelib/fs.scandir@2.1.5':
@@ -803,7 +803,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@fortawesome/fontawesome-free@7.0.0': {}
+  '@fortawesome/fontawesome-free@7.0.1': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
