@@ -32,7 +32,7 @@ importers:
         version: 0.25.5
       esbuild-plugin-less:
         specifier: ^1.3.25
-        version: 1.3.25(esbuild@0.25.5)
+        version: 1.3.27(esbuild@0.25.5)
       http-server:
         specifier: ^14.1.1
         version: 14.1.1
@@ -333,10 +333,10 @@ packages:
     resolution: {integrity: sha512-U9bFFjX8tFiATgtkJ1zg25+KviIXpgRvRHS8sau3GfhVzThRQrOeksPeT0BWW2MNZs1OEWJ1DPXOQMn0KKRkvg==}
     engines: {node: '>=0.12'}
 
-  esbuild-plugin-less@1.3.25:
-    resolution: {integrity: sha512-K1lbEdjebX294VbOZjw38zChvGafoF5g3MZbY/P5yKo6jpEbxCniiULh9O4AUXjEWUe4vEBnfV/caVj2DWKprg==}
+  esbuild-plugin-less@1.3.27:
+    resolution: {integrity: sha512-GRD29/F9jmXkEoUBzbXXEgK6MVvKCBQJFO+lBH/HOiHlP+UMsx0ePx/4qeHfpJNYZtGKMZa8/WEodj3xUIoPvg==}
     peerDependencies:
-      esbuild: '>=0.14.0 <0.25.9'
+      esbuild: '>=0.14.0 <0.25.11'
 
   esbuild@0.25.5:
     resolution: {integrity: sha512-P8OtKZRv/5J5hhz0cUAdu/cLuPIKXpQl1R9pZtvmHWQvrAUVd0UNIPT4IB4W3rNOqVO0rlqHmCIbSwxh/c9yUQ==}
@@ -474,8 +474,8 @@ packages:
     resolution: {integrity: sha512-Qush0uP+G8ZScpGMZvHUiRfI0YBWuB3gVBYlI0v0vvOJt5FLicco+IkP0a50LqTTQhmts/m6tP5SWE+USyIvcQ==}
     engines: {node: '>=12.20'}
 
-  less@4.4.0:
-    resolution: {integrity: sha512-kdTwsyRuncDfjEs0DlRILWNvxhDG/Zij4YLO4TMJgDLW+8OzpfkdPnRgrsRuY1o+oaxJGWsps5f/RVBgGmmN0w==}
+  less@4.4.1:
+    resolution: {integrity: sha512-X9HKyiXPi0f/ed0XhgUlBeFfxrlDP3xR4M7768Zl+WXLUViuL9AOPPJP4nCV0tgRWvTYvpNmN0SFhZOQzy16PA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -937,11 +937,11 @@ snapshots:
       d: 1.0.2
       ext: 1.7.0
 
-  esbuild-plugin-less@1.3.25(esbuild@0.25.5):
+  esbuild-plugin-less@1.3.27(esbuild@0.25.5):
     dependencies:
       '@types/less': 3.0.8
       esbuild: 0.25.5
-      less: 4.4.0
+      less: 4.4.1
 
   esbuild@0.25.5:
     optionalDependencies:
@@ -1111,7 +1111,7 @@ snapshots:
 
   junk@4.0.1: {}
 
-  less@4.4.0:
+  less@4.4.1:
     dependencies:
       copy-anything: 2.0.6
       parse-node-version: 1.0.1
