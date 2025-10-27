@@ -69,7 +69,7 @@ jobs:
       if: ${{ matrix.os == 'ubuntu-latest' }}
 
     - name: Upload test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: test-results-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.node-version }}
         path: '**/junit.xml'
@@ -85,7 +85,7 @@ jobs:
       uses: codecov/codecov-action@v5
 
     - name: Upload generated reports (html)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       id: upload-reports-html
       with:
         name: reports
@@ -95,7 +95,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
 
     - name: Upload generated reports (pdf)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       id: upload-reports-pdf
       with:
         name: reports
