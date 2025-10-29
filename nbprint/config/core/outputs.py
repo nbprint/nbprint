@@ -4,9 +4,10 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Literal, Optional
 from uuid import uuid4
 
+from ccflow import ResultBase
 from jinja2 import Template
 from nbformat import NotebookNode, writes
-from pydantic import DirectoryPath, Field, field_validator
+from pydantic import Field, PrivateAttr, field_validator
 
 from nbprint.config.base import BaseModel, Role
 
@@ -16,13 +17,24 @@ if TYPE_CHECKING:
 __all__ = ("NBConvertOutputs", "Outputs")
 
 
-class Outputs(BaseModel):
-    path_root: DirectoryPath = Field(default=Path.cwd())
+class Outputs(ResultBase, BaseModel):
+    path_root: Path = Field(default=Path.cwd() / "outputs")
     naming: str = Field(default="{{name}}-{{date}}")
 
     tags: list[str] = Field(default=["nbprint:outputs"])
     role: Role = Role.OUTPUTS
     ignore: bool = True
+
+    _nb_path: Optional[Path] = PrivateAttr(default=None)
+    _output_path: Optional[Path] = PrivateAttr(default=None)
+
+    @property
+    def notebook(self) -> Path:
+        return self._nb_path
+
+    @property
+    def output(self) -> Path:
+        return self._output_path
 
     @field_validator("path_root", mode="before")
     @classmethod
@@ -30,7 +42,6 @@ class Outputs(BaseModel):
         if isinstance(v, str):
             v = Path(v)
         if isinstance(v, Path):
-            v.resolve().mkdir(parents=True, exist_ok=True)
             return v
         raise TypeError
 
@@ -60,7 +71,10 @@ class Outputs(BaseModel):
             uuid=self._get_uuid(config=config),
             sha=self._get_sha(config=config),
         )
-        return Path(str(Path(self.path_root).resolve() / f"{name}.ipynb"))
+
+        root = Path(self.path_root).resolve()
+        root.mkdir(parents=True, exist_ok=True)
+        return root / f"{name}.ipynb"
 
     def resolve_output(self, config: "Configuration") -> Path:
         return self._get_notebook_path(config=config)
@@ -69,6 +83,8 @@ class Outputs(BaseModel):
         # create file or folder path
         file = self._get_notebook_path(config=config)
         file.write_text(writes(gen))
+        self._nb_path = file
+        self._output_path = file
         return file
 
     def generate(self, metadata: dict, config: "Configuration", parent: BaseModel, **kwargs) -> NotebookNode:
@@ -121,7 +137,8 @@ class NBConvertOutputs(Outputs):
         os.environ["_NBPRINT_IN_NBCONVERT"] = "1"
         os.environ["PSP_JUPYTER_HTML_EXPORT"] = "1"
         execute_nbconvert(cmd)
-        return self.resolve_output(config=config)
+        self._output_path = self.resolve_output(config=config)
+        return self._output_path
 
 
 # class PapermillOutputs(NBConvertOutputs):
