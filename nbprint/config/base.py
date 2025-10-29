@@ -273,15 +273,17 @@ class BaseModel(FlowBaseModel):
             config.context.nb_var_name if config and config.context and config.context._context_generated and not isinstance(self, Configuration) else "None"
         )
 
-        mod.body.append(
-            ast.Expr(
-                value=ast.Call(
-                    func=ast.Name(id=self.nb_var_name, ctx=ast.Load()),
-                    args=[],
-                    keywords=[ast.keyword(arg="ctx", value=ast.Name(id=call_with_context, ctx=ast.Load()))],
+        if not issubclass(self.__class__, Configuration):
+            mod.body.append(
+                ast.Expr(
+                    value=ast.Call(
+                        func=ast.Name(id=self.nb_var_name, ctx=ast.Load()),
+                        args=[],
+                        keywords=[ast.keyword(arg="ctx", value=ast.Name(id=call_with_context, ctx=ast.Load()))],
+                    )
                 )
             )
-        )
+
         # this line just puts the object as the last item, lets call it always instead
         # mod.body.append(ast.Expr(value=ast.Name(id=self.nb_var_name, ctx=ast.Load())))
 

@@ -1,6 +1,7 @@
 import ast
 from json import dumps
 
+from ccflow import ContextBase
 from nbformat import NotebookNode
 from pydantic import Field
 
@@ -9,7 +10,7 @@ from nbprint.config.base import BaseModel, Role
 __all__ = ("Parameters",)
 
 
-class Parameters(BaseModel):
+class Parameters(ContextBase, BaseModel):
     tags: list[str] = Field(default=["parameters", "nbprint:parameters"])
     role: Role = Role.PARAMETERS
     ignore: bool = True

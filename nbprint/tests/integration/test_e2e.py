@@ -27,3 +27,9 @@ def test_hydra_e2e(parameters):
 @pytest.mark.parametrize("template", ("basic", "inline", "landscape", "finance", "research", "plotly", "customsize", "nonpagedjs", "greattables"))
 def test_pdf(template):
     run_hydra(f"examples/{template}.yaml", ["++outputs.target=webpdf"])
+
+
+@pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples - notebook direct")
+@pytest.mark.parametrize("template", ("basic",))
+def test_run_notebook_direct(template):
+    run_hydra(f"examples/{template}.ipynb", [])

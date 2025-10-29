@@ -2,7 +2,7 @@
 
 defaults:
   - _self_
+  - /nbprint/outputs/nbconvert/default@outputs
 
 _target_: nbprint.Configuration
 debug: false
-
