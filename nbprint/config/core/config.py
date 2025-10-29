@@ -1,8 +1,9 @@
 from pathlib import Path
 from pprint import pprint
 from sys import version_info
-from typing import Optional, Union
+from typing import Optional, Type, Union
 
+from ccflow import CallableModel, ContextType, Flow, ResultType
 from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
 from nbformat import NotebookNode
@@ -26,7 +27,7 @@ __all__ = (
 )
 
 
-class Configuration(BaseModel):
+class Configuration(CallableModel, BaseModel):
     name: str
     resources: dict[str, BaseModel] = Field(default_factory=dict)
     outputs: Outputs
@@ -209,6 +210,22 @@ class Configuration(BaseModel):
         # reset ourselves in case we need to rerun
         self._nb_vars = set()
         self.context._context_generated = False
+
+    # ccflow integration
+    @property
+    def context_type(self) -> Type[ContextType]:
+        return self.parameters.__class__
+
+    @property
+    def result_type(self) -> Type[ResultType]:
+        return self.outputs.__class__
+
+    @Flow.call
+    def __call__(self, context):  # noqa: ANN204
+        if self.parameters != context:
+            self.parameters = context  # update parameters if changed
+        self.run()
+        return self.outputs
 
 
 load = Configuration.load
