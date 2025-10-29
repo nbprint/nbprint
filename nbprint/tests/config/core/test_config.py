@@ -1,10 +1,10 @@
 from pathlib import Path
 
-from nbprint.cli import run_hydra
+from nbprint.cli import run
 
 
 def test_config_rerunsafe():
-    config = run_hydra(str(Path(__file__).parent / "files" / "hermetic.yaml"), dry_run=True)
+    config = run(str(Path(__file__).parent / "files" / "hermetic.yaml"), dry_run=True)
     config1 = config.generate()
     config._reset()
     config2 = config.generate()
