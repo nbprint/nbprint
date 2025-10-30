@@ -158,12 +158,12 @@ nbprint/labextension
 # Rust
 target
 
-
+outputs
 nbprint/extension/*
 nbprint/templates/nbprint/static/*
 nbprint/voila/static/*
 tmp.html
-examples/output/
+examples/outputs
 
 # Plugins testing
 nbprint_example_plugin*

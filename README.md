@@ -40,6 +40,21 @@ This is the goal of `nbprint`. Using [`pagedjs`](https://pagedjs.org), `nbprint`
 
 ## Quickstart
 
+`nbprint` provides an nbconvert template and a configuration framework.
+The simplest example can be run with defaults by calling the `nbprint` executable on an existing notebook:
+
+```bash
+nbprint examples/basic.ipynb
+```
+
+This CLI supports configuration-driven customization with [hydra](https://hydra.cc) syntax:
+
+```bash
+nbprint examples/basic.yaml +name=test ++outputs.target=pdf
+```
+
+### Notebook
+
 `nbprint` can be used purely via notebook metadata, but it also provides a `yaml`-based framework for configuration (via [`pydantic`](https://docs.pydantic.dev/latest/), [`hydra`](https://hydra.cc), and [`omegaconf`](https://github.com/omry/omegaconf)). This is particularly convenient when generating parameterized reports, for example when configuring a large number of hyperparameters for a model's evaluation report. This configuration also allows for easier iteration on a report's design and content.
 
 ### Configuration
@@ -116,7 +131,7 @@ Next we fill in some content. Here we use a few components:
 We can now generate the report by running the CLI:
 
 ```bash
-nbprint run examples/basic.yaml basic
+nbprint examples/basic.yaml
 ```
 
 This will create a Notebook output in our specified folder `examples/output`, as well as an html asset (since that is what we specified in the yaml file). Both will have the date as a suffix, which is also configurable in our yaml. We see the generated report notebook, which we can open and use for further experimentation or to investigate the report itself.

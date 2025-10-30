@@ -1,11 +1,11 @@
 from datetime import datetime
 from pathlib import Path
 
-from nbprint.cli import run_hydra
+from nbprint.cli import run
 
 
 def test_outputs():
-    config = run_hydra(str(Path(__file__).parent / "files" / "basic.yaml"), dry_run=True)
+    config = run(str(Path(__file__).parent / "files" / "basic.yaml"), dry_run=True)
     assert config.outputs.naming == "{{name}}-{{date}}-{{datetime}}-{{uuid}}-{{sha}}"
     path = config.outputs.run(config=config, gen=config.generate())
     assert len(path.name) == 150
