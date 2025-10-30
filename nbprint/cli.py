@@ -81,5 +81,5 @@ def run_cli(
 
 def main() -> None:
     app = Typer()
-    app.command("run")(run)
+    app.command("run")(run_cli)
     app()
