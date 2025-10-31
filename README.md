@@ -53,9 +53,82 @@ This CLI supports configuration-driven customization with [hydra](https://hydra.
 nbprint examples/basic.yaml +name=test ++outputs.target=pdf
 ```
 
+```mermaid
+graph TB
+    nb("notebook<br>(.ipynb)")
+    nbc{nbconvert}
+    nbct[/nbprint <br> template/]
+    pjs[/paged.js <br> layout engine/]
+    o@{ shape: doc, label: "output (html,pdf,etc)" }
+
+    nb e2@--->nbc
+    e2@{animate: true}
+
+    nbct --> nbc
+    pjs --- nbct
+
+    nbc e3@-->o
+    e3@{animate: true}
+```
+
 ### Notebook
 
-`nbprint` can be used purely via notebook metadata, but it also provides a `yaml`-based framework for configuration (via [`pydantic`](https://docs.pydantic.dev/latest/), [`hydra`](https://hydra.cc), and [`omegaconf`](https://github.com/omry/omegaconf)). This is particularly convenient when generating parameterized reports, for example when configuring a large number of hyperparameters for a model's evaluation report. This configuration also allows for easier iteration on a report's design and content.
+`nbprint` can be used purely via notebook metadata, but it also provides a `yaml`-based framework for configuration (via [`pydantic`](https://docs.pydantic.dev/latest/), [`hydra`](https://hydra.cc), and [`omegaconf`](https://github.com/omry/omegaconf)).
+This is particularly convenient when generating parameterized or componentized reports.
+
+```mermaid
+graph TB
+    subgraph Config Framework
+        yml("configuration<br>(.yaml)")
+        pg[plugins<br> via hydra]
+        lb[python<br>libraries]
+        pg -.- yml
+        lb -.- yml
+    end
+
+    nb("notebook<br>(.ipynb)")
+    nbc{nbconvert}
+    nbct[/nbprint <br> template/]
+    pjs[/paged.js <br> layout engine/]
+    o@{ shape: doc, label: "output (html,pdf,etc)" }
+
+    yml e1@--->nb
+    e1@{animate: true}
+
+    nb e2@--->nbc
+    e2@{animate: true}
+
+    nbct --> nbc
+    pjs --- nbct
+
+    nbc e3@-->o
+    e3@{animate: true}
+```
+
+For example, imagine I had a collection of models that I wanted to evaluate for different hyperparameters, where models might have overlapping sets of report elements I want to see.
+With `nbprint`'s configuration system, this is easy to compose.
+
+```mermaid
+graph TB
+    subgraph Report C
+    p1[Params Three]
+    m4[Content One]
+    m5[Content Three]
+    end
+    subgraph Report B
+    p2[Params Two]
+    m1[Content One]
+    m2[Content Two]
+    m3[Content Three]
+    end
+    subgraph Report A
+    p3[params One]
+    m6[Content Two]
+    m7[Content Three]
+    end
+```
+
+This configuration also allows for easier iteration on a report's design and content.
 
 ### Configuration
 
