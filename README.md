@@ -50,7 +50,7 @@ nbprint examples/basic.ipynb
 This CLI supports configuration-driven customization with [hydra](https://hydra.cc) syntax:
 
 ```bash
-nbprint examples/basic.yaml +name=test ++outputs.target=pdf
+nbprint examples/basic.ipynb +name=test ++outputs.target=pdf
 ```
 
 ```mermaid
