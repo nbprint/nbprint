@@ -84,13 +84,9 @@ jobs:
     - name: Upload coverage
       uses: codecov/codecov-action@v5
 
-<<<<<<< before updating
     - name: Upload generated reports (html)
       uses: actions/upload-artifact@v5
       id: upload-reports-html
-=======
-    - uses: actions/upload-artifact@v5
->>>>>>> after updating
       with:
         name: reports
         path: 'examples/output/*.html'
