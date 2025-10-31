@@ -71,7 +71,7 @@ async function build_all() {
   await compile_css();
   await cp_to_paths("./src/css/*");
   await cp_to_paths(
-    "node_modules/\@fortawesome/fontawesome-free/css/fontawesome.min.css",
+    "node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css",
   );
 }
 
