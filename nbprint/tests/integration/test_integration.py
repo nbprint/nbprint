@@ -20,3 +20,19 @@ def test_integrations(file):
     if file.name == "plugins.yaml":
         output = res.outputs.notebook.read_text()
         assert "Example Page Content from Plugin" in output
+
+
+# def test_content_injection():
+#     res = run("examples/basic.ipynb", ["+content=toc"])
+#     output = res.outputs.notebook.read_text()
+#     nb = reads(output, as_version=4)
+#     first_cell = nb.cells[0]
+#     assert first_cell.source.startsWith("a = 10\nb = 'hello'\nd = True\nc = 'abc'")
+
+
+def test_parameter_injection():
+    res = run("examples/parameters.ipynb", ["+nbprint.parameters.a=10", "+nbprint.parameters.b='hello'", "+nbprint.parameters.d=True"])
+    output = res.outputs.notebook.read_text()
+    nb = reads(output, as_version=4)
+    first_cell = nb.cells[0]
+    assert first_cell.source.startswith("a = 10\nb = 'hello'\nd = True\nc = 'abc'")

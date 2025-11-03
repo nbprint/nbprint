@@ -30,6 +30,9 @@ def test_pdf(template):
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples - notebook direct")
-@pytest.mark.parametrize("template", ("basic",))
+@pytest.mark.parametrize("template", ("basic", "parameters"))
 def test_run_notebook_direct(template):
-    run(f"examples/{template}.ipynb", [])
+    if template == "parameters":
+        run(f"examples/{template}.ipynb", ["+parameters.a=10", "+parameters.b='hello'", "+parameters.c=True"])
+    else:
+        run(f"examples/{template}.ipynb", [])
