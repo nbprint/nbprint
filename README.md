@@ -51,6 +51,9 @@ This CLI supports configuration-driven customization with [hydra](https://hydra.
 
 ```bash
 nbprint examples/basic.ipynb +name=test ++outputs.target=pdf
+
+# First cell is papermill-style parameters
+nbprint examples/parameters.ipynb +parameters.a=test
 ```
 
 ```mermaid
@@ -139,8 +142,8 @@ Let's take a simple placeholder report.
 debug: false
 outputs:
   _target_: nbprint:NBConvertOutputs
-  path_root: ./examples/output
-  target: "html"
+  path_root: ./outputs
+  target: html
 
 content:
   - _target_: nbprint:ContentMarkdown
@@ -216,6 +219,15 @@ We also see the html document itself, which will be rendered via [`pagedjs`](htt
 <img src="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.png?raw=true" alt="example basic output" width="800"></a>
 
 You can find a pdf form of this document [here](https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.pdf?raw=true).
+
+## ccflow integration
+
+`nbprint` is compatible with [ccflow](https://github.com/point72/ccflow) callable models.
+`nbprint` outputs like `NBConvertOutputs` inherit from [`ccflow.ResultsBase`](https://github.com/Point72/ccflow/wiki/Workflows#result-type), and `nbprint` parameters like `Parameters` inherit from [`ccflow.ContextBase`](https://github.com/Point72/ccflow/wiki/Workflows#context).
+
+```bash
+nbprint-cc +nbprint.name=test +context=[]
+```
 
 ## Development
 

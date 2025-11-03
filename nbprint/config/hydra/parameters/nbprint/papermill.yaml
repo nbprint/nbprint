@@ -1,0 +1,3 @@
+# @package nbprint.parameters
+
+_target_: nbprint.PapermillParameters

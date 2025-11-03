@@ -1,0 +1,13 @@
+# @package _global_
+
+defaults:
+  - nbprint: nbprint/default
+  # NOTE: omit context as it will conflict with ccflow with different meaning,
+  # and notebook has no default context. Restore after renaming
+  # - context: nbprint/default
+  - outputs: nbprint/default
+  - page: nbprint/default
+  - parameters: nbprint/papermill
+  - _self_
+
+callable: /nbprint

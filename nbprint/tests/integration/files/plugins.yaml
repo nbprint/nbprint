@@ -3,6 +3,7 @@ defaults:
   # use example plugin
   - page: nbprint_example_plugin/default
 
+_target_: nbprint.Configuration
 name: "test"
 outputs:
   _target_: nbprint.NBConvertOutputs

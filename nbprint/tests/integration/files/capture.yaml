@@ -1,5 +1,7 @@
 defaults:
   - _self_
+
+_target_: nbprint.Configuration
 name: test
 outputs:
   _target_: nbprint.NBConvertOutputs
