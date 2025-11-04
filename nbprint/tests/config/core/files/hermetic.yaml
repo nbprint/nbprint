@@ -1,6 +1,7 @@
 defaults:
   - _self_
 
+_target_: nbprint.Configuration
 name: "basic"
 
 outputs:

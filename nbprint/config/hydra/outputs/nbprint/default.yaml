@@ -1,0 +1,3 @@
+# @package nbprint.outputs
+_target_: nbprint.NBConvertOutputs
+target: html

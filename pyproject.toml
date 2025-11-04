@@ -85,6 +85,8 @@ nbprint = "pkg:nbprint.config.hydra"
 
 [project.scripts]
 nbprint = "nbprint.cli:main"
+nbprint-cc = "nbprint.cli:hydra"
+nbprint-cc-explain = "nbprint.cli:hydra_explain"
 
 [project.urls]
 Repository = "https://github.com/nbprint/nbprint"
