@@ -1,3 +1,4 @@
+from ast import literal_eval
 from pathlib import Path
 from pprint import pprint
 from sys import version_info
@@ -6,20 +7,20 @@ from typing import Optional, Type, Union
 from ccflow import CallableModel, ContextType, Flow, ResultType
 from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
-from nbformat import NotebookNode
+from nbformat import NotebookNode, read as nb_read
 from nbformat.v4 import new_notebook
 from pydantic import Field, PrivateAttr, field_validator, model_validator
 from typing_extensions import Self
 
 from nbprint import __version__
 from nbprint.config.base import BaseModel, Role, _append_or_extend
-from nbprint.config.content import Content
+from nbprint.config.content import Content, ContentCode, ContentMarkdown
 from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
 from nbprint.config.page import Page
 
 from .context import Context
 from .outputs import Outputs
-from .parameters import Parameters
+from .parameters import PapermillParameters, Parameters
 
 __all__ = (
     "Configuration",
@@ -94,6 +95,58 @@ class Configuration(CallableModel, BaseModel):
     def _attach_params_to_context(self) -> Self:
         self.context.parameters = self.parameters
         return self
+
+    @model_validator(mode="before")
+    @classmethod
+    def _append_notebook_content(cls, values) -> None:
+        if values.get("notebook") is None:
+            return values
+
+        file = Path(values.pop("notebook"))
+        with file.open("r", encoding="utf-8") as path_file:
+            nb_content = nb_read(path_file, as_version=4)
+
+        if "content" not in values:
+            values["content"] = []
+
+        new_parameters = {}
+
+        # TODO: if first cell has tags, insert at front instead of appending
+        if nb_content.cells and "metadata" in nb_content.cells[0] and "parameters" in nb_content.cells[0]["metadata"].get("tags", []):
+            # skip first cell
+            cells_to_process = nb_content.cells[1:]
+
+            # Pull out the parameters object and ensure everything is present
+            if "parameters" not in values:
+                values["parameters"] = PapermillParameters()
+
+            # Parse first cell for parameters
+            first_cell = nb_content.cells[0]
+
+            # Pull out the parameters object and ensure everything is present
+            param_lines = first_cell.source.splitlines()
+            for line in param_lines:
+                if "=" in line:
+                    key, value = line.split("=", 1)
+                    key = key.strip()
+                    value = value.strip()
+                    # Attempt to eval the value to get correct type
+                    try:
+                        evaluated_value = literal_eval(value)
+                    except SyntaxError:
+                        evaluated_value = value
+
+                    new_parameters[key] = evaluated_value
+
+        else:
+            cells_to_process = nb_content.cells
+
+        for cell in cells_to_process:
+            values["content"].append(ContentCode(content=cell.source) if cell.cell_type == "code" else ContentMarkdown(content=cell.source))
+
+        for k, v in new_parameters.items():
+            setattr(values["parameters"], k, v)
+        return values
 
     def generate(self, **_) -> list[NotebookNode]:
         nb = new_notebook()
