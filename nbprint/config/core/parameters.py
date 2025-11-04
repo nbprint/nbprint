@@ -76,11 +76,23 @@ class PapermillParameters(Parameters):
 
     @model_validator(mode="before")
     @classmethod
-    def validate_vars(cls, data) -> "PapermillParameters":
+    def _model_before_validator(cls, data) -> dict:
         # Move all fields except those defined in Parameters to vars
-        params_fields = set(cls.model_fields.keys()) - {"vars"}
+        params_fields = set(cls.model_fields.keys()) | {"_target_"}
         vars_dict = {k: v for k, v in data.items() if k not in params_fields}
         for k in vars_dict:
             data.pop(k)
-        data["vars"] = vars_dict
+        if "vars" not in data:
+            data["vars"] = {}
+        data["vars"].update(vars_dict)
         return data
+
+    # NOTE: this shouldve been possible via a wrap or before validator,
+    # but alas i could not get it to work
+    def __setattr__(self, name: str, value) -> None:
+        if name in self.model_fields and name != "vars":
+            super().__setattr__(name, value)
+        elif name == "vars":
+            self.vars.update(value)
+        else:
+            self.vars[name] = value

@@ -57,6 +57,7 @@ class BaseModel(FlowBaseModel):
         validate_assignment=True,
         extra="ignore",
         arbitrary_types_allowed=False,
+        frozen=False,
     )
 
     def __init__(self, **kwargs) -> None:
