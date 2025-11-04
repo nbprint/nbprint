@@ -50,10 +50,10 @@ nbprint examples/basic.ipynb
 This CLI supports configuration-driven customization with [hydra](https://hydra.cc) syntax:
 
 ```bash
-nbprint examples/basic.ipynb +name=test ++outputs.target=pdf
+nbprint examples/basic.ipynb +nbprint.name=test ++nbprint.outputs.target=pdf
 
 # First cell is papermill-style parameters
-nbprint examples/parameters.ipynb +parameters.a=test
+nbprint examples/parameters.ipynb +nbprint.parameters.a=test
 ```
 
 ```mermaid
