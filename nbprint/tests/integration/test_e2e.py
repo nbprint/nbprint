@@ -35,7 +35,7 @@ def test_pdf(template):
 @pytest.mark.parametrize("template", ("basic", "parameters"))
 def test_run_notebook_direct(template):
     if template == "parameters":
-        run(f"examples/{template}.ipynb", ["+parameters.a=10", "+parameters.b='hello'", "+parameters.c=True"])
+        run(f"examples/{template}.ipynb", ["+nbprint.parameters.a=10", "+nbprint.parameters.b='hello'", "+nbprint.parameters.c=True"])
     else:
         run(f"examples/{template}.ipynb", [])
 
