@@ -8,9 +8,8 @@ version = "0.8.0"
 authors = [{name = "the nbprint authors", email = "t.paine154@gmail.com"}]
 description = "A framework for customizing NBConvert templates and building reports"
 readme = "README.md"
-<<<<<<< before updating
-license = { file = "LICENSE" }
-requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.10"
 keywords = [
     "Jupyter",
     "JupyterLab",
@@ -20,13 +19,7 @@ keywords = [
     "Reports",
     "Reporting",
 ]
-=======
-license = { text = "Apache-2.0" }
-version = "0.1.0"
-requires-python = ">=3.10"
-keywords = []
 
->>>>>>> after updating
 classifiers = [
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: Apache Software License",
