@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: 68f3543
+_commit: 973c39c
 _src_path: https://github.com/python-project-templates/base.git
 add_docs: false
 add_extension: js
@@ -9,5 +9,5 @@ github: nbprint
 project_description: A framework for customizing NBConvert templates and building
     reports
 project_name: nbprint
-python_version_primary: '3.9'
+python_version_primary: '3.11'
 team: the nbprint authors
