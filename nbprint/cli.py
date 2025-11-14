@@ -1,6 +1,5 @@
 from pathlib import Path
 from pprint import pprint
-from typing import Optional
 
 from ccflow import ResultBase
 from ccflow.utils.hydra import cfg_explain_cli, cfg_run
@@ -16,7 +15,7 @@ __all__ = ("hydra", "main", "run")
 
 def run(
     path: str,
-    overrides: Optional[list[str]] = Argument(None),
+    overrides: list[str] | None = Argument(None),
     cfg: bool = False,
     debug: bool = False,
     dry_run: bool = False,
@@ -36,7 +35,7 @@ def run(
 
 def run_cli(
     path: str,
-    overrides: Optional[list[str]] = Argument(None),
+    overrides: list[str] | None = Argument(None),
     cfg: bool = Option(False, "--cfg", is_eager=True, help="Print the config"),
     debug: bool = Option(False, "--debug", help="Run in debug mode"),
     dry_run: bool = Option(False, "--dry-run", "-d", help="Run dry run"),

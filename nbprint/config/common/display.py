@@ -1,5 +1,3 @@
-from typing import Optional
-
 from strenum import StrEnum
 
 from .css import _BaseCss
@@ -50,10 +48,10 @@ class DisplayKind(StrEnum):
 
 
 class FlexOptions(_BaseCss):
-    flex_direction: Optional[FlexDirection]
-    justify: Optional[Justify]
+    flex_direction: FlexDirection | None
+    justify: Justify | None
 
 
 class Display(_BaseCss):
-    display: Optional[DisplayKind]
-    flex_options: Optional[FlexOptions]
+    display: DisplayKind | None
+    flex_options: FlexOptions | None

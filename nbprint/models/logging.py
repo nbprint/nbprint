@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, List, Union
+from typing import Dict, List
 
 from IPython.display import HTML
 from pydantic import Field
@@ -12,7 +12,7 @@ __all__ = ("LoggingBasicConfig", "LoggingConfig")
 class LoggingBasicConfig(Content):
     """Set the basic logging configuration, to control which logs may show up in the report."""
 
-    log_level: Union[int, str] = "CRITICAL"
+    log_level: int | str = "CRITICAL"
 
     def __call__(self, **_) -> HTML:
         logging.basicConfig(level=self.log_level)
@@ -22,7 +22,7 @@ class LoggingBasicConfig(Content):
 class LoggingConfig(Content):
     version: int = 1
     disable_existing_loggers: bool = False
-    formatters: Dict[str, Dict[str, Union[str, Dict[str, str]]]] = Field(
+    formatters: Dict[str, Dict[str, str | Dict[str, str]]] = Field(
         default={
             "simple": {"format": "[%(asctime)s][%(threadName)s][%(name)s][%(levelname)s]: %(message)s"},
             "colorlog": {
@@ -49,7 +49,7 @@ class LoggingConfig(Content):
             }
         }
     )
-    root: Dict[str, Union[str, List[str]]] = Field(default={"handlers": ["console"], "level": "DEBUG"})
+    root: Dict[str, str | List[str]] = Field(default={"handlers": ["console"], "level": "DEBUG"})
 
     def __call__(self, **_) -> HTML:
         logging.dictConfig(self.model_dump(exclude=["type_"]))

@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Optional
 
 from IPython.display import HTML, Image
 from pydantic import Field, FilePath, field_validator
@@ -8,8 +7,8 @@ from .base import Content
 
 
 class ContentImage(Content):
-    path: Optional[FilePath] = None
-    content: Optional[bytes] = b""
+    path: FilePath | None = None
+    content: bytes | None = b""
     tags: list[str] = Field(default=["nbprint:content", "nbprint:content:image"])
 
     @field_validator("path", mode="before")

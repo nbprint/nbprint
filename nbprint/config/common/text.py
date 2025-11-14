@@ -1,5 +1,3 @@
-from typing import Optional, Union
-
 from strenum import StrEnum
 
 from .common import Color
@@ -47,9 +45,9 @@ class FontFamily(StrEnum):
 
 
 class Font(_BaseCss):
-    family: Optional[Union[FontFamily, str]] = None
-    size: Optional[int] = None
-    transform: Optional[TextTransform] = None
+    family: FontFamily | str | None = None
+    size: int | None = None
+    transform: TextTransform | None = None
 
     # TODO: multiple decorations and color decorations
     # text-decoration-color
@@ -57,11 +55,11 @@ class Font(_BaseCss):
     # text-decoration-style
     # text-decoration-thickness
 
-    decoration: Optional[TextDecoration] = None
+    decoration: TextDecoration | None = None
 
-    style: Optional[FontStyle] = None
-    weight: Optional[FontWeight] = None
-    color: Optional[Color] = None
+    style: FontStyle | None = None
+    weight: FontWeight | None = None
+    color: Color | None = None
 
     def __str__(self) -> str:
         ret = ""

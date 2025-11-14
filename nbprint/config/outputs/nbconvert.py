@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal
 
 from nbformat import NotebookNode
 from pydantic import field_validator
@@ -11,10 +11,10 @@ __all__ = ("HTMLOutputs", "NBConvertOutputs", "NotebookOutputs", "PDFOutputs")
 
 
 class NBConvertOutputs(Outputs):
-    target: Optional[Literal["ipynb", "html", "pdf", "webpdf"]] = "html"  # TODO: nbconvert types
-    execute: Optional[bool] = True
-    timeout: Optional[int] = 600
-    template: Optional[str] = "nbprint"
+    target: Literal["ipynb", "html", "pdf", "webpdf"] | None = "html"  # TODO: nbconvert types
+    execute: bool | None = True
+    timeout: int | None = 600
+    template: str | None = "nbprint"
 
     @field_validator("target", mode="before")
     @classmethod

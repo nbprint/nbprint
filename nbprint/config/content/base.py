@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Optional
 
 from IPython.display import HTML
 from nbformat import NotebookNode
@@ -13,24 +13,24 @@ if TYPE_CHECKING:
 
 
 class Content(BaseModel):
-    content: Optional[Union[str, list[SerializeAsAny[BaseModel]]]] = ""
+    content: str | list[SerializeAsAny[BaseModel]] | None = ""
     tags: list[str] = Field(default=["nbprint:content"])
     role: Role = Role.CONTENT
 
     # cell magics
-    magics: Optional[list[str]] = Field(default_factory=list, description="List of cell magics to apply to the cell")
+    magics: list[str] | None = Field(default_factory=list, description="List of cell magics to apply to the cell")
 
     # used by lots of things
-    style: Optional[Style] = None
+    style: Style | None = None
 
     def generate(
         self,
-        metadata: Optional[dict] = None,
+        metadata: dict | None = None,
         config: Optional["Configuration"] = None,
         parent: Optional["BaseModel"] = None,
         attr: str = "",
-        counter: Optional[int] = None,
-    ) -> Optional[Union[NotebookNode, list[NotebookNode]]]:
+        counter: int | None = None,
+    ) -> NotebookNode | list[NotebookNode] | None:
         # make a cell for yourself
         self_cell = super().generate(
             metadata=metadata,
@@ -84,15 +84,15 @@ class Content(BaseModel):
 
 
 class ContentMarkdown(Content):
-    content: Optional[str] = ""
+    content: str | None = ""
 
     def generate(
         self,
-        metadata: Optional[dict] = None,
+        metadata: dict | None = None,
         config: Optional["Configuration"] = None,
         parent: Optional["BaseModel"] = None,
         **_,
-    ) -> Optional[Union[NotebookNode, list[NotebookNode]]]:
+    ) -> NotebookNode | list[NotebookNode] | None:
         cell = super()._base_generate_md(metadata=metadata, config=config, parent=parent)
         cell.source = self.content
         return cell
