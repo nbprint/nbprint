@@ -14,7 +14,7 @@ __all__ = ("EmailOutputs",)
 
 class EmailOutputs(NBConvertOutputs):
     # revert this back
-    target: Literal["ipynb", "html", "pdf", "webpdf"] | None = "ipynb"
+    target: Literal["ipynb", "html", "webhtml", "pdf", "webpdf"] | None = "ipynb"
 
     body: str | None = Field(default=None, description="Body of the email, defaults to output name")
     subject: str | None = Field(default=None, description="Subject of the email, defaults to output name")
