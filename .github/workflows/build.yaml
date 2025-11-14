@@ -92,7 +92,7 @@ jobs:
       uses: actions/upload-artifact@v5
       id: upload-reports-html
       with:
-        name: reports
+        name: reports-html
         path: 'examples/output/*.html'
         if-no-files-found: error
         overwrite: true
@@ -102,7 +102,7 @@ jobs:
       uses: actions/upload-artifact@v5
       id: upload-reports-pdf
       with:
-        name: reports
+        name: reports-pdf
         path: 'examples/output/*.pdf'
         if-no-files-found: error
         overwrite: true
