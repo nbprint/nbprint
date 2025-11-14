@@ -5,6 +5,10 @@ defaults:
   # NOTE: omit context as it will conflict with ccflow with different meaning,
   # and notebook has no default context. Restore after renaming
   # - context: nbprint/default
+
+  - content/frontmatter: []
+  - content/backmatter: []
+
   - outputs: nbprint/default
   - page: nbprint/default
   - parameters: nbprint/papermill

@@ -18,6 +18,7 @@ from nbprint.config.content import Content, ContentCode, ContentMarkdown
 from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
 from nbprint.config.page import Page
 
+from .content import ContentMarshall
 from .context import Context
 from .outputs import Outputs
 from .parameters import PapermillParameters, Parameters
@@ -35,7 +36,8 @@ class Configuration(CallableModel, BaseModel):
     parameters: Parameters = Field(default_factory=Parameters)
     page: Page = Field(default_factory=Page)
     context: Context = Field(default_factory=Context)
-    content: list[Content] = Field(default_factory=list)
+
+    content: ContentMarshall = Field(default_factory=ContentMarshall)
 
     # basic metadata
     tags: list[str] = Field(default=["nbprint:config"])
@@ -50,7 +52,7 @@ class Configuration(CallableModel, BaseModel):
 
     @field_validator("resources", mode="before")
     @classmethod
-    def convert_resources_from_obj(cls, value) -> dict[str, BaseModel]:
+    def _convert_resources_from_obj(cls, value) -> dict[str, BaseModel]:
         if value is None:
             value = {}
         if isinstance(value, dict):
@@ -60,35 +62,49 @@ class Configuration(CallableModel, BaseModel):
 
     @field_validator("outputs", mode="before")
     @classmethod
-    def convert_outputs_from_obj(cls, v) -> Outputs:
+    def _convert_outputs_from_obj(cls, v) -> Outputs:
         return BaseModel._to_type(v, Outputs)
 
     @field_validator("parameters", mode="before")
     @classmethod
-    def convert_parameters_from_obj(cls, v) -> Parameters:
+    def _convert_parameters_from_obj(cls, v) -> Parameters:
         return BaseModel._to_type(v, Parameters)
 
     @field_validator("page", mode="before")
     @classmethod
-    def convert_page_from_obj(cls, v) -> Page:
+    def _convert_page_from_obj(cls, v) -> Page:
         return BaseModel._to_type(v, Page)
 
     @field_validator("context", mode="before")
     @classmethod
-    def convert_context_from_obj(cls, v) -> Context:
+    def _convert_context_from_obj(cls, v) -> Context:
         return BaseModel._to_type(v, Context)
+
+    @staticmethod
+    def _convert_content_from_list(v) -> ContentMarshall:
+        for i, element in enumerate(v):
+            if isinstance(element, str):
+                v[i] = Content(type_=element)
+            elif isinstance(element, dict):
+                v[i] = BaseModel._to_type(element)
+        return ContentMarshall(middlematter=v)
+
+    @staticmethod
+    def _convert_content_from_dict(v) -> ContentMarshall:
+        for key in ContentMarshall.model_fields:
+            if key in v and isinstance(v[key], list):
+                v[key] = Configuration._convert_content_from_list(v[key]).all
+        return ContentMarshall(**v)
 
     @field_validator("content", mode="before")
     @classmethod
-    def convert_content_from_obj(cls, v) -> Content:
+    def convert_content_from_obj(cls, v) -> ContentMarshall:
         if v is None:
-            return []
+            return ContentMarshall()
         if isinstance(v, list):
-            for i, element in enumerate(v):
-                if isinstance(element, str):
-                    v[i] = Content(type_=element)
-                elif isinstance(element, dict):
-                    v[i] = BaseModel._to_type(element)
+            return cls._convert_content_from_list(v)
+        if isinstance(v, dict):
+            return cls._convert_content_from_dict(v)
         return v
 
     @model_validator(mode="after")
@@ -96,19 +112,20 @@ class Configuration(CallableModel, BaseModel):
         self.context.parameters = self.parameters
         return self
 
-    @model_validator(mode="before")
-    @classmethod
-    def _append_notebook_content(cls, values) -> None:
-        if values.get("notebook") is None:
-            return values
-
-        file = Path(values.pop("notebook"))
-        with file.open("r", encoding="utf-8") as path_file:
-            nb_content = nb_read(path_file, as_version=4)
-
+    @staticmethod
+    def _init_content(values) -> ContentMarshall:
         if "content" not in values:
-            values["content"] = []
+            values["content"] = ContentMarshall()
+        elif isinstance(values["content"], list):
+            values["content"] = ContentMarshall(middlematter=values["content"])
+        elif isinstance(values["content"], dict):
+            values["content"] = ContentMarshall(**values["content"])
+        else:
+            e = f"Unexpected content format when loading from notebook: {type(values['content'])}"
+            raise RuntimeError(e)
 
+    @staticmethod
+    def _process_cells(values, nb_content: NotebookNode) -> None:
         new_parameters = {}
 
         # TODO: if first cell has tags, insert at front instead of appending
@@ -142,10 +159,25 @@ class Configuration(CallableModel, BaseModel):
             cells_to_process = nb_content.cells
 
         for cell in cells_to_process:
-            values["content"].append(ContentCode(content=cell.source) if cell.cell_type == "code" else ContentMarkdown(content=cell.source))
+            values["content"].middlematter.append(ContentCode(content=cell.source) if cell.cell_type == "code" else ContentMarkdown(content=cell.source))
 
         for k, v in new_parameters.items():
             setattr(values["parameters"], k, v)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _append_notebook_content(cls, values) -> None:
+        if values.get("notebook") is None:
+            return values
+
+        cls._init_content(values)
+
+        file = Path(values.pop("notebook"))
+        with file.open("r", encoding="utf-8") as path_file:
+            nb_content = nb_read(path_file, as_version=4)
+
+        cls._process_cells(values, nb_content)
+
         return values
 
     def generate(self, **_) -> list[NotebookNode]:
@@ -187,7 +219,7 @@ class Configuration(CallableModel, BaseModel):
         _append_or_extend(nb.cells, self.page.generate(metadata=base_meta.copy(), config=self, parent=self, attr="page"))
 
         # now iterate through the content, recursively generating
-        for i, content in enumerate(self.content):
+        for i, content in enumerate(self.content.all):
             _append_or_extend(
                 nb.cells,
                 content.generate(metadata=base_meta.copy(), config=self, parent=self, attr="content", counter=i),

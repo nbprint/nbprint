@@ -54,6 +54,9 @@ nbprint examples/basic.ipynb +nbprint.name=test ++nbprint.outputs.target=pdf
 
 # First cell is papermill-style parameters
 nbprint examples/parameters.ipynb +nbprint.parameters.a=test
+
+# Overlay a config group, e.g. title and table of contents
+nbprint examples/basic.ipynb content/frontmatter=nbprint/title_toc
 ```
 
 ```mermaid

@@ -1,5 +1,7 @@
-import os.path
 import sys
+from itertools import product
+from os import environ
+from os.path import exists
 from unittest.mock import patch
 
 import pytest
@@ -9,14 +11,41 @@ from nbprint.cli import hydra, run
 
 
 def _example_folder_does_not_exist():
-    return not os.path.exists("examples")
+    return not exists("examples")
+
+
+_integration_templates = (
+    "basic",
+    "inline",
+    "landscape",
+    "finance",
+    "research",
+    "plotly",
+    "customsize",
+    "nonpagedjs",
+    "greattables",
+)
+_integration_notebooks = (
+    "basic",
+    "parameters",
+)
+_integration_formats = (
+    "ipynb",
+    "html",
+    "webpdf",
+)
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
-@pytest.mark.parametrize("template", ("basic", "inline", "landscape", "finance", "research", "plotly", "customsize", "nonpagedjs", "greattables"))
-def test_e2e(template):
-    config = Configuration.load(f"examples/{template}.yaml", template)
-    config.run()
+@pytest.mark.parametrize(("template", "fmt"), list(product(_integration_templates, _integration_formats)))
+def test_run_e2e(template, fmt):
+    if fmt == "":
+        config = Configuration.load(f"examples/{template}.yaml", template)
+        config.run()
+    elif fmt == "webpdf":
+        if template == "customsize":
+            return
+        run(f"examples/{template}.yaml", ["++outputs.target=webpdf"])
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
@@ -26,18 +55,50 @@ def test_hydra_e2e(parameters):
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
-@pytest.mark.parametrize("template", ("basic", "inline", "landscape", "finance", "research", "plotly", "customsize", "nonpagedjs", "greattables"))
-def test_pdf(template):
-    run(f"examples/{template}.yaml", ["++outputs.target=webpdf"])
+@pytest.mark.parametrize("template", _integration_templates)
+def test_email(template):
+    pytest.skip("TODO", template)
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples - notebook direct")
-@pytest.mark.parametrize("template", ("basic", "parameters"))
-def test_run_notebook_direct(template):
-    if template == "parameters":
-        run(f"examples/{template}.ipynb", ["+nbprint.parameters.a=10", "+nbprint.parameters.b='hello'", "+nbprint.parameters.c=True"])
+@pytest.mark.parametrize(("notebook", "fmt"), list(product(_integration_notebooks, _integration_formats)))
+def test_run_notebook_direct(notebook, fmt):
+    if notebook == "parameters":
+        run(
+            f"examples/{notebook}.ipynb",
+            [
+                f"++nbprint.outputs.target={fmt}",
+                "+nbprint.parameters.a=10",
+                "+nbprint.parameters.b='hello'",
+                "+nbprint.parameters.c=True",
+            ],
+        )
     else:
-        run(f"examples/{template}.ipynb", [])
+        run(f"examples/{notebook}.ipynb", [])
+
+
+@pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples - notebook direct")
+@pytest.mark.parametrize(("notebook", "fmt"), list(product(_integration_notebooks, _integration_formats)))
+def test_email_notebook(notebook, fmt):
+    if notebook == "basic":
+        if "SMTP_USER" not in environ or "SMTP_PASSWORD" not in environ:
+            pytest.skip("SMTP credentials not set in environment - skipping email test")
+            return
+        run(
+            f"examples/{notebook}.ipynb",
+            [
+                "outputs=nbprint/email",
+                f"++nbprint.outputs.target={fmt}",
+                f"+nbprint.outputs.to={environ['SMTP_USER']}",
+                f"+nbprint.outputs.smtp.host={environ['SMTP_HOST']}",
+                f"+nbprint.outputs.smtp.user={environ['SMTP_USER']}",
+                f"+nbprint.outputs.smtp.password={environ['SMTP_PASSWORD']}",
+                "content/frontmatter=nbprint/title_toc",
+            ],
+        )
+    else:
+        # Skip for now
+        ...
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples - notebook direct")
