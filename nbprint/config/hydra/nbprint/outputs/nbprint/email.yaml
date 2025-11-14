@@ -2,7 +2,7 @@
 _target_: nbprint.EmailOutputs
 to: ???
 smtp:
-  _target_: ccflow_email.SMTP
+  _target_: nbprint.SMTP
   host: ???
   port: 587
   user: ???
