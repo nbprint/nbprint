@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 from uuid import uuid4
 
 from ccflow import ResultBase
@@ -24,8 +24,8 @@ class Outputs(ResultBase, BaseModel):
     role: Role = Role.OUTPUTS
     ignore: bool = True
 
-    _nb_path: Optional[Path] = PrivateAttr(default=None)
-    _output_path: Optional[Path] = PrivateAttr(default=None)
+    _nb_path: Path | None = PrivateAttr(default=None)
+    _output_path: Path | None = PrivateAttr(default=None)
 
     @property
     def notebook(self) -> Path:

@@ -15,7 +15,7 @@ _logger = getLogger(__name__)
 
 def load_config(
     path: str,
-    overrides: Optional[List[str]] = None,
+    overrides: List[str] | None = None,
 ) -> dict:
     # convert to Path
     path = Path(path)
