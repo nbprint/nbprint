@@ -1,5 +1,3 @@
-from typing import Optional, Union
-
 from pydantic import model_validator
 
 from nbprint.config.base import BaseModel
@@ -17,15 +15,15 @@ __all__ = (
 
 
 class Scope(BaseModel):
-    element: Optional[Union[Element, str]] = ""
+    element: Element | str | None = ""
 
-    id: Optional[str] = ""
-    classname: Optional[str] = ""
+    id: str | None = ""
+    classname: str | None = ""
 
-    selector: Optional[str] = ""
+    selector: str | None = ""
 
-    pseudoclass: Optional[PseudoClass] = ""
-    pseudoelement: Optional[PseudoElement] = ""
+    pseudoclass: PseudoClass | None = ""
+    pseudoelement: PseudoElement | None = ""
 
     @model_validator(mode="after")
     def check_any_set(self) -> "Scope":
@@ -51,10 +49,10 @@ class Scope(BaseModel):
 
 
 class Style(BaseModel):
-    scope: Optional[Scope] = None
-    spacing: Optional[Spacing] = None
-    font: Optional[Font] = None
-    border: Optional[Border] = None
+    scope: Scope | None = None
+    spacing: Spacing | None = None
+    font: Font | None = None
+    border: Border | None = None
 
     def __str__(self) -> str:
         ret = f"{self.scope} {{\n"

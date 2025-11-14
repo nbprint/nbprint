@@ -1,4 +1,4 @@
-from typing import Literal, Optional
+from typing import Literal
 
 from pydantic_extra_types.color import Color
 from strenum import StrEnum
@@ -116,7 +116,7 @@ class Direction(StrEnum):
 
 
 class _DirectionalSize(_BaseCss):
-    right: Optional[int] = None
-    left: Optional[int] = None
-    top: Optional[int] = None
-    bottom: Optional[int] = None
+    right: int | None = None
+    left: int | None = None
+    top: int | None = None
+    bottom: int | None = None

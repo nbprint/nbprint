@@ -2,7 +2,7 @@ import ast
 from collections.abc import Mapping
 from json import dumps, loads
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Optional, Union
+from typing import TYPE_CHECKING, List, Optional
 from uuid import uuid4
 
 from ccflow import BaseModel as FlowBaseModel, PyObjectPath
@@ -41,14 +41,14 @@ class BaseModel(FlowBaseModel):
 
     # frontend code
     # This is designed to match anywidget
-    css: Optional[Union[str, Path]] = Field(default="")
-    esm: Optional[Union[str, Path]] = Field(default="")
-    classname: Optional[Union[str, list[str]]] = Field(default="")
-    attrs: Optional[Mapping[str, str]] = Field(default_factory=dict)
+    css: str | Path | None = Field(default="")
+    esm: str | Path | None = Field(default="")
+    classname: str | list[str] | None = Field(default="")
+    attrs: Mapping[str, str] | None = Field(default_factory=dict)
 
     # internals
     # Variable to use inside notebook for this model
-    _nb_var_name: Optional[str] = PrivateAttr(default="")
+    _nb_var_name: str | None = PrivateAttr(default="")
 
     # id to use to reconstitute dom during page building
     _id: str = PrivateAttr(default_factory=lambda: str(uuid4()).replace("-", ""))
@@ -124,7 +124,7 @@ class BaseModel(FlowBaseModel):
         data = loads(json)
         return cls(**data)
 
-    def __call__(self, **_) -> Optional[DisplayObject]:
+    def __call__(self, **_) -> DisplayObject | None:
         """Execute this model inside of a notebook
 
         Args:
@@ -143,9 +143,9 @@ class BaseModel(FlowBaseModel):
         config: Optional["Configuration"],
         parent: Optional["BaseModel"] = None,
         attr: str = "",
-        counter: Optional[int] = None,
+        counter: int | None = None,
         **_,
-    ) -> Optional[Union[NotebookNode, list[NotebookNode]]]:
+    ) -> NotebookNode | list[NotebookNode] | None:
         """Generate a notebook node for this model.
         This will be called before the runtime of the notebook, use it for code generation.
 
@@ -189,7 +189,7 @@ class BaseModel(FlowBaseModel):
         )
         cell.metadata.nbprint.attrs = " ".join(f"{k}={dumps(v)}" for k, v in (self.attrs or {}).items())
 
-    def _base_generate_meta(self, metadata: Optional[dict] = None) -> Optional[NotebookNode]:
+    def _base_generate_meta(self, metadata: dict | None = None) -> NotebookNode | None:
         cell = new_code_cell(metadata=metadata)
         cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
 
@@ -198,7 +198,7 @@ class BaseModel(FlowBaseModel):
         cell.metadata.nbprint.data = self.model_dump_json(by_alias=True)
         return cell
 
-    def _base_generate_md_meta(self, metadata: Optional[dict] = None) -> Optional[NotebookNode]:
+    def _base_generate_md_meta(self, metadata: dict | None = None) -> NotebookNode | None:
         cell = new_markdown_cell(metadata=metadata)
         cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
         self._base_set_nbprint_metadata(cell)
@@ -210,8 +210,8 @@ class BaseModel(FlowBaseModel):
         config: "Configuration",
         parent: Optional["BaseModel"] = None,
         attr: str = "",
-        counter: Optional[int] = None,
-    ) -> Optional[NotebookNode]:
+        counter: int | None = None,
+    ) -> NotebookNode | None:
         from nbprint.config import Configuration
 
         # trigger any pre-cell generation logic
@@ -292,7 +292,7 @@ class BaseModel(FlowBaseModel):
         cell.source = source
         return cell
 
-    def _base_generate_md(self, metadata: dict, config: "Configuration", parent: Optional["BaseModel"] = None) -> Optional[NotebookNode]:
+    def _base_generate_md(self, metadata: dict, config: "Configuration", parent: Optional["BaseModel"] = None) -> NotebookNode | None:
         # trigger any pre-cell generation logic
         self.render(config=config)
 
@@ -308,7 +308,7 @@ class BaseModel(FlowBaseModel):
         return f"<{self.__class__.__name__}>"
 
 
-def _append_or_extend(cells: list, cell_or_cells: Union[NotebookNode, list[NotebookNode]]) -> None:
+def _append_or_extend(cells: list, cell_or_cells: NotebookNode | list[NotebookNode]) -> None:
     if isinstance(cell_or_cells, list):
         cells.extend(cell_or_cells)
     elif cell_or_cells:

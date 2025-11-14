@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Tuple
 
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
@@ -19,7 +19,7 @@ __all__ = (
 
 
 class PageRegionContent(BaseModel):
-    content: Optional[str] = ""
+    content: str | None = ""
 
     # common
     tags: list[str] = Field(default=["nbprint:page"])
@@ -33,13 +33,13 @@ class PageRegionContent(BaseModel):
 
 
 class PageNumber(PageRegionContent):
-    content: Optional[str] = "counter(page)"
+    content: str | None = "counter(page)"
 
 
 class PageRegion(BaseModel):
     _region: str = ""
-    content: Optional[PageRegionContent] = Field(default_factory=PageNumber)
-    style: Optional[Style] = None
+    content: PageRegionContent | None = Field(default_factory=PageNumber)
+    style: Style | None = None
 
     css: str = ""
 
@@ -55,23 +55,23 @@ class PageRegion(BaseModel):
 
 
 class Page(BaseModel):
-    top: Optional[PageRegion] = None
-    top_left: Optional[PageRegion] = None
-    top_right: Optional[PageRegion] = None
-    bottom: Optional[PageRegion] = None
-    bottom_left: Optional[PageRegion] = None
-    bottom_right: Optional[PageRegion] = None
-    left: Optional[PageRegion] = None
-    left_top: Optional[PageRegion] = None
-    left_bottom: Optional[PageRegion] = None
-    right: Optional[PageRegion] = None
-    right_top: Optional[PageRegion] = None
-    right_bottom: Optional[PageRegion] = None
+    top: PageRegion | None = None
+    top_left: PageRegion | None = None
+    top_right: PageRegion | None = None
+    bottom: PageRegion | None = None
+    bottom_left: PageRegion | None = None
+    bottom_right: PageRegion | None = None
+    left: PageRegion | None = None
+    left_top: PageRegion | None = None
+    left_bottom: PageRegion | None = None
+    right: PageRegion | None = None
+    right_top: PageRegion | None = None
+    right_bottom: PageRegion | None = None
 
-    size: Optional[Union[PageSize, Tuple[float, float]]] = Field(default=PageSize.letter)
-    orientation: Optional[PageOrientation] = Field(default=PageOrientation.portrait)
+    size: PageSize | Tuple[float, float] | None = Field(default=PageSize.letter)
+    orientation: PageOrientation | None = Field(default=PageOrientation.portrait)
 
-    pages: Optional[list["Page"]] = Field(default_factory=list)
+    pages: list["Page"] | None = Field(default_factory=list)
 
     css: str = ""
 
@@ -160,9 +160,7 @@ class Page(BaseModel):
                 """
                 )
 
-    def generate(
-        self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str = "page", **_
-    ) -> Optional[Union[NotebookNode, list[NotebookNode]]]:
+    def generate(self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str = "page", **_) -> NotebookNode | list[NotebookNode] | None:
         cells = []
 
         # parent and config should be equal for the global page layout
