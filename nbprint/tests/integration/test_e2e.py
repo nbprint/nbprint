@@ -32,6 +32,7 @@ _integration_notebooks = (
 _integration_formats = (
     "ipynb",
     "html",
+    "webhtml",
     "webpdf",
 )
 

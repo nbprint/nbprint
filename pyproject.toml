@@ -84,6 +84,9 @@ develop = [
 [project.entry-points."hydra.lernaplugins"]
 nbprint = "pkg:nbprint.config.hydra"
 
+[project.entry-points."nbconvert.exporters"]
+webhtml = "nbprint.nbconvert.webhtml:WebHTMLExporter"
+
 [project.scripts]
 nbprint = "nbprint.cli:main"
 nbprint-cc = "nbprint.cli:hydra"
@@ -174,6 +177,9 @@ exclude = ["/js"]
 "nbprint/templates/nbprint" = "share/jupyter/nbconvert/templates/nbprint"
 "nbprint/extension" = "share/jupyter/labextensions/nbprint"
 "nbprint/voila" = "share/jupyter/voila/templates/nbprint_voila"
+
+# https://github.com/jupyter/nbconvert/pull/2246
+"nbprint/nbconvert/templates" = "share/jupyter/nbconvert/templates"
 
 [tool.hatch.build.hooks.hatch-js]
 path = "js"
