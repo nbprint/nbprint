@@ -7,11 +7,11 @@ from pydantic import field_validator
 
 from nbprint.config import Configuration, Outputs
 
-__all__ = ("HTMLOutputs", "NBConvertOutputs", "NotebookOutputs", "PDFOutputs")
+__all__ = ("HTMLOutputs", "NBConvertOutputs", "NotebookOutputs", "PDFOutputs", "WebHTMLOutputs")
 
 
 class NBConvertOutputs(Outputs):
-    target: Literal["ipynb", "html", "pdf", "webpdf"] | None = "html"  # TODO: nbconvert types
+    target: Literal["ipynb", "html", "webhtml", "pdf", "webpdf"] | None = "html"  # TODO: nbconvert types
     execute: bool | None = True
     timeout: int | None = 600
     template: str | None = "nbprint"
@@ -28,7 +28,12 @@ class NBConvertOutputs(Outputs):
     def resolve_output(self, config: "Configuration") -> Path:
         # get original notebook
         original = str(super().resolve_output(config=config))
-        target = self.target if self.target != "webpdf" else "pdf"
+        if self.target == "webpdf":
+            target = "pdf"
+        elif self.target == "webhtml":
+            target = "html"
+        else:
+            target = self.target
         if self.target == "ipynb":
             return Path(original.replace(".ipynb", ".nbconvert.ipynb"))
         return Path(original.replace(".ipynb", f".{target}"))
@@ -67,6 +72,10 @@ class NotebookOutputs(NBConvertOutputs):
 
 class HTMLOutputs(NBConvertOutputs):
     target: Literal["html"] = "html"
+
+
+class WebHTMLOutputs(NBConvertOutputs):
+    target: Literal["webhtml"] = "webhtml"
 
 
 class PDFOutputs(NBConvertOutputs):
