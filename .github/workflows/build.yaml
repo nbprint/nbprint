@@ -66,6 +66,10 @@ jobs:
 
     - name: Test
       run: make tests
+      env:
+        SMTP_HOST: ${{ secrets.SMTP_HOST }}
+        SMTP_USER: ${{ secrets.SMTP_USER }}
+        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
       if: ${{ matrix.os == 'ubuntu-latest' }}
 
     - name: Upload test results

@@ -1,0 +1,6 @@
+# @package nbprint.content.frontmatter
+- _target_:  nbprint.ContentMarkdown
+  content: |
+    # ${nbprint.name}
+  css: ":scope { text-align: center; }"
+- _target_:  nbprint.ContentPageBreak
