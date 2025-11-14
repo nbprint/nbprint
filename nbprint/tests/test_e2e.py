@@ -87,13 +87,13 @@ def test_email_notebook(notebook, fmt):
         run(
             f"examples/{notebook}.ipynb",
             [
-                "outputs=nbprint/email",
+                "nbprint/outputs=nbprint/email",
                 f"++nbprint.outputs.target={fmt}",
                 f"+nbprint.outputs.to={environ['SMTP_USER']}",
                 f"+nbprint.outputs.smtp.host={environ['SMTP_HOST']}",
                 f"+nbprint.outputs.smtp.user={environ['SMTP_USER']}",
                 f"+nbprint.outputs.smtp.password={environ['SMTP_PASSWORD']}",
-                "content/frontmatter=nbprint/title_toc",
+                "nbprint/content/frontmatter=nbprint/title_toc",
             ],
         )
     else:
