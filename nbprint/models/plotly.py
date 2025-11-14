@@ -1,5 +1,4 @@
 import os
-from typing import Optional
 
 from IPython.display import HTML
 
@@ -9,7 +8,7 @@ __all__ = ("PlotlyRendererConfiguration",)
 
 
 class PlotlyRendererConfiguration(Content):
-    default: Optional[str] = "notebook_connected"
+    default: str | None = "notebook_connected"
 
     def __call__(self, **_) -> HTML:
         if os.environ.get("_NBPRINT_IN_NBCONVERT", "0") == "1":

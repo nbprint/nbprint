@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Literal
 
 from ccflow_email import SMTP, Attachment, Email, Message
 from nbformat import NotebookNode
@@ -14,10 +14,10 @@ __all__ = ("EmailOutputs",)
 
 class EmailOutputs(NBConvertOutputs):
     # revert this back
-    target: Optional[Literal["ipynb", "html", "pdf", "webpdf"]] = "ipynb"
+    target: Literal["ipynb", "html", "pdf", "webpdf"] | None = "ipynb"
 
-    body: Optional[str] = Field(default=None, description="Body of the email, defaults to output name")
-    subject: Optional[str] = Field(default=None, description="Subject of the email, defaults to output name")
+    body: str | None = Field(default=None, description="Body of the email, defaults to output name")
+    subject: str | None = Field(default=None, description="Subject of the email, defaults to output name")
     to: list[str] = Field(description="Recipient email addresses")
 
     smtp: SMTP = Field()

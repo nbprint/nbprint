@@ -2,7 +2,7 @@ from ast import literal_eval
 from pathlib import Path
 from pprint import pprint
 from sys import version_info
-from typing import Optional, Type, Union
+from typing import Type, Union
 
 from ccflow import CallableModel, ContextType, Flow, ResultType
 from hydra import compose, initialize_config_dir
@@ -243,7 +243,7 @@ class Configuration(CallableModel, BaseModel):
         cell.metadata.nbprint.outputs = self.outputs.model_dump_json(by_alias=True)
         return cell
 
-    def _generate_resources_cells(self, metadata: Optional[dict] = None) -> NotebookNode:
+    def _generate_resources_cells(self, metadata: dict | None = None) -> NotebookNode:
         cell = super()._base_generate(metadata=metadata, config=None)
 
         # omit the data
@@ -279,7 +279,7 @@ class Configuration(CallableModel, BaseModel):
                 return config
         raise NBPrintPathOrModelMalformedError(path_or_model)
 
-    def run(self, dry_run: bool = False) -> Optional[Path]:
+    def run(self, dry_run: bool = False) -> Path | None:
         gen = self.generate()
         ret = None
         if self.debug:

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from nbformat import NotebookNode
 from pydantic import ConfigDict, Field, PrivateAttr
@@ -17,7 +17,7 @@ class Context(BaseModel):
     tags: list[str] = Field(default=["nbprint:context"])
     role: Role = Role.CONTEXT
     ignore: bool = True
-    parameters: Optional[Parameters] = None
+    parameters: Parameters | None = None
 
     # internals
     _nb_var_name: str = PrivateAttr(default="nbprint_ctx")
