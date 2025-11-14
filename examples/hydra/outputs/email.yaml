@@ -1,0 +1,14 @@
+# @package _global_
+
+outputs:
+  _target_: nbprint.EmailOutputs
+  subject: nbprint test email
+  body: Example Email Report
+  to: ???
+  smtp:
+    _target_: ccflow_email.SMTP
+    host: ???
+    port: 587
+    user: ???
+    password: ???
+    tls: true
