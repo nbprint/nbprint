@@ -1,0 +1,19 @@
+defaults:
+  - _self_
+  # use example plugin
+  - nbprint/page: nbprint_example_plugin/default
+
+nbprint:
+  _target_: nbprint.Configuration
+  name: "test"
+  outputs:
+    _target_: nbprint.NBConvertOutputs
+
+  content:
+    - _target_: nbprint.ContentCode
+      content: |
+        print("yay!")
+
+hydra:
+  searchpath:
+    - file://examples/hydra

@@ -23,7 +23,7 @@ def test_integrations(file):
 
 
 def test_content_injection():
-    res = run("examples/basic.ipynb", ["content/frontmatter=nbprint/title_toc"])
+    res = run("examples/basic.ipynb", ["nbprint/content/frontmatter=nbprint/title_toc"])
     output = res.outputs.notebook.read_text()
     nb = reads(output, as_version=4)
     # Title cell

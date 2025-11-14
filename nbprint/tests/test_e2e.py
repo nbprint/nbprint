@@ -82,19 +82,19 @@ def test_run_notebook_direct(notebook, fmt):
 @pytest.mark.parametrize(("notebook", "fmt"), list(product(_integration_notebooks, _integration_formats)))
 def test_email_notebook(notebook, fmt):
     if notebook == "basic":
-        if "SMTP_USER" not in environ or "SMTP_PASSWORD" not in environ:
+        if not environ.get("SMTP_USER") or not environ.get("SMTP_PASSWORD"):
             pytest.skip("SMTP credentials not set in environment - skipping email test")
             return
         run(
             f"examples/{notebook}.ipynb",
             [
-                "outputs=nbprint/email",
+                "nbprint/outputs=nbprint/email",
                 f"++nbprint.outputs.target={fmt}",
                 f"+nbprint.outputs.to={environ['SMTP_USER']}",
                 f"+nbprint.outputs.smtp.host={environ['SMTP_HOST']}",
                 f"+nbprint.outputs.smtp.user={environ['SMTP_USER']}",
                 f"+nbprint.outputs.smtp.password={environ['SMTP_PASSWORD']}",
-                "content/frontmatter=nbprint/title_toc",
+                "nbprint/content/frontmatter=nbprint/title_toc",
             ],
         )
     else:
