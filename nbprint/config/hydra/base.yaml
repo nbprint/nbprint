@@ -6,12 +6,12 @@ defaults:
   # and notebook has no default context. Restore after renaming
   # - context: nbprint/default
 
-  - content/frontmatter: []
-  - content/backmatter: []
+  - nbprint/content/frontmatter: []
+  - nbprint/content/backmatter: []
 
-  - outputs: nbprint/default
-  - page: nbprint/default
-  - parameters: nbprint/papermill
+  - nbprint/outputs: nbprint/default
+  - nbprint/page: nbprint/default
+  - nbprint/parameters: nbprint/papermill
   - _self_
 
 callable: /nbprint
