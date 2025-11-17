@@ -18,6 +18,11 @@ export class handlers extends Handler {
 }
 
 export const build = async () => {
+  // Attach CSS Selector to body so it can be used in downstream CSS
+  // Do this before any pagedjs processing so that elements can adjust
+  // their styles before chunking or previewing
+  document.body.classList.add("pagedjs");
+
   const config = {
     auto: true,
     before: undefined,
