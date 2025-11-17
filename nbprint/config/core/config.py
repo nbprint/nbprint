@@ -162,7 +162,10 @@ class Configuration(CallableModel, BaseModel):
             values["content"].middlematter.append(ContentCode(content=cell.source) if cell.cell_type == "code" else ContentMarkdown(content=cell.source))
 
         for k, v in new_parameters.items():
-            setattr(values["parameters"], k, v)
+            if k in values["parameters"].model_fields and getattr(values["parameters"], k) is None:
+                setattr(values["parameters"], k, v)
+            elif isinstance(values["parameters"], PapermillParameters) and (k not in values["parameters"].vars or values["parameters"].vars[k] is None):
+                values["parameters"].vars[k] = v
 
     @model_validator(mode="before")
     @classmethod

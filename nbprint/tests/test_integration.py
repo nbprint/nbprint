@@ -6,7 +6,7 @@ from nbformat import reads
 from nbprint.cli import run
 
 
-@pytest.mark.parametrize("file", list((Path(__file__).parent / "files").glob("*")))
+@pytest.mark.parametrize("file", sorted((Path(__file__).parent / "files").glob("*")))
 def test_integrations(file):
     res = run(str(file.resolve()))
 
@@ -37,5 +37,5 @@ def test_parameter_injection():
     output = res.outputs.notebook.read_text()
     nb = reads(output, as_version=4)
     first_cell = nb.cells[0]
-    for k, v in [("a", 1), ("b", 2.3), ("d", True), ("c", "'abc'")]:
+    for k, v in [("a", 10), ("b", "'hello'"), ("d", True), ("c", "'abc'")]:
         assert f"{k} = {v}" in first_cell.source
