@@ -9,7 +9,7 @@ _target_: nbprint.Configuration
 
 outputs:
   _target_: nbprint.NBConvertOutputs
-  path_root: ./examples/output
+  path_root: ./outputs
   target: "html"
 
 context:
