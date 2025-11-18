@@ -25,18 +25,10 @@ class _ContentFlexLayout(Content):
     esm: str = """
 function render(meta, elem) {
     let data = JSON.parse(meta.data);
-
-    if (data.sizes.length <= 0 )
-        return;
-
     let size_index = 0;
 
     Array.from(elem.children).forEach((child) => {
-        let size = data.sizes[size_index];
-
-        if (!size)
-            return;
-
+        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;
         // TODO:these are hacks to determine
         // if it should be included
         let output_children = (child.querySelector(".jp-OutputArea-output") || {}).children || [];
