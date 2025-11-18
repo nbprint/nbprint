@@ -48,6 +48,7 @@ dependencies = [
     "nbformat",
     "notebook",
     "omegaconf",
+    "pkn",
     "pydantic>=2,<3",
     "pydantic_extra_types",
     "strenum",

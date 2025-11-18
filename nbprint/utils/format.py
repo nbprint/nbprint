@@ -29,8 +29,7 @@ def hr() -> HTML:
 
 def newpage() -> HTML:
     """Make a new page. in html, this just does a horizontal rule"""
-    p = dt.p()
-    p.attributes["style"] = "page-break-before: always;"
+    p = dt.p(cls="pagebreak")
     return _html(str(p))
 
 
