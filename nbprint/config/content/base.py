@@ -14,14 +14,42 @@ if TYPE_CHECKING:
 
 class Content(BaseModel):
     content: str | list[SerializeAsAny[BaseModel]] | None = ""
-    tags: list[str] = Field(default=["nbprint:content"])
+    tags: list[str] = Field(default_factory=list)
     role: Role = Role.CONTENT
 
     # cell magics
     magics: list[str] | None = Field(default_factory=list, description="List of cell magics to apply to the cell")
 
+    # output key
+    output: str | None = Field(
+        default=None,
+        description="If set, the cell's outputs will be collected into the `Outputs` context under this key (only for code cells).",
+    )
+
     # used by lots of things
     style: Style | None = None
+
+    @field_validator("tags", mode="after")
+    @classmethod
+    def _ensure_tags(cls, v: list[str]) -> list[str]:
+        if "nbprint:content" not in v:
+            v.append("nbprint:content")
+        return v
+
+    def _postprocess_cell(self, cell) -> None:
+        if isinstance(self.content, str) and self.content:
+            # replace content if its a str
+            cell.source = self.content
+
+            # remove the data, redundant
+            cell.metadata.nbprint.data = ""
+
+        if self.output:
+            # Add output tag
+            if f"nbprint:output:{self.output}" not in cell.metadata.get("tags", []):
+                cell.metadata.tags.append(f"nbprint:output:{self.output}")
+            # Add to nbprint meta
+            cell.metadata.nbprint.output = self.output
 
     def generate(
         self,
@@ -39,13 +67,7 @@ class Content(BaseModel):
             attr=attr or "content",
             counter=counter,
         )
-        if isinstance(self.content, str) and self.content:
-            # replace content if its a str
-            self_cell.source = self.content
-
-            # remove the data, redundant
-            self_cell.metadata.nbprint.data = ""
-
+        self._postprocess_cell(self_cell)
         cells = [self_cell]
 
         if isinstance(self.content, list):

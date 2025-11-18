@@ -49,3 +49,61 @@ content:
               Ut labore et dolore magna aliqua.
               ## Subsection One
               Ut enim ad minim veniam, quis nostrud.
+
+  - _target_:  nbprint.ContentPageBreak
+
+  - _target_: nbprint.ContentMarkdown
+    content: |
+      ## Outputs
+
+  - _target_: nbprint.ContentCode
+    content: |
+      from superstore import superstore, getTimeSeries
+      from IPython.display import JSON, Markdown, FileLink
+
+  - _target_: nbprint.ContentCode
+    content: |
+      df = superstore()
+
+  - _target_: nbprint.ContentMarkdown
+    content: |
+      ### FileLink
+
+  - _target_: nbprint.ContentCode
+    content: |
+      pth = "superstore.csv"
+      df.to_csv(pth, index=False)
+      FileLink(pth)
+
+  - _target_: nbprint.ContentMarkdown
+    content: |
+      ### JSON
+
+  - _target_: nbprint.ContentCode
+    content: |
+      JSON(df.head().to_dict())
+
+  - _target_: nbprint.ContentMarkdown
+    content: |
+      ### Image
+
+  - _target_: nbprint.ContentCode
+    content: |
+      getTimeSeries().plot();
+
+  - _target_: nbprint.ContentMarkdown
+    content: |
+      ### Bool
+
+  - _target_: nbprint.ContentCode
+    content: |
+      True
+
+  - _target_: nbprint.ContentMarkdown
+    content: |
+      ### String
+
+  - _target_: nbprint.ContentCode
+    content: |
+      "abc"
+

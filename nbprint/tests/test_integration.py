@@ -14,8 +14,9 @@ def test_integrations(file):
     if file.name == "capture.yaml":
         output = res.outputs.notebook.read_text()
         nb = reads(output, as_version=4)
-        assert nb.cells[-1].source == '%%capture\nprint("test1")\nimport logging\nlogging.critical("test!")\n'
-        assert nb.cells[-1].outputs == []
+        # NOTE: last cell is outputs, so check second to last
+        assert nb.cells[-2].source == '%%capture\nprint("test1")\nimport logging\nlogging.critical("test!")\n'
+        assert nb.cells[-2].outputs == []
 
     if file.name == "plugins.yaml":
         output = res.outputs.notebook.read_text()
@@ -25,6 +26,23 @@ def test_integrations(file):
 def test_nbprint_metadata_in_basic_nb():
     c = run("examples/basic.ipynb", dry_run=True)
     assert c.content.middlematter[0].css == ":scope h2 { color: red; }"
+
+
+def test_nbprint_outputs():
+    # Grab config via dry run
+    c = run("examples/basic.ipynb", dry_run=True)
+
+    # Execute
+    c.run()
+
+    # Check outputs collected
+    assert sorted(c.outputs.outputs.keys()) == [
+        "bool",
+        "file",
+        "image",
+        "json",
+        "string",
+    ]
 
 
 def test_content_injection():
