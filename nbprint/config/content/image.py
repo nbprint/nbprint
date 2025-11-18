@@ -9,13 +9,20 @@ from .base import Content
 class ContentImage(Content):
     path: FilePath | None = None
     content: bytes | None = b""
-    tags: list[str] = Field(default=["nbprint:content", "nbprint:content:image"])
+    tags: list[str] = Field(default_factory=list)
 
     @field_validator("path", mode="before")
     @classmethod
     def convert_path_from_obj(cls, v) -> Path:
         if isinstance(v, str):
             v = Path(v).resolve()
+        return v
+
+    @field_validator("tags", mode="after")
+    @classmethod
+    def _ensure_tags(cls, v: list[str]) -> list[str]:
+        if "nbprint:content:image" not in v:
+            v.append("nbprint:content:image")
         return v
 
     @field_validator("content", mode="before")

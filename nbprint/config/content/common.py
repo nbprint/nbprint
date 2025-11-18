@@ -14,7 +14,7 @@ class TextComponent(Content):
     font_style: FontStyle | None = None
     text_decoration: TextDecoration | None = None
 
-    tags: list[str] = Field(default=["nbprint:content"])
+    tags: list[str] = Field(default_factory=list)
 
     def __call__(self, **_) -> Markdown:
         return Markdown(self.text)

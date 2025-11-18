@@ -7,7 +7,7 @@ from jinja2 import Environment
 from nbformat import NotebookNode
 from pydantic import Field, field_validator, model_validator
 
-from nbprint.config import Configuration
+from nbprint.config import Configuration, OutputsProcessing
 
 from .nbconvert import NBConvertOutputs
 
@@ -94,6 +94,9 @@ class EmailOutputs(NBConvertOutputs):
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
         # generate the output file
         output_path = super().run(config=config, gen=gen)
+
+        if output_path in (None, OutputsProcessing.STOP):
+            return OutputsProcessing.STOP
 
         default_output_name = self._output_name(config=config)
 

@@ -22,7 +22,7 @@ class PageRegionContent(BaseModel):
     content: str | None = ""
 
     # common
-    tags: list[str] = Field(default=["nbprint:page"])
+    tags: list[str] = Field(default_factory=list)
     role: Role = Role.PAGE
     ignore: bool = True
 
@@ -30,6 +30,13 @@ class PageRegionContent(BaseModel):
         if self.content:
             return f"content: {self.content};"
         return ""
+
+    @field_validator("tags", mode="after")
+    @classmethod
+    def _ensure_tags(cls, v: list[str]) -> list[str]:
+        if "nbprint:page" not in v:
+            v.append("nbprint:page")
+        return v
 
 
 class PageNumber(PageRegionContent):
@@ -44,9 +51,16 @@ class PageRegion(BaseModel):
     css: str = ""
 
     # common
-    tags: list[str] = Field(default=["nbprint:page"])
+    tags: list[str] = Field(default_factory=list)
     role: Role = Role.PAGE
     ignore: bool = True
+
+    @field_validator("tags", mode="after")
+    @classmethod
+    def _ensure_tags(cls, v: list[str]) -> list[str]:
+        if "nbprint:page" not in v:
+            v.append("nbprint:page")
+        return v
 
     def generate(self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str, **_) -> NotebookNode:
         cell = super().generate(metadata=metadata, config=config, parent=parent, attr=attr)
