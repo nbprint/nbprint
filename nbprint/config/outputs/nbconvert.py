@@ -2,10 +2,11 @@ import os
 from pathlib import Path
 from typing import Literal
 
+from ccflow import PyObjectPath
 from nbformat import NotebookNode
-from pydantic import field_validator
+from pydantic import Field, PrivateAttr, field_validator
 
-from nbprint.config import Configuration, Outputs
+from nbprint.config import Configuration, Outputs, OutputsProcessing
 
 __all__ = ("HTMLOutputs", "NBConvertOutputs", "NotebookOutputs", "PDFOutputs", "WebHTMLOutputs")
 
@@ -15,6 +16,37 @@ class NBConvertOutputs(Outputs):
     execute: bool | None = True
     timeout: int | None = 600
     template: str | None = "nbprint"
+
+    # TODO: maybe allow collecting by index
+    # collect_cells: list[int] = Field(default=[], description="List of cell indices to collect outputs from.")
+    collect_outputs: bool = Field(
+        default=False, description=("Whether to collect cell outputs into the context. Cells with tag `nbprint:output:<key>` will be collected under `<key>`.")
+    )
+    execute_hook: PyObjectPath | None = Field(
+        default=None,
+        description=(
+            "A callable hook that is called after nbconvert execution of the notebook. "
+            "It is passed this instance. "
+            "If it returns something non-None, that value is returned by `run` instead of the output path."
+            "NOTE: Parent/child class hooks may also be called."
+        ),
+    )
+    nbconvert_hook: PyObjectPath | None = Field(
+        default=None,
+        description=(
+            "A callable hook that is called after nbconvert of the previously executed notebook. "
+            "It is passed this instance. "
+            "If it returns something non-None, that value is returned by `run` instead of the output path."
+            "NOTE: Parent/child class hooks may also be called."
+        ),
+    )
+
+    _collected_cells: dict[int | str, list[dict[str, str]]] = PrivateAttr(default_factory=dict)
+
+    @property
+    def outputs(self) -> dict[int | str, list[dict[str, str]]]:
+        # NOTE: parent class has `output`
+        return self._collected_cells
 
     @field_validator("target", mode="before")
     @classmethod
@@ -35,34 +67,114 @@ class NBConvertOutputs(Outputs):
         else:
             target = self.target
         if self.target == "ipynb":
-            return Path(original.replace(".ipynb", ".nbconvert.ipynb"))
+            return Path(original.replace(".ipynb", ".executed.ipynb"))
         return Path(original.replace(".ipynb", f".{target}"))
+
+    @staticmethod
+    def _get_output_key(cell: NotebookNode) -> str | None:
+        """Get the output key from cell metadata or tags."""
+        if "nbprint" in cell.metadata and "output" in cell.metadata.nbprint:
+            return cell.metadata.nbprint.output
+        for tag in cell.metadata.get("tags", []):
+            if tag.startswith("nbprint:output:"):
+                return tag.split("nbprint:output:")[1]
+        return None
+
+    def _extract_cell_outputs(self) -> None:
+        """Extract outputs from selected cells into the context."""
+        # We're going to:
+        # - read the notebook
+        # - go through each cell and look for nbprint metadata
+        #   - either `nbprint:output:<key>` tag or
+        #   - `nbprint` metadata with `output` key
+        # - collect outputs from those cells into self._collected_cells, such that:
+        #     - the mimetype is used to determine the type of output
+        #     - if we know how to deal, store natively
+        #     - else, store as-is
+
+        from nbformat import reads
+
+        notebook_content = self._nb_path.read_text()
+        nb = reads(notebook_content, as_version=4)
+
+        for cell in nb.cells:
+            if "nbprint" not in cell.metadata and not any(tag.startswith("nbprint:output:") for tag in cell.metadata.get("tags", [])):
+                continue
+
+            output_key = self._get_output_key(cell)
+            if output_key is None:
+                continue
+
+            outputs = []
+            for output in cell.get("outputs", []):
+                output_data = {}
+                if "data" in output:
+                    output_data = dict(output["data"].items())
+                elif "text" in output:
+                    output_data["text/plain"] = output["text"]
+                outputs.append(output_data)
+            if output_key not in self._collected_cells:
+                self._collected_cells[output_key] = []
+            self._collected_cells[output_key].extend(outputs)
 
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
         from nbconvert.nbconvertapp import main as execute_nbconvert
 
-        # run the nbconvert
+        # Run parent to create notebook
         notebook = super().run(config=config, gen=gen)
+
+        # If notebook is None, we stop
+        if notebook in (None, OutputsProcessing.STOP):
+            return OutputsProcessing.STOP
+
+        # Grab the output artifact
+        self._output_path = self.resolve_output(config=config)
+
+        # TODO: fix in nbconvert
+        output = str(self._output_path).replace(".webpdf", ".pdf").replace(".pdf", "") if self.target == "webpdf" else str(self._output_path)
 
         cmd = [
             str(notebook),
             f"--to={self.target}",
+            f"--output={output}",
             f"--template={self.template}",
         ]
-
-        if self.execute:
-            cmd.extend(
-                [
-                    "--execute",
-                    f"--ExecutePreprocessor.timeout={self.timeout}",
-                ]
-            )
 
         # We have some cheats here because we have to
         os.environ["_NBPRINT_IN_NBCONVERT"] = "1"
         os.environ["PSP_JUPYTER_HTML_EXPORT"] = "1"
-        execute_nbconvert(cmd)
-        self._output_path = self.resolve_output(config=config)
+
+        if self.execute:
+            execute_output = notebook.parent / f"{notebook.stem}.executed.ipynb"
+            nbex_cmd = [
+                str(notebook),
+                "--to=notebook",
+                f"--output={execute_output!s}",
+                "--execute",
+                f"--ExecutePreprocessor.timeout={self.timeout}",
+            ]
+
+            # Update cmd to use executed notebook
+            cmd[0] = str(execute_output)
+
+            # Update nb path to be executed notebook
+            self._nb_path = execute_output
+
+            # Execute nbconvert
+            execute_nbconvert(nbex_cmd)
+
+            if self.execute_hook and self.execute_hook.object()(self) in (OutputsProcessing.STOP, None):
+                return OutputsProcessing.STOP
+
+        if not (self.execute and self.target == "ipynb"):
+            # If target is notebook, we already did it above
+            execute_nbconvert(cmd)
+
+        if self.execute:
+            # Extract cells by tags
+            self._extract_cell_outputs()
+        if self.nbconvert_hook and self.nbconvert_hook.object()(self) in (OutputsProcessing.STOP, None):
+            return OutputsProcessing.STOP
         return self._output_path
 
 
@@ -80,11 +192,3 @@ class WebHTMLOutputs(NBConvertOutputs):
 
 class PDFOutputs(NBConvertOutputs):
     target: Literal["webpdf"] = "webpdf"
-
-
-# class PapermillOutputs(NBConvertOutputs):
-#     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
-#         from nbconvert.nbconvertapp import main
-
-#         notebook = super().run(config=config, gen=gen)
-#         main([notebook, f"--to={self.target}", f"--template={self.template}", "--execute"])

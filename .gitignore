@@ -169,3 +169,4 @@ examples/output
 
 # Plugins testing
 nbprint_example_plugin*
+*.csv

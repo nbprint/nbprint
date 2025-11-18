@@ -21,7 +21,7 @@ from nbprint.config.page import Page
 
 from .content import ContentMarshall
 from .context import Context
-from .outputs import Outputs
+from .outputs import Outputs, OutputsProcessing
 from .parameters import PapermillParameters, Parameters
 
 __all__ = (
@@ -43,7 +43,7 @@ class Configuration(CallableModel, BaseModel):
     content: ContentMarshall = Field(default_factory=ContentMarshall)
 
     # basic metadata
-    tags: list[str] = Field(default=["nbprint:config"])
+    tags: list[str] = Field(default_factory=list)
     role: Role = Role.CONFIGURATION
     ignore: bool = True
     pagedjs: bool = True
@@ -52,6 +52,13 @@ class Configuration(CallableModel, BaseModel):
     # internals
     _nb_var_name: str = PrivateAttr(default="nbprint_config")
     _nb_vars: set = PrivateAttr(default_factory=set)
+
+    @field_validator("tags", mode="after")
+    @classmethod
+    def _ensure_tags(cls, v: list[str]) -> list[str]:
+        if "nbprint:config" not in v:
+            v.append("nbprint:config")
+        return v
 
     @field_validator("resources", mode="before")
     @classmethod
@@ -148,32 +155,37 @@ class Configuration(CallableModel, BaseModel):
         #     "type_": "nbprint.config.core.parameters.Parameters"
         #    },
         if "metadata" in cell and "nbprint" in cell["metadata"]:
-            cell_meta = cell["metadata"]["nbprint"]
+            nbprint_cell_meta = cell["metadata"]["nbprint"]
 
             # TODO: not all fields are serdes symmetric
-            cell_meta.pop("attrs", None)
-            cell_meta.pop("class", None)
-            cell_meta.pop("class_selector", None)
-            cell_meta.pop("element_selector", None)
-
-            if "type_" in cell_meta:
-                content_type = cell_meta["type_"]
-                content_model = BaseModel._to_type({"type_": content_type}, Content)
-                return content_model.model_validate(cell_meta)
+            nbprint_cell_meta.pop("attrs", None)
+            nbprint_cell_meta.pop("class", None)
+            nbprint_cell_meta.pop("class_selector", None)
+            nbprint_cell_meta.pop("element_selector", None)
         else:
-            cell_meta = {}
+            nbprint_cell_meta = {}
+
+        # Attach cell tags in to content
+        if "tags" in cell["metadata"]:
+            nbprint_cell_meta["tags"] = cell["metadata"]["tags"]
+
+        # If this is an nbprint defined type, use that
+        if "type_" in nbprint_cell_meta:
+            content_type = nbprint_cell_meta["type_"]
+            content_model = BaseModel._to_type({"type_": content_type}, Content)
+            return content_model.model_validate(nbprint_cell_meta)
+
+        # Set source
+        nbprint_cell_meta["content"] = cell.source
+
         # Default handling: treat as code or markdown content
         if cell.cell_type in {"code"}:
-            content = ContentCode(content=cell.source)
+            content = ContentCode.model_validate(nbprint_cell_meta)
         elif cell.cell_type in {"markdown"}:
-            content = ContentMarkdown(content=cell.source)
+            content = ContentMarkdown.model_validate(nbprint_cell_meta)
         else:
             # Skip, log warning
             _log.warning(f"Unsupported cell type when loading from notebook: {cell.cell_type}")
-        # Apply cell metadata if present
-        for k, v in cell_meta.items():
-            if k in content.__class__.model_fields:
-                setattr(content, k, v)
         return content
 
     @staticmethod
@@ -287,6 +299,12 @@ class Configuration(CallableModel, BaseModel):
                 content.generate(metadata=base_meta.copy(), config=self, parent=self, attr="content", counter=i),
             )
 
+        # Finally, run the outputs cell
+        # NOTE: outputs cell doesnt usually actually do anything, unless
+        # it is set to run in-context, in which case it will only
+        # execute inside the notebook and note outside
+        _append_or_extend(nb.cells, self.outputs.generate(metadata=base_meta.copy(), config=self, parent=self, attr="outputs"))
+
         return nb
 
     def _generate_self(self, metadata: dict) -> NotebookNode:
@@ -348,6 +366,11 @@ class Configuration(CallableModel, BaseModel):
             pprint(gen)
         if not dry_run:
             ret = self.outputs.run(self, gen)
+            if ret in (None, OutputsProcessing.STOP):
+                # Either a handled problem or user requested stop
+                # Return None to indicate a problem
+                # TODO: revisit
+                return None
 
         # reset in case we want to run again
         self._reset()
