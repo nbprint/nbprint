@@ -22,6 +22,11 @@ def test_integrations(file):
         assert "Example Page Content from Plugin" in output
 
 
+def test_nbprint_metadata_in_basic_nb():
+    c = run("examples/basic.ipynb", dry_run=True)
+    assert c.content.middlematter[0].css == ":scope h2 { color: red; }"
+
+
 def test_content_injection():
     res = run("examples/basic.ipynb", ["nbprint/content/frontmatter=nbprint/title_toc"])
     output = res.outputs.notebook.read_text()
