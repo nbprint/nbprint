@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from nbformat import NotebookNode
-from pydantic import ConfigDict, Field, PrivateAttr
+from pydantic import ConfigDict, Field, PrivateAttr, field_validator
 
 from nbprint.config.base import BaseModel, Role
 
@@ -14,7 +14,7 @@ __all__ = ("Context",)
 
 
 class Context(BaseModel):
-    tags: list[str] = Field(default=["nbprint:context"])
+    tags: list[str] = Field(default_factory=list)
     role: Role = Role.CONTEXT
     ignore: bool = True
     parameters: Parameters | None = None
@@ -28,6 +28,13 @@ class Context(BaseModel):
         extra="allow",
         arbitrary_types_allowed=True,
     )
+
+    @field_validator("tags", mode="after")
+    @classmethod
+    def _ensure_tags(cls, v: list[str]) -> list[str]:
+        if "nbprint:context" not in v:
+            v.append("nbprint:context")
+        return v
 
     def generate(self, metadata: dict, config: "Configuration", parent: BaseModel, attr: str = "", **kwargs) -> NotebookNode:
         self._context_generated = True

@@ -56,7 +56,7 @@ nbprint examples/basic.ipynb +nbprint.name=test ++nbprint.outputs.target=pdf
 nbprint examples/parameters.ipynb +nbprint.parameters.a=test
 
 # Overlay a config group, e.g. title and table of contents
-nbprint examples/basic.ipynb content/frontmatter=nbprint/title_toc
+nbprint examples/basic.ipynb nbprint/content/frontmatter=nbprint/title_toc
 ```
 
 ```mermaid
@@ -135,6 +135,26 @@ graph TB
 ```
 
 This configuration also allows for easier iteration on a report's design and content.
+
+### Outputs
+
+`nbprint` can produce a variety of outputs based on [nbconvert](https://nbconvert.readthedocs.io/en/latest/).
+It can also postprocess these outputs based on content, to e.g. email a report if a certain cell returns `True`, as a simple example.
+With [`hydra`](https://hydra.cc), its easy for us to mix-and-match configuration for content, outputs, layout, and more.
+
+```bash
+# Create HTML from notebook as-is
+nbprint examples/basic.ipynb
+
+# Create HTML using hydra to overlay title page and table-of-contents
+nbprint examples/basic.ipynb nbprint/content/frontmatter=nbprint/title_toc
+
+# Create PDF via WebPDF by using hydra to swap out outputs type
+nbprint examples/basic.ipynb nbprint/outputs=nbprint/pdf
+
+# Create PDF via WebPDF same as above by using hydra to tweak the default output target
+nbprint examples/basic.ipynb ++nbprint.outputs.target=webpdf
+```
 
 ### Configuration
 

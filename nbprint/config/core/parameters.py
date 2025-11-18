@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from ccflow import ContextBase
 from nbformat import NotebookNode
-from pydantic import Field, model_validator
+from pydantic import Field, field_validator, model_validator
 
 from nbprint.config.base import BaseModel, Role
 
@@ -12,9 +12,18 @@ __all__ = ("PapermillParameters", "Parameters")
 
 
 class Parameters(ContextBase, BaseModel):
-    tags: list[str] = Field(default=["parameters", "nbprint:parameters"])
+    tags: list[str] = Field(default_factory=list)
     role: Role = Role.PARAMETERS
     ignore: bool = True
+
+    @field_validator("tags", mode="after")
+    @classmethod
+    def _ensure_tags(cls, v: list[str]) -> list[str]:
+        if "nbprint:parameters" not in v:
+            v.append("nbprint:parameters")
+        if "parameters" not in v:
+            v.append("parameters")
+        return v
 
     def generate(self, metadata: dict, **_) -> NotebookNode:
         cell = self._base_generate_meta(metadata=metadata)

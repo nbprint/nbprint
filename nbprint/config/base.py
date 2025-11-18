@@ -2,7 +2,7 @@ import ast
 from collections.abc import Mapping
 from json import dumps, loads
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, Optional
 from uuid import uuid4
 
 from ccflow import BaseModel as FlowBaseModel, PyObjectPath
@@ -35,7 +35,7 @@ class Role(StrEnum):
 
 class BaseModel(FlowBaseModel):
     # basic metadata
-    tags: List[str] = Field(default_factory=list)
+    tags: list[str] = Field(default_factory=list)
     role: Role = Role.UNDEFINED
     ignore: bool = False
 
