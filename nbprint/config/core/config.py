@@ -9,6 +9,7 @@ from hydra import compose, initialize_config_dir
 from hydra.utils import instantiate
 from nbformat import NotebookNode, read as nb_read
 from nbformat.v4 import new_notebook
+from pkn import getSimpleLogger
 from pydantic import Field, PrivateAttr, field_validator, model_validator
 from typing_extensions import Self
 
@@ -27,6 +28,8 @@ __all__ = (
     "Configuration",
     "load",
 )
+
+_log = getSimpleLogger("nbprint.config.core.config")
 
 
 class Configuration(CallableModel, BaseModel):
@@ -125,41 +128,97 @@ class Configuration(CallableModel, BaseModel):
             raise RuntimeError(e)
 
     @staticmethod
+    def _cell_to_content(cell) -> Content:
+        source = cell.source.strip()
+        if not source:
+            # skip empty cells
+            return None
+        # Cells may have nbprint metadata from the UI extension
+        # "nbprint": {
+        #     "attrs": "",
+        #     "class": "",
+        #     "class_selector": "",
+        #     "css": "",
+        #     "data": "{}",
+        #     "element_selector": "",
+        #     "esm": "",
+        #     "id": "",
+        #     "ignore": true,
+        #     "role": "parameters",
+        #     "type_": "nbprint.config.core.parameters.Parameters"
+        #    },
+        if "metadata" in cell and "nbprint" in cell["metadata"]:
+            cell_meta = cell["metadata"]["nbprint"]
+
+            # TODO: not all fields are serdes symmetric
+            cell_meta.pop("attrs", None)
+            cell_meta.pop("class", None)
+            cell_meta.pop("class_selector", None)
+            cell_meta.pop("element_selector", None)
+
+            if "type_" in cell_meta:
+                content_type = cell_meta["type_"]
+                content_model = BaseModel._to_type({"type_": content_type}, Content)
+                return content_model.model_validate(cell_meta)
+        else:
+            cell_meta = {}
+        # Default handling: treat as code or markdown content
+        if cell.cell_type in {"code"}:
+            content = ContentCode(content=cell.source)
+        elif cell.cell_type in {"markdown"}:
+            content = ContentMarkdown(content=cell.source)
+        else:
+            # Skip, log warning
+            _log.warning(f"Unsupported cell type when loading from notebook: {cell.cell_type}")
+        # Apply cell metadata if present
+        for k, v in cell_meta.items():
+            if k in content.__class__.model_fields:
+                setattr(content, k, v)
+        return content
+
+    @staticmethod
+    def _parse_parameters_cell(cell) -> dict:
+        new_parameters = {}
+        param_lines = cell.source.splitlines()
+        for line in param_lines:
+            if "=" in line:
+                key, value = line.split("=", 1)
+                key = key.strip()
+                value = value.strip()
+                # Attempt to eval the value to get correct type
+                try:
+                    evaluated_value = literal_eval(value)
+                except SyntaxError:
+                    evaluated_value = value
+
+                new_parameters[key] = evaluated_value
+        return new_parameters
+
+    @staticmethod
     def _process_cells(values, nb_content: NotebookNode) -> None:
         new_parameters = {}
+        cells_to_process = nb_content.cells
 
         # TODO: if first cell has tags, insert at front instead of appending
-        if nb_content.cells and "metadata" in nb_content.cells[0] and "parameters" in nb_content.cells[0]["metadata"].get("tags", []):
+        if cells_to_process and "metadata" in cells_to_process[0] and "parameters" in cells_to_process[0]["metadata"].get("tags", []):
+            # Parse first cell for parameters
+            first_cell = cells_to_process[0]
             # skip first cell
-            cells_to_process = nb_content.cells[1:]
+            cells_to_process = cells_to_process[1:]
 
             # Pull out the parameters object and ensure everything is present
             if "parameters" not in values:
                 values["parameters"] = PapermillParameters()
 
-            # Parse first cell for parameters
-            first_cell = nb_content.cells[0]
-
             # Pull out the parameters object and ensure everything is present
-            param_lines = first_cell.source.splitlines()
-            for line in param_lines:
-                if "=" in line:
-                    key, value = line.split("=", 1)
-                    key = key.strip()
-                    value = value.strip()
-                    # Attempt to eval the value to get correct type
-                    try:
-                        evaluated_value = literal_eval(value)
-                    except SyntaxError:
-                        evaluated_value = value
-
-                    new_parameters[key] = evaluated_value
-
+            new_parameters = Configuration._parse_parameters_cell(first_cell)
         else:
             cells_to_process = nb_content.cells
 
         for cell in cells_to_process:
-            values["content"].middlematter.append(ContentCode(content=cell.source) if cell.cell_type == "code" else ContentMarkdown(content=cell.source))
+            cell_instance = Configuration._cell_to_content(cell)
+            if cell_instance is not None:
+                values["content"].middlematter.append(cell_instance)
 
         for k, v in new_parameters.items():
             if k in values["parameters"].model_fields and getattr(values["parameters"], k) is None:
