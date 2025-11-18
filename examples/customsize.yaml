@@ -4,7 +4,7 @@ pagedjs: true
 _target_: nbprint.Configuration
 outputs:
   _target_: nbprint.HTMLOutputs
-  path_root: ./examples/output
+  path_root: ./outputs
 
 page:
   size: [8.5, 1000]

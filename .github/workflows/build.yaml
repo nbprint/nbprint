@@ -93,7 +93,7 @@ jobs:
       id: upload-reports-html
       with:
         name: reports-html
-        path: 'examples/output/*.html'
+        path: 'outputs/*.html'
         if-no-files-found: error
         overwrite: true
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
@@ -103,7 +103,7 @@ jobs:
       id: upload-reports-pdf
       with:
         name: reports-pdf
-        path: 'examples/output/*.pdf'
+        path: 'outputs/*.pdf'
         if-no-files-found: error
         overwrite: true
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
