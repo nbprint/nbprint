@@ -17,11 +17,11 @@ A framework for building print media with [`nbconvert`](https://nbconvert.readth
 
 Jupyter Notebooks are widely used for reports via [`nbconvert`](https://nbconvert.readthedocs.io/en/latest/), but most development work has been on enabling building interactive websites. The goal of `nbprint` is to focus on print-oriented workflows, e.g. PDF, by leveraging new developments in `nbconvert` and the [`pagedjs`](https://pagedjs.org) print-oriented layout library.
 
-For a deeper dive, see [the documentation](<>).
+For a deeper dive, see [the documentation](https://nbprint.github.io/nbprint/index.html).
 
 ## Quickstart
 
-`nbprint` provides an `nbconvert` template and a [configuration framework](<>).
+`nbprint` provides an `nbconvert` template and a [configuration framework](https://nbprint.github.io/nbprint/docs/src/configuration.html).
 The simplest example can be run with defaults by calling the `nbprint` executable on an existing notebook:
 
 ```bash
@@ -48,21 +48,23 @@ graph TB
     pjs[/paged.js <br> layout engine/]
     o@{ shape: doc, label: "output (html,pdf,etc)" }
 
-    nb e2@--->nbc
-    e2@{animate: true}
+    nb ---> nbc
+    %% nb e2@--->nbc
+    %% e2@{animate: true}
 
     nbct --> nbc
     pjs --- nbct
 
-    nbc e3@-->o
-    e3@{animate: true}
+    nbc -->o
+    %% nbc e3@-->o
+    %% e3@{animate: true}
 ```
 
-For more information, see [the architecture documentation](<>).
+For more information, see [the architecture documentation](https://nbprint.github.io/nbprint/docs/src/architecture.html).
 
 ### Configuration
 
-See the [configuration framework documentation](<>) for more information on building pure YAML-based report workflows with `hydra`.
+See the [configuration framework documentation](https://nbprint.github.io/nbprint/docs/src/configuration.html) for more information on building pure YAML-based report workflows with `hydra`.
 
 ## Installation
 

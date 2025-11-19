@@ -14,14 +14,16 @@ graph TB
     pjs[/paged.js <br> layout engine/]
     o@{ shape: doc, label: "output (html,pdf,etc)" }
 
-    nb e2@--->nbc
-    e2@{animate: true}
+    nb --->nbc
+    %% nb e2@--->nbc
+    %% e2@{animate: true}
 
     nbct --> nbc
     pjs --- nbct
 
-    nbc e3@-->o
-    e3@{animate: true}
+    nbc -->o
+    %% nbc e3@-->o
+    %% e3@{animate: true}
 ```
 
 ## Components
@@ -65,32 +67,40 @@ graph LR
     outputcell(Outputs Cell)
     end
 
-    paramyaml eparamyamlparam@---> param
-    eparamyamlparam@{animate: true}
-    pfile epfileparam@--->param
-    epfileparam@{animate: true}
+    paramyaml---> param
+    %% paramyaml eparamyamlparam@---> param
+    %% eparamyamlparam@{animate: true}
+    pfile --->param
+    %% pfile epfileparam@--->param
+    %% epfileparam@{animate: true}
     param --> config
 
-    ctxyaml ectxyamlctx@---> ctx
-    ectxyamlctx@{animate: true}
+    ctxyaml --> ctx
+    %% ctxyaml ectxyamlctx@---> ctx
+    %% ectxyamlctx@{animate: true}
     ctx --> config
 
-    pageyaml epageyamlpage@---> page
-    epageyamlpage@{animate: true}
+    pageyaml --> page
+    %% pageyaml epageyamlpage@---> page
+    %% epageyamlpage@{animate: true}
     page --> config
 
-    nb enbcnt@--->cnt
-    enbcnt@{animate: true}
-    cntyaml ecntyamlcnt@---> cnt
-    ecntyamlcnt@{animate: true}
+    nb --->cnt
+    %% nb enbcnt@--->cnt
+    %% enbcnt@{animate: true}
+    cntyaml ---> cnt
+    %% cntyaml ecntyamlcnt@---> cnt
+    %% ecntyamlcnt@{animate: true}
     cnt --> config
 
-    outyaml eoutyamlout@---> out
-    eoutyamlout@{animate: true}
+    outyaml ---> out
+    %% outyaml eoutyamlout@---> out
+    %% eoutyamlout@{animate: true}
     out --> config
 
-    configyaml econfigyamlconfig@---> config
-    econfigyamlconfig@{animate: true}
+    configyaml --> config
+    %% configyaml econfigyamlconfig@---> config
+    %% econfigyamlconfig@{animate: true}
 
     pcell---configcell
     configcell---pagecell
