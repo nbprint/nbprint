@@ -24,7 +24,7 @@ class OutputsProcessing(str, Enum):
 
 
 class Outputs(ResultBase, BaseModel):
-    path_root: Path = Field(default=Path.cwd() / "outputs")
+    root: Path = Field(default=Path.cwd() / "outputs")
     naming: str = Field(default="{{name}}-{{date}}")
 
     tags: list[str] = Field(default_factory=list)
@@ -38,6 +38,14 @@ class Outputs(ResultBase, BaseModel):
             "A callable hook that is called after generation of the notebook. "
             "It is passed the config instance. "
             "If it returns something non-None, that value is returned by `run` instead of the output path."
+        ),
+    )
+    postprocess: PyObjectPath | None = Field(
+        default=None,
+        description=(
+            "A callable hook that is called after all processing completes. "
+            "It is passed the config instance/s. "
+            "NOTE: It may receive multiple Configuration instances, if a parameterized run was performed."
         ),
     )
 
@@ -62,7 +70,7 @@ class Outputs(ResultBase, BaseModel):
             v.append("nbprint:outputs")
         return v
 
-    @field_validator("path_root", mode="before")
+    @field_validator("root", mode="before")
     @classmethod
     def _convert_str_to_path(cls, v) -> Path:
         if isinstance(v, str):
@@ -108,7 +116,7 @@ class Outputs(ResultBase, BaseModel):
     def _get_notebook_path(self, config: "Configuration") -> Path:
         # Create file or folder path
         name = self._output_name(config=config)
-        root = Path(self.path_root).resolve()
+        root = Path(self.root).resolve()
         root.mkdir(parents=True, exist_ok=True)
         return root / f"{name}.ipynb"
 
@@ -142,7 +150,3 @@ class Outputs(ResultBase, BaseModel):
             err = "Outputs cell execution in context is not yet implemented."
             raise NotImplementedError(err)
         return HTML("")
-
-    def reduce(self, other: "Outputs") -> "Outputs":  # noqa: ARG002
-        """Reduce is called in batch mode to indicate that this output is part of a multi-output run."""
-        return self
