@@ -1,0 +1,6 @@
+﻿nbprint.config.core.Context
+===========================
+
+.. currentmodule:: nbprint.config.core
+
+.. autopydantic_model:: Context

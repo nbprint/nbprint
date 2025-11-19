@@ -1,0 +1,6 @@
+﻿nbprint.cli.run
+===============
+
+.. currentmodule:: nbprint.cli
+
+.. autofunction:: run

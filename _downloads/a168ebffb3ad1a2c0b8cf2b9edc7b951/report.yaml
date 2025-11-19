@@ -1,0 +1,13 @@
+# @package _global_
+
+page:
+  _target_: nbprint.example.ExampleReportPage
+  bottom_left:
+    _target_: nbprint.example.ExampleLogoInFooter
+  bottom_right:
+    _target_: nbprint.PageRegion
+  bottom:
+    _target_: nbprint.PageRegion
+    content:
+      _target_: nbprint.PageRegionContent
+      content: "'Example Report'"

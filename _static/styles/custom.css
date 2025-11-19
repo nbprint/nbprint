@@ -1,0 +1,12 @@
+/* Wide main page */
+.content {
+    flex: 1;
+}
+aside.sidebar-drawer {
+    width: unset;
+}
+
+/* Left-align tables */
+article table.align-default {
+    margin-left: 0;
+}

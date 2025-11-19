@@ -1,0 +1,6 @@
+﻿nbprint.config.core.Outputs
+===========================
+
+.. currentmodule:: nbprint.config.core
+
+.. autopydantic_model:: Outputs

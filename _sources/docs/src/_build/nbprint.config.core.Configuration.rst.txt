@@ -1,0 +1,6 @@
+﻿nbprint.config.core.Configuration
+=================================
+
+.. currentmodule:: nbprint.config.core
+
+.. autopydantic_model:: Configuration

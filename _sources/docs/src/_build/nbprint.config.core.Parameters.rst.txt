@@ -1,0 +1,6 @@
+﻿nbprint.config.core.Parameters
+==============================
+
+.. currentmodule:: nbprint.config.core
+
+.. autopydantic_model:: Parameters

@@ -1,0 +1,6 @@
+﻿nbprint.cli.hydra\_explain
+==========================
+
+.. currentmodule:: nbprint.cli
+
+.. autofunction:: hydra_explain

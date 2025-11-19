@@ -1,0 +1,6 @@
+﻿nbprint.config.hydra.load\_config
+=================================
+
+.. currentmodule:: nbprint.config.hydra
+
+.. autofunction:: load_config
