@@ -264,11 +264,11 @@
 <section id="background">
 <h1>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h1>
 <p>Jupyter Notebooks are widely used for reports via <a class="reference external" href="https://nbconvert.readthedocs.io/en/latest/"><code class="docutils literal notranslate"><span class="pre">nbconvert</span></code></a>, but most development work has been on enabling building interactive websites. The goal of <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> is to focus on print-oriented workflows, e.g. PDF, by leveraging new developments in <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> and the <a class="reference external" href="https://pagedjs.org"><code class="docutils literal notranslate"><span class="pre">pagedjs</span></code></a> print-oriented layout library.</p>
-<p>For a deeper dive, see <a class="reference internal" href="#"><span class="xref myst">the documentation</span></a>.</p>
+<p>For a deeper dive, see <a class="reference external" href="https://nbprint.github.io/nbprint/index.html">the documentation</a>.</p>
 </section>
 <section id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code> provides an <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> template and a <a class="reference internal" href="#"><span class="xref myst">configuration framework</span></a>.
+<p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code> provides an <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> template and a <a class="reference external" href="https://nbprint.github.io/nbprint/docs/src/configuration.html">configuration framework</a>.
 The simplest example can be run with defaults by calling the <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> executable on an existing notebook:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.ipynb
 </pre></div>
@@ -291,18 +291,20 @@ nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span>nbpri
     pjs[/paged.js &lt;br&gt; layout engine/]
     o&#64;{ shape: doc, label: &quot;output (html,pdf,etc)&quot; }
 
-    nb e2&#64;---&gt;nbc
-    e2&#64;{animate: true}
+    nb ---&gt; nbc
+    %% nb e2&#64;---&gt;nbc
+    %% e2&#64;{animate: true}
 
     nbct --&gt; nbc
     pjs --- nbct
 
-    nbc e3&#64;--&gt;o
-    e3&#64;{animate: true}
-    </pre><p>For more information, see <a class="reference internal" href="#"><span class="xref myst">the architecture documentation</span></a>.</p>
+    nbc --&gt;o
+    %% nbc e3&#64;--&gt;o
+    %% e3&#64;{animate: true}
+    </pre><p>For more information, see <a class="reference external" href="https://nbprint.github.io/nbprint/docs/src/architecture.html">the architecture documentation</a>.</p>
 <section id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
-<p>See the <a class="reference internal" href="#"><span class="xref myst">configuration framework documentation</span></a> for more information on building pure YAML-based report workflows with <code class="docutils literal notranslate"><span class="pre">hydra</span></code>.</p>
+<p>See the <a class="reference external" href="https://nbprint.github.io/nbprint/docs/src/configuration.html">configuration framework documentation</a> for more information on building pure YAML-based report workflows with <code class="docutils literal notranslate"><span class="pre">hydra</span></code>.</p>
 </section>
 </section>
 <section id="installation">

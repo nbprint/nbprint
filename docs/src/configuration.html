@@ -269,17 +269,20 @@ This is particularly convenient when generating parameterized or componentized r
     pjs[/paged.js &lt;br&gt; layout engine/]
     o&#64;{ shape: doc, label: &quot;output (html,pdf,etc)&quot; }
 
-    yml e1&#64;---&gt;nb
-    e1&#64;{animate: true}
+    yml ---&gt;nb
+    %% yml e1&#64;---&gt;nb
+    %% e1&#64;{animate: true}
 
-    nb e2&#64;---&gt;nbc
-    e2&#64;{animate: true}
+    nb ---&gt;nbc
+    %% nb e2&#64;---&gt;nbc
+    %% e2&#64;{animate: true}
 
     nbct --&gt; nbc
     pjs --- nbct
 
-    nbc e3&#64;--&gt;o
-    e3&#64;{animate: true}
+    nbc --&gt;o
+    %% nbc e3&#64;--&gt;o
+    %% e3&#64;{animate: true}
     </pre><p>For example, imagine I had a collection of models that I wanted to evaluate for different hyperparameters, where models might have overlapping sets of report elements I want to see.
 With <code class="docutils literal notranslate"><span class="pre">nbprint</span></code>’s configuration system, this is easy to compose.</p>
 <pre  class="mermaid">

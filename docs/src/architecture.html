@@ -263,14 +263,16 @@ with a standard template optionally running <a class="reference external" href="
     pjs[/paged.js &lt;br&gt; layout engine/]
     o&#64;{ shape: doc, label: &quot;output (html,pdf,etc)&quot; }
 
-    nb e2&#64;---&gt;nbc
-    e2&#64;{animate: true}
+    nb ---&gt;nbc
+    %% nb e2&#64;---&gt;nbc
+    %% e2&#64;{animate: true}
 
     nbct --&gt; nbc
     pjs --- nbct
 
-    nbc e3&#64;--&gt;o
-    e3&#64;{animate: true}
+    nbc --&gt;o
+    %% nbc e3&#64;--&gt;o
+    %% e3&#64;{animate: true}
     </pre><section id="components">
 <h2>Components<a class="headerlink" href="#components" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code> provides a core <code class="docutils literal notranslate"><span class="pre">Configuration</span></code> object with parameters for controlling:</p>
@@ -312,32 +314,40 @@ This allows us to represent notebook “state” as a typed <code class="docutil
     outputcell(Outputs Cell)
     end
 
-    paramyaml eparamyamlparam&#64;---&gt; param
-    eparamyamlparam&#64;{animate: true}
-    pfile epfileparam&#64;---&gt;param
-    epfileparam&#64;{animate: true}
+    paramyaml---&gt; param
+    %% paramyaml eparamyamlparam&#64;---&gt; param
+    %% eparamyamlparam&#64;{animate: true}
+    pfile ---&gt;param
+    %% pfile epfileparam&#64;---&gt;param
+    %% epfileparam&#64;{animate: true}
     param --&gt; config
 
-    ctxyaml ectxyamlctx&#64;---&gt; ctx
-    ectxyamlctx&#64;{animate: true}
+    ctxyaml --&gt; ctx
+    %% ctxyaml ectxyamlctx&#64;---&gt; ctx
+    %% ectxyamlctx&#64;{animate: true}
     ctx --&gt; config
 
-    pageyaml epageyamlpage&#64;---&gt; page
-    epageyamlpage&#64;{animate: true}
+    pageyaml --&gt; page
+    %% pageyaml epageyamlpage&#64;---&gt; page
+    %% epageyamlpage&#64;{animate: true}
     page --&gt; config
 
-    nb enbcnt&#64;---&gt;cnt
-    enbcnt&#64;{animate: true}
-    cntyaml ecntyamlcnt&#64;---&gt; cnt
-    ecntyamlcnt&#64;{animate: true}
+    nb ---&gt;cnt
+    %% nb enbcnt&#64;---&gt;cnt
+    %% enbcnt&#64;{animate: true}
+    cntyaml ---&gt; cnt
+    %% cntyaml ecntyamlcnt&#64;---&gt; cnt
+    %% ecntyamlcnt&#64;{animate: true}
     cnt --&gt; config
 
-    outyaml eoutyamlout&#64;---&gt; out
-    eoutyamlout&#64;{animate: true}
+    outyaml ---&gt; out
+    %% outyaml eoutyamlout&#64;---&gt; out
+    %% eoutyamlout&#64;{animate: true}
     out --&gt; config
 
-    configyaml econfigyamlconfig&#64;---&gt; config
-    econfigyamlconfig&#64;{animate: true}
+    configyaml --&gt; config
+    %% configyaml econfigyamlconfig&#64;---&gt; config
+    %% econfigyamlconfig&#64;{animate: true}
 
     pcell---configcell
     configcell---pagecell
