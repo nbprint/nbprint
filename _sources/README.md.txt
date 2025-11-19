@@ -1,5 +1,5 @@
 <a href="https://github.com/nbprint/nbprint">
-  <picture>
+  <picture width=400>
     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/nbprint/nbprint/raw/main/docs/img/logo-dark.png?raw=true">
     <img alt="nbprint logo" src="https://github.com/nbprint/nbprint/raw/main/docs/img/logo-light.png?raw=true">
   </picture>
