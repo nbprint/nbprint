@@ -155,6 +155,10 @@ nbprint examples/basic.ipynb nbprint/outputs=nbprint/pdf
 nbprint examples/basic.ipynb ++nbprint.outputs.target=webpdf
 ```
 
+### Multiruns
+
+See [#ccflow-integration](#ccflow-integration) below.
+
 ### Configuration
 
 Let's take a simple placeholder report.
@@ -249,6 +253,19 @@ You can find a pdf form of this document [here](https://github.com/nbprint/nbpri
 
 ```bash
 nbprint-cc +nbprint.name=test +context=[]
+```
+
+### Workflows
+
+We also support [ccflow workflows](https://github.com/point72/ccflow/wiki/Workflows) in the form of multi-runs:
+
+```bash
+nbprint \
+  examples/basic.ipynb \
+  ++callable=/nbprintx \ # Switch to the multirun model
+  +nbprint.outputs.naming='\{\{name\}\}-\{\{date\}\}-\{\{a\}\}' \ # Update the output naming convention to include the param
+  +nbprintx.parameters=[{"a":1},{"a":2},{"a":3}] \ # Pass in JSON or filepath
+  ++nbprint.outputs.execute=False # Turn off execution for demo speed
 ```
 
 ## Development
