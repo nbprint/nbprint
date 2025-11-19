@@ -44,6 +44,9 @@ class Outputs(ResultBase, BaseModel):
     _nb_path: Path | None = PrivateAttr(default=None)
     _output_path: Path | None = PrivateAttr(default=None)
 
+    # batch mode
+    _multi: bool = PrivateAttr(default=False)
+
     @property
     def notebook(self) -> Path:
         return self._nb_path
@@ -99,6 +102,7 @@ class Outputs(ResultBase, BaseModel):
             datetime=self._get_datetime(config=config),
             uuid=self._get_uuid(config=config),
             sha=self._get_sha(config=config),
+            **config.parameters.model_dump(exclude_none=True, exclude_unset=True),
         )
 
     def _get_notebook_path(self, config: "Configuration") -> Path:
@@ -138,3 +142,7 @@ class Outputs(ResultBase, BaseModel):
             err = "Outputs cell execution in context is not yet implemented."
             raise NotImplementedError(err)
         return HTML("")
+
+    def reduce(self, other: "Outputs") -> "Outputs":  # noqa: ARG002
+        """Reduce is called in batch mode to indicate that this output is part of a multi-output run."""
+        return self

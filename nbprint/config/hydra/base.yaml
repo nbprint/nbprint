@@ -12,6 +12,10 @@ defaults:
   - nbprint/outputs: nbprint/default
   - nbprint/page: nbprint/default
   - nbprint/parameters: nbprint/papermill
+
+  - nbprintx: nbprint/default
+  - cli/model: nbprint/default
+
   - override hydra/hydra_logging: default
   - override hydra/job_logging: default
   - _self_

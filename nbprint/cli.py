@@ -1,13 +1,13 @@
 from pathlib import Path
 from pprint import pprint
 
-from ccflow import ResultBase
+from ccflow import FlowOptions, FlowOptionsOverride, ResultBase
 from ccflow.utils.hydra import cfg_explain_cli, cfg_run
 from hydra import main as hydra_main
 from omegaconf import OmegaConf
 from typer import Argument, Option, Typer
 
-from .config import Configuration
+from .config import Configuration, Executor
 from .config.hydra import load_config
 
 __all__ = ("hydra", "main", "run")
@@ -19,18 +19,15 @@ def run(
     cfg: bool = False,
     debug: bool = False,
     dry_run: bool = False,
-) -> Configuration:
+) -> Configuration | Executor:
     registry = load_config(path, overrides=overrides)
-    config = registry["nbprint"]
-    if not isinstance(config, Configuration):
-        config = Configuration.model_validate(config)
-
-    if debug:
-        config.debug = True
-
-    # mimic hydra cfg
-    pprint(OmegaConf.to_yaml(config.model_dump(mode="json"))) if cfg else config.run(dry_run=dry_run)
-    return config
+    model = registry["callable"] if "callable" in registry else registry["nbprint"]
+    model.debug = True if debug else model.debug
+    global_options = registry.get("/cli/global", FlowOptions())
+    model_options = registry.get("/cli/model", FlowOptions())
+    with FlowOptionsOverride(options=global_options), FlowOptionsOverride(options=model_options):
+        pprint(OmegaConf.to_yaml(model.model_dump(mode="json"))) if cfg else model.run(dry_run=dry_run)
+    return model
 
 
 def run_cli(

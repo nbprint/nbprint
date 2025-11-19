@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 from ccflow import ContextBase
 from nbformat import NotebookNode
-from pydantic import Field, field_validator, model_validator
+from pydantic import Field, field_validator, model_serializer, model_validator
 
 from nbprint.config.base import BaseModel, Role
 
@@ -96,10 +96,17 @@ class PapermillParameters(Parameters):
         data["vars"].update(vars_dict)
         return data
 
+    @model_serializer(mode="wrap")
+    def _serialize_model(self, handler) -> dict[str, object]:
+        serialized = handler(self)
+        serialized = {k: v for k, v in serialized.items() if k != "vars"}
+        serialized.update(self.vars)
+        return serialized
+
     # NOTE: this shouldve been possible via a wrap or before validator,
     # but alas i could not get it to work
     def __setattr__(self, name: str, value) -> None:
-        if name in self.model_fields and name != "vars":
+        if name in self.__class__.model_fields and name != "vars":
             super().__setattr__(name, value)
         elif name == "vars":
             self.vars.update(value)

@@ -91,13 +91,7 @@ class EmailOutputs(NBConvertOutputs):
                 return v[1]
         return v
 
-    def run(self, config: "Configuration", gen: NotebookNode) -> Path:
-        # generate the output file
-        output_path = super().run(config=config, gen=gen)
-
-        if output_path in (None, OutputsProcessing.STOP):
-            return OutputsProcessing.STOP
-
+    def make_message(self, config: "Configuration", output_path: Path) -> EmailMessage:
         default_output_name = self._output_name(config=config)
 
         env = Environment(autoescape=True)
@@ -110,10 +104,23 @@ class EmailOutputs(NBConvertOutputs):
             bcc=self.bcc,
         )
         msg.attach(filename=output_path.name, content_disposition="attachment", data=output_path.read_bytes())
-        smtp_config = self.smtp.model_dump(exclude_unset=True, exclude_none=True, exclude=["type_"])
-        smtp_config["fail_silently"] = False
-        response = msg.send(to=self.to, smtp=smtp_config)
-        if not response.success:
-            err = f"Failed to send email: {response.error}"
-            raise RuntimeError(err)
+        return msg
+
+    def run(self, config: "Configuration", gen: NotebookNode) -> Path:
+        # generate the output file
+        output_path = super().run(config=config, gen=gen)
+
+        if output_path in (None, OutputsProcessing.STOP):
+            return OutputsProcessing.STOP
+
+        if not self._multi:
+            msg = self.make_message(config=config, output_path=output_path)
+            smtp_config = self.smtp.model_dump(exclude_unset=True, exclude_none=True, exclude=["type_"])
+            smtp_config["fail_silently"] = False
+
+            # TODO: deal with batch mode
+            response = msg.send(to=self.to, smtp=smtp_config)
+            if not response.success:
+                err = f"Failed to send email: {response.error}"
+                raise RuntimeError(err)
         return output_path
