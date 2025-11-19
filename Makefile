@@ -45,8 +45,8 @@ lint-js:  ## run js linter
 	cd js; pnpm lint
 
 lint-docs:  ## lint docs with mdformat and codespell
-	python -m mdformat --check README.md 
-	python -m codespell_lib README.md 
+	python -m mdformat --check README.md docs/src
+	python -m codespell_lib README.md docs/src
 
 lint: lint-js lint-py lint-docs  ## run project linters
 
@@ -62,8 +62,8 @@ fix-js:  ## fix js formatting
 	cd js; pnpm fix
 
 fix-docs:  ## autoformat docs with mdformat and codespell
-	python -m mdformat README.md 
-	python -m codespell_lib --write README.md 
+	python -m mdformat README.md docs/src
+	python -m codespell_lib --write README.md docs/src
 
 fix: fix-js fix-py fix-docs  ## run project autoformatters
 

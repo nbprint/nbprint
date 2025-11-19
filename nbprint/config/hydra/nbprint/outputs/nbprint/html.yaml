@@ -1,0 +1,3 @@
+# @package nbprint.outputs
+_target_: nbprint.HTMLOutputs
+target: html
