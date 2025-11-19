@@ -13,20 +13,6 @@ A framework for building print media with [`nbconvert`](https://nbconvert.readth
 [![GitHub issues](https://img.shields.io/github/issues/nbprint/nbprint.svg)](https://github.com/nbprint/nbprint/issues)
 [![License](https://img.shields.io/github/license/nbprint/nbprint)](https://github.com/nbprint/nbprint)
 
-## Installation
-
-Install with `pip`:
-
-```bash
-pip install nbprint
-```
-
-Install with `conda`
-
-```bash
-conda install nbprint -c conda-forge
-```
-
 ## Background
 
 Jupyter Notebooks are widely used for reports via [`nbconvert`](https://nbconvert.readthedocs.io/en/latest/), but most development work has been on enabling building interactive websites. The goal of `nbprint` is to focus on print-oriented workflows, e.g. PDF, by leveraging new developments in `nbconvert` and the [`pagedjs`](https://pagedjs.org) print-oriented layout library.
@@ -72,44 +58,24 @@ graph TB
     e3@{animate: true}
 ```
 
-### Outputs
-
-`nbprint` can produce a variety of outputs based on [`nbconvert`](https://nbconvert.readthedocs.io/en/latest/).
-It can also postprocess these outputs based on content, to e.g. email a report if a certain cell returns `True`, as a simple example.
-
-With [`hydra`](https://hydra.cc), its easy for us to mix-and-match configuration for content, outputs, layout, and more.
-
-```bash
-# Create HTML from notebook as-is
-nbprint examples/basic.ipynb
-
-# Create HTML using hydra to overlay title page and table-of-contents
-nbprint examples/basic.ipynb nbprint/content/frontmatter=nbprint/title_toc
-
-# Create PDF via WebPDF by using hydra to swap out outputs type
-nbprint examples/basic.ipynb nbprint/outputs=nbprint/pdf
-
-# Create PDF via WebPDF same as above by using hydra to tweak the default output target
-nbprint examples/basic.ipynb ++nbprint.outputs.target=webpdf
-```
-
 For more information, see [the architecture documentation](<>).
-
-### Multiruns
-
-See [#ccflow-integration](#ccflow-integration) below.
 
 ### Configuration
 
-See the [configuration framework documentation](<>) for more information on building YAML-based report workflows with `hydra`.
+See the [configuration framework documentation](<>) for more information on building pure YAML-based report workflows with `hydra`.
 
-## ccflow integration
+## Installation
 
-`nbprint` is compatible with [ccflow](https://github.com/point72/ccflow) callable models.
-`nbprint` outputs like `NBConvertOutputs` inherit from [`ccflow.ResultsBase`](https://github.com/Point72/ccflow/wiki/Workflows#result-type), and `nbprint` parameters like `Parameters` inherit from [`ccflow.ContextBase`](https://github.com/Point72/ccflow/wiki/Workflows#context).
+Install with `pip`:
 
 ```bash
-nbprint-cc +nbprint.name=test +context=[]
+pip install nbprint
+```
+
+Install with `conda`
+
+```bash
+conda install nbprint -c conda-forge
 ```
 
 ## Development

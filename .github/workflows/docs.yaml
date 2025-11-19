@@ -1,0 +1,24 @@
+name: Publish Docs
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions-ext/python/setup@main
+      - uses: actions-ext/node/setup@main
+      - run: uv pip install .[develop]
+      - run: uv pip install yardang
+      - run: yardang build
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/html

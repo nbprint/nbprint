@@ -1,4 +1,4 @@
-## Configuration
+# Configuration
 
 `nbprint` can be used purely via notebook metadata, but it also provides a `yaml`-based framework for configuration (via [`pydantic`](https://docs.pydantic.dev/latest/), [`hydra`](https://hydra.cc), and [`omegaconf`](https://github.com/omry/omegaconf)).
 This is particularly convenient when generating parameterized or componentized reports.

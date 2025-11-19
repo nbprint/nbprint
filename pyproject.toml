@@ -71,6 +71,7 @@ develop = [
     "ruff>=0.9,<0.15",
     "twine",
     "wheel",
+    "yardang",
     # notebook deps
     "great_tables",
     "matplotlib",
@@ -279,3 +280,12 @@ section-order = [
     "ERA",
     "S101",
 ]
+
+[tool.yardang]
+pages = [
+    "docs/src/background.md",
+    "docs/src/architecture.md",
+    "docs/src/configuration.md",
+    "docs/src/api.md",
+]
+use-autoapi = false
