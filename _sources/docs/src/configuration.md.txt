@@ -19,20 +19,17 @@ graph TB
     pjs[/paged.js <br> layout engine/]
     o@{ shape: doc, label: "output (html,pdf,etc)" }
 
-    yml --->nb
-    %% yml e1@--->nb
-    %% e1@{animate: true}
+    yml e1@--->nb
+    e1@{animate: true}
 
-    nb --->nbc
-    %% nb e2@--->nbc
-    %% e2@{animate: true}
+    nb e2@--->nbc
+    e2@{animate: true}
 
     nbct --> nbc
     pjs --- nbct
 
-    nbc -->o
-    %% nbc e3@-->o
-    %% e3@{animate: true}
+    nbc e3@-->o
+    e3@{animate: true}
 ```
 
 For example, imagine I had a collection of models that I wanted to evaluate for different hyperparameters, where models might have overlapping sets of report elements I want to see.

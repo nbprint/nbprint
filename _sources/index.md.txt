@@ -67,16 +67,14 @@ graph TB
     pjs[/paged.js <br> layout engine/]
     o@{ shape: doc, label: "output (html,pdf,etc)" }
 
-    nb ---> nbc
-    %% nb e2@--->nbc
-    %% e2@{animate: true}
+    nb e2@--->nbc
+    e2@{animate: true}
 
     nbct --> nbc
     pjs --- nbct
 
-    nbc -->o
-    %% nbc e3@-->o
-    %% e3@{animate: true}
+    nbc e3@-->o
+    e3@{animate: true}
 ```
 
 For more information, see [the architecture documentation](https://nbprint.github.io/nbprint/docs/src/architecture.html).
