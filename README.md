@@ -1,9 +1,10 @@
-<a href="https://github.com/nbprint/nbprint#gh-light-mode-only">
-  <img src="https://github.com/nbprint/nbprint/raw/main/docs/img/logo-light.png?raw=true#gh-light-mode-only" alt="nbprint" width="400"></a>
+<a href="https://github.com/nbprint/nbprint">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/nbprint/nbprint/raw/main/docs/img/logo-dark.png?raw=true">
+    <img alt="nbprint logo" src="https://github.com/nbprint/nbprint/raw/main/docs/img/logo-light.png?raw=true">
+  </picture>
 </a>
-<a href="https://github.com/nbprint/nbprint#gh-dark-mode-only">
-  <img src="https://github.com/nbprint/nbprint/raw/main/docs/img/logo-dark.png?raw=true#gh-dark-mode-only" alt="nbprint" width="400"></a>
-</a>
+
 <br/>
 
 A framework for building print media with [`nbconvert`](https://nbconvert.readthedocs.io).
