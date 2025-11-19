@@ -36,7 +36,7 @@ class Outputs(ResultBase, BaseModel):
         default=None,
         description=(
             "A callable hook that is called after generation of the notebook. "
-            "It is passed this instance. "
+            "It is passed the config instance. "
             "If it returns something non-None, that value is returned by `run` instead of the output path."
         ),
     )
@@ -120,7 +120,7 @@ class Outputs(ResultBase, BaseModel):
         self._nb_path = file
         self._output_path = file
 
-        if self.hook and self.hook.object()(self) in (OutputsProcessing.STOP, None):
+        if self.hook and self.hook.object(config) in (OutputsProcessing.STOP, None):
             return OutputsProcessing.STOP
         return file
 

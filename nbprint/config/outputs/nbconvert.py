@@ -8,7 +8,7 @@ from pydantic import Field, PrivateAttr, field_validator
 
 from nbprint.config import Configuration, Outputs, OutputsProcessing
 
-__all__ = ("HTMLOutputs", "NBConvertOutputs", "NotebookOutputs", "PDFOutputs", "WebHTMLOutputs")
+__all__ = ("HTMLOutputs", "NBConvertOutputs", "NBConvertShortCircuitOutputs", "NotebookOutputs", "PDFOutputs", "WebHTMLOutputs", "short_circuit_hook")
 
 
 class NBConvertOutputs(Outputs):
@@ -26,7 +26,7 @@ class NBConvertOutputs(Outputs):
         default=None,
         description=(
             "A callable hook that is called after nbconvert execution of the notebook. "
-            "It is passed this instance. "
+            "It is passed the config instance. "
             "If it returns something non-None, that value is returned by `run` instead of the output path."
             "NOTE: Parent/child class hooks may also be called."
         ),
@@ -35,7 +35,7 @@ class NBConvertOutputs(Outputs):
         default=None,
         description=(
             "A callable hook that is called after nbconvert of the previously executed notebook. "
-            "It is passed this instance. "
+            "It is passed the config instance. "
             "If it returns something non-None, that value is returned by `run` instead of the output path."
             "NOTE: Parent/child class hooks may also be called."
         ),
@@ -163,17 +163,17 @@ class NBConvertOutputs(Outputs):
             # Execute nbconvert
             execute_nbconvert(nbex_cmd)
 
-            if self.execute_hook and self.execute_hook.object()(self) in (OutputsProcessing.STOP, None):
+            # Extract cells by tags
+            self._extract_cell_outputs()
+
+            if self.execute_hook and self.execute_hook.object(config) in (OutputsProcessing.STOP, None):
                 return OutputsProcessing.STOP
 
         if not (self.execute and self.target == "ipynb"):
             # If target is notebook, we already did it above
             execute_nbconvert(cmd)
 
-        if self.execute:
-            # Extract cells by tags
-            self._extract_cell_outputs()
-        if self.nbconvert_hook and self.nbconvert_hook.object()(self) in (OutputsProcessing.STOP, None):
+        if self.nbconvert_hook and self.nbconvert_hook.object(config) in (OutputsProcessing.STOP, None):
             return OutputsProcessing.STOP
         return self._output_path
 
@@ -192,3 +192,25 @@ class WebHTMLOutputs(NBConvertOutputs):
 
 class PDFOutputs(NBConvertOutputs):
     target: Literal["webpdf"] = "webpdf"
+
+
+def short_circuit_hook(config: "Configuration") -> OutputsProcessing | bool:
+    """A hook that short-circuits processing if a certain cell returns True."""
+    return (
+        OutputsProcessing.STOP
+        if config.outputs.outputs
+        and "stop" in config.outputs.outputs
+        and any(outcome.get("text/plain", "").strip().lower() == "true" for outcome in config.outputs.outputs["stop"])
+        else True
+    )
+
+
+class NBConvertShortCircuitOutputs(NBConvertOutputs):
+    """A specialized NBConvertOutputs that installs a default hook to stop processing if a certain cell
+    with tag nbprint:output:stop returns True.
+    """
+
+    execute_hook: PyObjectPath = Field(
+        default=PyObjectPath("nbprint.config.outputs.nbconvert.short_circuit_hook"),
+        description="A hook that short-circuits processing if a certain cell with tag nbprint:output:stop returns True.",
+    )

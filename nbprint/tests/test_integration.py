@@ -45,6 +45,20 @@ def test_nbprint_outputs():
     ]
 
 
+def test_output_shortcircuit():
+    # Grab config via dry run
+    c = run("examples/shortcircuit.ipynb", overrides=["nbprint/outputs=nbprint/short_circuit"], dry_run=True)
+
+    # Execute
+    assert c.run() is None
+
+    # Check outputs collected
+    assert sorted(c.outputs.outputs.keys()) == ["stop"]
+
+    # Assert that no html file called shortcircuit was created
+    assert not c.outputs.output.exists()
+
+
 def test_content_injection():
     res = run("examples/basic.ipynb", ["nbprint/content/frontmatter=nbprint/title_toc"])
     output = res.outputs.notebook.read_text()

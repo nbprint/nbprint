@@ -6,13 +6,12 @@
 </a>
 <br/>
 
-A framework for building print media with [nbconvert](https://nbconvert.readthedocs.io).
+A framework for building print media with [`nbconvert`](https://nbconvert.readthedocs.io).
 
 [![Build Status](https://github.com/nbprint/nbprint/actions/workflows/build.yaml/badge.svg?branch=main&event=push)](https://github.com/nbprint/nbprint/actions/workflows/build.yaml)
 [![Coverage](https://codecov.io/gh/nbprint/nbprint/branch/main/graph/badge.svg?token=ag2j2TV2wE)](https://app.codecov.io/gh/nbprint/nbprint/tree/main)
 [![GitHub issues](https://img.shields.io/github/issues/nbprint/nbprint.svg)](https://github.com/nbprint/nbprint/issues)
 [![License](https://img.shields.io/github/license/nbprint/nbprint)](https://github.com/nbprint/nbprint)
-[![PyPI](https://img.shields.io/pypi/l/nbprint.svg)](https://pypi.python.org/pypi/nbprint)
 
 ## Installation
 
@@ -40,7 +39,7 @@ This is the goal of `nbprint`. Using [`pagedjs`](https://pagedjs.org), `nbprint`
 
 ## Quickstart
 
-`nbprint` provides an nbconvert template and a configuration framework.
+`nbprint` provides an `nbconvert` template and a configuration framework.
 The simplest example can be run with defaults by calling the `nbprint` executable on an existing notebook:
 
 ```bash
@@ -138,7 +137,7 @@ This configuration also allows for easier iteration on a report's design and con
 
 ### Outputs
 
-`nbprint` can produce a variety of outputs based on [nbconvert](https://nbconvert.readthedocs.io/en/latest/).
+`nbprint` can produce a variety of outputs based on [`nbconvert`](https://nbconvert.readthedocs.io/en/latest/).
 It can also postprocess these outputs based on content, to e.g. email a report if a certain cell returns `True`, as a simple example.
 With [`hydra`](https://hydra.cc), its easy for us to mix-and-match configuration for content, outputs, layout, and more.
 
@@ -258,18 +257,18 @@ nbprint-cc +nbprint.name=test +context=[]
 
 ## Related Projects
 
-- [nbconvert](https://nbconvert.readthedocs.io/en/latest/): Convert Notebooks to other formats
-- [pagedjs](https://pagedjs.org): Paged.js is a free and open-source library that paginates any HTML content to produce beautiful print-ready PDF
-- [Voilà](https://github.com/voila-dashboards/voila): Voilà turns Jupyter notebooks into standalone web applications
+- [`nbconvert`](https://nbconvert.readthedocs.io/en/latest/): Convert Notebooks to other formats
+- [`pagedjs`](https://pagedjs.org): Paged.js is a free and open-source library that paginates any HTML content to produce beautiful print-ready PDF
+- [`Voilà`](https://github.com/voila-dashboards/voila): Voilà turns Jupyter notebooks into standalone web applications
 - [Jupyter Book](https://jupyterbook.org/en/stable/intro.html): Build beautiful, publication-quality books and documents from computational content
-- [ipypublish](https://github.com/chrisjsewell/ipypublish/tree/develop): A workflow for creating and editing publication ready scientific reports and presentations, from one or more Jupyter Notebooks, without leaving the browser!
+- [`ipypublish`](https://github.com/chrisjsewell/ipypublish/tree/develop): A workflow for creating and editing publication ready scientific reports and presentations, from one or more Jupyter Notebooks, without leaving the browser!
 
 Additionally, this project relies heavily on:
 
-- [pydantic](https://docs.pydantic.dev/latest/): Pydantic is the most widely used data validation library for Python.
-- [hydra](https://hydra.cc): Hydra is a framework for dynamically creating hierarchical configuration by composition, with the ability to override through config files and the command line
-- [omegaconf](https://github.com/omry/omegaconf): OmegaConf is a hierarchical configuration system, with support for merging configurations from multiple sources
-- [typer](https://typer.tiangolo.com): Typer is a library for building CLI applications based on Python type hints
+- [`pydantic`](https://docs.pydantic.dev/latest/): Pydantic is the most widely used data validation library for Python.
+- [`hydra`](https://hydra.cc): Hydra is a framework for dynamically creating hierarchical configuration by composition, with the ability to override through config files and the command line
+- [`omegaconf`](https://github.com/omry/omegaconf): OmegaConf is a hierarchical configuration system, with support for merging configurations from multiple sources
+- [`typer`](https://typer.tiangolo.com): Typer is a library for building CLI applications based on Python type hints
 
 ## License
 
