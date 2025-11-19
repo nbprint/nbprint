@@ -392,8 +392,11 @@ class Configuration(CallableModel, BaseModel):
 
     @Flow.call
     def __call__(self, context):  # noqa: ANN204
-        if self.parameters != context:
-            self.parameters = context  # update parameters if changed
+        # NOTE: make a copy to avoid mutation during flow runs interfering with caching
+        # update parameters if changed
+        if context != self.parameters:
+            self.parameters = context
+            self._reset()
         self.run()
         return self.outputs
 

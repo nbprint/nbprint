@@ -129,3 +129,20 @@ def test_run_notebook_ccflow_with_notebook(parameters):
     ]
     with patch.object(sys, "argv", argv):
         hydra()
+
+
+def test_multirun():
+    with patch("nbconvert.nbconvertapp.main") as mock_nbconvert_main:
+        ret = run(
+            "examples/basic.ipynb",
+            [
+                "++callable=/nbprintx",
+                r"""+nbprint.outputs.naming='{{name}}-{{date}}-{{a}}'""",
+                r"""+nbprintx.parameters='[{"a":1},{"a":2},{"a":3}]'""",
+                "++nbprint.outputs.execute=False",
+            ],
+        )
+        assert len(ret.outputs) == 3
+
+        # Ensure that nbconvert was only called exactly 3 times (once per output)
+        assert mock_nbconvert_main.call_count == 3
