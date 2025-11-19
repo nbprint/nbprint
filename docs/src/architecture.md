@@ -102,8 +102,13 @@ graph LR
     o@{ shape: doc, label: "output (html,pdf,etc)" }
     end
 
+    post(Post Processing)
+
     Configuration --> Notebook
-    Notebook -->Output
+    Notebook --> Output
+    Output eOutputPosProcessing@---> post
+    eOutputPosProcessing@{animate: true}
+
 ```
 
 ### `Parameters`
@@ -140,7 +145,68 @@ c = True
 
 ### `Context`
 
+Context is used to wrap variables local to the notebook.
+The best documentation is a simple example in YAML form:
+
+```yaml
+---
+_target_: nbprint.Configuration
+context:
+  _target_: nbprint.example.ExampleContext
+content:
+  - _target_: nbprint.ContentCode
+    content: |
+      nbprint_ctx.string = string
+  - _target_: nbprint.ContentCode
+    content: |
+      print(nbprint_ctx.string)
+```
+
+This will create two `ContentCode` instances, where one sets a value `string` on the `ExampleContext` instance and the other reads it.
+
+You can of course rely on notebook-global variables, but relying on typed contexts makes it easier to build modular reports.
+
 ### `Content`
+
+`Content` is the basic form of displayable content.
+It can be used to wrap any generic functionality or Markdown content.
+It can also be convenient to reuse display configuration.
+
+Content has a few key attributes:
+
+- `Content.content`: string text content, or a `list[Content]` of subcontent for layout elements
+- `Content.style`: A `Style` element based on CSS for styling this content
+- `css`: Generic string content to be injected into a `<style>` tag scoped to this cell
+- `esm`: Generic string content to be injected into a `<script>` tag scoped to this cell. It is expected to contain a function `render(cell_nbprint_metadata_as_json, cell_dom_element)`.
+
+The following items are provided:
+
+#### `ContentCode`
+
+Content that is executed as a code cell.
+
+#### `ContentMarkdown`
+
+Content that is executed as a Markdown cell.
+
+#### `ContentImage`
+
+#### `ContentTableOfContents`
+
+#### Layout Elements
+
+- `ContentLayout`
+- `ContentInlineLayout`
+- `ContentFlexColumnLayout`
+- `ContentFlexRowLayout`
+- `ContentPageBreak`
+
+#### Library Configuration Elements
+
+- `LoggingConfig`
+- `PandasDisplayConfiguration`
+- `PlotlyRendererConfiguration`
+- `SeabornDisplayConfiguration`
 
 ### `Outputs`
 
@@ -148,6 +214,24 @@ c = True
 It can also postprocess these outputs based on content, to e.g. email a report if a certain cell returns `True`, as a simple example.
 
 The following defaults are provided:
+
+#### `Outputs`
+
+This is the base class for all outputs.
+It has a few key attributes:
+
+- `.root`: Base path where output artifacts will generate
+- `.naming`: naming convention to use for output artifacts. This is particularly useful when producing many artifacts. It is templatized via Jinja2 with the following arguments:
+  - `name`: name of the notebook
+  - `date`: current date as ISO format
+  - `datetime`: current datetime as ISO format
+  - `uuid`: a generated UUID
+  - `sha`: a hash of the `Configuration` object
+  - any parameters set in the `Configuration.parameters` object
+- `.hook`: a python callable path to be invoked after notebook generation
+- `.postprocess`: a python callable path to be invoked at the very end of the `Configuration` run/s
+
+In particular, the hooks can be used to get behavior like: only send a report via email if XYZ condition is (not) satisfied.
 
 #### `NBConvertOutputs`
 
@@ -160,6 +244,11 @@ It supports the following configuration options:
 - `execute`: whether or not to reexecute the notebook, defaults to `True`
 - `timeout`: execution timeout, defaults to `600s`
 - `template`: `nbconvert` template to use, defaults to `"nbprint"`
+
+Additionally, there are two extra hooks that can be set:
+
+- `execute_hook`: Called after `nbconvert` execution of the notebook
+- `nbconvert_hook`: Called after `nbconvert` conversion of the notebook
 
 #### `PDFOutputs`
 
@@ -190,6 +279,27 @@ Same as `NBConvertOutputs`, but with `target=webhtml`.
 A specialized `NBConvertOutputs` that stops output processing if a cell tagged `nbprint:output:stop` returns `True`
 
 - `execute_hook`: A Python import path to a function to evaluate, see `nbprint.config.outputs.nbconvert.short_circuit_hook` as an example
+
+#### `EmailOutputs`
+
+> `hydra` config: `nbprint/outputs/email`
+
+Inherits from `NBConvertOutputs` and attaches the output to an email using a prebuilt `postprocess` hook.
+
+- `body`: Content of the email, defaults to the output name
+- `subject`: Content of the subject, defaults to the output name
+- `to`: Email recipient/s
+- `from_`: Email sender
+- `cc`: CC
+- `bcc`: BCC
+- `smtp`: SMTP configuration
+  - `host`: SMTP server host
+  - `port`: SMTP server port
+  - `user`: SMTP server user
+  - `password`: SMTP server password
+  - `tls`: Enable TLS
+  - `ssl`: Enable SSL
+  - `timeout`: Timeout for SMTP connection
 
 ## Configuration
 

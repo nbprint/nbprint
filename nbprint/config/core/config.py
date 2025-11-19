@@ -50,6 +50,7 @@ class Configuration(CallableModel, BaseModel):
     debug: bool = True
 
     # internals
+    _multi: bool = PrivateAttr(default=False)
     _nb_var_name: str = PrivateAttr(default="nbprint_config")
     _nb_vars: set = PrivateAttr(default_factory=set)
 
@@ -359,7 +360,7 @@ class Configuration(CallableModel, BaseModel):
                 return config
         raise NBPrintPathOrModelMalformedError(path_or_model)
 
-    def run(self, dry_run: bool = False) -> Path | None:
+    def run(self, dry_run: bool = False, *, _multi: bool = False) -> Path | None:
         gen = self.generate()
         ret = None
         if self.debug:
@@ -372,8 +373,14 @@ class Configuration(CallableModel, BaseModel):
                 # TODO: revisit
                 return None
 
-        # reset in case we want to run again
-        self._reset()
+        if not self._multi and self.outputs.postprocess:
+            # Run postprocessing
+            self.outputs.postprocess.object([self])
+
+            # NOTE: as of this point, we're "done"
+
+            # reset in case we want to run again
+            self._reset()
         return ret
 
     def _reset(self) -> None:

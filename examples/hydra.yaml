@@ -5,7 +5,7 @@ defaults:
   - _self_
 
 outputs:
-  path_root: ./outputs
+  root: ./outputs
 
 hydra:
   searchpath:
