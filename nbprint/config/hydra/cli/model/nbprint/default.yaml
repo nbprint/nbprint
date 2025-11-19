@@ -1,0 +1,9 @@
+# @package cli.model
+
+_target_: ccflow.FlowOptions
+evaluator:
+  _target_: ccflow.evaluators.MultiEvaluator
+  evaluators:
+    - _target_: ccflow.evaluators.GraphEvaluator
+    - _target_: ccflow.evaluators.MemoryCacheEvaluator
+cacheable: true

@@ -1,0 +1,5 @@
+# @package nbprintx
+defaults: []
+
+_target_: nbprint.Executor
+nbprint: /nbprint

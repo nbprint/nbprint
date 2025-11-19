@@ -72,4 +72,11 @@ def load_config(
         registry = ModelRegistry.root()
         registry.load_config(cfg=cfg, overwrite=True)
 
+        if "callable" in cfg:
+            registry.add("callable", registry[cfg["callable"]], overwrite=True)
+        elif "callable" in cfg.get("nbprint", {}):
+            registry.add("callable", registry[cfg["nbprint"]["callable"]], overwrite=True)
+        else:
+            registry.add("callable", registry["nbprint"], overwrite=True)
+
     return registry
