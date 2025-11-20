@@ -7,7 +7,7 @@ name: "basic"
 outputs:
   _target_: nbprint.NBConvertOutputs
   naming: "{{name}}"
-  path_root: .pytest_cache/garbage
+  root: .pytest_cache/garbage
 
 hydra:
   searchpath:

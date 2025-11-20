@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Literal, Tuple
 
-from ccflow import BaseModel
+from ccflow import BaseModel, PyObjectPath
 from emails import Message as EmailMessage
 from jinja2 import Environment
 from nbformat import NotebookNode
@@ -36,6 +36,11 @@ class EmailOutputs(NBConvertOutputs):
     bcc: Tuple[str, str] | str | None = Field(default=None, description="BCC email address")
 
     smtp: SMTP = Field()
+
+    postprocess: PyObjectPath = Field(
+        default=PyObjectPath("nbprint.config.outputs.email.email_postprocess"),
+        description=("A callable hook that is called after all processing completes to email the results."),
+    )
 
     @model_validator(mode="after")
     def _validate_from_or_user(self) -> "EmailOutputs":
@@ -91,7 +96,8 @@ class EmailOutputs(NBConvertOutputs):
                 return v[1]
         return v
 
-    def make_message(self, config: "Configuration", output_path: Path) -> EmailMessage:
+    def make_message(self, config: "Configuration") -> EmailMessage:
+        output_path = self._output_path
         default_output_name = self._output_name(config=config)
 
         env = Environment(autoescape=True)
@@ -112,15 +118,68 @@ class EmailOutputs(NBConvertOutputs):
 
         if output_path in (None, OutputsProcessing.STOP):
             return OutputsProcessing.STOP
-
-        if not self._multi:
-            msg = self.make_message(config=config, output_path=output_path)
-            smtp_config = self.smtp.model_dump(exclude_unset=True, exclude_none=True, exclude=["type_"])
-            smtp_config["fail_silently"] = False
-
-            # TODO: deal with batch mode
-            response = msg.send(to=self.to, smtp=smtp_config)
-            if not response.success:
-                err = f"Failed to send email: {response.error}"
-                raise RuntimeError(err)
         return output_path
+
+
+def email_postprocess(configs: list[Configuration]) -> None:
+    """A postprocess hook to email all output files after processing completes.
+    NOTE: it is assumed that all EmailOutputs instances are configured identically,
+    as happens in a multi run scenario.
+
+    Args:
+        configs (list[Configuration]): The list of nbprint configuration/s.
+
+    """
+    msgs: list[EmailMessage] = []
+    smtp = None
+
+    for config in configs:
+        if isinstance(config.outputs, EmailOutputs):
+            msgs.append(config.outputs.make_message(config=config))
+            if smtp is None:
+                smtp = config.outputs.smtp.model_dump(exclude_unset=True, exclude_none=True, exclude=["type_"])
+                smtp["fail_silently"] = False
+    if not msgs:
+        return
+    # Combine message contents, adjust email and body to be the common substring, and send
+    msg = msgs[0]
+    if len(msgs) > 1:
+        # Concatenate bodies
+        combined_body = "\n\n".join([m.html for m in msgs])
+        msg.html = combined_body
+
+        # Subject may be paramterized,
+        # so find the overlapping parts of the strings
+        # and replace the non-overlapping parts with "*"
+        subjects = [m.subject for m in msgs]
+        common_subject = subjects[0]
+        for subject in subjects[1:]:
+            # Find common prefix
+            prefix_len = 0
+            for a, b in zip(common_subject, subject, strict=True):
+                if a == b:
+                    prefix_len += 1
+                else:
+                    break
+            # Find common suffix
+            suffix_len = 0
+            for a, b in zip(reversed(common_subject), reversed(subject), strict=True):
+                if a == b:
+                    suffix_len += 1
+                else:
+                    break
+            # Build new common subject
+            middle_len = max(len(common_subject), len(subject)) - prefix_len - suffix_len
+            common_subject = common_subject[:prefix_len] + ("*" * middle_len) + common_subject[-suffix_len if suffix_len > 0 else None :]
+        msg.subject = common_subject
+
+        # Attach all attachements
+        for m in msgs[1:]:
+            for attachment in m.attachments:
+                msg.attachments.append(attachment)
+
+    # Send the email
+    response = msg.send(to=config.outputs.to, smtp=smtp)
+    if not response.success:
+        err = f"Failed to send email: {response.error}"
+        raise RuntimeError(err)

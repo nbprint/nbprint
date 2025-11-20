@@ -56,13 +56,13 @@ class Executor(CallableModel):
     @Flow.deps
     def __deps__(self, context: ExecutorParameters) -> list[tuple[Configuration, PapermillParameters]]:
         # TODO: Make sure outputs will not clobber
-        return [(self.nbprint.model_copy(deep=True), [p.model_copy(deep=True)]) for p in context.parameters]
+        return [(self.nbprint.model_copy(deep=True, update={"_multi": True}), [p.model_copy(deep=True)]) for p in context.parameters]
 
     @Flow.call
     def __call__(self, context: ExecutorParameters = None) -> ExecutorOutputs:
         op = []
         for p in context.parameters:
-            nb = self.nbprint.model_copy(deep=True)
+            nb = self.nbprint.model_copy(deep=True, update={"_multi": True})
             nb(p.model_copy(deep=True))
             op.append(nb.outputs.model_copy(deep=True))
         self.outputs = op
