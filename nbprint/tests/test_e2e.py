@@ -1,4 +1,5 @@
 import sys
+from datetime import date
 from itertools import product
 from os import environ
 from os.path import exists
@@ -146,3 +147,46 @@ def test_multirun():
 
         # Ensure that nbconvert was only called exactly 3 times (once per output)
         assert mock_nbconvert_main.call_count == 3
+
+
+def test_email_combine_multirun():
+    with patch("nbconvert.nbconvertapp.main") as mock_nbconvert_main, patch("emails.backend.smtp.backend.SMTPBackend.connection_cls") as mock_smtp_backend:
+        # test inline
+        # nbprint examples/basic.ipynb \
+        # ++callable=/nbprintx \
+        # nbprint/outputs=nbprint/email \
+        # +nbprint.outputs.to=$SMTP_USER \
+        # +nbprint.outputs.smtp.host=$SMTP_HOST \
+        # +nbprint.outputs.smtp.user=$SMTP_USER \
+        # +nbprint.outputs.smtp.password=$SMTP_PASSWORD \
+        # +nbprint.outputs.target=notebook \
+        # ++nbprint.outputs.execute=False \
+        # +nbprintx.parameters=[{"a":1},{"a":2},{"a":3}] \
+        # +nbprint.outputs.naming='\{\{name\}\}-\{\{date\}\}-\{\{a\}\}' \
+        # nbprint/content/frontmatter=nbprint/title_toc
+
+        ret = run(
+            "examples/basic.ipynb",
+            [
+                "++callable=/nbprintx",
+                "nbprint/outputs=nbprint/email",
+                r"""+nbprint.outputs.naming='{{name}}-{{date}}-{{a}}'""",
+                r"""+nbprintx.parameters='[{"a":1},{"a":2},{"a":3}]'""",
+                "++nbprint.outputs.target=notebook",
+                "++nbprint.outputs.execute=False",
+                "+nbprint.outputs.to=test",
+                "+nbprint.outputs.smtp.host=test",
+                "+nbprint.outputs.smtp.user=test",
+                "+nbprint.outputs.smtp.password=test",
+                "nbprint/content/frontmatter=nbprint/title_toc",
+            ],
+        )
+        assert len(ret.outputs) == 3
+
+        # Ensure that nbconvert was only called exactly 3 times (once per output)
+        assert mock_nbconvert_main.call_count == 3
+        assert mock_smtp_backend.return_value.sendmail.call_count == 1
+        msg = mock_smtp_backend.return_value.sendmail.call_args[1]
+        assert msg["from_addr"] == "test"
+        assert msg["to_addrs"] == ["test"]
+        assert f"Subject: basic-{date.today().isoformat()}-*" in msg["msg"]

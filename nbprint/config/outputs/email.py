@@ -121,7 +121,7 @@ class EmailOutputs(NBConvertOutputs):
         return output_path
 
 
-def email_postprocess(configs: list[Configuration]) -> None:
+def email_postprocess(configs: list[Configuration], comma_or_common: Literal["common", "comma"] = "common") -> None:
     """A postprocess hook to email all output files after processing completes.
     NOTE: it is assumed that all EmailOutputs instances are configured identically,
     as happens in a multi run scenario.
@@ -145,38 +145,45 @@ def email_postprocess(configs: list[Configuration]) -> None:
     msg = msgs[0]
     if len(msgs) > 1:
         # Concatenate bodies
-        combined_body = "\n\n".join([m.html for m in msgs])
-        msg.html = combined_body
+        combined_body = "<br>".join([m.html for m in msgs])
+        msg.html = combined_body + "<br>"
 
         # Subject may be paramterized,
         # so find the overlapping parts of the strings
         # and replace the non-overlapping parts with "*"
         subjects = [m.subject for m in msgs]
-        common_subject = subjects[0]
-        for subject in subjects[1:]:
-            # Find common prefix
-            prefix_len = 0
-            for a, b in zip(common_subject, subject, strict=True):
-                if a == b:
-                    prefix_len += 1
-                else:
-                    break
-            # Find common suffix
-            suffix_len = 0
-            for a, b in zip(reversed(common_subject), reversed(subject), strict=True):
-                if a == b:
-                    suffix_len += 1
-                else:
-                    break
-            # Build new common subject
-            middle_len = max(len(common_subject), len(subject)) - prefix_len - suffix_len
-            common_subject = common_subject[:prefix_len] + ("*" * middle_len) + common_subject[-suffix_len if suffix_len > 0 else None :]
-        msg.subject = common_subject
+
+        if comma_or_common == "comma":
+            msg.subject = ", ".join(subjects)
+        else:
+            common_subject = subjects[0]
+            for subject in subjects[1:]:
+                # Find common prefix
+                prefix_len = 0
+                for a, b in zip(common_subject, subject, strict=True):
+                    if a == b:
+                        prefix_len += 1
+                    else:
+                        break
+                # Find common suffix
+                suffix_len = 0
+                for a, b in zip(reversed(common_subject), reversed(subject), strict=True):
+                    if a == b:
+                        suffix_len += 1
+                    else:
+                        break
+                # Build new common subject
+                middle_len = max(len(common_subject), len(subject)) - prefix_len - suffix_len
+                common_subject = common_subject[:prefix_len] + ("*" * middle_len)
+                if suffix_len > 0:
+                    common_subject += common_subject[-suffix_len:]
+                break
+            msg.subject = common_subject
 
         # Attach all attachements
         for m in msgs[1:]:
             for attachment in m.attachments:
-                msg.attachments.append(attachment)
+                msg.attachments.add(attachment)
 
     # Send the email
     response = msg.send(to=config.outputs.to, smtp=smtp)
