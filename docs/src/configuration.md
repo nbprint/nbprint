@@ -66,7 +66,7 @@ Let's take a simple placeholder report.
 debug: false
 outputs:
   _target_: nbprint:NBConvertOutputs
-  path_root: ./outputs
+  root: ./outputs
   target: html
 
 content:

@@ -8,7 +8,7 @@ resources:
 
 outputs:
   _target_:  nbprint.NBConvertOutputs
-  path_root: ./outputs
+  root: ./outputs
   target: "html"
 
 parameters:
