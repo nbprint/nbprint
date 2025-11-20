@@ -97,19 +97,16 @@ class EmailOutputs(NBConvertOutputs):
         return v
 
     def make_message(self, config: "Configuration") -> EmailMessage:
-        output_path = self._output_path
-        default_output_name = self._output_name(config=config)
-
         env = Environment(autoescape=True)
         msg = EmailMessage(
-            html=env.from_string(self.body or default_output_name).render(config.parameters.model_dump(exclude_unset=True)),
-            subject=env.from_string(self.subject or default_output_name).render(config.parameters.model_dump(exclude_unset=True)),
+            html=env.from_string(self.body or self.output.stem).render(config.parameters.model_dump(exclude_unset=True)),
+            subject=env.from_string(self.subject or self.output.stem).render(config.parameters.model_dump(exclude_unset=True)),
             mail_from=self.from_,
             mail_to=self.to,
             cc=self.cc,
             bcc=self.bcc,
         )
-        msg.attach(filename=output_path.name, content_disposition="attachment", data=output_path.read_bytes())
+        msg.attach(filename=self.output.name, content_disposition="attachment", data=self.output.read_bytes())
         return msg
 
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
@@ -160,14 +157,14 @@ def email_postprocess(configs: list[Configuration], comma_or_common: Literal["co
             for subject in subjects[1:]:
                 # Find common prefix
                 prefix_len = 0
-                for a, b in zip(common_subject, subject, strict=True):
+                for a, b in zip(common_subject, subject, strict=False):
                     if a == b:
                         prefix_len += 1
                     else:
                         break
                 # Find common suffix
                 suffix_len = 0
-                for a, b in zip(reversed(common_subject), reversed(subject), strict=True):
+                for a, b in zip(reversed(common_subject), reversed(subject), strict=False):
                     if a == b:
                         suffix_len += 1
                     else:

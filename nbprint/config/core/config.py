@@ -119,9 +119,26 @@ class Configuration(CallableModel, BaseModel):
         return v
 
     @model_validator(mode="after")
-    def _attach_params_to_context(self) -> Self:
+    def _validate(self) -> Self:
         self.context.parameters = self.parameters
+        self.outputs._compute_outputs(config=self)
         return self
+
+    # NOTE: this shouldve been possible via a wrap validator,
+    # but alas i could not get it to work
+    def __setattr__(self, name: str, value) -> None:
+        if name == "parameters" and self.parameters:
+            value = BaseModel._to_type(value, Parameters) if isinstance(value, dict) and "type_" in value else PapermillParameters.model_validate(value)
+
+            if not type(value) is not type(self.parameters):
+                # replace wholesale
+                super().__setattr__(name, value)
+            else:
+                # Union new parameters with existing parameters
+                for k, v in value.model_dump(mode="json").items() if isinstance(value, Parameters) else value.items():
+                    setattr(self.parameters, k, v)
+            self._validate()
+        return super().__setattr__(name, value)
 
     @staticmethod
     def _init_content(values) -> ContentMarshall:
@@ -373,7 +390,7 @@ class Configuration(CallableModel, BaseModel):
                 # TODO: revisit
                 return None
 
-        if not self._multi and self.outputs.postprocess:
+        if not dry_run and not self._multi and self.outputs.postprocess:
             # Run postprocessing
             self.outputs.postprocess.object([self])
 
@@ -403,7 +420,6 @@ class Configuration(CallableModel, BaseModel):
         # update parameters if changed
         if context != self.parameters:
             self.parameters = context
-            self._reset()
         self.run()
         return self.outputs
 
