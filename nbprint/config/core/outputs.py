@@ -49,15 +49,18 @@ class Outputs(ResultBase, BaseModel):
         ),
     )
 
+    # Private variables to compute and store paths
     _nb_path: Path | None = PrivateAttr(default=None)
+    _nb_executed_path: Path | None = PrivateAttr(default=None)
     _output_path: Path | None = PrivateAttr(default=None)
-
-    # batch mode
-    _multi: bool = PrivateAttr(default=False)
 
     @property
     def notebook(self) -> Path:
         return self._nb_path
+
+    @property
+    def executed_notebook(self) -> Path:
+        return self._nb_executed_path
 
     @property
     def output(self) -> Path:
@@ -86,6 +89,21 @@ class Outputs(ResultBase, BaseModel):
             raise ValueError(err)
         return self
 
+    def _compute_outputs(self, config: "Configuration") -> None:
+        name = Template(self.naming).render(
+            name=self._get_name(config=config),
+            date=self._get_date(config=config),
+            datetime=self._get_datetime(config=config),
+            uuid=self._get_uuid(config=config),
+            sha=self._get_sha(config=config),
+            **config.parameters.model_dump(exclude_none=True, exclude_unset=True),
+        )
+
+        root = Path(self.root).resolve()
+        self._nb_executed_path = root / f"{name}.ipynb"
+        self._nb_path = root / f"{name}.ipynb"
+        self._output_path = root / f"{name}.ipynb"
+
     def _get_name(self, config: "Configuration") -> str:
         return config.name
 
@@ -103,38 +121,16 @@ class Outputs(ResultBase, BaseModel):
 
         return hashlib.sha256(config.model_dump_json(by_alias=True).encode()).hexdigest()
 
-    def _output_name(self, config: "Configuration") -> str:
-        return Template(self.naming).render(
-            name=self._get_name(config=config),
-            date=self._get_date(config=config),
-            datetime=self._get_datetime(config=config),
-            uuid=self._get_uuid(config=config),
-            sha=self._get_sha(config=config),
-            **config.parameters.model_dump(exclude_none=True, exclude_unset=True),
-        )
-
-    def _get_notebook_path(self, config: "Configuration") -> Path:
-        # Create file or folder path
-        name = self._output_name(config=config)
-        root = Path(self.root).resolve()
-        root.mkdir(parents=True, exist_ok=True)
-        return root / f"{name}.ipynb"
-
-    def resolve_output(self, config: "Configuration") -> Path:
-        return self._get_notebook_path(config=config)
-
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
         # Create file or folder path
-        file = self._get_notebook_path(config=config)
-        file.write_text(writes(gen))
+        if not self.notebook.parent.exists():
+            self.notebook.parent.mkdir(parents=True, exist_ok=True)
 
-        # Update paths
-        self._nb_path = file
-        self._output_path = file
+        self.notebook.write_text(writes(gen), encoding="utf-8")
 
         if self.hook and self.hook.object(config) in (OutputsProcessing.STOP, None):
             return OutputsProcessing.STOP
-        return file
+        return self.notebook
 
     def generate(self, metadata: dict, **kwargs) -> NotebookNode:
         return super().generate(metadata=metadata, **kwargs)
