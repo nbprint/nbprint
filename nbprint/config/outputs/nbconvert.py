@@ -12,7 +12,7 @@ __all__ = ("HTMLOutputs", "NBConvertOutputs", "NBConvertShortCircuitOutputs", "N
 
 
 class NBConvertOutputs(Outputs):
-    target: Literal["ipynb", "html", "webhtml", "pdf", "webpdf"] | None = "html"  # TODO: nbconvert types
+    target: Literal["ipynb", "notebook", "html", "webhtml", "pdf", "webpdf"] | None = "html"  # TODO: nbconvert types
     execute: bool | None = True
     timeout: int | None = 600
     template: str | None = "nbprint"
@@ -55,6 +55,8 @@ class NBConvertOutputs(Outputs):
             return "html"
         if v == "pdf":
             return "webpdf"
+        if v == "notebook":
+            return "ipynb"
         return v
 
     def resolve_output(self, config: "Configuration") -> Path:
@@ -66,7 +68,7 @@ class NBConvertOutputs(Outputs):
             target = "html"
         else:
             target = self.target
-        if self.target == "ipynb":
+        if self.target == "ipynb" and self.execute:
             return Path(original.replace(".ipynb", ".executed.ipynb"))
         return Path(original.replace(".ipynb", f".{target}"))
 
