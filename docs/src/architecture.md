@@ -127,7 +127,7 @@ As an example, the following `YAML`:
 
 ```yaml
 # @package nbprint.parameters
-_target_: nbprint.PapermillParameterss
+_target_: nbprint.PapermillParameters
 a: abc
 b: 1.2
 c: true
