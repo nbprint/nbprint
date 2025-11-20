@@ -28,7 +28,6 @@ class Executor(CallableModel):
     outputs: list[Outputs] = Field(default_factory=list)
 
     _nbprints: list[Configuration] = PrivateAttr(default_factory=list)
-    _parameters: list[Parameters] = PrivateAttr(default_factory=list)
 
     @model_validator(mode="before")
     @classmethod
@@ -56,7 +55,9 @@ class Executor(CallableModel):
     @Flow.deps
     def __deps__(self, context: ExecutorParameters) -> list[tuple[Configuration, PapermillParameters]]:
         # TODO: Make sure outputs will not clobber
-        return [(self.nbprint.model_copy(deep=True, update={"_multi": True}), [p.model_copy(deep=True)]) for p in context.parameters]
+        self._nbprints = [self.nbprint.model_copy(deep=True, update={"_multi": True}) for _ in context.parameters]
+        self._parameters = [[p.model_copy(deep=True)] for p in context.parameters]
+        return zip(self._nbprints, self._parameters, strict=True)
 
     @Flow.call
     def __call__(self, context: ExecutorParameters = None) -> ExecutorOutputs:
@@ -71,4 +72,9 @@ class Executor(CallableModel):
     def run(self, dry_run: bool = False) -> ExecutorOutputs:
         if dry_run:
             raise NotImplementedError
-        return self(ExecutorParameters(parameters=self.parameters))
+        res = self(ExecutorParameters(parameters=self.parameters))
+        # Run outputs postprocessing
+        if res.outputs and res.outputs[0].postprocess:
+            # Run postprocessing
+            res.outputs[0].postprocess.object(self._nbprints)
+        return res
