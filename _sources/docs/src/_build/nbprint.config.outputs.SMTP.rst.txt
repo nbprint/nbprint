@@ -1,0 +1,6 @@
+﻿nbprint.config.outputs.SMTP
+===========================
+
+.. currentmodule:: nbprint.config.outputs
+
+.. autopydantic_model:: SMTP

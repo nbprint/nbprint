@@ -208,6 +208,28 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.cli.hydra_explain.html">nbprint.cli.hydra_explain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.hydra.load_config.html">nbprint.config.hydra.load_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.core.PapermillParameters.html">nbprint.config.core.PapermillParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentCode.html">nbprint.config.content.ContentCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentMarkdown.html">nbprint.config.content.ContentMarkdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentImage.html">nbprint.config.content.ContentImage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentTableOfContents.html">nbprint.config.content.ContentTableOfContents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentLayout.html">nbprint.config.content.ContentLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentInlineLayout.html">nbprint.config.content.ContentInlineLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentFlexColumnLayout.html">nbprint.config.content.ContentFlexColumnLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentFlexRowLayout.html">nbprint.config.content.ContentFlexRowLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentPageBreak.html">nbprint.config.content.ContentPageBreak</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html">nbprint.config.outputs.NBConvertOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.PDFOutputs.html">nbprint.config.outputs.PDFOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.NotebookOutputs.html">nbprint.config.outputs.NotebookOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.HTMLOutputs.html">nbprint.config.outputs.HTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.WebHTMLOutputs.html">nbprint.config.outputs.WebHTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertShortCircuitOutputs.html">nbprint.config.outputs.NBConvertShortCircuitOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.EmailOutputs.html">nbprint.config.outputs.EmailOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.SMTP.html">nbprint.config.outputs.SMTP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.LoggingConfig.html">nbprint.models.LoggingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.PandasDisplayConfiguration.html">nbprint.models.PandasDisplayConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.PlotlyRendererConfiguration.html">nbprint.models.PlotlyRendererConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.SeabornDisplayConfiguration.html">nbprint.models.SeabornDisplayConfiguration</a></li>
 </ul>
 </li>
 </ul>
@@ -297,6 +319,7 @@
     <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="c1"># internals</span>
+    <span class="n">_multi</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_nb_var_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;nbprint_config&quot;</span><span class="p">)</span>
     <span class="n">_nb_vars</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
 
@@ -617,7 +640,7 @@
 
 <div class="viewcode-block" id="Configuration.run">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.Configuration.html#nbprint.config.core.Configuration.run">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dry_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dry_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">_multi</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">gen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate</span><span class="p">()</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
@@ -630,8 +653,14 @@
                 <span class="c1"># TODO: revisit</span>
                 <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="c1"># reset in case we want to run again</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_multi</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">postprocess</span><span class="p">:</span>
+            <span class="c1"># Run postprocessing</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">postprocess</span><span class="o">.</span><span class="n">object</span><span class="p">([</span><span class="bp">self</span><span class="p">])</span>
+
+            <span class="c1"># NOTE: as of this point, we&#39;re &quot;done&quot;</span>
+
+            <span class="c1"># reset in case we want to run again</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">ret</span></div>
 
 

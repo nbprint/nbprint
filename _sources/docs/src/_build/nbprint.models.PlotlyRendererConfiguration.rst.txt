@@ -1,0 +1,6 @@
+﻿nbprint.models.PlotlyRendererConfiguration
+==========================================
+
+.. currentmodule:: nbprint.models
+
+.. autopydantic_model:: PlotlyRendererConfiguration

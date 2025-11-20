@@ -1,0 +1,6 @@
+﻿nbprint.config.core.PapermillParameters
+=======================================
+
+.. currentmodule:: nbprint.config.core
+
+.. autopydantic_model:: PapermillParameters

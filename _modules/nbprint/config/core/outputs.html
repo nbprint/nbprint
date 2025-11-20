@@ -208,6 +208,28 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.cli.hydra_explain.html">nbprint.cli.hydra_explain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.hydra.load_config.html">nbprint.config.hydra.load_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.core.PapermillParameters.html">nbprint.config.core.PapermillParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentCode.html">nbprint.config.content.ContentCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentMarkdown.html">nbprint.config.content.ContentMarkdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentImage.html">nbprint.config.content.ContentImage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentTableOfContents.html">nbprint.config.content.ContentTableOfContents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentLayout.html">nbprint.config.content.ContentLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentInlineLayout.html">nbprint.config.content.ContentInlineLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentFlexColumnLayout.html">nbprint.config.content.ContentFlexColumnLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentFlexRowLayout.html">nbprint.config.content.ContentFlexRowLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentPageBreak.html">nbprint.config.content.ContentPageBreak</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html">nbprint.config.outputs.NBConvertOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.PDFOutputs.html">nbprint.config.outputs.PDFOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.NotebookOutputs.html">nbprint.config.outputs.NotebookOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.HTMLOutputs.html">nbprint.config.outputs.HTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.WebHTMLOutputs.html">nbprint.config.outputs.WebHTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertShortCircuitOutputs.html">nbprint.config.outputs.NBConvertShortCircuitOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.EmailOutputs.html">nbprint.config.outputs.EmailOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.SMTP.html">nbprint.config.outputs.SMTP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.LoggingConfig.html">nbprint.models.LoggingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.PandasDisplayConfiguration.html">nbprint.models.PandasDisplayConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.PlotlyRendererConfiguration.html">nbprint.models.PlotlyRendererConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.SeabornDisplayConfiguration.html">nbprint.models.SeabornDisplayConfiguration</a></li>
 </ul>
 </li>
 </ul>
@@ -271,7 +293,7 @@
 <div class="viewcode-block" id="Outputs">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.Outputs.html#nbprint.config.core.Outputs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Outputs</span><span class="p">(</span><span class="n">ResultBase</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">path_root</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;outputs&quot;</span><span class="p">)</span>
+    <span class="n">root</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;outputs&quot;</span><span class="p">)</span>
     <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;{{name}}-{{date}}&quot;</span><span class="p">)</span>
 
     <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
@@ -285,6 +307,14 @@
             <span class="s2">&quot;A callable hook that is called after generation of the notebook. &quot;</span>
             <span class="s2">&quot;It is passed the config instance. &quot;</span>
             <span class="s2">&quot;If it returns something non-None, that value is returned by `run` instead of the output path.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">postprocess</span><span class="p">:</span> <span class="n">PyObjectPath</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;A callable hook that is called after all processing completes. &quot;</span>
+            <span class="s2">&quot;It is passed the config instance/s. &quot;</span>
+            <span class="s2">&quot;NOTE: It may receive multiple Configuration instances, if a parameterized run was performed.&quot;</span>
         <span class="p">),</span>
     <span class="p">)</span>
 
@@ -309,7 +339,7 @@
             <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;nbprint:outputs&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;path_root&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;root&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_convert_str_to_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -355,7 +385,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_notebook_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="c1"># Create file or folder path</span>
         <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_name</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path_root</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
         <span class="n">root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.ipynb&quot;</span>
 
@@ -397,14 +427,7 @@
             <span class="c1"># For now, this is a TODO.</span>
             <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;Outputs cell execution in context is not yet implemented.&quot;</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Outputs.reduce">
-<a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.Outputs.html#nbprint.config.core.Outputs.reduce">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">reduce</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">:</span> <span class="s2">&quot;Outputs&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Outputs&quot;</span><span class="p">:</span>  <span class="c1"># noqa: ARG002</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reduce is called in batch mode to indicate that this output is part of a multi-output run.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
-</div>
+        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 </pre></div>
         </article>

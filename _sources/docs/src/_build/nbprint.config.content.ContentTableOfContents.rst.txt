@@ -1,0 +1,6 @@
+﻿nbprint.config.content.ContentTableOfContents
+=============================================
+
+.. currentmodule:: nbprint.config.content
+
+.. autopydantic_model:: ContentTableOfContents

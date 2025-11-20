@@ -1,0 +1,6 @@
+﻿nbprint.config.content.ContentCode
+==================================
+
+.. currentmodule:: nbprint.config.content
+
+.. autopydantic_model:: ContentCode

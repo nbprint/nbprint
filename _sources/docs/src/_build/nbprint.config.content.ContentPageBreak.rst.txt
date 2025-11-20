@@ -1,0 +1,6 @@
+﻿nbprint.config.content.ContentPageBreak
+=======================================
+
+.. currentmodule:: nbprint.config.content
+
+.. autopydantic_model:: ContentPageBreak

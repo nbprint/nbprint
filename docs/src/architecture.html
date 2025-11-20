@@ -209,6 +209,28 @@
 <li class="toctree-l2"><a class="reference internal" href="_build/nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_build/nbprint.cli.hydra_explain.html">nbprint.cli.hydra_explain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.hydra.load_config.html">nbprint.config.hydra.load_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.PapermillParameters.html">nbprint.config.core.PapermillParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentCode.html">nbprint.config.content.ContentCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentMarkdown.html">nbprint.config.content.ContentMarkdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentImage.html">nbprint.config.content.ContentImage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentTableOfContents.html">nbprint.config.content.ContentTableOfContents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentLayout.html">nbprint.config.content.ContentLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentInlineLayout.html">nbprint.config.content.ContentInlineLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentFlexColumnLayout.html">nbprint.config.content.ContentFlexColumnLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentFlexRowLayout.html">nbprint.config.content.ContentFlexRowLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentPageBreak.html">nbprint.config.content.ContentPageBreak</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.NBConvertOutputs.html">nbprint.config.outputs.NBConvertOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.PDFOutputs.html">nbprint.config.outputs.PDFOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.NotebookOutputs.html">nbprint.config.outputs.NotebookOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.HTMLOutputs.html">nbprint.config.outputs.HTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.WebHTMLOutputs.html">nbprint.config.outputs.WebHTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.NBConvertShortCircuitOutputs.html">nbprint.config.outputs.NBConvertShortCircuitOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.EmailOutputs.html">nbprint.config.outputs.EmailOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.SMTP.html">nbprint.config.outputs.SMTP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.models.LoggingConfig.html">nbprint.models.LoggingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.models.PandasDisplayConfiguration.html">nbprint.models.PandasDisplayConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.models.PlotlyRendererConfiguration.html">nbprint.models.PlotlyRendererConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.models.SeabornDisplayConfiguration.html">nbprint.models.SeabornDisplayConfiguration</a></li>
 </ul>
 </li>
 </ul>
@@ -349,8 +371,13 @@ This allows us to represent notebook “state” as a typed <code class="docutil
     o&#64;{ shape: doc, label: &quot;output (html,pdf,etc)&quot; }
     end
 
+    post(Post Processing)
+
     Configuration --&gt; Notebook
-    Notebook --&gt;Output
+    Notebook --&gt; Output
+    Output eOutputPosProcessing&#64;---&gt; post
+    eOutputPosProcessing&#64;{animate: true}
+
     </pre></section>
 <section id="parameters">
 <h3><code class="docutils literal notranslate"><span class="pre">Parameters</span></code><a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
@@ -383,15 +410,97 @@ This allows us to represent notebook “state” as a typed <code class="docutil
 </section>
 <section id="context">
 <h3><code class="docutils literal notranslate"><span class="pre">Context</span></code><a class="headerlink" href="#context" title="Link to this heading">¶</a></h3>
+<p>Context is used to wrap variables local to the notebook.
+The best documentation is a simple example in YAML form:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.Configuration</span>
+<span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.example.ExampleContext</span>
+<span class="nt">content</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentCode</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">nbprint_ctx.string = string</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentCode</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">print(nbprint_ctx.string)</span>
+</pre></div>
+</div>
+<p>This will create two <code class="docutils literal notranslate"><span class="pre">ContentCode</span></code> instances, where one sets a value <code class="docutils literal notranslate"><span class="pre">string</span></code> on the <code class="docutils literal notranslate"><span class="pre">ExampleContext</span></code> instance and the other reads it.</p>
+<p>You can of course rely on notebook-global variables, but relying on typed contexts makes it easier to build modular reports.</p>
 </section>
 <section id="content">
 <h3><code class="docutils literal notranslate"><span class="pre">Content</span></code><a class="headerlink" href="#content" title="Link to this heading">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Content</span></code> is the basic form of displayable content.
+It can be used to wrap any generic functionality or Markdown content.
+It can also be convenient to reuse display configuration.</p>
+<p>Content has a few key attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Content.content</span></code>: string text content, or a <code class="docutils literal notranslate"><span class="pre">list[Content]</span></code> of subcontent for layout elements</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Content.style</span></code>: A <code class="docutils literal notranslate"><span class="pre">Style</span></code> element based on CSS for styling this content</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">css</span></code>: Generic string content to be injected into a <code class="docutils literal notranslate"><span class="pre">&lt;style&gt;</span></code> tag scoped to this cell</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">esm</span></code>: Generic string content to be injected into a <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;</span></code> tag scoped to this cell. It is expected to contain a function <code class="docutils literal notranslate"><span class="pre">render(cell_nbprint_metadata_as_json,</span> <span class="pre">cell_dom_element)</span></code>.</p></li>
+</ul>
+<p>The following items are provided:</p>
+<section id="contentcode">
+<h4><code class="docutils literal notranslate"><span class="pre">ContentCode</span></code><a class="headerlink" href="#contentcode" title="Link to this heading">¶</a></h4>
+<p>Content that is executed as a code cell.</p>
+</section>
+<section id="contentmarkdown">
+<h4><code class="docutils literal notranslate"><span class="pre">ContentMarkdown</span></code><a class="headerlink" href="#contentmarkdown" title="Link to this heading">¶</a></h4>
+<p>Content that is executed as a Markdown cell.</p>
+</section>
+<section id="contentimage">
+<h4><code class="docutils literal notranslate"><span class="pre">ContentImage</span></code><a class="headerlink" href="#contentimage" title="Link to this heading">¶</a></h4>
+</section>
+<section id="contenttableofcontents">
+<h4><code class="docutils literal notranslate"><span class="pre">ContentTableOfContents</span></code><a class="headerlink" href="#contenttableofcontents" title="Link to this heading">¶</a></h4>
+</section>
+<section id="layout-elements">
+<h4>Layout Elements<a class="headerlink" href="#layout-elements" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ContentLayout</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ContentInlineLayout</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ContentFlexColumnLayout</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ContentFlexRowLayout</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ContentPageBreak</span></code></p></li>
+</ul>
+</section>
+<section id="library-configuration-elements">
+<h4>Library Configuration Elements<a class="headerlink" href="#library-configuration-elements" title="Link to this heading">¶</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">LoggingConfig</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PandasDisplayConfiguration</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PlotlyRendererConfiguration</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">SeabornDisplayConfiguration</span></code></p></li>
+</ul>
+</section>
 </section>
 <section id="outputs">
 <h3><code class="docutils literal notranslate"><span class="pre">Outputs</span></code><a class="headerlink" href="#outputs" title="Link to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code> can produce a variety of outputs based on <a class="reference external" href="https://nbconvert.readthedocs.io/en/latest/"><code class="docutils literal notranslate"><span class="pre">nbconvert</span></code></a>.
 It can also postprocess these outputs based on content, to e.g. email a report if a certain cell returns <code class="docutils literal notranslate"><span class="pre">True</span></code>, as a simple example.</p>
 <p>The following defaults are provided:</p>
+<section id="id1">
+<h4><code class="docutils literal notranslate"><span class="pre">Outputs</span></code><a class="headerlink" href="#id1" title="Link to this heading">¶</a></h4>
+<p>This is the base class for all outputs.
+It has a few key attributes:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.root</span></code>: Base path where output artifacts will generate</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.naming</span></code>: naming convention to use for output artifacts. This is particularly useful when producing many artifacts. It is templatized via Jinja2 with the following arguments:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: name of the notebook</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">date</span></code>: current date as ISO format</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">datetime</span></code>: current datetime as ISO format</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uuid</span></code>: a generated UUID</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sha</span></code>: a hash of the <code class="docutils literal notranslate"><span class="pre">Configuration</span></code> object</p></li>
+<li><p>any parameters set in the <code class="docutils literal notranslate"><span class="pre">Configuration.parameters</span></code> object</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.hook</span></code>: a python callable path to be invoked after notebook generation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.postprocess</span></code>: a python callable path to be invoked at the very end of the <code class="docutils literal notranslate"><span class="pre">Configuration</span></code> run/s</p></li>
+</ul>
+<p>In particular, the hooks can be used to get behavior like: only send a report via email if XYZ condition is (not) satisfied.</p>
+</section>
 <section id="nbconvertoutputs">
 <h4><code class="docutils literal notranslate"><span class="pre">NBConvertOutputs</span></code><a class="headerlink" href="#nbconvertoutputs" title="Link to this heading">¶</a></h4>
 <blockquote>
@@ -404,6 +513,11 @@ It supports the following configuration options:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">execute</span></code>: whether or not to reexecute the notebook, defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">timeout</span></code>: execution timeout, defaults to <code class="docutils literal notranslate"><span class="pre">600s</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">template</span></code>: <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> template to use, defaults to <code class="docutils literal notranslate"><span class="pre">&quot;nbprint&quot;</span></code></p></li>
+</ul>
+<p>Additionally, there are two extra hooks that can be set:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">execute_hook</span></code>: Called after <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> execution of the notebook</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nbconvert_hook</span></code>: Called after <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> conversion of the notebook</p></li>
 </ul>
 </section>
 <section id="pdfoutputs">
@@ -441,10 +555,36 @@ It supports the following configuration options:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">execute_hook</span></code>: A Python import path to a function to evaluate, see <code class="docutils literal notranslate"><span class="pre">nbprint.config.outputs.nbconvert.short_circuit_hook</span></code> as an example</p></li>
 </ul>
 </section>
+<section id="emailoutputs">
+<h4><code class="docutils literal notranslate"><span class="pre">EmailOutputs</span></code><a class="headerlink" href="#emailoutputs" title="Link to this heading">¶</a></h4>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">hydra</span></code> config: <code class="docutils literal notranslate"><span class="pre">nbprint/outputs/email</span></code></p>
+</div></blockquote>
+<p>Inherits from <code class="docutils literal notranslate"><span class="pre">NBConvertOutputs</span></code> and attaches the output to an email using a prebuilt <code class="docutils literal notranslate"><span class="pre">postprocess</span></code> hook.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">body</span></code>: Content of the email, defaults to the output name</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">subject</span></code>: Content of the subject, defaults to the output name</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">to</span></code>: Email recipient/s</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">from_</span></code>: Email sender</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cc</span></code>: CC</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bcc</span></code>: BCC</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">smtp</span></code>: SMTP configuration</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">host</span></code>: SMTP server host</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">port</span></code>: SMTP server port</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">user</span></code>: SMTP server user</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">password</span></code>: SMTP server password</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tls</span></code>: Enable TLS</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ssl</span></code>: Enable SSL</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">timeout</span></code>: Timeout for SMTP connection</p></li>
+</ul>
+</li>
+</ul>
 </section>
 </section>
-<section id="id1">
-<h2>Configuration<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+</section>
+<section id="id2">
+<h2>Configuration<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
 <p><a class="reference external" href="https://hydra.cc"><code class="docutils literal notranslate"><span class="pre">hydra</span></code></a> allows us the ability to mix and match the various components defined in YAML, or even build our own.
 Its easy for us to mix-and-match configuration for content, outputs, layout, and more.
 It also lets us tweak existing <code class="docutils literal notranslate"><span class="pre">pydantic</span></code>-defined options from the command line.</p>
@@ -570,19 +710,29 @@ we can customize, tweak, and extend <code class="docutils literal notranslate"><
 </li>
 <li><a class="reference internal" href="#page"><code class="docutils literal notranslate"><span class="pre">Page</span></code></a></li>
 <li><a class="reference internal" href="#context"><code class="docutils literal notranslate"><span class="pre">Context</span></code></a></li>
-<li><a class="reference internal" href="#content"><code class="docutils literal notranslate"><span class="pre">Content</span></code></a></li>
+<li><a class="reference internal" href="#content"><code class="docutils literal notranslate"><span class="pre">Content</span></code></a><ul>
+<li><a class="reference internal" href="#contentcode"><code class="docutils literal notranslate"><span class="pre">ContentCode</span></code></a></li>
+<li><a class="reference internal" href="#contentmarkdown"><code class="docutils literal notranslate"><span class="pre">ContentMarkdown</span></code></a></li>
+<li><a class="reference internal" href="#contentimage"><code class="docutils literal notranslate"><span class="pre">ContentImage</span></code></a></li>
+<li><a class="reference internal" href="#contenttableofcontents"><code class="docutils literal notranslate"><span class="pre">ContentTableOfContents</span></code></a></li>
+<li><a class="reference internal" href="#layout-elements">Layout Elements</a></li>
+<li><a class="reference internal" href="#library-configuration-elements">Library Configuration Elements</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#outputs"><code class="docutils literal notranslate"><span class="pre">Outputs</span></code></a><ul>
+<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">Outputs</span></code></a></li>
 <li><a class="reference internal" href="#nbconvertoutputs"><code class="docutils literal notranslate"><span class="pre">NBConvertOutputs</span></code></a></li>
 <li><a class="reference internal" href="#pdfoutputs"><code class="docutils literal notranslate"><span class="pre">PDFOutputs</span></code></a></li>
 <li><a class="reference internal" href="#notebookoutputs"><code class="docutils literal notranslate"><span class="pre">NotebookOutputs</span></code></a></li>
 <li><a class="reference internal" href="#htmloutputs"><code class="docutils literal notranslate"><span class="pre">HTMLOutputs</span></code></a></li>
 <li><a class="reference internal" href="#webhtmloutputs"><code class="docutils literal notranslate"><span class="pre">WebHTMLOutputs</span></code></a></li>
 <li><a class="reference internal" href="#nbconvertshortcircuitoutputs"><code class="docutils literal notranslate"><span class="pre">NBConvertShortCircuitOutputs</span></code></a></li>
+<li><a class="reference internal" href="#emailoutputs"><code class="docutils literal notranslate"><span class="pre">EmailOutputs</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id1">Configuration</a></li>
+<li><a class="reference internal" href="#id2">Configuration</a></li>
 </ul>
 </li>
 </ul>

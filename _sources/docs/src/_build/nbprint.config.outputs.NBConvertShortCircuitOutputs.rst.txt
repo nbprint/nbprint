@@ -1,0 +1,6 @@
+﻿nbprint.config.outputs.NBConvertShortCircuitOutputs
+===================================================
+
+.. currentmodule:: nbprint.config.outputs
+
+.. autopydantic_model:: NBConvertShortCircuitOutputs

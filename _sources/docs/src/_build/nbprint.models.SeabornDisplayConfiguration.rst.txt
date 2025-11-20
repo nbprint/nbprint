@@ -1,0 +1,6 @@
+﻿nbprint.models.SeabornDisplayConfiguration
+==========================================
+
+.. currentmodule:: nbprint.models
+
+.. autopydantic_model:: SeabornDisplayConfiguration

@@ -208,6 +208,28 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.cli.hydra_explain.html">nbprint.cli.hydra_explain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.hydra.load_config.html">nbprint.config.hydra.load_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.core.PapermillParameters.html">nbprint.config.core.PapermillParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentCode.html">nbprint.config.content.ContentCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentMarkdown.html">nbprint.config.content.ContentMarkdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentImage.html">nbprint.config.content.ContentImage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentTableOfContents.html">nbprint.config.content.ContentTableOfContents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentLayout.html">nbprint.config.content.ContentLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentInlineLayout.html">nbprint.config.content.ContentInlineLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentFlexColumnLayout.html">nbprint.config.content.ContentFlexColumnLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentFlexRowLayout.html">nbprint.config.content.ContentFlexRowLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.ContentPageBreak.html">nbprint.config.content.ContentPageBreak</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html">nbprint.config.outputs.NBConvertOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.PDFOutputs.html">nbprint.config.outputs.PDFOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.NotebookOutputs.html">nbprint.config.outputs.NotebookOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.HTMLOutputs.html">nbprint.config.outputs.HTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.WebHTMLOutputs.html">nbprint.config.outputs.WebHTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertShortCircuitOutputs.html">nbprint.config.outputs.NBConvertShortCircuitOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.EmailOutputs.html">nbprint.config.outputs.EmailOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.outputs.SMTP.html">nbprint.config.outputs.SMTP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.LoggingConfig.html">nbprint.models.LoggingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.PandasDisplayConfiguration.html">nbprint.models.PandasDisplayConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.PlotlyRendererConfiguration.html">nbprint.models.PlotlyRendererConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.models.SeabornDisplayConfiguration.html">nbprint.models.SeabornDisplayConfiguration</a></li>
 </ul>
 </li>
 </ul>
@@ -306,11 +328,15 @@
 
 
 
+<div class="viewcode-block" id="PapermillParameters">
+<a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.PapermillParameters.html#nbprint.config.core.PapermillParameters">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PapermillParameters</span><span class="p">(</span><span class="n">Parameters</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Papermill parameters function implicitly as a dict&quot;&quot;&quot;</span>
 
     <span class="nb">vars</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
+<div class="viewcode-block" id="PapermillParameters.generate">
+<a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.PapermillParameters.html#nbprint.config.core.PapermillParameters.generate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NotebookNode</span><span class="p">:</span>
         <span class="n">cell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base_generate_meta</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
         <span class="n">mod</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">Module</span><span class="p">(</span><span class="n">body</span><span class="o">=</span><span class="p">[],</span> <span class="n">type_ignores</span><span class="o">=</span><span class="p">[])</span>
@@ -332,7 +358,8 @@
             <span class="p">)</span>
         <span class="n">source</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">unparse</span><span class="p">(</span><span class="n">mod</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&quot;&#39;</span><span class="p">)</span>
         <span class="n">cell</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
-        <span class="k">return</span> <span class="n">cell</span>
+        <span class="k">return</span> <span class="n">cell</span></div>
+
 
     <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
@@ -362,7 +389,8 @@
         <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;vars&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
 </pre></div>
         </article>
       </div>

@@ -1,0 +1,6 @@
+﻿nbprint.config.outputs.NBConvertOutputs
+=======================================
+
+.. currentmodule:: nbprint.config.outputs
+
+.. autopydantic_model:: NBConvertOutputs

@@ -209,6 +209,28 @@
 <li class="toctree-l2"><a class="reference internal" href="nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nbprint.cli.hydra_explain.html">nbprint.cli.hydra_explain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nbprint.config.hydra.load_config.html">nbprint.config.hydra.load_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.core.PapermillParameters.html">nbprint.config.core.PapermillParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentCode.html">nbprint.config.content.ContentCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentMarkdown.html">nbprint.config.content.ContentMarkdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentImage.html">nbprint.config.content.ContentImage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentTableOfContents.html">nbprint.config.content.ContentTableOfContents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentLayout.html">nbprint.config.content.ContentLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentInlineLayout.html">nbprint.config.content.ContentInlineLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentFlexColumnLayout.html">nbprint.config.content.ContentFlexColumnLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentFlexRowLayout.html">nbprint.config.content.ContentFlexRowLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentPageBreak.html">nbprint.config.content.ContentPageBreak</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.NBConvertOutputs.html">nbprint.config.outputs.NBConvertOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.PDFOutputs.html">nbprint.config.outputs.PDFOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.NotebookOutputs.html">nbprint.config.outputs.NotebookOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.HTMLOutputs.html">nbprint.config.outputs.HTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.WebHTMLOutputs.html">nbprint.config.outputs.WebHTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.NBConvertShortCircuitOutputs.html">nbprint.config.outputs.NBConvertShortCircuitOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.EmailOutputs.html">nbprint.config.outputs.EmailOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.SMTP.html">nbprint.config.outputs.SMTP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.models.LoggingConfig.html">nbprint.models.LoggingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.models.PandasDisplayConfiguration.html">nbprint.models.PandasDisplayConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.models.PlotlyRendererConfiguration.html">nbprint.models.PlotlyRendererConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.models.SeabornDisplayConfiguration.html">nbprint.models.SeabornDisplayConfiguration</a></li>
 </ul>
 </li>
 </ul>
@@ -2810,7 +2832,7 @@ This will be called before the runtime of the notebook, use it for code generati
 
 <dl class="py method">
 <dt class="sig sig-object py" id="nbprint.config.core.Configuration.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/nbprint/config/core/config.html#Configuration.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbprint.config.core.Configuration.run" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dry_run</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">_multi</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Path</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/nbprint/config/core/config.html#Configuration.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbprint.config.core.Configuration.run" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py property">

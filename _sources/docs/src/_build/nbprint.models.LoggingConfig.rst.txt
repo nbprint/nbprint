@@ -1,0 +1,6 @@
+﻿nbprint.models.LoggingConfig
+============================
+
+.. currentmodule:: nbprint.models
+
+.. autopydantic_model:: LoggingConfig

@@ -1,0 +1,6 @@
+﻿nbprint.config.content.ContentImage
+===================================
+
+.. currentmodule:: nbprint.config.content
+
+.. autopydantic_model:: ContentImage

@@ -1,0 +1,6 @@
+﻿nbprint.config.content.ContentLayout
+====================================
+
+.. currentmodule:: nbprint.config.content
+
+.. autopydantic_model:: ContentLayout

@@ -209,6 +209,28 @@
 <li class="toctree-l2"><a class="reference internal" href="nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nbprint.cli.hydra_explain.html">nbprint.cli.hydra_explain</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nbprint.config.hydra.load_config.html">nbprint.config.hydra.load_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.core.PapermillParameters.html">nbprint.config.core.PapermillParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentCode.html">nbprint.config.content.ContentCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentMarkdown.html">nbprint.config.content.ContentMarkdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentImage.html">nbprint.config.content.ContentImage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentTableOfContents.html">nbprint.config.content.ContentTableOfContents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentLayout.html">nbprint.config.content.ContentLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentInlineLayout.html">nbprint.config.content.ContentInlineLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentFlexColumnLayout.html">nbprint.config.content.ContentFlexColumnLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentFlexRowLayout.html">nbprint.config.content.ContentFlexRowLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.content.ContentPageBreak.html">nbprint.config.content.ContentPageBreak</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.NBConvertOutputs.html">nbprint.config.outputs.NBConvertOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.PDFOutputs.html">nbprint.config.outputs.PDFOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.NotebookOutputs.html">nbprint.config.outputs.NotebookOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.HTMLOutputs.html">nbprint.config.outputs.HTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.WebHTMLOutputs.html">nbprint.config.outputs.WebHTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.NBConvertShortCircuitOutputs.html">nbprint.config.outputs.NBConvertShortCircuitOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.EmailOutputs.html">nbprint.config.outputs.EmailOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.config.outputs.SMTP.html">nbprint.config.outputs.SMTP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.models.LoggingConfig.html">nbprint.models.LoggingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.models.PandasDisplayConfiguration.html">nbprint.models.PandasDisplayConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.models.PlotlyRendererConfiguration.html">nbprint.models.PlotlyRendererConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nbprint.models.SeabornDisplayConfiguration.html">nbprint.models.SeabornDisplayConfiguration</a></li>
 </ul>
 </li>
 </ul>
@@ -340,10 +362,10 @@
 <span class="w">         </span><span class="p">],</span>
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Attrs&quot;</span>
 <span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="nt">&quot;path_root&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;root&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/home/runner/work/nbprint/nbprint/outputs&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;format&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path&quot;</span><span class="p">,</span>
-<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Path Root&quot;</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Root&quot;</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;string&quot;</span>
 <span class="w">      </span><span class="p">},</span>
 <span class="w">      </span><span class="nt">&quot;naming&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -360,6 +382,10 @@
 <span class="w">      </span><span class="nt">&quot;hook&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
 <span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Hook&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;postprocess&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">         </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Postprocess&quot;</span>
 <span class="w">      </span><span class="p">}</span>
 <span class="w">   </span><span class="p">},</span>
 <span class="w">   </span><span class="nt">&quot;$defs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
@@ -388,15 +414,16 @@
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hook</span> <span class="pre">(ccflow.exttypes.pyobjectpath.PyObjectPath</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ignore</span> <span class="pre">(bool)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">naming</span> <span class="pre">(str)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">path_root</span> <span class="pre">(pathlib.Path)</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">postprocess</span> <span class="pre">(ccflow.exttypes.pyobjectpath.PyObjectPath</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">role</span> <span class="pre">(nbprint.config.base.Role)</span></code></p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">root</span> <span class="pre">(pathlib.Path)</span></code></p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tags</span> <span class="pre">(list[str])</span></code></p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py attribute pydantic_field">
-<dt class="sig sig-object py" id="nbprint.config.core.Outputs.path_root">
-<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path_root</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Path</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/nbprint/nbprint/outputs')</span></em><a class="headerlink" href="#nbprint.config.core.Outputs.path_root" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="nbprint.config.core.Outputs.root">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Path</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/nbprint/nbprint/outputs')</span></em><a class="headerlink" href="#nbprint.config.core.Outputs.root" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
@@ -429,6 +456,12 @@
 <dt class="sig sig-object py" id="nbprint.config.core.Outputs.hook">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hook</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">PyObjectPath</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#nbprint.config.core.Outputs.hook" title="Link to this definition">¶</a></dt>
 <dd><p>A callable hook that is called after generation of the notebook. It is passed the config instance. If it returns something non-None, that value is returned by <cite>run</cite> instead of the output path.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="nbprint.config.core.Outputs.postprocess">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">postprocess</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">PyObjectPath</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#nbprint.config.core.Outputs.postprocess" title="Link to this definition">¶</a></dt>
+<dd><p>A callable hook that is called after all processing completes. It is passed the config instance/s. NOTE: It may receive multiple Configuration instances, if a parameterized run was performed.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -468,12 +501,6 @@ This will be called before the runtime of the notebook, use it for code generati
 <div><p>NotebookNode: the content of the notebook node</p>
 </div></blockquote>
 </section>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="nbprint.config.core.Outputs.reduce">
-<span class="sig-name descname"><span class="pre">reduce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#nbprint.config.core.Outputs" title="nbprint.config.core.outputs.Outputs"><span class="pre">Outputs</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#nbprint.config.core.Outputs" title="nbprint.config.core.outputs.Outputs"><span class="pre">Outputs</span></a></span></span><a class="reference internal" href="../../../_modules/nbprint/config/core/outputs.html#Outputs.reduce"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nbprint.config.core.Outputs.reduce" title="Link to this definition">¶</a></dt>
-<dd><p>Reduce is called in batch mode to indicate that this output is part of a multi-output run.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -552,19 +579,19 @@ This will be called before the runtime of the notebook, use it for code generati
             <ul>
 <li><a class="reference internal" href="#">nbprint.config.core.Outputs</a><ul>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs"><code class="docutils literal notranslate"><span class="pre">Outputs</span></code></a><ul>
-<li><a class="reference internal" href="#nbprint.config.core.Outputs.path_root"><code class="docutils literal notranslate"><span class="pre">Outputs.path_root</span></code></a></li>
+<li><a class="reference internal" href="#nbprint.config.core.Outputs.root"><code class="docutils literal notranslate"><span class="pre">Outputs.root</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.naming"><code class="docutils literal notranslate"><span class="pre">Outputs.naming</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.tags"><code class="docutils literal notranslate"><span class="pre">Outputs.tags</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.role"><code class="docutils literal notranslate"><span class="pre">Outputs.role</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.ignore"><code class="docutils literal notranslate"><span class="pre">Outputs.ignore</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.embedded"><code class="docutils literal notranslate"><span class="pre">Outputs.embedded</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.hook"><code class="docutils literal notranslate"><span class="pre">Outputs.hook</span></code></a></li>
+<li><a class="reference internal" href="#nbprint.config.core.Outputs.postprocess"><code class="docutils literal notranslate"><span class="pre">Outputs.postprocess</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.notebook"><code class="docutils literal notranslate"><span class="pre">Outputs.notebook</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.output"><code class="docutils literal notranslate"><span class="pre">Outputs.output</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.resolve_output"><code class="docutils literal notranslate"><span class="pre">Outputs.resolve_output()</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.run"><code class="docutils literal notranslate"><span class="pre">Outputs.run()</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.generate"><code class="docutils literal notranslate"><span class="pre">Outputs.generate()</span></code></a></li>
-<li><a class="reference internal" href="#nbprint.config.core.Outputs.reduce"><code class="docutils literal notranslate"><span class="pre">Outputs.reduce()</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.model_post_init"><code class="docutils literal notranslate"><span class="pre">Outputs.model_post_init()</span></code></a></li>
 </ul>
 </li>

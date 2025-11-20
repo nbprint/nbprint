@@ -1,0 +1,6 @@
+﻿nbprint.config.outputs.WebHTMLOutputs
+=====================================
+
+.. currentmodule:: nbprint.config.outputs
+
+.. autopydantic_model:: WebHTMLOutputs

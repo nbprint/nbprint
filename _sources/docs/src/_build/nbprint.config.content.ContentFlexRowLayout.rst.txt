@@ -1,0 +1,6 @@
+﻿nbprint.config.content.ContentFlexRowLayout
+===========================================
+
+.. currentmodule:: nbprint.config.content
+
+.. autopydantic_model:: ContentFlexRowLayout

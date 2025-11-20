@@ -1,0 +1,6 @@
+﻿nbprint.config.content.ContentMarkdown
+======================================
+
+.. currentmodule:: nbprint.config.content
+
+.. autopydantic_model:: ContentMarkdown

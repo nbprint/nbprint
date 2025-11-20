@@ -1,0 +1,6 @@
+﻿nbprint.models.PandasDisplayConfiguration
+=========================================
+
+.. currentmodule:: nbprint.models
+
+.. autopydantic_model:: PandasDisplayConfiguration
