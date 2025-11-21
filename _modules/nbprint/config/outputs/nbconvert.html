@@ -331,11 +331,12 @@
         <span class="k">return</span> <span class="n">v</span></div>
 
 
-<div class="viewcode-block" id="NBConvertOutputs.resolve_output">
-<a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html#nbprint.config.outputs.NBConvertOutputs.resolve_output">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">resolve_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-        <span class="c1"># get original notebook</span>
-        <span class="n">original</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">resolve_output</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">))</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_compute_outputs</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+        <span class="c1"># Update executed path if needed</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nb_executed_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">.executed.ipynb&quot;</span>
+        <span class="c1"># Update output path</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;webpdf&quot;</span><span class="p">:</span>
             <span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;pdf&quot;</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;webhtml&quot;</span><span class="p">:</span>
@@ -343,9 +344,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;ipynb&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">original</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.ipynb&quot;</span><span class="p">,</span> <span class="s2">&quot;.executed.ipynb&quot;</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">original</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.ipynb&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span></div>
-
+            <span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.ipynb&quot;</span><span class="p">,</span> <span class="s2">&quot;.executed.ipynb&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.ipynb&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_output_key</span><span class="p">(</span><span class="n">cell</span><span class="p">:</span> <span class="n">NotebookNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
@@ -371,7 +372,7 @@
 
         <span class="kn">from</span><span class="w"> </span><span class="nn">nbformat</span><span class="w"> </span><span class="kn">import</span> <span class="n">reads</span>
 
-        <span class="n">notebook_content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nb_path</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+        <span class="n">notebook_content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">executed_notebook</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
         <span class="n">nb</span> <span class="o">=</span> <span class="n">reads</span><span class="p">(</span><span class="n">notebook_content</span><span class="p">,</span> <span class="n">as_version</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
@@ -406,11 +407,8 @@
         <span class="k">if</span> <span class="n">notebook</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span>
 
-        <span class="c1"># Grab the output artifact</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolve_output</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
-
         <span class="c1"># TODO: fix in nbconvert</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.webpdf&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;webpdf&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.webpdf&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;webpdf&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
 
         <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
             <span class="nb">str</span><span class="p">(</span><span class="n">notebook</span><span class="p">),</span>
@@ -424,20 +422,16 @@
         <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PSP_JUPYTER_HTML_EXPORT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">:</span>
-            <span class="n">execute_output</span> <span class="o">=</span> <span class="n">notebook</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">notebook</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">.executed.ipynb&quot;</span>
             <span class="n">nbex_cmd</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">notebook</span><span class="p">),</span>
                 <span class="s2">&quot;--to=notebook&quot;</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;--output=</span><span class="si">{</span><span class="n">execute_output</span><span class="si">!s}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;--output=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">executed_notebook</span><span class="si">!s}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;--execute&quot;</span><span class="p">,</span>
                 <span class="sa">f</span><span class="s2">&quot;--ExecutePreprocessor.timeout=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="p">]</span>
 
             <span class="c1"># Update cmd to use executed notebook</span>
-            <span class="n">cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">execute_output</span><span class="p">)</span>
-
-            <span class="c1"># Update nb path to be executed notebook</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_nb_path</span> <span class="o">=</span> <span class="n">execute_output</span>
+            <span class="n">cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">executed_notebook</span><span class="p">)</span>
 
             <span class="c1"># Execute nbconvert</span>
             <span class="n">execute_nbconvert</span><span class="p">(</span><span class="n">nbex_cmd</span><span class="p">)</span>
@@ -454,7 +448,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbconvert_hook</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbconvert_hook</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span></div>
 </div>
 
 
