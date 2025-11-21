@@ -8,6 +8,23 @@ outputs:
   target: "html"
 
 content:
+  - _target_:  nbprint.ContentMarkdown
+    content: |
+      # A Generic Report
+      ## A Subtitle
+    css: ":scope { text-align: center; }"
+
+  - _target_:  nbprint.ContentTableOfContents
+
+  - _target_:  nbprint.ContentMarkdown
+    content: |
+      # Section One
+      Lorem ipsum dolor sit amet.
+      ## Subsection One
+      Consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+      ## Subsection Two
+      Ut labore et dolore magna aliqua.
+
   - _target_: nbprint.ContentCode
     content: |
       from superstore import superstore
