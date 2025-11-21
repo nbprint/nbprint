@@ -4,7 +4,7 @@ build-backend="hatchling.build"
 
 [project]
 name = "nbprint"
-version = "0.11.0"
+version = "0.11.1"
 authors = [{name = "the nbprint authors", email = "t.paine154@gmail.com"}]
 description = "A framework for customizing NBConvert templates and building reports"
 readme = "README.md"
@@ -100,7 +100,7 @@ Repository = "https://github.com/nbprint/nbprint"
 Homepage = "https://github.com/nbprint/nbprint"
 
 [tool.bumpversion]
-current_version = "0.11.0"
+current_version = "0.11.1"
 commit = true
 tag = false
 commit_args = "-s"
