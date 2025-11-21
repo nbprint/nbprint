@@ -59,9 +59,12 @@ class NBConvertOutputs(Outputs):
             return "ipynb"
         return v
 
-    def resolve_output(self, config: "Configuration") -> Path:
-        # get original notebook
-        original = str(super().resolve_output(config=config))
+    def _compute_outputs(self, config: "Configuration") -> None:
+        super()._compute_outputs(config=config)
+        # Update executed path if needed
+        if self.execute:
+            self._nb_executed_path = self.notebook.parent / f"{self.notebook.stem}.executed.ipynb"
+        # Update output path
         if self.target == "webpdf":
             target = "pdf"
         elif self.target == "webhtml":
@@ -69,8 +72,9 @@ class NBConvertOutputs(Outputs):
         else:
             target = self.target
         if self.target == "ipynb" and self.execute:
-            return Path(original.replace(".ipynb", ".executed.ipynb"))
-        return Path(original.replace(".ipynb", f".{target}"))
+            self._output_path = Path(str(self.output).replace(".ipynb", ".executed.ipynb"))
+        else:
+            self._output_path = Path(str(self.output).replace(".ipynb", f".{target}"))
 
     @staticmethod
     def _get_output_key(cell: NotebookNode) -> str | None:
@@ -96,7 +100,7 @@ class NBConvertOutputs(Outputs):
 
         from nbformat import reads
 
-        notebook_content = self._nb_path.read_text()
+        notebook_content = self.executed_notebook.read_text()
         nb = reads(notebook_content, as_version=4)
 
         for cell in nb.cells:
@@ -129,11 +133,8 @@ class NBConvertOutputs(Outputs):
         if notebook in (None, OutputsProcessing.STOP):
             return OutputsProcessing.STOP
 
-        # Grab the output artifact
-        self._output_path = self.resolve_output(config=config)
-
         # TODO: fix in nbconvert
-        output = str(self._output_path).replace(".webpdf", ".pdf").replace(".pdf", "") if self.target == "webpdf" else str(self._output_path)
+        output = str(self.output).replace(".webpdf", ".pdf").replace(".pdf", "") if self.target == "webpdf" else str(self.output)
 
         cmd = [
             str(notebook),
@@ -147,20 +148,16 @@ class NBConvertOutputs(Outputs):
         os.environ["PSP_JUPYTER_HTML_EXPORT"] = "1"
 
         if self.execute:
-            execute_output = notebook.parent / f"{notebook.stem}.executed.ipynb"
             nbex_cmd = [
                 str(notebook),
                 "--to=notebook",
-                f"--output={execute_output!s}",
+                f"--output={self.executed_notebook!s}",
                 "--execute",
                 f"--ExecutePreprocessor.timeout={self.timeout}",
             ]
 
             # Update cmd to use executed notebook
-            cmd[0] = str(execute_output)
-
-            # Update nb path to be executed notebook
-            self._nb_path = execute_output
+            cmd[0] = str(self.executed_notebook)
 
             # Execute nbconvert
             execute_nbconvert(nbex_cmd)
@@ -177,7 +174,7 @@ class NBConvertOutputs(Outputs):
 
         if self.nbconvert_hook and self.nbconvert_hook.object(config) in (OutputsProcessing.STOP, None):
             return OutputsProcessing.STOP
-        return self._output_path
+        return self.output
 
 
 class NotebookOutputs(NBConvertOutputs):

@@ -28,6 +28,7 @@ class Executor(CallableModel):
     outputs: list[Outputs] = Field(default_factory=list)
 
     _nbprints: list[Configuration] = PrivateAttr(default_factory=list)
+    _parameters: list[Parameters] = PrivateAttr(default_factory=list)
 
     @model_validator(mode="before")
     @classmethod
@@ -55,17 +56,23 @@ class Executor(CallableModel):
     @Flow.deps
     def __deps__(self, context: ExecutorParameters) -> list[tuple[Configuration, PapermillParameters]]:
         # TODO: Make sure outputs will not clobber
+        # TODO: vars is ugly hack, need to fix in papermill parameters
         self._nbprints = [self.nbprint.model_copy(deep=True, update={"_multi": True}) for _ in context.parameters]
-        self._parameters = [[p.model_copy(deep=True)] for p in context.parameters]
-        return zip(self._nbprints, self._parameters, strict=True)
+        self._parameters = context.parameters
+        return list(
+            zip(
+                self._nbprints,
+                [[_] for _ in self._parameters],
+                strict=True,
+            )
+        )
 
     @Flow.call
-    def __call__(self, context: ExecutorParameters = None) -> ExecutorOutputs:
+    def __call__(self, context: ExecutorParameters = None) -> ExecutorOutputs:  # noqa: ARG002
         op = []
-        for p in context.parameters:
+        for p in self._parameters:
             nb = self.nbprint.model_copy(deep=True, update={"_multi": True})
-            nb(p.model_copy(deep=True))
-            op.append(nb.outputs.model_copy(deep=True))
+            op.append(nb(p.model_copy(deep=True)))
         self.outputs = op
         return ExecutorOutputs(outputs=op)
 
