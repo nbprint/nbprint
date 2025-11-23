@@ -438,20 +438,29 @@
 
 const style = document.createElement('style');
 style.textContent = `.mermaid-container {
-    position: relative !important;
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
     width: 100%;
 }
 
+.mermaid-container > pre {
+    display: block;
+    width: 95%;
+}
+
+.mermaid-container > pre > svg {
+    width: 100%;
+    height: auto;
+    max-width: 100% !important;
+}
+
 .mermaid-fullscreen-btn {
-    position: absolute !important;
     width: 28px;
     height: 28px;
     background: rgba(255, 255, 255, 0.95);
     border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 4px;
     cursor: pointer;
-    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -581,8 +590,7 @@ style.textContent = `.mermaid-container {
 
 .mermaid-fullscreen-modal .mermaid-fullscreen-btn {
     display: none !important;
-}
-`;
+}`;
 document.head.appendChild(style);
 
 // Detect if page has dark background
@@ -601,31 +609,42 @@ const isDarkTheme = () => {
 
 const load = async () => {
     await mermaid.run();
+
     const all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
     const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
-    if(mermaids_to_add_zoom > 0) {
-        var svgs = d3.selectAll(".mermaid svg");
-        if(all_mermaids.length !== mermaids_processed.length) {
-            setTimeout(load, 200);
-            return;
-        } else if(svgs.size() !== mermaids_to_add_zoom) {
-            setTimeout(load, 200);
-            return;
-        } else {
-            svgs.each(function() {
-                var svg = d3.select(this);
-                svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                var inner = svg.select("g");
-                var zoom = d3.zoom().on("zoom", function(event) {
-                    inner.attr("transform", event.transform);
+
+    if ("True" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll(".mermaid svg");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(load, 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(load, 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
                 });
-                svg.call(zoom);
-            });
+            }
         }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(load, 200);
+        return;
     }
 
     const darkTheme = isDarkTheme();
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
 
     const modal = document.createElement('div');
     modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
@@ -634,11 +653,11 @@ const load = async () => {
     modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
     modal.innerHTML = `
         <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
-        <div class="mermaid-fullscreen-content${darkTheme ? ' dark-theme' : ''}"></div>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
     `;
     document.body.appendChild(modal);
 
-    const modalContent = modal.querySelector('.mermaid-fullscreen-content');
+    const modalContent = modal.querySelector('.mermaid-container-fullscreen');
     const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
 
     let previousScrollOffset = [window.scrollX, window.scrollY];
@@ -701,20 +720,22 @@ const load = async () => {
                 svg.style.width = '100%';
                 svg.style.height = 'auto';
                 svg.style.maxWidth = '100%';
-                svg.style.display = 'block';
+                svg.style.sdisplay = 'block';
 
-                setTimeout(() => {
-                    const g = svg.querySelector('g');
-                    if (g) {
-                        var svgD3 = d3.select(svg);
-                        svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
-                        var inner = svgD3.select("g");
-                        var zoom = d3.zoom().on("zoom", function(event) {
-                            inner.attr("transform", event.transform);
-                        });
-                        svgD3.call(zoom);
-                    }
-                }, 100);
+                if ("True" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
             }
 
             modal.classList.add('active');
