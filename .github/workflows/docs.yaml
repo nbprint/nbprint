@@ -29,7 +29,12 @@ jobs:
       - name: Copy HTML outputs to docs directory
         run: |
           mkdir -p docs/html/outputs
-          cp -r outputs/*.html docs/html/outputs/ || true
+          if ls outputs/*.html 1> /dev/null 2>&1; then
+            cp outputs/*.html docs/html/outputs/
+            echo "Copied HTML outputs to docs/html/outputs/"
+          else
+            echo "No HTML outputs found in outputs/ directory"
+          fi
       - uses: peaceiris/actions-gh-pages@v4
         with:
           publish_branch: gh-pages
