@@ -19,7 +19,7 @@ jobs:
           sudo apt install pandoc
           uv pip install playwright
           playwright install chromium
-          uv pip install .[develop]
+          uv pip install -e .[develop]
           uv pip install yardang
       - name: Run tests to generate HTML outputs
         run: make tests
