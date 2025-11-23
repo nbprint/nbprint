@@ -1,0 +1,721 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html">
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.09.25 -->
+        <title>&lt;no title&gt; - nbprint v0.11.1</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=580074bf" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/custom.css?v=45bc7fcc" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #eeffcc;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.11.1</code></div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.11.1</code></span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../docs/src/background.html">Background</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/src/architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/src/configuration.html">Configuration</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docs/src/api.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.core.Configuration.html">nbprint.config.core.Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.core.Parameters.html">nbprint.config.core.Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.core.Context.html">nbprint.config.core.Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.core.Outputs.html">nbprint.config.core.Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.cli.run.html">nbprint.cli.run</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.cli.hydra_explain.html">nbprint.cli.hydra_explain</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.hydra.load_config.html">nbprint.config.hydra.load_config</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.core.PapermillParameters.html">nbprint.config.core.PapermillParameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.content.ContentCode.html">nbprint.config.content.ContentCode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.content.ContentMarkdown.html">nbprint.config.content.ContentMarkdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.content.ContentImage.html">nbprint.config.content.ContentImage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.content.ContentTableOfContents.html">nbprint.config.content.ContentTableOfContents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.content.ContentLayout.html">nbprint.config.content.ContentLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.content.ContentInlineLayout.html">nbprint.config.content.ContentInlineLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.content.ContentFlexColumnLayout.html">nbprint.config.content.ContentFlexColumnLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.content.ContentFlexRowLayout.html">nbprint.config.content.ContentFlexRowLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.content.ContentPageBreak.html">nbprint.config.content.ContentPageBreak</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html">nbprint.config.outputs.NBConvertOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.outputs.PDFOutputs.html">nbprint.config.outputs.PDFOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.outputs.NotebookOutputs.html">nbprint.config.outputs.NotebookOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.outputs.HTMLOutputs.html">nbprint.config.outputs.HTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.outputs.WebHTMLOutputs.html">nbprint.config.outputs.WebHTMLOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.outputs.NBConvertShortCircuitOutputs.html">nbprint.config.outputs.NBConvertShortCircuitOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.outputs.EmailOutputs.html">nbprint.config.outputs.EmailOutputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.config.outputs.SMTP.html">nbprint.config.outputs.SMTP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.models.LoggingConfig.html">nbprint.models.LoggingConfig</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.models.PandasDisplayConfiguration.html">nbprint.models.PandasDisplayConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.models.PlotlyRendererConfiguration.html">nbprint.models.PlotlyRendererConfiguration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs/src/_build/nbprint.models.SeabornDisplayConfiguration.html">nbprint.models.SeabornDisplayConfiguration</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/outputs/finance-2025-11-23.ipynb.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>css = &#39;&#39;
+esm = &#39;&#39;
+classname = &#39;&#39;
+attrs = {}
+ticker = &#39;ABCD&#39;
+authors = []
+color = &#39;#5db39c&#39;
+type_ = &#39;nbprint.example.finance.parameters.ExampleFinanceParameters&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from nbprint.config.core.config import Configuration
+nbprint_config = Configuration.from_json(&#39;{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;configuration\&quot;,\&quot;ignore\&quot;:true,\&quot;css\&quot;:\&quot;.jp-RenderedHTMLCommon h1, .jp-RenderedHTMLCommon h2, .jp-RenderedHTMLCommon h3, .jp-RenderedHTMLCommon h4, .jp-RenderedHTMLCommon h5, .jp-RenderedHTMLCommon h6 { margin: 0 !important; }\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;meta\&quot;:{\&quot;name\&quot;:\&quot;nbprint\&quot;,\&quot;description\&quot;:\&quot;\&quot;,\&quot;_target_\&quot;:\&quot;ccflow.callable.MetaData\&quot;},\&quot;name\&quot;:\&quot;finance\&quot;,\&quot;resources\&quot;:{},\&quot;outputs\&quot;:{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;outputs\&quot;,\&quot;ignore\&quot;:true,\&quot;css\&quot;:\&quot;\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;root\&quot;:\&quot;outputs\&quot;,\&quot;naming\&quot;:\&quot;{{name}}-{{date}}\&quot;,\&quot;embedded\&quot;:false,\&quot;hook\&quot;:null,\&quot;postprocess\&quot;:null,\&quot;target\&quot;:\&quot;webpdf\&quot;,\&quot;execute\&quot;:true,\&quot;timeout\&quot;:600,\&quot;template\&quot;:\&quot;nbprint\&quot;,\&quot;collect_outputs\&quot;:false,\&quot;execute_hook\&quot;:null,\&quot;nbconvert_hook\&quot;:null,\&quot;_target_\&quot;:\&quot;nbprint.config.outputs.nbconvert.NBConvertOutputs\&quot;},\&quot;parameters\&quot;:{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;parameters\&quot;,\&quot;ignore\&quot;:true,\&quot;css\&quot;:\&quot;\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;ticker\&quot;:\&quot;ABCD\&quot;,\&quot;authors\&quot;:[],\&quot;color\&quot;:\&quot;#5db39c\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.parameters.ExampleFinanceParameters\&quot;},\&quot;page\&quot;:{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;undefined\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;top\&quot;:null,\&quot;top_left\&quot;:null,\&quot;top_right\&quot;:null,\&quot;bottom\&quot;:null,\&quot;bottom_left\&quot;:null,\&quot;bottom_right\&quot;:null,\&quot;left\&quot;:null,\&quot;left_top\&quot;:null,\&quot;left_bottom\&quot;:null,\&quot;right\&quot;:null,\&quot;right_top\&quot;:null,\&quot;right_bottom\&quot;:null,\&quot;size\&quot;:\&quot;letter\&quot;,\&quot;orientation\&quot;:\&quot;portrait\&quot;,\&quot;pages\&quot;:[],\&quot;_target_\&quot;:\&quot;nbprint.config.page.Page\&quot;},\&quot;context\&quot;:{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;context\&quot;,\&quot;ignore\&quot;:true,\&quot;css\&quot;:\&quot;\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;parameters\&quot;:{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;parameters\&quot;,\&quot;ignore\&quot;:true,\&quot;css\&quot;:\&quot;\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;ticker\&quot;:\&quot;ABCD\&quot;,\&quot;authors\&quot;:[],\&quot;color\&quot;:\&quot;#5db39c\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.parameters.ExampleFinanceParameters\&quot;},\&quot;df\&quot;:null,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.context.ExampleFinanceContext\&quot;},\&quot;content\&quot;:{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;undefined\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;prematter\&quot;:[],\&quot;frontmatter\&quot;:[],\&quot;middlematter\&quot;:[{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n\\nh1 {\\n  font-family: sans-serif;\\n  font-size: 25px !important;\\n  padding-right: 15px;\\n  border-right: 2px solid black;\\n}\\n\\nh2 {\\n  font-family: sans-serif;\\n  text-transform: uppercase;\\n  font-weight: bold !important;\\n  font-size: 12px !important;\\n  padding-left: 15px;\\n}\\n\\nspan {\\n  color: grey;\\n  font-size: 15px !important;\\n  font-style: italic;\\n  padding-top: 10px;\\n  padding-bottom: 10px;\\n}\\n    \&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;title\&quot;:\&quot;Jefferies Morgan\&quot;,\&quot;subtitle\&quot;:\&quot;Research\&quot;,\&quot;date\&quot;:\&quot;November 8, 2023 08:45 GMT\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceTitle\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;layout\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope { display: flex; flex-direction: row; break-inside: auto; }\\n\&quot;,\&quot;esm\&quot;:\&quot;\\nfunction render(meta, elem) {\\n    let data = JSON.parse(meta.data);\\n    let size_index = 0;\\n\\n    Array.from(elem.children).forEach((child) =&gt; {\\n        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;\\n        // TODO:these are hacks to determine\\n        // if it should be included\\n        let output_children = (child.querySelector(\\\&quot;.jp-OutputArea-output\\\&quot;) || {}).children || [];\\n        if (Array.from(child.classList).includes(\\\&quot;nbprint\\\&quot;)) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else if (Array.from(output_children).length &gt; 0) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else {\\n            child.style.flex = \\\&quot;0\\\&quot;;\\n        }\\n    });\\n}\\n\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:[{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;layout\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;:scope { border-right: 1px solid black; margin-right: 5px; }\&quot;,\&quot;esm\&quot;:\&quot;\\nfunction render(meta, elem) {\\n    let data = JSON.parse(meta.data);\\n    let size_index = 0;\\n\\n    Array.from(elem.children).forEach((child) =&gt; {\\n        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;\\n        // TODO:these are hacks to determine\\n        // if it should be included\\n        let output_children = (child.querySelector(\\\&quot;.jp-OutputArea-output\\\&quot;) || {}).children || [];\\n        if (Array.from(child.classList).includes(\\\&quot;nbprint\\\&quot;)) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else if (Array.from(output_children).length &gt; 0) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else {\\n            child.style.flex = \\\&quot;0\\\&quot;;\\n        }\\n    });\\n}\\n\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:[{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\ndiv.row {\\n  padding-bottom: 10px;\\n  margin-top: 12px !important;\\n  margin-bottom: 12px !important;\\n}\\n\\nh2:nth-child(1) {\\n  padding-right: 15px;\\n\\n}\\n\\nh2:nth-child(2) {\\n  padding-left: 15px;\\n}\\n\\nh1 {\\n  font-weight: lighter !important;\\n  margin-bottom: 12px !important;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;company_name\&quot;:\&quot;ABCD Inc.\&quot;,\&quot;region\&quot;:\&quot;North America\&quot;,\&quot;byline\&quot;:\&quot;Solid Growth in both Domestic and International Markets\&quot;,\&quot;color\&quot;:\&quot;#5db39c\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceStockHeadline\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope div.row {\\n  margin-top: 15px;\\n  margin-bottom: 15px;\\n  justify-content: space-between;\\n}\\n\\ndiv.row &gt; div:nth-child(2),\\ndiv.row &gt; div:nth-child(3) {\\n  padding-left: 20px;\\n  border-left: 1px solid black;\\n}\\n\\ndiv.row &gt; div &gt; span:nth-child(1) {\\n  font-size: 10px;\\n}\\n\\ndiv.row &gt; div &gt; span:nth-child(2) {\\n  font-weight: lighter !important;\\n  font-size: 17px;\\n  padding-left: 5px;\\n}\\n\\ndiv.row div:nth-child(1) span:nth-child(1)::before {\\n  font-family: \\\&quot;Font Awesome 6 Free\\\&quot;;\\n  font-weight: 900;\\n  content: \&#39;\\\\f201\&#39;;\\n  display: none;\\n  width: 20px;\\n}\\n\\ndiv.row div:nth-child(2) span:nth-child(1)::before {\\n  font-family: \\\&quot;Font Awesome 6 Free\\\&quot;;\\n  content: \&#39;\\\\f06e\&#39;;\\n  display: none;\\n}\\n\\ndiv.row div:nth-child(3) span:nth-child(1)::before {\\n  font-family: \\\&quot;Font Awesome 6 Free\\\&quot;;\\n  content: \&#39;\\\\f192\&#39;;\\n  display: none;\\n}\\n\\nsvg {\\n  width: 15px;\\n  margin-right: 3px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;ticker\&quot;:\&quot;\&quot;,\&quot;rating\&quot;:\&quot;Overweight\&quot;,\&quot;view\&quot;:\&quot;In-Line\&quot;,\&quot;price_target\&quot;:10.0,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceStockPTUpdate\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope span {\\n  font-size: 20px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do\\neiusmod tempor incididunt ut labore et dolore magna aliqua.\\nUt enim ad minim veniam, quis nostrud exercitation ullamco laboris\\nnisi ut aliquip ex ea commodo consequat.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceStockSubHeadline\&quot;}],\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;sizes\&quot;:[],\&quot;_target_\&quot;:\&quot;nbprint.config.content.page.ContentFlexColumnLayout\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;layout\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope { display: flex; flex-direction: column; break-inside: auto; }\\n\&quot;,\&quot;esm\&quot;:\&quot;\\nfunction render(meta, elem) {\\n    let data = JSON.parse(meta.data);\\n    let size_index = 0;\\n\\n    Array.from(elem.children).forEach((child) =&gt; {\\n        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;\\n        // TODO:these are hacks to determine\\n        // if it should be included\\n        let output_children = (child.querySelector(\\\&quot;.jp-OutputArea-output\\\&quot;) || {}).children || [];\\n        if (Array.from(child.classList).includes(\\\&quot;nbprint\\\&quot;)) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else if (Array.from(output_children).length &gt; 0) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else {\\n            child.style.flex = \\\&quot;0\\\&quot;;\\n        }\\n    });\\n}\\n\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:[{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n\\ndiv.column &gt; span:nth-child(1) {\\n  font-size: 12px;\\n  font-weight: bold;\\n}\\n\\ndiv.column &gt; span:nth-child(2) {\\n  font-size: 10px;\\n  text-transform: uppercase;\\n}\\n\\ndiv.row {\\n  justify-content: space-between;\\n}\\n\\ndiv.row &gt; span:nth-child(1) {\\n  font-size: 10px;\\n}\\n\\ndiv.row &gt; span:nth-child(2) {\\n  font-family: monospace;\\n  font-size: 10px;\\n}\\n\\n    \&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;name\&quot;:\&quot;John Smith\&quot;,\&quot;title\&quot;:\&quot;Equity Analyst\&quot;,\&quot;email\&quot;:\&quot;John.Smith@jm.com\&quot;,\&quot;phone\&quot;:\&quot;+1 212 867-5309\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceAuthor\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n\\ndiv.column &gt; span:nth-child(1) {\\n  font-size: 12px;\\n  font-weight: bold;\\n}\\n\\ndiv.column &gt; span:nth-child(2) {\\n  font-size: 10px;\\n  text-transform: uppercase;\\n}\\n\\ndiv.row {\\n  justify-content: space-between;\\n}\\n\\ndiv.row &gt; span:nth-child(1) {\\n  font-size: 10px;\\n}\\n\\ndiv.row &gt; span:nth-child(2) {\\n  font-family: monospace;\\n  font-size: 10px;\\n}\\n\\n    \&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;name\&quot;:\&quot;Jane Doe\&quot;,\&quot;title\&quot;:\&quot;Equity Analyst\&quot;,\&quot;email\&quot;:\&quot;Jane.Doe@jm.com\&quot;,\&quot;phone\&quot;:\&quot;+1 212 867-5309\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceAuthor\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\ndiv.row {\\n  justify-content: space-between;\\n  font-size: 10px;\\n}\\n\\ndiv.column &gt; div.column &gt; div.row:nth-child(1),\\ndiv.column &gt; div.column &gt; div.row:nth-child(2),\\ndiv.column &gt; div.column &gt; div.row:nth-child(3) {\\n  font-weight: bold;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;ticker\&quot;:\&quot;ABCD\&quot;,\&quot;company_name\&quot;:\&quot;ABCD Inc.\&quot;,\&quot;color\&quot;:\&quot;#5db39c\&quot;,\&quot;sector\&quot;:\&quot;Autos &amp; Shared Mobility\&quot;,\&quot;country\&quot;:\&quot;United States of America\&quot;,\&quot;region\&quot;:\&quot;\&quot;,\&quot;rating\&quot;:\&quot;Overweight\&quot;,\&quot;view\&quot;:\&quot;In-Line\&quot;,\&quot;price_target\&quot;:10.0,\&quot;share_price\&quot;:7.59,\&quot;market_cap\&quot;:\&quot;1,024\&quot;,\&quot;range_min\&quot;:4.35,\&quot;range_max\&quot;:8.25,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceStockQuickStats\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope {\\n  margin: 0px !important;\\n  padding: 0px !important;\\n  break-before: avoid;\\n}\\n\\ntable {\\n  font-size: 10px !important;\\n}\\ntable thead tr {\\n  font-weight: bold;\\n}\\ntable tbody tr td:nth-child(1){\\n  font-weight: bold;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;ticker\&quot;:\&quot;\&quot;,\&quot;company_name\&quot;:\&quot;\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceStockEarningsTable\&quot;}],\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;sizes\&quot;:[],\&quot;_target_\&quot;:\&quot;nbprint.config.content.page.ContentFlexColumnLayout\&quot;}],\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;sizes\&quot;:[5.0,3.0],\&quot;_target_\&quot;:\&quot;nbprint.config.content.page.ContentFlexRowLayout\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope {\\n  margin-top: 25px;\\n  margin-bottom: 15px;\\n  page-break-after: avoid;\\n}\\n\\nh2 {\\n  font-size: 18px;\\n  font-weight: bold;\\n  margin: 0px !important;\\n  padding: 8px 0px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;title\&quot;:\&quot;Investment Thesis\&quot;,\&quot;color\&quot;:\&quot;#5db39c\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionHeading\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;We initiate coverage of ABCD Inc. with an Overweight rating and a $10.00 price target,\\nrepresenting 32% upside from current levels. Our positive view is predicated on three key pillars:\\n(1) strong secular tailwinds driving sustained growth in both domestic and international markets,\\n(2) improving operational efficiency leading to margin expansion, and (3) a robust innovation\\npipeline that positions the company to capture incremental market share.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;The company has demonstrated remarkable execution over the past 18 months, delivering consistent\\nrevenue growth while simultaneously expanding margins. Management\&#39;s strategic focus on high-growth\\nsegments, combined with disciplined capital allocation, has resulted in best-in-class returns on\\ninvested capital. We believe these trends are sustainable and see further upside as the company\\nscales its operations.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Our financial models incorporate conservative assumptions around market share gains and pricing\\npower. We project revenue to grow at a 14-16% CAGR through FY2026, with EBITDA margins expanding\\nfrom 14.6% in FY2023 to 16.1% by FY2026. This translates to earnings growth significantly above\\nindustry averages, justifying a premium valuation multiple.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope ul {\\n  font-size: 11px;\\n  line-height: 1.6;\\n  margin: 10px 0px;\\n  padding-left: 20px;\\n}\\n\\n:scope ul li {\\n  margin-bottom: 8px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;items\&quot;:[\&quot;Market leadership in high-growth segments with 28% market share in North America\&quot;,\&quot;Strong brand recognition and customer loyalty driving repeat business\&quot;,\&quot;Vertically integrated supply chain providing cost advantages over competitors\&quot;,\&quot;Experienced management team with proven track record of value creation\&quot;,\&quot;Healthy balance sheet with net debt to EBITDA of 1.8x providing flexibility for M&amp;A\&quot;],\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceBulletPoints\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;_target_\&quot;:\&quot;nbprint.config.content.pagebreak.ContentPageBreak\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope {\\n  margin-top: 25px;\\n  margin-bottom: 15px;\\n  page-break-after: avoid;\\n}\\n\\nh2 {\\n  font-size: 18px;\\n  font-weight: bold;\\n  margin: 0px !important;\\n  padding: 8px 0px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;title\&quot;:\&quot;Company Overview\&quot;,\&quot;color\&quot;:\&quot;#5db39c\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionHeading\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Founded in 2010, ABCD Inc. is a leading provider of innovative mobility solutions serving both\\nconsumer and commercial markets. The company operates through three primary business segments:\\nPersonal Mobility (52% of revenue), Fleet Solutions (31%), and Aftermarket Services (17%). With\\noperations in 45 countries and a workforce of approximately 18,000 employees, ABCD has established\\nitself as a key player in the rapidly evolving transportation ecosystem.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;The Personal Mobility segment focuses on direct-to-consumer sales of electric and hybrid vehicles\\ndesigned for urban and suburban use. This segment has been the primary growth driver, benefiting\\nfrom increasing consumer adoption of sustainable transportation alternatives. The Fleet Solutions\\nsegment provides comprehensive mobility packages to corporate clients and municipalities, including\\nvehicle leasing, maintenance, and fleet management software. Aftermarket Services encompasses parts,\\naccessories, and extended warranty offerings, generating highly profitable recurring revenue streams.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Geographically, North America accounts for 58% of revenues, with Europe contributing 28%, and\\nemerging markets representing the remaining 14%. The company has been actively expanding its\\ninternational footprint, with particular emphasis on high-growth markets in Southeast Asia and\\nLatin America where urbanization trends and government incentives are driving adoption of\\nsustainable mobility solutions.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope {\\n  margin-top: 25px;\\n  margin-bottom: 15px;\\n  page-break-after: avoid;\\n}\\n\\nh2 {\\n  font-size: 18px;\\n  font-weight: bold;\\n  margin: 0px !important;\\n  padding: 8px 0px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;title\&quot;:\&quot;Financial Analysis &amp; Outlook\&quot;,\&quot;color\&quot;:\&quot;#5db39c\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionHeading\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;ABCD Inc. has demonstrated strong financial performance over the past three years, with revenue\\ngrowing from $8.9 billion in FY2021 to $12.5 billion in FY2023, representing a compound annual\\ngrowth rate of 18.5%. This growth has been driven by robust demand across all business segments,\\nsuccessful new product launches, and strategic market expansion initiatives. We expect this\\nmomentum to continue, projecting revenues of $14.1 billion in FY2024 and $18.7 billion by FY2026.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope {\\n  margin: 15px 0px;\\n  break-inside: avoid;\\n}\\n\\ntable {\\n  width: 100%;\\n  border-collapse: collapse;\\n  font-size: 10px;\\n}\\n\\ntable thead {\\n  background-color: #f5f5f5;\\n  font-weight: bold;\\n}\\n\\ntable thead tr th {\\n  padding: 8px 5px;\\n  text-align: right;\\n  border-bottom: 2px solid #333;\\n}\\n\\ntable thead tr th:first-child {\\n  text-align: left;\\n}\\n\\ntable tbody tr td {\\n  padding: 6px 5px;\\n  text-align: right;\\n  border-bottom: 1px solid #ddd;\\n}\\n\\ntable tbody tr td:first-child {\\n  text-align: left;\\n  font-weight: 500;\\n}\\n\\ntable tbody tr.total td {\\n  font-weight: bold;\\n  border-top: 2px solid #333;\\n  border-bottom: 2px solid #333;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceFinancialTable\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Profitability metrics have shown consistent improvement, with gross margins expanding from 34.2%\\nin FY2021 to 36.6% in FY2023. This margin expansion reflects favorable product mix shifts toward\\nhigher-margin offerings, operational efficiencies gained through scale, and the company\&#39;s ability\\nto pass through cost inflation to customers. We anticipate further margin expansion to 37.6% by\\nFY2026 as the company continues to optimize its cost structure and benefits from operating leverage.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Operating expenses as a percentage of revenue have declined from 27.8% in FY2021 to 26.0% in\\nFY2023, demonstrating strong operational discipline. While the company continues to invest heavily\\nin R&amp;D and sales infrastructure to support growth, management has shown an ability to scale these\\ninvestments efficiently. EBITDA margins have expanded from 12.3% to 14.6% over this period, and\\nwe project further improvement to 16.1% by FY2026.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope {\\n  margin: 15px 0px;\\n  break-inside: avoid;\\n}\\n\\ntable {\\n  width: 100%;\\n  border-collapse: collapse;\\n  font-size: 10px;\\n}\\n\\ntable thead {\\n  background-color: #f5f5f5;\\n  font-weight: bold;\\n}\\n\\ntable thead tr th {\\n  padding: 8px 5px;\\n  text-align: right;\\n  border-bottom: 2px solid #333;\\n}\\n\\ntable thead tr th:first-child {\\n  text-align: left;\\n}\\n\\ntable tbody tr td {\\n  padding: 6px 5px;\\n  text-align: right;\\n  border-bottom: 1px solid #ddd;\\n}\\n\\ntable tbody tr td:first-child {\\n  text-align: left;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceKeyMetricsTable\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Free cash flow generation has been robust, with the company producing $820 million in FY2023,\\nrepresenting a conversion rate of 96% of net income. This strong cash generation supports the\\ncompany\&#39;s growth investments while maintaining balance sheet flexibility. Management has indicated\\nplans to initiate a dividend program in FY2025, with an initial payout ratio of approximately 15-20%\\nof net income.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope {\\n  margin-top: 25px;\\n  margin-bottom: 15px;\\n  page-break-after: avoid;\\n}\\n\\nh2 {\\n  font-size: 18px;\\n  font-weight: bold;\\n  margin: 0px !important;\\n  padding: 8px 0px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;title\&quot;:\&quot;Valuation Analysis\&quot;,\&quot;color\&quot;:\&quot;#5db39c\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionHeading\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Our $10.00 price target is based on a blended valuation approach, incorporating three methodologies:\\nP/E multiple, EV/EBITDA multiple, and discounted cash flow (DCF) analysis. We weight the P/E method\\nat 40%, EV/EBITDA at 30%, and DCF at 30%, reflecting our confidence in the company\&#39;s earnings\\nvisibility and the comparability of peer multiples.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope {\\n  margin: 15px 0px;\\n  break-inside: avoid;\\n}\\n\\ntable {\\n  width: 100%;\\n  border-collapse: collapse;\\n  font-size: 10px;\\n}\\n\\ntable thead {\\n  font-weight: bold;\\n}\\n\\ntable thead tr th {\\n  padding: 8px 5px;\\n  text-align: right;\\n  border-bottom: 2px solid #333;\\n}\\n\\ntable thead tr th:first-child {\\n  text-align: left;\\n}\\n\\ntable tbody tr td {\\n  padding: 6px 5px;\\n  text-align: right;\\n  border-bottom: 1px solid #ddd;\\n}\\n\\ntable tbody tr td:first-child {\\n  text-align: left;\\n}\\n\\ntable tbody tr.highlight td {\\n  font-weight: bold;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;color\&quot;:\&quot;#5db39c\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceValuationTable\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;For our P/E-based valuation, we apply a 12.5x multiple to our FY2025 EPS estimate of $0.90. This\\nmultiple represents a modest premium to the peer group average of 11.2x, which we believe is\\njustified by ABCD\&#39;s superior growth profile and return on equity. The company\&#39;s three-year forward\\nrevenue CAGR of 15% compares favorably to the peer average of 8%, while its projected FY2025 ROE\\nof 18.9% exceeds the peer median of 14.5%.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Our EV/EBITDA analysis applies an 8.5x multiple to FY2025E EBITDA of $2.56 billion, yielding a\\nvaluation of approximately $10.50 per share. This multiple is in line with the peer group median\\nand reflects the company\&#39;s strong cash generation characteristics and moderate leverage profile.\\nWe note that best-in-class operators in the sector trade at 9-10x EV/EBITDA, suggesting potential\\nupside to our base case if the company continues to execute well.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Our DCF analysis assumes a weighted average cost of capital (WACC) of 9.2% and a terminal growth\\nrate of 3.0%. We project free cash flows over a ten-year period, incorporating our revenue and\\nmargin assumptions along with capital expenditure requirements of approximately 3.5% of sales.\\nThis methodology yields a value of $9.00 per share, providing a conservative anchor to our\\nblended valuation.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope {\\n  margin-top: 25px;\\n  margin-bottom: 15px;\\n  page-break-after: avoid;\\n}\\n\\nh2 {\\n  font-size: 18px;\\n  font-weight: bold;\\n  margin: 0px !important;\\n  padding: 8px 0px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;title\&quot;:\&quot;Key Risks to Our Investment Thesis\&quot;,\&quot;color\&quot;:\&quot;#5db39c\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionHeading\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;While we maintain a positive outlook on ABCD Inc., investors should be aware of several key risks\\nthat could impact the company\&#39;s performance and our investment thesis:\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope ul {\\n  font-size: 11px;\\n  line-height: 1.6;\\n  margin: 10px 0px;\\n  padding-left: 20px;\\n}\\n\\n:scope ul li {\\n  margin-bottom: 8px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;items\&quot;:[\&quot;&lt;strong&gt;Competitive Intensity:&lt;/strong&gt; The mobility sector is experiencing increased competition from both established automotive manufacturers entering the space and well-funded startups. Intensifying competition could pressure pricing and market share.\&quot;,\&quot;&lt;strong&gt;Regulatory Changes:&lt;/strong&gt; Changes in government incentives for sustainable transportation or new safety regulations could impact demand and increase compliance costs.\&quot;,\&quot;&lt;strong&gt;Supply Chain Disruption:&lt;/strong&gt; The company relies on a complex global supply chain for key components. Disruptions could impact production and margins.\&quot;,\&quot;&lt;strong&gt;Technology Risk:&lt;/strong&gt; Rapid technological change in the mobility sector could render existing products obsolete or require substantial R&amp;D investments.\&quot;,\&quot;&lt;strong&gt;Macroeconomic Sensitivity:&lt;/strong&gt; Consumer discretionary spending is sensitive to economic conditions. A recession could significantly impact demand.\&quot;,\&quot;&lt;strong&gt;Execution Risk:&lt;/strong&gt; The company\&#39;s growth strategy requires successful new product launches and international expansion, which carry inherent execution risks.\&quot;],\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceBulletPoints\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Additionally, the company faces foreign exchange exposure from its international operations, with\\napproximately 42% of revenues generated outside North America. A strengthening U.S. dollar could\\nnegatively impact reported results. The company partially hedges this exposure but remains subject\\nto translation effects.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;From a financial perspective, while the company\&#39;s balance sheet is healthy, any significant\\ndebt-funded acquisitions could increase leverage and financial risk. Management has indicated\\nopenness to M&amp;A opportunities, which could be value-accretive if executed well but also carry\\nintegration risks.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope {\\n  margin-top: 25px;\\n  margin-bottom: 15px;\\n  page-break-after: avoid;\\n}\\n\\nh2 {\\n  font-size: 18px;\\n  font-weight: bold;\\n  margin: 0px !important;\\n  padding: 8px 0px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;title\&quot;:\&quot;Recent Business Highlights\&quot;,\&quot;color\&quot;:\&quot;#5db39c\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionHeading\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;ABCD Inc. has achieved several notable milestones in recent quarters that underscore the strength\\nof its business model and market position:\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope ul {\\n  font-size: 11px;\\n  line-height: 1.6;\\n  margin: 10px 0px;\\n  padding-left: 20px;\\n}\\n\\n:scope ul li {\\n  margin-bottom: 8px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;items\&quot;:[\&quot;&lt;strong&gt;Q3 FY2024 Results:&lt;/strong&gt; Revenues of $3.6 billion exceeded consensus estimates by 4%, driven by stronger-than-expected Personal Mobility sales in North America and Europe.\&quot;,\&quot;&lt;strong&gt;Product Innovation:&lt;/strong&gt; Launch of the new X-Series mobility platform featuring advanced autonomous capabilities and extended range, receiving positive early reviews.\&quot;,\&quot;&lt;strong&gt;Strategic Partnership:&lt;/strong&gt; Announced collaboration with a leading technology company to develop next-generation vehicle connectivity and entertainment systems.\&quot;,\&quot;&lt;strong&gt;International Expansion:&lt;/strong&gt; Opened three new manufacturing and distribution facilities in Southeast Asia, positioning for accelerated growth in emerging markets.\&quot;,\&quot;&lt;strong&gt;Sustainability Leadership:&lt;/strong&gt; Achieved carbon-neutral operations across all North American facilities, ahead of the 2025 target.\&quot;],\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceBulletPoints\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope p {\\n  font-size: 11px;\\n  line-height: 1.5;\\n  margin-bottom: 10px;\\n  text-align: justify;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;text\&quot;:\&quot;Management commentary on recent earnings calls has emphasized confidence in the company\&#39;s ability\\nto navigate near-term headwinds while maintaining investment in long-term growth initiatives. The\\ncompany has reaffirmed FY2024 guidance and provided preliminary FY2025 targets that align with our\\nexpectations, suggesting a positive outlook for the business.\\n\&quot;,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceSectionText\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;_target_\&quot;:\&quot;nbprint.config.content.pagebreak.ContentPageBreak\&quot;},{\&quot;tags\&quot;:[],\&quot;role\&quot;:\&quot;content\&quot;,\&quot;ignore\&quot;:false,\&quot;css\&quot;:\&quot;\\n:scope h1 {\\n  font-size: 12px;\\n}\\n\\n:scope p {\\n  font-size: 8px;\\n}\\n\&quot;,\&quot;esm\&quot;:\&quot;\&quot;,\&quot;classname\&quot;:\&quot;\&quot;,\&quot;attrs\&quot;:{},\&quot;content\&quot;:\&quot;\&quot;,\&quot;magics\&quot;:[],\&quot;output\&quot;:null,\&quot;style\&quot;:null,\&quot;_target_\&quot;:\&quot;nbprint.example.finance.content.ExampleFinanceDisclosures\&quot;}],\&quot;endmatter\&quot;:[],\&quot;_target_\&quot;:\&quot;nbprint.config.core.content.ContentMarshall\&quot;},\&quot;pagedjs\&quot;:true,\&quot;debug\&quot;:false,\&quot;_target_\&quot;:\&quot;nbprint.config.core.config.Configuration\&quot;}&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_ctx = nbprint_config.context
+nbprint_ctx(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint tag_nbprint:page docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_page = nbprint_config.page
+nbprint_page(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancetitle = nbprint_config.content[0]
+nbprint_examplefinancetitle(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_contentflexrowlayout = nbprint_config.content[1]
+nbprint_contentflexrowlayout(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_contentflexcolumnlayout = nbprint_contentflexrowlayout.content[0]
+nbprint_contentflexcolumnlayout(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancestockheadline = nbprint_contentflexcolumnlayout.content[0]
+nbprint_examplefinancestockheadline(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancestockptupdate = nbprint_contentflexcolumnlayout.content[1]
+nbprint_examplefinancestockptupdate(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancestocksubheadline = nbprint_contentflexcolumnlayout.content[2]
+nbprint_examplefinancestocksubheadline(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_contentflexcolumnlayout0 = nbprint_contentflexrowlayout.content[1]
+nbprint_contentflexcolumnlayout0(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinanceauthor = nbprint_contentflexcolumnlayout0.content[0]
+nbprint_examplefinanceauthor(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinanceauthor0 = nbprint_contentflexcolumnlayout0.content[1]
+nbprint_examplefinanceauthor0(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancestockquickstats = nbprint_contentflexcolumnlayout0.content[2]
+nbprint_examplefinancestockquickstats(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancestockearningstable = nbprint_contentflexcolumnlayout0.content[3]
+nbprint_examplefinancestockearningstable(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectionheading = nbprint_config.content[2]
+nbprint_examplefinancesectionheading(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext = nbprint_config.content[3]
+nbprint_examplefinancesectiontext(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext0 = nbprint_config.content[4]
+nbprint_examplefinancesectiontext0(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext1 = nbprint_config.content[5]
+nbprint_examplefinancesectiontext1(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancebulletpoints = nbprint_config.content[6]
+nbprint_examplefinancebulletpoints(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_contentpagebreak = nbprint_config.content[7]
+nbprint_contentpagebreak(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectionheading0 = nbprint_config.content[8]
+nbprint_examplefinancesectionheading0(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext2 = nbprint_config.content[9]
+nbprint_examplefinancesectiontext2(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext3 = nbprint_config.content[10]
+nbprint_examplefinancesectiontext3(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext4 = nbprint_config.content[11]
+nbprint_examplefinancesectiontext4(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectionheading1 = nbprint_config.content[12]
+nbprint_examplefinancesectionheading1(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext5 = nbprint_config.content[13]
+nbprint_examplefinancesectiontext5(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancefinancialtable = nbprint_config.content[14]
+nbprint_examplefinancefinancialtable(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext6 = nbprint_config.content[15]
+nbprint_examplefinancesectiontext6(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext7 = nbprint_config.content[16]
+nbprint_examplefinancesectiontext7(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancekeymetricstable = nbprint_config.content[17]
+nbprint_examplefinancekeymetricstable(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext8 = nbprint_config.content[18]
+nbprint_examplefinancesectiontext8(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectionheading2 = nbprint_config.content[19]
+nbprint_examplefinancesectionheading2(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext9 = nbprint_config.content[20]
+nbprint_examplefinancesectiontext9(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancevaluationtable = nbprint_config.content[21]
+nbprint_examplefinancevaluationtable(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext10 = nbprint_config.content[22]
+nbprint_examplefinancesectiontext10(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext11 = nbprint_config.content[23]
+nbprint_examplefinancesectiontext11(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext12 = nbprint_config.content[24]
+nbprint_examplefinancesectiontext12(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectionheading3 = nbprint_config.content[25]
+nbprint_examplefinancesectionheading3(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext13 = nbprint_config.content[26]
+nbprint_examplefinancesectiontext13(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancebulletpoints0 = nbprint_config.content[27]
+nbprint_examplefinancebulletpoints0(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext14 = nbprint_config.content[28]
+nbprint_examplefinancesectiontext14(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext15 = nbprint_config.content[29]
+nbprint_examplefinancesectiontext15(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectionheading4 = nbprint_config.content[30]
+nbprint_examplefinancesectionheading4(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext16 = nbprint_config.content[31]
+nbprint_examplefinancesectiontext16(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancebulletpoints1 = nbprint_config.content[32]
+nbprint_examplefinancebulletpoints1(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancesectiontext17 = nbprint_config.content[33]
+nbprint_examplefinancesectiontext17(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_contentpagebreak0 = nbprint_config.content[34]
+nbprint_contentpagebreak0(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_examplefinancedisclosures = nbprint_config.content[35]
+nbprint_examplefinancedisclosures(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_nbprint docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>nbprint_nbconvertoutputs = nbprint_config.outputs
+nbprint_nbconvertoutputs(ctx=nbprint_ctx)
+</pre></div>
+</div>
+</div>
+</div>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; the nbprint authors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=57cbeb03"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/custom.js?v=956e5d78"></script>
+    </body>
+</html>

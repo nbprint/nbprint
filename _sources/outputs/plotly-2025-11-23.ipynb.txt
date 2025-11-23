@@ -1,0 +1,262 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e585d122",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-core-parameters-Parameters nbprint-config-core-parameters-Parameters-2104a8359cd840b296fea8ee4a9215ef ",
+     "class_selector": "nbprint-config-core-parameters-Parameters",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"parameters\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"_target_\":\"nbprint.config.core.parameters.Parameters\"}",
+     "element_selector": "nbprint-config-core-parameters-Parameters-2104a8359cd840b296fea8ee4a9215ef",
+     "esm": "",
+     "id": "2104a8359cd840b296fea8ee4a9215ef",
+     "ignore": true,
+     "role": "parameters",
+     "type_": "nbprint.config.core.parameters.Parameters"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "css = ''\n",
+    "esm = ''\n",
+    "classname = ''\n",
+    "attrs = {}\n",
+    "type_ = 'nbprint.config.core.parameters.Parameters'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "31b95db8",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-core-config-Configuration nbprint-config-core-config-Configuration-16c69f18f4e74d7e9bee3d13c3b00fde ",
+     "class_selector": "nbprint-config-core-config-Configuration",
+     "css": "",
+     "data": "",
+     "debug": false,
+     "element_selector": "nbprint-config-core-config-Configuration-16c69f18f4e74d7e9bee3d13c3b00fde",
+     "esm": "",
+     "id": "16c69f18f4e74d7e9bee3d13c3b00fde",
+     "ignore": true,
+     "outputs": "{\"tags\":[],\"role\":\"outputs\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"root\":\"outputs\",\"naming\":\"{{name}}-{{date}}\",\"embedded\":false,\"hook\":null,\"postprocess\":null,\"target\":\"webpdf\",\"execute\":true,\"timeout\":600,\"template\":\"nbprint\",\"collect_outputs\":false,\"execute_hook\":null,\"nbconvert_hook\":null,\"_target_\":\"nbprint.config.outputs.nbconvert.NBConvertOutputs\"}",
+     "pagedjs": true,
+     "role": "configuration",
+     "type_": "nbprint.config.core.config.Configuration"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "from nbprint.config.core.config import Configuration\n",
+    "nbprint_config = Configuration.from_json('{\\\"tags\\\":[],\\\"role\\\":\\\"configuration\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"meta\\\":{\\\"name\\\":\\\"nbprint\\\",\\\"description\\\":\\\"\\\",\\\"_target_\\\":\\\"ccflow.callable.MetaData\\\"},\\\"name\\\":\\\"plotly\\\",\\\"resources\\\":{},\\\"outputs\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"outputs\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"root\\\":\\\"outputs\\\",\\\"naming\\\":\\\"{{name}}-{{date}}\\\",\\\"embedded\\\":false,\\\"hook\\\":null,\\\"postprocess\\\":null,\\\"target\\\":\\\"webpdf\\\",\\\"execute\\\":true,\\\"timeout\\\":600,\\\"template\\\":\\\"nbprint\\\",\\\"collect_outputs\\\":false,\\\"execute_hook\\\":null,\\\"nbconvert_hook\\\":null,\\\"_target_\\\":\\\"nbprint.config.outputs.nbconvert.NBConvertOutputs\\\"},\\\"parameters\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"parameters\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"_target_\\\":\\\"nbprint.config.core.parameters.Parameters\\\"},\\\"page\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"undefined\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"top\\\":null,\\\"top_left\\\":null,\\\"top_right\\\":null,\\\"bottom\\\":null,\\\"bottom_left\\\":null,\\\"bottom_right\\\":null,\\\"left\\\":null,\\\"left_top\\\":null,\\\"left_bottom\\\":null,\\\"right\\\":null,\\\"right_top\\\":null,\\\"right_bottom\\\":null,\\\"size\\\":\\\"letter\\\",\\\"orientation\\\":\\\"portrait\\\",\\\"pages\\\":[],\\\"_target_\\\":\\\"nbprint.config.page.Page\\\"},\\\"context\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"context\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"parameters\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"parameters\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"_target_\\\":\\\"nbprint.config.core.parameters.Parameters\\\"},\\\"_target_\\\":\\\"nbprint.config.core.context.Context\\\"},\\\"content\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"undefined\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"prematter\\\":[],\\\"frontmatter\\\":[],\\\"middlematter\\\":[{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\":scope { text-align: center; }\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"# Plotly Test\\\\n\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"default\\\":\\\"notebook_connected\\\",\\\"_target_\\\":\\\"nbprint.models.plotly.PlotlyRendererConfiguration\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"import plotly.express as px\\\\nfig = px.scatter(x=[0,1,2,3,4], y=[0,1,4,9,16], title=\\\\\\\"Interactive Plot\\\\\\\")\\\\nfig.show()\\\\n\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"}],\\\"endmatter\\\":[],\\\"_target_\\\":\\\"nbprint.config.core.content.ContentMarshall\\\"},\\\"pagedjs\\\":true,\\\"debug\\\":false,\\\"_target_\\\":\\\"nbprint.config.core.config.Configuration\\\"}')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1439ee19",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-core-context-Context nbprint-config-core-context-Context-3e19de008c6c4b82bafd619d9afc1c5a ",
+     "class_selector": "nbprint-config-core-context-Context",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"context\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"parameters\":{\"tags\":[],\"role\":\"parameters\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"_target_\":\"nbprint.config.core.parameters.Parameters\"},\"_target_\":\"nbprint.config.core.context.Context\"}",
+     "element_selector": "nbprint-config-core-context-Context-3e19de008c6c4b82bafd619d9afc1c5a",
+     "esm": "",
+     "id": "3e19de008c6c4b82bafd619d9afc1c5a",
+     "ignore": true,
+     "role": "context",
+     "type_": "nbprint.config.core.context.Context"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_ctx = nbprint_config.context\n",
+    "nbprint_ctx(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "284cce4b",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-page-Page nbprint-config-page-Page-f431a5900b784d8a9e829f5ec471e924 ",
+     "class_selector": "nbprint-config-page-Page",
+     "css": "\n    @page { size: letter portrait; }\n                ",
+     "data": "{\"tags\":[],\"role\":\"undefined\",\"ignore\":false,\"css\":\"\\n    @page { size: letter portrait; }\\n                \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"top\":null,\"top_left\":null,\"top_right\":null,\"bottom\":null,\"bottom_left\":null,\"bottom_right\":null,\"left\":null,\"left_top\":null,\"left_bottom\":null,\"right\":null,\"right_top\":null,\"right_bottom\":null,\"size\":\"letter\",\"orientation\":\"portrait\",\"pages\":[],\"_target_\":\"nbprint.config.page.Page\"}",
+     "element_selector": "nbprint-config-page-Page-f431a5900b784d8a9e829f5ec471e924",
+     "esm": "",
+     "id": "f431a5900b784d8a9e829f5ec471e924",
+     "ignore": true,
+     "role": "page",
+     "type_": "nbprint.config.page.Page"
+    },
+    "tags": [
+     "nbprint",
+     "nbprint:page"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_page = nbprint_config.page\n",
+    "nbprint_page(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "57149721",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-3f448d938821476e8f1ed032f74ad78d ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": ":scope { text-align: center; }",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-3f448d938821476e8f1ed032f74ad78d",
+     "esm": "",
+     "id": "3f448d938821476e8f1ed032f74ad78d",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "# Plotly Test\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "96d38a32",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-models-plotly-PlotlyRendererConfiguration nbprint-models-plotly-PlotlyRendererConfiguration-97d639976cb24f2b91cc9e2f999e45c1 ",
+     "class_selector": "nbprint-models-plotly-PlotlyRendererConfiguration",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"default\":\"notebook_connected\",\"_target_\":\"nbprint.models.plotly.PlotlyRendererConfiguration\"}",
+     "element_selector": "nbprint-models-plotly-PlotlyRendererConfiguration-97d639976cb24f2b91cc9e2f999e45c1",
+     "esm": "",
+     "id": "97d639976cb24f2b91cc9e2f999e45c1",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.models.plotly.PlotlyRendererConfiguration"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_plotlyrendererconfiguration = nbprint_config.content[1]\n",
+    "nbprint_plotlyrendererconfiguration(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "83bf5ce9",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-8fc2cd10cc1f40569cfe6628ea2a738e ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-8fc2cd10cc1f40569cfe6628ea2a738e",
+     "esm": "",
+     "id": "8fc2cd10cc1f40569cfe6628ea2a738e",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "import plotly.express as px\n",
+    "fig = px.scatter(x=[0,1,2,3,4], y=[0,1,4,9,16], title=\"Interactive Plot\")\n",
+    "fig.show()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e66c27a9",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-outputs-nbconvert-NBConvertOutputs nbprint-config-outputs-nbconvert-NBConvertOutputs-007ed9b8107e4609ad08416b4041532c ",
+     "class_selector": "nbprint-config-outputs-nbconvert-NBConvertOutputs",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"outputs\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"root\":\"outputs\",\"naming\":\"{{name}}-{{date}}\",\"embedded\":false,\"hook\":null,\"postprocess\":null,\"target\":\"webpdf\",\"execute\":true,\"timeout\":600,\"template\":\"nbprint\",\"collect_outputs\":false,\"execute_hook\":null,\"nbconvert_hook\":null,\"_target_\":\"nbprint.config.outputs.nbconvert.NBConvertOutputs\"}",
+     "element_selector": "nbprint-config-outputs-nbconvert-NBConvertOutputs-007ed9b8107e4609ad08416b4041532c",
+     "esm": "",
+     "id": "007ed9b8107e4609ad08416b4041532c",
+     "ignore": true,
+     "role": "outputs",
+     "type_": "nbprint.config.outputs.nbconvert.NBConvertOutputs"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_nbconvertoutputs = nbprint_config.outputs\n",
+    "nbprint_nbconvertoutputs(ctx=nbprint_ctx)"
+   ]
+  }
+ ],
+ "metadata": {
+  "nbprint": {
+   "language": "python3.11",
+   "nbprint": {},
+   "tags": [],
+   "version": "0.11.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

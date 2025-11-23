@@ -1,0 +1,239 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a989b4e2",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-core-parameters-Parameters nbprint-config-core-parameters-Parameters-66c2b0078ec64b318bc6adc5995c8fe5 ",
+     "class_selector": "nbprint-config-core-parameters-Parameters",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"parameters\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"_target_\":\"nbprint.config.core.parameters.Parameters\"}",
+     "element_selector": "nbprint-config-core-parameters-Parameters-66c2b0078ec64b318bc6adc5995c8fe5",
+     "esm": "",
+     "id": "66c2b0078ec64b318bc6adc5995c8fe5",
+     "ignore": true,
+     "role": "parameters",
+     "type_": "nbprint.config.core.parameters.Parameters"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "css = ''\n",
+    "esm = ''\n",
+    "classname = ''\n",
+    "attrs = {}\n",
+    "type_ = 'nbprint.config.core.parameters.Parameters'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "2ad826b0",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-core-config-Configuration nbprint-config-core-config-Configuration-88d721e527a24a21a52a1b5c479202d9 ",
+     "class_selector": "nbprint-config-core-config-Configuration",
+     "css": "",
+     "data": "",
+     "debug": false,
+     "element_selector": "nbprint-config-core-config-Configuration-88d721e527a24a21a52a1b5c479202d9",
+     "esm": "",
+     "id": "88d721e527a24a21a52a1b5c479202d9",
+     "ignore": true,
+     "outputs": "{\"tags\":[],\"role\":\"outputs\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"root\":\"outputs\",\"naming\":\"{{name}}-{{date}}\",\"embedded\":false,\"hook\":null,\"postprocess\":null,\"target\":\"webpdf\",\"execute\":true,\"timeout\":600,\"template\":\"nbprint\",\"collect_outputs\":false,\"execute_hook\":null,\"nbconvert_hook\":null,\"_target_\":\"nbprint.config.outputs.nbconvert.NBConvertOutputs\"}",
+     "pagedjs": true,
+     "role": "configuration",
+     "type_": "nbprint.config.core.config.Configuration"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "from nbprint.config.core.config import Configuration\n",
+    "nbprint_config = Configuration.from_json('{\\\"tags\\\":[],\\\"role\\\":\\\"configuration\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"meta\\\":{\\\"name\\\":\\\"nbprint\\\",\\\"description\\\":\\\"\\\",\\\"_target_\\\":\\\"ccflow.callable.MetaData\\\"},\\\"name\\\":\\\"greattables\\\",\\\"resources\\\":{},\\\"outputs\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"outputs\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"root\\\":\\\"outputs\\\",\\\"naming\\\":\\\"{{name}}-{{date}}\\\",\\\"embedded\\\":false,\\\"hook\\\":null,\\\"postprocess\\\":null,\\\"target\\\":\\\"webpdf\\\",\\\"execute\\\":true,\\\"timeout\\\":600,\\\"template\\\":\\\"nbprint\\\",\\\"collect_outputs\\\":false,\\\"execute_hook\\\":null,\\\"nbconvert_hook\\\":null,\\\"_target_\\\":\\\"nbprint.config.outputs.nbconvert.NBConvertOutputs\\\"},\\\"parameters\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"parameters\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"_target_\\\":\\\"nbprint.config.core.parameters.Parameters\\\"},\\\"page\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"undefined\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"top\\\":null,\\\"top_left\\\":null,\\\"top_right\\\":null,\\\"bottom\\\":null,\\\"bottom_left\\\":null,\\\"bottom_right\\\":null,\\\"left\\\":null,\\\"left_top\\\":null,\\\"left_bottom\\\":null,\\\"right\\\":null,\\\"right_top\\\":null,\\\"right_bottom\\\":null,\\\"size\\\":\\\"letter\\\",\\\"orientation\\\":\\\"portrait\\\",\\\"pages\\\":[],\\\"_target_\\\":\\\"nbprint.config.page.Page\\\"},\\\"context\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"context\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"parameters\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"parameters\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"_target_\\\":\\\"nbprint.config.core.parameters.Parameters\\\"},\\\"_target_\\\":\\\"nbprint.config.core.context.Context\\\"},\\\"content\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"undefined\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"prematter\\\":[],\\\"frontmatter\\\":[],\\\"middlematter\\\":[{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"# Great Tables Test\\\\n\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"from superstore import superstore\\\\nfrom great_tables import GT\\\\n\\\\n(\\\\n  GT(superstore())\\\\n  .tab_header(title=\\\\\\\"Superstore\\\\\\\", subtitle=\\\\\\\"Example Data\\\\\\\")\\\\n  .opt_align_table_header(align=\\\\\\\"left\\\\\\\")\\\\n)\\\\n\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"}],\\\"endmatter\\\":[],\\\"_target_\\\":\\\"nbprint.config.core.content.ContentMarshall\\\"},\\\"pagedjs\\\":true,\\\"debug\\\":false,\\\"_target_\\\":\\\"nbprint.config.core.config.Configuration\\\"}')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8b716ee4",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-core-context-Context nbprint-config-core-context-Context-1dd424401c9d4279972bf7d26c119619 ",
+     "class_selector": "nbprint-config-core-context-Context",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"context\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"parameters\":{\"tags\":[],\"role\":\"parameters\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"_target_\":\"nbprint.config.core.parameters.Parameters\"},\"_target_\":\"nbprint.config.core.context.Context\"}",
+     "element_selector": "nbprint-config-core-context-Context-1dd424401c9d4279972bf7d26c119619",
+     "esm": "",
+     "id": "1dd424401c9d4279972bf7d26c119619",
+     "ignore": true,
+     "role": "context",
+     "type_": "nbprint.config.core.context.Context"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_ctx = nbprint_config.context\n",
+    "nbprint_ctx(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "20391603",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-page-Page nbprint-config-page-Page-bb90b61c92054c2f9fb434a9c47eae73 ",
+     "class_selector": "nbprint-config-page-Page",
+     "css": "\n    @page { size: letter portrait; }\n                ",
+     "data": "{\"tags\":[],\"role\":\"undefined\",\"ignore\":false,\"css\":\"\\n    @page { size: letter portrait; }\\n                \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"top\":null,\"top_left\":null,\"top_right\":null,\"bottom\":null,\"bottom_left\":null,\"bottom_right\":null,\"left\":null,\"left_top\":null,\"left_bottom\":null,\"right\":null,\"right_top\":null,\"right_bottom\":null,\"size\":\"letter\",\"orientation\":\"portrait\",\"pages\":[],\"_target_\":\"nbprint.config.page.Page\"}",
+     "element_selector": "nbprint-config-page-Page-bb90b61c92054c2f9fb434a9c47eae73",
+     "esm": "",
+     "id": "bb90b61c92054c2f9fb434a9c47eae73",
+     "ignore": true,
+     "role": "page",
+     "type_": "nbprint.config.page.Page"
+    },
+    "tags": [
+     "nbprint",
+     "nbprint:page"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_page = nbprint_config.page\n",
+    "nbprint_page(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "be1e9eb1",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-438516a3d6ea48c79aab3d811d9139bf ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": "",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-438516a3d6ea48c79aab3d811d9139bf",
+     "esm": "",
+     "id": "438516a3d6ea48c79aab3d811d9139bf",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "# Great Tables Test\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f43ad480",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-5eb54c6d19fa4eef8911cf10d7ecb8e4 ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-5eb54c6d19fa4eef8911cf10d7ecb8e4",
+     "esm": "",
+     "id": "5eb54c6d19fa4eef8911cf10d7ecb8e4",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "from superstore import superstore\n",
+    "from great_tables import GT\n",
+    "\n",
+    "(\n",
+    "  GT(superstore())\n",
+    "  .tab_header(title=\"Superstore\", subtitle=\"Example Data\")\n",
+    "  .opt_align_table_header(align=\"left\")\n",
+    ")\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ebfcc6f0",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-outputs-nbconvert-NBConvertOutputs nbprint-config-outputs-nbconvert-NBConvertOutputs-9dd34b8414c04e4983b1a58008365a97 ",
+     "class_selector": "nbprint-config-outputs-nbconvert-NBConvertOutputs",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"outputs\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"root\":\"outputs\",\"naming\":\"{{name}}-{{date}}\",\"embedded\":false,\"hook\":null,\"postprocess\":null,\"target\":\"webpdf\",\"execute\":true,\"timeout\":600,\"template\":\"nbprint\",\"collect_outputs\":false,\"execute_hook\":null,\"nbconvert_hook\":null,\"_target_\":\"nbprint.config.outputs.nbconvert.NBConvertOutputs\"}",
+     "element_selector": "nbprint-config-outputs-nbconvert-NBConvertOutputs-9dd34b8414c04e4983b1a58008365a97",
+     "esm": "",
+     "id": "9dd34b8414c04e4983b1a58008365a97",
+     "ignore": true,
+     "role": "outputs",
+     "type_": "nbprint.config.outputs.nbconvert.NBConvertOutputs"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_nbconvertoutputs = nbprint_config.outputs\n",
+    "nbprint_nbconvertoutputs(ctx=nbprint_ctx)"
+   ]
+  }
+ ],
+ "metadata": {
+  "nbprint": {
+   "language": "python3.11",
+   "nbprint": {},
+   "tags": [],
+   "version": "0.11.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

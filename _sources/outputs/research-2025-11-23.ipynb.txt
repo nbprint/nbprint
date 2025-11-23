@@ -1,0 +1,760 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "177d967e",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-core-parameters-Parameters nbprint-config-core-parameters-Parameters-aabef64f27994c1bb4866b513f36751f ",
+     "class_selector": "nbprint-config-core-parameters-Parameters",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"parameters\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"_target_\":\"nbprint.config.core.parameters.Parameters\"}",
+     "element_selector": "nbprint-config-core-parameters-Parameters-aabef64f27994c1bb4866b513f36751f",
+     "esm": "",
+     "id": "aabef64f27994c1bb4866b513f36751f",
+     "ignore": true,
+     "role": "parameters",
+     "type_": "nbprint.config.core.parameters.Parameters"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "css = ''\n",
+    "esm = ''\n",
+    "classname = ''\n",
+    "attrs = {}\n",
+    "type_ = 'nbprint.config.core.parameters.Parameters'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c10a35c0",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-core-config-Configuration nbprint-config-core-config-Configuration-bb3ccfef98024e5bbe7c5f1379abe035 ",
+     "class_selector": "nbprint-config-core-config-Configuration",
+     "css": "",
+     "data": "",
+     "debug": false,
+     "element_selector": "nbprint-config-core-config-Configuration-bb3ccfef98024e5bbe7c5f1379abe035",
+     "esm": "",
+     "id": "bb3ccfef98024e5bbe7c5f1379abe035",
+     "ignore": true,
+     "outputs": "{\"tags\":[],\"role\":\"outputs\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"root\":\"outputs\",\"naming\":\"{{name}}-{{date}}\",\"embedded\":false,\"hook\":null,\"postprocess\":null,\"target\":\"webpdf\",\"execute\":true,\"timeout\":600,\"template\":\"nbprint\",\"collect_outputs\":false,\"execute_hook\":null,\"nbconvert_hook\":null,\"_target_\":\"nbprint.config.outputs.nbconvert.NBConvertOutputs\"}",
+     "pagedjs": true,
+     "role": "configuration",
+     "type_": "nbprint.config.core.config.Configuration"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "from nbprint.config.core.config import Configuration\n",
+    "nbprint_config = Configuration.from_json('{\\\"tags\\\":[],\\\"role\\\":\\\"configuration\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"meta\\\":{\\\"name\\\":\\\"nbprint\\\",\\\"description\\\":\\\"\\\",\\\"_target_\\\":\\\"ccflow.callable.MetaData\\\"},\\\"name\\\":\\\"research\\\",\\\"resources\\\":{},\\\"outputs\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"outputs\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"root\\\":\\\"outputs\\\",\\\"naming\\\":\\\"{{name}}-{{date}}\\\",\\\"embedded\\\":false,\\\"hook\\\":null,\\\"postprocess\\\":null,\\\"target\\\":\\\"webpdf\\\",\\\"execute\\\":true,\\\"timeout\\\":600,\\\"template\\\":\\\"nbprint\\\",\\\"collect_outputs\\\":false,\\\"execute_hook\\\":null,\\\"nbconvert_hook\\\":null,\\\"_target_\\\":\\\"nbprint.config.outputs.nbconvert.NBConvertOutputs\\\"},\\\"parameters\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"parameters\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"_target_\\\":\\\"nbprint.config.core.parameters.Parameters\\\"},\\\"page\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"undefined\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"top\\\":null,\\\"top_left\\\":null,\\\"top_right\\\":null,\\\"bottom\\\":null,\\\"bottom_left\\\":null,\\\"bottom_right\\\":null,\\\"left\\\":null,\\\"left_top\\\":null,\\\"left_bottom\\\":null,\\\"right\\\":null,\\\"right_top\\\":null,\\\"right_bottom\\\":null,\\\"size\\\":\\\"letter\\\",\\\"orientation\\\":\\\"portrait\\\",\\\"pages\\\":[],\\\"_target_\\\":\\\"nbprint.config.page.Page\\\"},\\\"context\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"context\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"parameters\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"parameters\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"_target_\\\":\\\"nbprint.config.core.parameters.Parameters\\\"},\\\"_target_\\\":\\\"nbprint.example.research.context.ExampleResearchReferencesContext\\\"},\\\"content\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"undefined\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"prematter\\\":[],\\\"frontmatter\\\":[],\\\"middlematter\\\":[{\\\"tags\\\":[],\\\"role\\\":\\\"layout\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\\n:scope {\\\\n  padding-top: 50px;\\\\n  display: flex;\\\\n  flex-direction: column;\\\\n  padding-bottom: 50px;\\\\n}\\\\n\\\",\\\"esm\\\":\\\"\\\\nfunction render(meta, elem) {\\\\n    let data = JSON.parse(meta.data);\\\\n    let size_index = 0;\\\\n\\\\n    Array.from(elem.children).forEach((child) => {\\\\n        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;\\\\n        // TODO:these are hacks to determine\\\\n        // if it should be included\\\\n        let output_children = (child.querySelector(\\\\\\\".jp-OutputArea-output\\\\\\\") || {}).children || [];\\\\n        if (Array.from(child.classList).includes(\\\\\\\"nbprint\\\\\\\")) {\\\\n            child.style.flex = `${size}`;\\\\n            size_index += 1;\\\\n        } else if (Array.from(output_children).length > 0) {\\\\n            child.style.flex = `${size}`;\\\\n            size_index += 1;\\\\n        } else {\\\\n            child.style.flex = \\\\\\\"0\\\\\\\";\\\\n        }\\\\n    });\\\\n}\\\\n\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":[{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\\n:scope {\\\\n}\\\\n\\\\nh1 {\\\\n  font-family: serif;\\\\n  font-weight: bold !important;\\\\n  font-size: 25px !important;\\\\n  margin: auto !important;\\\\n}\\\\n    \\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"title\\\":\\\"An Example Research Publication Title\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchTitle\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"layout\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\\n:scope { display: flex; flex-direction: row; break-inside: auto; }\\\\n\\\",\\\"esm\\\":\\\"\\\\nfunction render(meta, elem) {\\\\n    let data = JSON.parse(meta.data);\\\\n    let size_index = 0;\\\\n\\\\n    Array.from(elem.children).forEach((child) => {\\\\n        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;\\\\n        // TODO:these are hacks to determine\\\\n        // if it should be included\\\\n        let output_children = (child.querySelector(\\\\\\\".jp-OutputArea-output\\\\\\\") || {}).children || [];\\\\n        if (Array.from(child.classList).includes(\\\\\\\"nbprint\\\\\\\")) {\\\\n            child.style.flex = `${size}`;\\\\n            size_index += 1;\\\\n        } else if (Array.from(output_children).length > 0) {\\\\n            child.style.flex = `${size}`;\\\\n            size_index += 1;\\\\n        } else {\\\\n            child.style.flex = \\\\\\\"0\\\\\\\";\\\\n        }\\\\n    });\\\\n}\\\\n\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":[{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\\n:scope {\\\\n  text-align: center;\\\\n}\\\\ndiv.column > span:nth-child(1) {\\\\n  font-size: 16px;\\\\n  font-family: serif !important;\\\\n}\\\\ndiv.column > span:nth-child(2) {\\\\n  font-size: 12px;\\\\n  font-family: sans-serif !important;\\\\n}\\\\n    \\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"name\\\":\\\"John Smith\\\",\\\"email\\\":\\\"john.smith@columbia.edu\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchAuthor\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\\n:scope {\\\\n  text-align: center;\\\\n}\\\\ndiv.column > span:nth-child(1) {\\\\n  font-size: 16px;\\\\n  font-family: serif !important;\\\\n}\\\\ndiv.column > span:nth-child(2) {\\\\n  font-size: 12px;\\\\n  font-family: sans-serif !important;\\\\n}\\\\n    \\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"name\\\":\\\"Jane Doe\\\",\\\"email\\\":\\\"jane.doe@columbia.edu\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchAuthor\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\\n:scope {\\\\n  text-align: center;\\\\n}\\\\ndiv.column > span:nth-child(1) {\\\\n  font-size: 16px;\\\\n  font-family: serif !important;\\\\n}\\\\ndiv.column > span:nth-child(2) {\\\\n  font-size: 12px;\\\\n  font-family: sans-serif !important;\\\\n}\\\\n    \\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"name\\\":\\\"Joe Schmo\\\",\\\"email\\\":\\\"joe.schmo@columbia.edu\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchAuthor\\\"}],\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"sizes\\\":[],\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchAuthors\\\"}],\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"sizes\\\":[],\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchHeader\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"layout\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\\n:scope {\\\\n  column-count: 2;\\\\n  -webkit-column-count: 2;\\\\n  column-gap: 1cm;\\\\n}\\\\n\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":[{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\\n  h1 {\\\\n    padding-bottom: 10px;\\\\n  }\\\\n  \\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"title\\\":\\\"Abstract\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchSectionTitle\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"text\\\":\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchSectionText\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"text\\\":\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchSectionText\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\\n  h1 {\\\\n    padding-bottom: 10px;\\\\n  }\\\\n  \\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"title\\\":\\\"1. Introduction\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchSectionTitle\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"text\\\":\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchSectionText\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"text\\\":\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchSectionText\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"text\\\":\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchSectionText\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"text\\\":\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchSectionText\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"%matplotlib inline\\\\nimport pandas as pd\\\\nimport matplotlib.pyplot as plt\\\\nimport superstore as sup\\\\nimport seaborn as sns\\\\n\\\\nsns.set()\\\\n\\\\n\\\\ndf = pd.DataFrame(sup.getTimeSeriesData())\\\\n\\\\n# add to context\\\\nnbprint_ctx.df = df\\\\n\\\\nfig = plt.figure(1, clear=True, figsize=(12,8));\\\\nax = fig.add_subplot(111);\\\\n\\\\n_ = df.plot(ax=ax);\\\\n_ = fig.text(.3, -.05, \\'Lorem ipsum dolor sit amet, consectetur adipiscing elit, \\\\\\\\n\\'\\\\n                      \\'sed do eiusmod tempor incididunt ut labore et dolore magna \\\\\\\\n\\'\\\\n                      \\'aliqua. Ut enim ad minim veniam, quis nostrud exercitation \\\\\\\\n\\'\\\\n                      \\'ullamco laboris nisi ut aliquip ex ea commodo consequat. \\\\\\\\n\\'\\\\n                      \\'Duis aute irure dolor in reprehenderit in voluptate velit.\\',\\\\n          fontsize=12,\\\\n          wrap=True,\\\\n          ha=\\'left\\');\\\\n_ = fig.text(.3, .06, \\'This Image:\\',\\\\n          fontsize=12,\\\\n          weight=\\'bold\\',\\\\n          wrap=True,\\\\n          ha=\\'left\\');\\\\nplt.show()\\\\n\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"text\\\":\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchSectionText\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"text\\\":\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchSectionText\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"text\\\":\\\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\\\",\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchSectionText\\\"}],\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.example.research.content.ExampleResearchBody\\\"}],\\\"endmatter\\\":[],\\\"_target_\\\":\\\"nbprint.config.core.content.ContentMarshall\\\"},\\\"pagedjs\\\":true,\\\"debug\\\":false,\\\"_target_\\\":\\\"nbprint.config.core.config.Configuration\\\"}')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ac45cd9f",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-context-ExampleResearchReferencesContext nbprint-example-research-context-ExampleResearchReferencesContext-b745bbe4b4634ad1b855e7a6e7ed993e ",
+     "class_selector": "nbprint-example-research-context-ExampleResearchReferencesContext",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"context\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"parameters\":{\"tags\":[],\"role\":\"parameters\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"_target_\":\"nbprint.config.core.parameters.Parameters\"},\"_target_\":\"nbprint.example.research.context.ExampleResearchReferencesContext\"}",
+     "element_selector": "nbprint-example-research-context-ExampleResearchReferencesContext-b745bbe4b4634ad1b855e7a6e7ed993e",
+     "esm": "",
+     "id": "b745bbe4b4634ad1b855e7a6e7ed993e",
+     "ignore": true,
+     "role": "context",
+     "type_": "nbprint.example.research.context.ExampleResearchReferencesContext"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_ctx = nbprint_config.context\n",
+    "nbprint_ctx(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d2f12662",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-page-Page nbprint-config-page-Page-56c137b98ce946b897b211e0ddf78785 ",
+     "class_selector": "nbprint-config-page-Page",
+     "css": "\n    @page { size: letter portrait; }\n                ",
+     "data": "{\"tags\":[],\"role\":\"undefined\",\"ignore\":false,\"css\":\"\\n    @page { size: letter portrait; }\\n                \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"top\":null,\"top_left\":null,\"top_right\":null,\"bottom\":null,\"bottom_left\":null,\"bottom_right\":null,\"left\":null,\"left_top\":null,\"left_bottom\":null,\"right\":null,\"right_top\":null,\"right_bottom\":null,\"size\":\"letter\",\"orientation\":\"portrait\",\"pages\":[],\"_target_\":\"nbprint.config.page.Page\"}",
+     "element_selector": "nbprint-config-page-Page-56c137b98ce946b897b211e0ddf78785",
+     "esm": "",
+     "id": "56c137b98ce946b897b211e0ddf78785",
+     "ignore": true,
+     "role": "page",
+     "type_": "nbprint.config.page.Page"
+    },
+    "tags": [
+     "nbprint",
+     "nbprint:page"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_page = nbprint_config.page\n",
+    "nbprint_page(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "850cbd65",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchHeader nbprint-example-research-content-ExampleResearchHeader-3f2e629fa45643f0a9ceaf0c99ba3bfc ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchHeader",
+     "css": "\n:scope {\n  padding-top: 50px;\n  display: flex;\n  flex-direction: column;\n  padding-bottom: 50px;\n}\n",
+     "data": "{\"tags\":[],\"role\":\"layout\",\"ignore\":false,\"css\":\"\\n:scope {\\n  padding-top: 50px;\\n  display: flex;\\n  flex-direction: column;\\n  padding-bottom: 50px;\\n}\\n\",\"esm\":\"\\nfunction render(meta, elem) {\\n    let data = JSON.parse(meta.data);\\n    let size_index = 0;\\n\\n    Array.from(elem.children).forEach((child) => {\\n        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;\\n        // TODO:these are hacks to determine\\n        // if it should be included\\n        let output_children = (child.querySelector(\\\".jp-OutputArea-output\\\") || {}).children || [];\\n        if (Array.from(child.classList).includes(\\\"nbprint\\\")) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else if (Array.from(output_children).length > 0) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else {\\n            child.style.flex = \\\"0\\\";\\n        }\\n    });\\n}\\n\",\"classname\":\"\",\"attrs\":{},\"content\":[{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n:scope {\\n}\\n\\nh1 {\\n  font-family: serif;\\n  font-weight: bold !important;\\n  font-size: 25px !important;\\n  margin: auto !important;\\n}\\n    \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"title\":\"An Example Research Publication Title\",\"_target_\":\"nbprint.example.research.content.ExampleResearchTitle\"},{\"tags\":[],\"role\":\"layout\",\"ignore\":false,\"css\":\"\\n:scope { display: flex; flex-direction: row; break-inside: auto; }\\n\",\"esm\":\"\\nfunction render(meta, elem) {\\n    let data = JSON.parse(meta.data);\\n    let size_index = 0;\\n\\n    Array.from(elem.children).forEach((child) => {\\n        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;\\n        // TODO:these are hacks to determine\\n        // if it should be included\\n        let output_children = (child.querySelector(\\\".jp-OutputArea-output\\\") || {}).children || [];\\n        if (Array.from(child.classList).includes(\\\"nbprint\\\")) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else if (Array.from(output_children).length > 0) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else {\\n            child.style.flex = \\\"0\\\";\\n        }\\n    });\\n}\\n\",\"classname\":\"\",\"attrs\":{},\"content\":[{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n:scope {\\n  text-align: center;\\n}\\ndiv.column > span:nth-child(1) {\\n  font-size: 16px;\\n  font-family: serif !important;\\n}\\ndiv.column > span:nth-child(2) {\\n  font-size: 12px;\\n  font-family: sans-serif !important;\\n}\\n    \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"name\":\"John Smith\",\"email\":\"john.smith@columbia.edu\",\"_target_\":\"nbprint.example.research.content.ExampleResearchAuthor\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n:scope {\\n  text-align: center;\\n}\\ndiv.column > span:nth-child(1) {\\n  font-size: 16px;\\n  font-family: serif !important;\\n}\\ndiv.column > span:nth-child(2) {\\n  font-size: 12px;\\n  font-family: sans-serif !important;\\n}\\n    \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"name\":\"Jane Doe\",\"email\":\"jane.doe@columbia.edu\",\"_target_\":\"nbprint.example.research.content.ExampleResearchAuthor\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n:scope {\\n  text-align: center;\\n}\\ndiv.column > span:nth-child(1) {\\n  font-size: 16px;\\n  font-family: serif !important;\\n}\\ndiv.column > span:nth-child(2) {\\n  font-size: 12px;\\n  font-family: sans-serif !important;\\n}\\n    \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"name\":\"Joe Schmo\",\"email\":\"joe.schmo@columbia.edu\",\"_target_\":\"nbprint.example.research.content.ExampleResearchAuthor\"}],\"magics\":[],\"output\":null,\"style\":null,\"sizes\":[],\"_target_\":\"nbprint.example.research.content.ExampleResearchAuthors\"}],\"magics\":[],\"output\":null,\"style\":null,\"sizes\":[],\"_target_\":\"nbprint.example.research.content.ExampleResearchHeader\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchHeader-3f2e629fa45643f0a9ceaf0c99ba3bfc",
+     "esm": "\nfunction render(meta, elem) {\n    let data = JSON.parse(meta.data);\n    let size_index = 0;\n\n    Array.from(elem.children).forEach((child) => {\n        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;\n        // TODO:these are hacks to determine\n        // if it should be included\n        let output_children = (child.querySelector(\".jp-OutputArea-output\") || {}).children || [];\n        if (Array.from(child.classList).includes(\"nbprint\")) {\n            child.style.flex = `${size}`;\n            size_index += 1;\n        } else if (Array.from(output_children).length > 0) {\n            child.style.flex = `${size}`;\n            size_index += 1;\n        } else {\n            child.style.flex = \"0\";\n        }\n    });\n}\n",
+     "id": "3f2e629fa45643f0a9ceaf0c99ba3bfc",
+     "ignore": false,
+     "role": "layout",
+     "type_": "nbprint.example.research.content.ExampleResearchHeader"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchheader = nbprint_config.content[0]\n",
+    "nbprint_exampleresearchheader(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d6a7b6bd",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchTitle nbprint-example-research-content-ExampleResearchTitle-ec31835cd5e349a88e0acda1ec30d008 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchTitle",
+     "css": "\n:scope {\n}\n\nh1 {\n  font-family: serif;\n  font-weight: bold !important;\n  font-size: 25px !important;\n  margin: auto !important;\n}\n    ",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n:scope {\\n}\\n\\nh1 {\\n  font-family: serif;\\n  font-weight: bold !important;\\n  font-size: 25px !important;\\n  margin: auto !important;\\n}\\n    \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"title\":\"An Example Research Publication Title\",\"_target_\":\"nbprint.example.research.content.ExampleResearchTitle\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchTitle-ec31835cd5e349a88e0acda1ec30d008",
+     "esm": "",
+     "id": "ec31835cd5e349a88e0acda1ec30d008",
+     "ignore": false,
+     "parent-id": "3f2e629fa45643f0a9ceaf0c99ba3bfc",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchTitle"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchtitle = nbprint_exampleresearchheader.content[0]\n",
+    "nbprint_exampleresearchtitle(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "98f13a2b",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchAuthors nbprint-example-research-content-ExampleResearchAuthors-269c75b1e9344c4a8a6016b15d6d7b3d ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchAuthors",
+     "css": "\n:scope { display: flex; flex-direction: row; break-inside: auto; }\n",
+     "data": "{\"tags\":[],\"role\":\"layout\",\"ignore\":false,\"css\":\"\\n:scope { display: flex; flex-direction: row; break-inside: auto; }\\n\",\"esm\":\"\\nfunction render(meta, elem) {\\n    let data = JSON.parse(meta.data);\\n    let size_index = 0;\\n\\n    Array.from(elem.children).forEach((child) => {\\n        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;\\n        // TODO:these are hacks to determine\\n        // if it should be included\\n        let output_children = (child.querySelector(\\\".jp-OutputArea-output\\\") || {}).children || [];\\n        if (Array.from(child.classList).includes(\\\"nbprint\\\")) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else if (Array.from(output_children).length > 0) {\\n            child.style.flex = `${size}`;\\n            size_index += 1;\\n        } else {\\n            child.style.flex = \\\"0\\\";\\n        }\\n    });\\n}\\n\",\"classname\":\"\",\"attrs\":{},\"content\":[{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n:scope {\\n  text-align: center;\\n}\\ndiv.column > span:nth-child(1) {\\n  font-size: 16px;\\n  font-family: serif !important;\\n}\\ndiv.column > span:nth-child(2) {\\n  font-size: 12px;\\n  font-family: sans-serif !important;\\n}\\n    \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"name\":\"John Smith\",\"email\":\"john.smith@columbia.edu\",\"_target_\":\"nbprint.example.research.content.ExampleResearchAuthor\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n:scope {\\n  text-align: center;\\n}\\ndiv.column > span:nth-child(1) {\\n  font-size: 16px;\\n  font-family: serif !important;\\n}\\ndiv.column > span:nth-child(2) {\\n  font-size: 12px;\\n  font-family: sans-serif !important;\\n}\\n    \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"name\":\"Jane Doe\",\"email\":\"jane.doe@columbia.edu\",\"_target_\":\"nbprint.example.research.content.ExampleResearchAuthor\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n:scope {\\n  text-align: center;\\n}\\ndiv.column > span:nth-child(1) {\\n  font-size: 16px;\\n  font-family: serif !important;\\n}\\ndiv.column > span:nth-child(2) {\\n  font-size: 12px;\\n  font-family: sans-serif !important;\\n}\\n    \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"name\":\"Joe Schmo\",\"email\":\"joe.schmo@columbia.edu\",\"_target_\":\"nbprint.example.research.content.ExampleResearchAuthor\"}],\"magics\":[],\"output\":null,\"style\":null,\"sizes\":[],\"_target_\":\"nbprint.example.research.content.ExampleResearchAuthors\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchAuthors-269c75b1e9344c4a8a6016b15d6d7b3d",
+     "esm": "\nfunction render(meta, elem) {\n    let data = JSON.parse(meta.data);\n    let size_index = 0;\n\n    Array.from(elem.children).forEach((child) => {\n        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;\n        // TODO:these are hacks to determine\n        // if it should be included\n        let output_children = (child.querySelector(\".jp-OutputArea-output\") || {}).children || [];\n        if (Array.from(child.classList).includes(\"nbprint\")) {\n            child.style.flex = `${size}`;\n            size_index += 1;\n        } else if (Array.from(output_children).length > 0) {\n            child.style.flex = `${size}`;\n            size_index += 1;\n        } else {\n            child.style.flex = \"0\";\n        }\n    });\n}\n",
+     "id": "269c75b1e9344c4a8a6016b15d6d7b3d",
+     "ignore": false,
+     "parent-id": "3f2e629fa45643f0a9ceaf0c99ba3bfc",
+     "role": "layout",
+     "type_": "nbprint.example.research.content.ExampleResearchAuthors"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchauthors = nbprint_exampleresearchheader.content[1]\n",
+    "nbprint_exampleresearchauthors(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b970173b",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchAuthor nbprint-example-research-content-ExampleResearchAuthor-a39d90a235464d5498e534dac1452f13 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchAuthor",
+     "css": "\n:scope {\n  text-align: center;\n}\ndiv.column > span:nth-child(1) {\n  font-size: 16px;\n  font-family: serif !important;\n}\ndiv.column > span:nth-child(2) {\n  font-size: 12px;\n  font-family: sans-serif !important;\n}\n    ",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n:scope {\\n  text-align: center;\\n}\\ndiv.column > span:nth-child(1) {\\n  font-size: 16px;\\n  font-family: serif !important;\\n}\\ndiv.column > span:nth-child(2) {\\n  font-size: 12px;\\n  font-family: sans-serif !important;\\n}\\n    \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"name\":\"John Smith\",\"email\":\"john.smith@columbia.edu\",\"_target_\":\"nbprint.example.research.content.ExampleResearchAuthor\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchAuthor-a39d90a235464d5498e534dac1452f13",
+     "esm": "",
+     "id": "a39d90a235464d5498e534dac1452f13",
+     "ignore": false,
+     "parent-id": "269c75b1e9344c4a8a6016b15d6d7b3d",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchAuthor"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchauthor = nbprint_exampleresearchauthors.content[0]\n",
+    "nbprint_exampleresearchauthor(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "aafc6e1d",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchAuthor nbprint-example-research-content-ExampleResearchAuthor-96d7e57335dc468f80c3e906c5f0aff0 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchAuthor",
+     "css": "\n:scope {\n  text-align: center;\n}\ndiv.column > span:nth-child(1) {\n  font-size: 16px;\n  font-family: serif !important;\n}\ndiv.column > span:nth-child(2) {\n  font-size: 12px;\n  font-family: sans-serif !important;\n}\n    ",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n:scope {\\n  text-align: center;\\n}\\ndiv.column > span:nth-child(1) {\\n  font-size: 16px;\\n  font-family: serif !important;\\n}\\ndiv.column > span:nth-child(2) {\\n  font-size: 12px;\\n  font-family: sans-serif !important;\\n}\\n    \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"name\":\"Jane Doe\",\"email\":\"jane.doe@columbia.edu\",\"_target_\":\"nbprint.example.research.content.ExampleResearchAuthor\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchAuthor-96d7e57335dc468f80c3e906c5f0aff0",
+     "esm": "",
+     "id": "96d7e57335dc468f80c3e906c5f0aff0",
+     "ignore": false,
+     "parent-id": "269c75b1e9344c4a8a6016b15d6d7b3d",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchAuthor"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchauthor0 = nbprint_exampleresearchauthors.content[1]\n",
+    "nbprint_exampleresearchauthor0(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "600de4d8",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchAuthor nbprint-example-research-content-ExampleResearchAuthor-93dee5cee79747a0b07f3716dab8fa95 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchAuthor",
+     "css": "\n:scope {\n  text-align: center;\n}\ndiv.column > span:nth-child(1) {\n  font-size: 16px;\n  font-family: serif !important;\n}\ndiv.column > span:nth-child(2) {\n  font-size: 12px;\n  font-family: sans-serif !important;\n}\n    ",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n:scope {\\n  text-align: center;\\n}\\ndiv.column > span:nth-child(1) {\\n  font-size: 16px;\\n  font-family: serif !important;\\n}\\ndiv.column > span:nth-child(2) {\\n  font-size: 12px;\\n  font-family: sans-serif !important;\\n}\\n    \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"name\":\"Joe Schmo\",\"email\":\"joe.schmo@columbia.edu\",\"_target_\":\"nbprint.example.research.content.ExampleResearchAuthor\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchAuthor-93dee5cee79747a0b07f3716dab8fa95",
+     "esm": "",
+     "id": "93dee5cee79747a0b07f3716dab8fa95",
+     "ignore": false,
+     "parent-id": "269c75b1e9344c4a8a6016b15d6d7b3d",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchAuthor"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchauthor1 = nbprint_exampleresearchauthors.content[2]\n",
+    "nbprint_exampleresearchauthor1(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4d68cef9",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchBody nbprint-example-research-content-ExampleResearchBody-ee75e806a5c04baca97e7690b2011e29 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchBody",
+     "css": "\n:scope {\n  column-count: 2;\n  -webkit-column-count: 2;\n  column-gap: 1cm;\n}\n",
+     "data": "{\"tags\":[],\"role\":\"layout\",\"ignore\":false,\"css\":\"\\n:scope {\\n  column-count: 2;\\n  -webkit-column-count: 2;\\n  column-gap: 1cm;\\n}\\n\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":[{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n  h1 {\\n    padding-bottom: 10px;\\n  }\\n  \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"title\":\"Abstract\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionTitle\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n  h1 {\\n    padding-bottom: 10px;\\n  }\\n  \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"title\":\"1. Introduction\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionTitle\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"%matplotlib inline\\nimport pandas as pd\\nimport matplotlib.pyplot as plt\\nimport superstore as sup\\nimport seaborn as sns\\n\\nsns.set()\\n\\n\\ndf = pd.DataFrame(sup.getTimeSeriesData())\\n\\n# add to context\\nnbprint_ctx.df = df\\n\\nfig = plt.figure(1, clear=True, figsize=(12,8));\\nax = fig.add_subplot(111);\\n\\n_ = df.plot(ax=ax);\\n_ = fig.text(.3, -.05, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, \\\\n'\\n                      'sed do eiusmod tempor incididunt ut labore et dolore magna \\\\n'\\n                      'aliqua. Ut enim ad minim veniam, quis nostrud exercitation \\\\n'\\n                      'ullamco laboris nisi ut aliquip ex ea commodo consequat. \\\\n'\\n                      'Duis aute irure dolor in reprehenderit in voluptate velit.',\\n          fontsize=12,\\n          wrap=True,\\n          ha='left');\\n_ = fig.text(.3, .06, 'This Image:',\\n          fontsize=12,\\n          weight='bold',\\n          wrap=True,\\n          ha='left');\\nplt.show()\\n\",\"magics\":[],\"output\":null,\"style\":null,\"_target_\":\"nbprint.config.content.base.ContentCode\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"},{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"}],\"magics\":[],\"output\":null,\"style\":null,\"_target_\":\"nbprint.example.research.content.ExampleResearchBody\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchBody-ee75e806a5c04baca97e7690b2011e29",
+     "esm": "",
+     "id": "ee75e806a5c04baca97e7690b2011e29",
+     "ignore": false,
+     "role": "layout",
+     "type_": "nbprint.example.research.content.ExampleResearchBody"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchbody = nbprint_config.content[1]\n",
+    "nbprint_exampleresearchbody(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1169c22c",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchSectionTitle nbprint-example-research-content-ExampleResearchSectionTitle-ed2bb3f260834108a4fa09ec0a9b00c8 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchSectionTitle",
+     "css": "\n  h1 {\n    padding-bottom: 10px;\n  }\n  ",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n  h1 {\\n    padding-bottom: 10px;\\n  }\\n  \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"title\":\"Abstract\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionTitle\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchSectionTitle-ed2bb3f260834108a4fa09ec0a9b00c8",
+     "esm": "",
+     "id": "ed2bb3f260834108a4fa09ec0a9b00c8",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchSectionTitle"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchsectiontitle = nbprint_exampleresearchbody.content[0]\n",
+    "nbprint_exampleresearchsectiontitle(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "a10f1e6d",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchSectionText nbprint-example-research-content-ExampleResearchSectionText-fb1c050b65d24a9f93c5c186352bf805 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchSectionText",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchSectionText-fb1c050b65d24a9f93c5c186352bf805",
+     "esm": "",
+     "id": "fb1c050b65d24a9f93c5c186352bf805",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchSectionText"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchsectiontext = nbprint_exampleresearchbody.content[1]\n",
+    "nbprint_exampleresearchsectiontext(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "40a9544a",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchSectionText nbprint-example-research-content-ExampleResearchSectionText-f9fa0c1f5b0140019ad35ae6923c23fa ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchSectionText",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchSectionText-f9fa0c1f5b0140019ad35ae6923c23fa",
+     "esm": "",
+     "id": "f9fa0c1f5b0140019ad35ae6923c23fa",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchSectionText"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchsectiontext0 = nbprint_exampleresearchbody.content[2]\n",
+    "nbprint_exampleresearchsectiontext0(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "faa916fc",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchSectionTitle nbprint-example-research-content-ExampleResearchSectionTitle-9d3c55126c444c96b9fb0b0269906f00 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchSectionTitle",
+     "css": "\n  h1 {\n    padding-bottom: 10px;\n  }\n  ",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\\n  h1 {\\n    padding-bottom: 10px;\\n  }\\n  \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"title\":\"1. Introduction\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionTitle\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchSectionTitle-9d3c55126c444c96b9fb0b0269906f00",
+     "esm": "",
+     "id": "9d3c55126c444c96b9fb0b0269906f00",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchSectionTitle"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchsectiontitle0 = nbprint_exampleresearchbody.content[3]\n",
+    "nbprint_exampleresearchsectiontitle0(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "01872d6b",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchSectionText nbprint-example-research-content-ExampleResearchSectionText-a2e984628f7d484583e83ada9126faac ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchSectionText",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchSectionText-a2e984628f7d484583e83ada9126faac",
+     "esm": "",
+     "id": "a2e984628f7d484583e83ada9126faac",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchSectionText"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchsectiontext1 = nbprint_exampleresearchbody.content[4]\n",
+    "nbprint_exampleresearchsectiontext1(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b01c12ce",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchSectionText nbprint-example-research-content-ExampleResearchSectionText-b6b06528dfa34468a30e36563e0a7d28 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchSectionText",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchSectionText-b6b06528dfa34468a30e36563e0a7d28",
+     "esm": "",
+     "id": "b6b06528dfa34468a30e36563e0a7d28",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchSectionText"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchsectiontext2 = nbprint_exampleresearchbody.content[5]\n",
+    "nbprint_exampleresearchsectiontext2(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "033283d0",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchSectionText nbprint-example-research-content-ExampleResearchSectionText-5aa01d1271df4a658e1a677219a99710 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchSectionText",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchSectionText-5aa01d1271df4a658e1a677219a99710",
+     "esm": "",
+     "id": "5aa01d1271df4a658e1a677219a99710",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchSectionText"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchsectiontext3 = nbprint_exampleresearchbody.content[6]\n",
+    "nbprint_exampleresearchsectiontext3(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "946266e7",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchSectionText nbprint-example-research-content-ExampleResearchSectionText-09fc8da2cbef4f6a8d1c59b6b5df3756 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchSectionText",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchSectionText-09fc8da2cbef4f6a8d1c59b6b5df3756",
+     "esm": "",
+     "id": "09fc8da2cbef4f6a8d1c59b6b5df3756",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchSectionText"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchsectiontext4 = nbprint_exampleresearchbody.content[7]\n",
+    "nbprint_exampleresearchsectiontext4(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "70cd1229",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-79ad1e901cf3492195f8c024244182f0 ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-79ad1e901cf3492195f8c024244182f0",
+     "esm": "",
+     "id": "79ad1e901cf3492195f8c024244182f0",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "%matplotlib inline\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "import superstore as sup\n",
+    "import seaborn as sns\n",
+    "\n",
+    "sns.set()\n",
+    "\n",
+    "\n",
+    "df = pd.DataFrame(sup.getTimeSeriesData())\n",
+    "\n",
+    "# add to context\n",
+    "nbprint_ctx.df = df\n",
+    "\n",
+    "fig = plt.figure(1, clear=True, figsize=(12,8));\n",
+    "ax = fig.add_subplot(111);\n",
+    "\n",
+    "_ = df.plot(ax=ax);\n",
+    "_ = fig.text(.3, -.05, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, \\n'\n",
+    "                      'sed do eiusmod tempor incididunt ut labore et dolore magna \\n'\n",
+    "                      'aliqua. Ut enim ad minim veniam, quis nostrud exercitation \\n'\n",
+    "                      'ullamco laboris nisi ut aliquip ex ea commodo consequat. \\n'\n",
+    "                      'Duis aute irure dolor in reprehenderit in voluptate velit.',\n",
+    "          fontsize=12,\n",
+    "          wrap=True,\n",
+    "          ha='left');\n",
+    "_ = fig.text(.3, .06, 'This Image:',\n",
+    "          fontsize=12,\n",
+    "          weight='bold',\n",
+    "          wrap=True,\n",
+    "          ha='left');\n",
+    "plt.show()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1adf44fb",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchSectionText nbprint-example-research-content-ExampleResearchSectionText-2d31f6c36ca44f198a3fed3ada10cdbc ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchSectionText",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchSectionText-2d31f6c36ca44f198a3fed3ada10cdbc",
+     "esm": "",
+     "id": "2d31f6c36ca44f198a3fed3ada10cdbc",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchSectionText"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchsectiontext5 = nbprint_exampleresearchbody.content[9]\n",
+    "nbprint_exampleresearchsectiontext5(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "756430d9",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchSectionText nbprint-example-research-content-ExampleResearchSectionText-7b5dee57ed8140df9345eb75b6474387 ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchSectionText",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchSectionText-7b5dee57ed8140df9345eb75b6474387",
+     "esm": "",
+     "id": "7b5dee57ed8140df9345eb75b6474387",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchSectionText"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchsectiontext6 = nbprint_exampleresearchbody.content[10]\n",
+    "nbprint_exampleresearchsectiontext6(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "43cc8e8e",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-example-research-content-ExampleResearchSectionText nbprint-example-research-content-ExampleResearchSectionText-36752e690e9c4d0a97fd8aa6ff027b9e ",
+     "class_selector": "nbprint-example-research-content-ExampleResearchSectionText",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"text\":\"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\"_target_\":\"nbprint.example.research.content.ExampleResearchSectionText\"}",
+     "element_selector": "nbprint-example-research-content-ExampleResearchSectionText-36752e690e9c4d0a97fd8aa6ff027b9e",
+     "esm": "",
+     "id": "36752e690e9c4d0a97fd8aa6ff027b9e",
+     "ignore": false,
+     "parent-id": "ee75e806a5c04baca97e7690b2011e29",
+     "role": "content",
+     "type_": "nbprint.example.research.content.ExampleResearchSectionText"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_exampleresearchsectiontext7 = nbprint_exampleresearchbody.content[11]\n",
+    "nbprint_exampleresearchsectiontext7(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "84300076",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-outputs-nbconvert-NBConvertOutputs nbprint-config-outputs-nbconvert-NBConvertOutputs-1f4f428c1c514f0c9b54bf636a49e076 ",
+     "class_selector": "nbprint-config-outputs-nbconvert-NBConvertOutputs",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"outputs\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"root\":\"outputs\",\"naming\":\"{{name}}-{{date}}\",\"embedded\":false,\"hook\":null,\"postprocess\":null,\"target\":\"webpdf\",\"execute\":true,\"timeout\":600,\"template\":\"nbprint\",\"collect_outputs\":false,\"execute_hook\":null,\"nbconvert_hook\":null,\"_target_\":\"nbprint.config.outputs.nbconvert.NBConvertOutputs\"}",
+     "element_selector": "nbprint-config-outputs-nbconvert-NBConvertOutputs-1f4f428c1c514f0c9b54bf636a49e076",
+     "esm": "",
+     "id": "1f4f428c1c514f0c9b54bf636a49e076",
+     "ignore": true,
+     "role": "outputs",
+     "type_": "nbprint.config.outputs.nbconvert.NBConvertOutputs"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_nbconvertoutputs = nbprint_config.outputs\n",
+    "nbprint_nbconvertoutputs(ctx=nbprint_ctx)"
+   ]
+  }
+ ],
+ "metadata": {
+  "nbprint": {
+   "language": "python3.11",
+   "nbprint": {},
+   "tags": [],
+   "version": "0.11.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

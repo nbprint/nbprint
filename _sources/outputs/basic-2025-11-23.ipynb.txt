@@ -1,0 +1,829 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b09739d0",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-core-parameters-PapermillParameters nbprint-config-core-parameters-PapermillParameters-d5e56a536a9148d5b6e972513ce279a4 ",
+     "class_selector": "nbprint-config-core-parameters-PapermillParameters",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"parameters\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"_target_\":\"nbprint.config.core.parameters.PapermillParameters\"}",
+     "element_selector": "nbprint-config-core-parameters-PapermillParameters-d5e56a536a9148d5b6e972513ce279a4",
+     "esm": "",
+     "id": "d5e56a536a9148d5b6e972513ce279a4",
+     "ignore": true,
+     "role": "parameters",
+     "type_": "nbprint.config.core.parameters.PapermillParameters"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0ae983b8",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-core-config-Configuration nbprint-config-core-config-Configuration-dd3e543244d44d058dde222f69130805 ",
+     "class_selector": "nbprint-config-core-config-Configuration",
+     "css": "",
+     "data": "",
+     "debug": false,
+     "element_selector": "nbprint-config-core-config-Configuration-dd3e543244d44d058dde222f69130805",
+     "esm": "",
+     "id": "dd3e543244d44d058dde222f69130805",
+     "ignore": true,
+     "outputs": "{\"tags\":[],\"role\":\"outputs\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"root\":\"/home/runner/work/nbprint/nbprint/outputs\",\"naming\":\"{{name}}-{{date}}\",\"embedded\":false,\"hook\":null,\"postprocess\":null,\"target\":\"html\",\"execute\":true,\"timeout\":600,\"template\":\"nbprint\",\"collect_outputs\":false,\"execute_hook\":null,\"nbconvert_hook\":null,\"_target_\":\"nbprint.config.outputs.nbconvert.NBConvertOutputs\"}",
+     "pagedjs": true,
+     "role": "configuration",
+     "type_": "nbprint.config.core.config.Configuration"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "from nbprint.config.core.config import Configuration\n",
+    "nbprint_config = Configuration.from_json('{\\\"tags\\\":[],\\\"role\\\":\\\"configuration\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"meta\\\":{\\\"name\\\":\\\"nbprint\\\",\\\"description\\\":\\\"\\\",\\\"_target_\\\":\\\"ccflow.callable.MetaData\\\"},\\\"name\\\":\\\"basic\\\",\\\"resources\\\":{},\\\"outputs\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"outputs\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"root\\\":\\\"/home/runner/work/nbprint/nbprint/outputs\\\",\\\"naming\\\":\\\"{{name}}-{{date}}\\\",\\\"embedded\\\":false,\\\"hook\\\":null,\\\"postprocess\\\":null,\\\"target\\\":\\\"html\\\",\\\"execute\\\":true,\\\"timeout\\\":600,\\\"template\\\":\\\"nbprint\\\",\\\"collect_outputs\\\":false,\\\"execute_hook\\\":null,\\\"nbconvert_hook\\\":null,\\\"_target_\\\":\\\"nbprint.config.outputs.nbconvert.NBConvertOutputs\\\"},\\\"parameters\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"parameters\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"_target_\\\":\\\"nbprint.config.core.parameters.PapermillParameters\\\"},\\\"page\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"undefined\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"top\\\":null,\\\"top_left\\\":null,\\\"top_right\\\":null,\\\"bottom\\\":null,\\\"bottom_left\\\":null,\\\"bottom_right\\\":null,\\\"left\\\":null,\\\"left_top\\\":null,\\\"left_bottom\\\":null,\\\"right\\\":null,\\\"right_top\\\":null,\\\"right_bottom\\\":null,\\\"size\\\":\\\"letter\\\",\\\"orientation\\\":\\\"portrait\\\",\\\"pages\\\":[],\\\"_target_\\\":\\\"nbprint.config.page.Page\\\"},\\\"context\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"context\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"parameters\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"parameters\\\",\\\"ignore\\\":true,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"_target_\\\":\\\"nbprint.config.core.parameters.PapermillParameters\\\"},\\\"_target_\\\":\\\"nbprint.config.core.context.Context\\\"},\\\"content\\\":{\\\"tags\\\":[],\\\"role\\\":\\\"undefined\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"prematter\\\":[],\\\"frontmatter\\\":[{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\":scope { text-align: center; }\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"# basic\\\\n\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.pagebreak.ContentPageBreak\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.table_of_contents.ContentTableOfContents\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.pagebreak.ContentPageBreak\\\"}],\\\"middlematter\\\":[{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\":scope h2 { color: red; }\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"# A Generic Report\\\\n## A Subtitle\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"from nbprint import newpage; newpage()\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"# Section One,\\\\nLorem ipsum dolor sit amet.\\\\n\\\\n## Subsection One\\\\n\\\\nConsectetur adipiscing elit, sed do eiusmod tempor incididunt.\\\\n\\\\n## Subsection Two\\\\n\\\\nUt labore et dolore magna aliqua.\\\\n\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"from nbprint import newpage; newpage()\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"# Section Two\\\\n\\\\nLorem ipsum dolor sit amet.\\\\n\\\\n## Subsection One\\\\n\\\\nConsectetur adipiscing elit, sed do eiusmod tempor incididunt.\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"from nbprint import newpage; newpage()\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"# Section Three\\\\n\\\\nUt labore et dolore magna aliqua.\\\\n\\\\n## Subsection One\\\\n\\\\nUt enim ad minim veniam, quis nostrud.\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"from superstore import superstore, getTimeSeries\\\\nfrom IPython.display import JSON, Markdown, FileLink\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"## Outputs\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"df = superstore()\\\\n\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"### File\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[\\\"nbprint:output:file\\\",\\\"nbprint:content\\\"],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"pth = \\\\\\\"superstore.csv\\\\\\\"\\\\ndf.to_csv(pth, index=False)\\\\nFileLink(pth)\\\\n\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"### JSON\\\\n\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[\\\"nbprint:output:json\\\",\\\"nbprint:content\\\"],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\\nJSON(df.head().to_dict())\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"### Image\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"getTimeSeries().plot();\\\",\\\"magics\\\":[],\\\"output\\\":\\\"image\\\",\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"### Bool\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"True\\\",\\\"magics\\\":[],\\\"output\\\":\\\"bool\\\",\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"### String\\\",\\\"magics\\\":[],\\\"output\\\":null,\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentMarkdown\\\"},{\\\"tags\\\":[],\\\"role\\\":\\\"content\\\",\\\"ignore\\\":false,\\\"css\\\":\\\"\\\",\\\"esm\\\":\\\"\\\",\\\"classname\\\":\\\"\\\",\\\"attrs\\\":{},\\\"content\\\":\\\"\\\\\\\"abc\\\\\\\"\\\",\\\"magics\\\":[],\\\"output\\\":\\\"string\\\",\\\"style\\\":null,\\\"_target_\\\":\\\"nbprint.config.content.base.ContentCode\\\"}],\\\"endmatter\\\":[],\\\"_target_\\\":\\\"nbprint.config.core.content.ContentMarshall\\\"},\\\"pagedjs\\\":true,\\\"debug\\\":false,\\\"_target_\\\":\\\"nbprint.config.core.config.Configuration\\\"}')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "afb42cab",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-core-context-Context nbprint-config-core-context-Context-b08ebfa5dc9a4497978e7582f076ab04 ",
+     "class_selector": "nbprint-config-core-context-Context",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"context\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"parameters\":{\"tags\":[],\"role\":\"parameters\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"_target_\":\"nbprint.config.core.parameters.PapermillParameters\"},\"_target_\":\"nbprint.config.core.context.Context\"}",
+     "element_selector": "nbprint-config-core-context-Context-b08ebfa5dc9a4497978e7582f076ab04",
+     "esm": "",
+     "id": "b08ebfa5dc9a4497978e7582f076ab04",
+     "ignore": true,
+     "role": "context",
+     "type_": "nbprint.config.core.context.Context"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_ctx = nbprint_config.context\n",
+    "nbprint_ctx(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "db332f6c",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-page-Page nbprint-config-page-Page-a5b8a36399f542e78ff1a94555e6377d ",
+     "class_selector": "nbprint-config-page-Page",
+     "css": "\n    @page { size: letter portrait; }\n                ",
+     "data": "{\"tags\":[],\"role\":\"undefined\",\"ignore\":false,\"css\":\"\\n    @page { size: letter portrait; }\\n                \",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"top\":null,\"top_left\":null,\"top_right\":null,\"bottom\":null,\"bottom_left\":null,\"bottom_right\":null,\"left\":null,\"left_top\":null,\"left_bottom\":null,\"right\":null,\"right_top\":null,\"right_bottom\":null,\"size\":\"letter\",\"orientation\":\"portrait\",\"pages\":[],\"_target_\":\"nbprint.config.page.Page\"}",
+     "element_selector": "nbprint-config-page-Page-a5b8a36399f542e78ff1a94555e6377d",
+     "esm": "",
+     "id": "a5b8a36399f542e78ff1a94555e6377d",
+     "ignore": true,
+     "role": "page",
+     "type_": "nbprint.config.page.Page"
+    },
+    "tags": [
+     "nbprint",
+     "nbprint:page"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_page = nbprint_config.page\n",
+    "nbprint_page(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "4da4d4a0",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-ac63e19fa1b64971a9d9dde7f4d694bb ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": ":scope { text-align: center; }",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-ac63e19fa1b64971a9d9dde7f4d694bb",
+     "esm": "",
+     "id": "ac63e19fa1b64971a9d9dde7f4d694bb",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "# basic\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4e480b67",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-pagebreak-ContentPageBreak nbprint-config-content-pagebreak-ContentPageBreak-91e2c9030f4f44229ae71ab2b2685a68 ",
+     "class_selector": "nbprint-config-content-pagebreak-ContentPageBreak",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"_target_\":\"nbprint.config.content.pagebreak.ContentPageBreak\"}",
+     "element_selector": "nbprint-config-content-pagebreak-ContentPageBreak-91e2c9030f4f44229ae71ab2b2685a68",
+     "esm": "",
+     "id": "91e2c9030f4f44229ae71ab2b2685a68",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.pagebreak.ContentPageBreak"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_contentpagebreak = nbprint_config.content[1]\n",
+    "nbprint_contentpagebreak(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "5beeb728",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-table_of_contents-ContentTableOfContents nbprint-config-content-table_of_contents-ContentTableOfContents-602e06ec435540e8b7da8c0840cb2ec6 ",
+     "class_selector": "nbprint-config-content-table_of_contents-ContentTableOfContents",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"_target_\":\"nbprint.config.content.table_of_contents.ContentTableOfContents\"}",
+     "element_selector": "nbprint-config-content-table_of_contents-ContentTableOfContents-602e06ec435540e8b7da8c0840cb2ec6",
+     "esm": "",
+     "id": "602e06ec435540e8b7da8c0840cb2ec6",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.table_of_contents.ContentTableOfContents"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_contenttableofcontents = nbprint_config.content[2]\n",
+    "nbprint_contenttableofcontents(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "731e1c9a",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-pagebreak-ContentPageBreak nbprint-config-content-pagebreak-ContentPageBreak-b30298395b954bdca755f9e4cdf6c827 ",
+     "class_selector": "nbprint-config-content-pagebreak-ContentPageBreak",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"content\",\"ignore\":false,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"content\":\"\",\"magics\":[],\"output\":null,\"style\":null,\"_target_\":\"nbprint.config.content.pagebreak.ContentPageBreak\"}",
+     "element_selector": "nbprint-config-content-pagebreak-ContentPageBreak-b30298395b954bdca755f9e4cdf6c827",
+     "esm": "",
+     "id": "b30298395b954bdca755f9e4cdf6c827",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.pagebreak.ContentPageBreak"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_contentpagebreak0 = nbprint_config.content[3]\n",
+    "nbprint_contentpagebreak0(ctx=nbprint_ctx)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "81bae66e",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-9e30423fa62948c39c24d683abf7e9bf ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": ":scope h2 { color: red; }",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-9e30423fa62948c39c24d683abf7e9bf",
+     "esm": "",
+     "id": "9e30423fa62948c39c24d683abf7e9bf",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "# A Generic Report\n",
+    "## A Subtitle"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "187e9e40",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-39e6ddb52cd24862b4159a03670741aa ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-39e6ddb52cd24862b4159a03670741aa",
+     "esm": "",
+     "id": "39e6ddb52cd24862b4159a03670741aa",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "from nbprint import newpage; newpage()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "752105ad",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-1c2a802fe5724eba8eeaec54882697ff ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": "",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-1c2a802fe5724eba8eeaec54882697ff",
+     "esm": "",
+     "id": "1c2a802fe5724eba8eeaec54882697ff",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "# Section One,\n",
+    "Lorem ipsum dolor sit amet.\n",
+    "\n",
+    "## Subsection One\n",
+    "\n",
+    "Consectetur adipiscing elit, sed do eiusmod tempor incididunt.\n",
+    "\n",
+    "## Subsection Two\n",
+    "\n",
+    "Ut labore et dolore magna aliqua.\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "fa914191",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-eb38ee7c8557401ca4c88e0845aea697 ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-eb38ee7c8557401ca4c88e0845aea697",
+     "esm": "",
+     "id": "eb38ee7c8557401ca4c88e0845aea697",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "from nbprint import newpage; newpage()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "bb6e4a4c",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-4e7df82fefbc4b1686f3730db5acfb19 ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": "",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-4e7df82fefbc4b1686f3730db5acfb19",
+     "esm": "",
+     "id": "4e7df82fefbc4b1686f3730db5acfb19",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "# Section Two\n",
+    "\n",
+    "Lorem ipsum dolor sit amet.\n",
+    "\n",
+    "## Subsection One\n",
+    "\n",
+    "Consectetur adipiscing elit, sed do eiusmod tempor incididunt."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "37430aac",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-5a9d796f531e4ec9af8c0c4251aa8d0e ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-5a9d796f531e4ec9af8c0c4251aa8d0e",
+     "esm": "",
+     "id": "5a9d796f531e4ec9af8c0c4251aa8d0e",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "from nbprint import newpage; newpage()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ab70f818",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-c9e990771ca54a44b76a95a425ca5f07 ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": "",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-c9e990771ca54a44b76a95a425ca5f07",
+     "esm": "",
+     "id": "c9e990771ca54a44b76a95a425ca5f07",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "# Section Three\n",
+    "\n",
+    "Ut labore et dolore magna aliqua.\n",
+    "\n",
+    "## Subsection One\n",
+    "\n",
+    "Ut enim ad minim veniam, quis nostrud."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e8a73bb6",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-0d8f7a0549ba4668b44eb96697c5cd3f ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-0d8f7a0549ba4668b44eb96697c5cd3f",
+     "esm": "",
+     "id": "0d8f7a0549ba4668b44eb96697c5cd3f",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "from superstore import superstore, getTimeSeries\n",
+    "from IPython.display import JSON, Markdown, FileLink"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2773e9a9",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-06c363912e014fe08cfa93f5e72cf1fe ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": "",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-06c363912e014fe08cfa93f5e72cf1fe",
+     "esm": "",
+     "id": "06c363912e014fe08cfa93f5e72cf1fe",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "## Outputs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1c694560",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-c242c58563dc4f47a199c8d993db5f40 ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-c242c58563dc4f47a199c8d993db5f40",
+     "esm": "",
+     "id": "c242c58563dc4f47a199c8d993db5f40",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "df = superstore()\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "0de01088",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-0b5f41935b0844cf81bc1e88e64f6d1e ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": "",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-0b5f41935b0844cf81bc1e88e64f6d1e",
+     "esm": "",
+     "id": "0b5f41935b0844cf81bc1e88e64f6d1e",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "### File"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ccff35dd",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-47cae4a09b584381ac6d586ac7c7515b ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-47cae4a09b584381ac6d586ac7c7515b",
+     "esm": "",
+     "id": "47cae4a09b584381ac6d586ac7c7515b",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint",
+     "nbprint:content",
+     "nbprint:output:file"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "pth = \"superstore.csv\"\n",
+    "df.to_csv(pth, index=False)\n",
+    "FileLink(pth)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "80585281",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-5799ae767a4e47d98e82f1e64e66ff1c ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": "",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-5799ae767a4e47d98e82f1e64e66ff1c",
+     "esm": "",
+     "id": "5799ae767a4e47d98e82f1e64e66ff1c",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "### JSON\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "73abedde",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-585bf21c8684481886b482a1d4c5e8bc ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-585bf21c8684481886b482a1d4c5e8bc",
+     "esm": "",
+     "id": "585bf21c8684481886b482a1d4c5e8bc",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint",
+     "nbprint:content",
+     "nbprint:output:json"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "\n",
+    "JSON(df.head().to_dict())"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d3c1c538",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-3afabe58838740e8a70b94a2b9c9795d ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": "",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-3afabe58838740e8a70b94a2b9c9795d",
+     "esm": "",
+     "id": "3afabe58838740e8a70b94a2b9c9795d",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "### Image"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c2952cd8",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-1c74baba99074e94a3f994c8f708bef0 ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-1c74baba99074e94a3f994c8f708bef0",
+     "esm": "",
+     "id": "1c74baba99074e94a3f994c8f708bef0",
+     "ignore": false,
+     "output": "image",
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint",
+     "nbprint:output:image"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "getTimeSeries().plot();"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "119e12d8",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-22ead2e6a43e4ef2b3b892b8ba102a98 ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": "",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-22ead2e6a43e4ef2b3b892b8ba102a98",
+     "esm": "",
+     "id": "22ead2e6a43e4ef2b3b892b8ba102a98",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "### Bool"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c2ae3680",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-c285fa5fa62a4c148ba7c7fc323df433 ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-c285fa5fa62a4c148ba7c7fc323df433",
+     "esm": "",
+     "id": "c285fa5fa62a4c148ba7c7fc323df433",
+     "ignore": false,
+     "output": "bool",
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint",
+     "nbprint:output:bool"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "True"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "c00003ce",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentMarkdown nbprint-config-content-base-ContentMarkdown-64c0f40f8a82455ebba03db7381a42c2 ",
+     "class_selector": "nbprint-config-content-base-ContentMarkdown",
+     "css": "",
+     "element_selector": "nbprint-config-content-base-ContentMarkdown-64c0f40f8a82455ebba03db7381a42c2",
+     "esm": "",
+     "id": "64c0f40f8a82455ebba03db7381a42c2",
+     "ignore": false,
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentMarkdown"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "source": [
+    "### String"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f6364c6d",
+   "metadata": {
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-content-base-ContentCode nbprint-config-content-base-ContentCode-fc8fa68420ab452ca2b5e99453311ab6 ",
+     "class_selector": "nbprint-config-content-base-ContentCode",
+     "css": "",
+     "data": "",
+     "element_selector": "nbprint-config-content-base-ContentCode-fc8fa68420ab452ca2b5e99453311ab6",
+     "esm": "",
+     "id": "fc8fa68420ab452ca2b5e99453311ab6",
+     "ignore": false,
+     "output": "string",
+     "role": "content",
+     "type_": "nbprint.config.content.base.ContentCode"
+    },
+    "tags": [
+     "nbprint",
+     "nbprint:output:string"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "\"abc\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b67f287c",
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+    },
+    "nbprint": {
+     "attrs": "",
+     "class": "nbprint nbprint-config-outputs-nbconvert-NBConvertOutputs nbprint-config-outputs-nbconvert-NBConvertOutputs-015bf8a2ffc44b53ab1e5ad9b4ea2a50 ",
+     "class_selector": "nbprint-config-outputs-nbconvert-NBConvertOutputs",
+     "css": "",
+     "data": "{\"tags\":[],\"role\":\"outputs\",\"ignore\":true,\"css\":\"\",\"esm\":\"\",\"classname\":\"\",\"attrs\":{},\"root\":\"/home/runner/work/nbprint/nbprint/outputs\",\"naming\":\"{{name}}-{{date}}\",\"embedded\":false,\"hook\":null,\"postprocess\":null,\"target\":\"html\",\"execute\":true,\"timeout\":600,\"template\":\"nbprint\",\"collect_outputs\":false,\"execute_hook\":null,\"nbconvert_hook\":null,\"_target_\":\"nbprint.config.outputs.nbconvert.NBConvertOutputs\"}",
+     "element_selector": "nbprint-config-outputs-nbconvert-NBConvertOutputs-015bf8a2ffc44b53ab1e5ad9b4ea2a50",
+     "esm": "",
+     "id": "015bf8a2ffc44b53ab1e5ad9b4ea2a50",
+     "ignore": true,
+     "role": "outputs",
+     "type_": "nbprint.config.outputs.nbconvert.NBConvertOutputs"
+    },
+    "tags": [
+     "nbprint"
+    ]
+   },
+   "outputs": [],
+   "source": [
+    "nbprint_nbconvertoutputs = nbprint_config.outputs\n",
+    "nbprint_nbconvertoutputs(ctx=nbprint_ctx)"
+   ]
+  }
+ ],
+ "metadata": {
+  "nbprint": {
+   "language": "python3.11",
+   "nbprint": {},
+   "tags": [],
+   "version": "0.11.1"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
