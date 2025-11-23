@@ -4,6 +4,7 @@ pagedjs: true
 _target_: nbprint.Configuration
 outputs:
   _target_: nbprint.HTMLOutputs
+  naming: "{{name}}"
   root: ./outputs
 
 page:

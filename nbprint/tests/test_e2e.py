@@ -59,7 +59,7 @@ def test_hydra_e2e(parameters):
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples not present - skipping examples tests")
 @pytest.mark.parametrize("template", _integration_templates)
 def test_email(template):
-    pytest.skip("TODO", template)
+    pytest.skip(f"TODO - {template}")
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples - notebook direct")
@@ -70,13 +70,19 @@ def test_run_notebook_direct(notebook, fmt):
             f"examples/{notebook}.ipynb",
             [
                 f"++nbprint.outputs.target={fmt}",
+                r"""+nbprint.outputs.naming='{{name}}'""",
                 "+nbprint.parameters.a=10",
                 "+nbprint.parameters.b='hello'",
                 "+nbprint.parameters.c=True",
             ],
         )
     else:
-        run(f"examples/{notebook}.ipynb", [])
+        run(
+            f"examples/{notebook}.ipynb",
+            [
+                r"""+nbprint.outputs.naming='{{name}}'""",
+            ],
+        )
 
 
 @pytest.mark.skipif(_example_folder_does_not_exist(), reason="Examples - notebook direct")
@@ -90,6 +96,7 @@ def test_email_notebook(notebook, fmt):
             f"examples/{notebook}.ipynb",
             [
                 "nbprint/outputs=nbprint/email",
+                r"""+nbprint.outputs.naming='{{name}}'""",
                 f"++nbprint.outputs.target={fmt}",
                 f"+nbprint.outputs.to={environ['SMTP_USER']}",
                 f"+nbprint.outputs.smtp.host={environ['SMTP_HOST']}",
@@ -138,7 +145,7 @@ def test_multirun():
             "examples/basic.ipynb",
             [
                 "++callable=/nbprintx",
-                r"""+nbprint.outputs.naming='{{name}}-{{date}}-{{a}}'""",
+                r"""+nbprint.outputs.naming='{{name}}-{{a}}'""",
                 r"""+nbprintx.parameters='[{"a":1},{"a":2},{"a":3}]'""",
                 "++nbprint.outputs.execute=False",
             ],
@@ -170,7 +177,7 @@ def test_email_combine_multirun():
             [
                 "++callable=/nbprintx",
                 "nbprint/outputs=nbprint/email",
-                r"""+nbprint.outputs.naming='{{name}}-{{date}}-{{a}}'""",
+                r"""+nbprint.outputs.naming='{{name}}-{{a}}'""",
                 r"""+nbprintx.parameters='[{"a":1},{"a":2},{"a":3}]'""",
                 "++nbprint.outputs.target=notebook",
                 "++nbprint.outputs.execute=False",

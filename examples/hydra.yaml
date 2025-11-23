@@ -5,6 +5,7 @@ defaults:
   - _self_
 
 outputs:
+  naming: "{{name}}"
   root: ./outputs
 
 hydra:
