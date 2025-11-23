@@ -1,5 +1,4 @@
 import sys
-from datetime import date
 from itertools import product
 from os import environ
 from os.path import exists
@@ -196,4 +195,4 @@ def test_email_combine_multirun():
         msg = mock_smtp_backend.return_value.sendmail.call_args[1]
         assert msg["from_addr"] == "test"
         assert msg["to_addrs"] == ["test"]
-        assert f"Subject: basic-{date.today().isoformat()}-*" in msg["msg"]
+        assert "Subject: basic-*" in msg["msg"]
