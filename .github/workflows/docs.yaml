@@ -15,13 +15,13 @@ jobs:
       - uses: actions-ext/python/setup@main
       - uses: actions-ext/node/setup@main
       - name: Install pandoc
-        run: sudo apt install pandoc
       - name: Install dependencies
-        run: uv pip install .[develop]
-      - name: Install yardang
-        run: uv pip install yardang
-      - name: Install chromium
-        run: npx playwright install chromium
+        run: |
+          sudo apt install pandoc
+          uv pip install playwright
+          playwright install chromium
+          uv pip install .[develop]
+          uv pip install yardang
       - name: Run tests to generate HTML outputs
         run: make tests
       - name: Build docs
