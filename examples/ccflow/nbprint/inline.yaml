@@ -9,6 +9,7 @@ _target_: nbprint.Configuration
 
 outputs:
   _target_: nbprint.NBConvertOutputs
+  naming: "{{name}}"
   root: ./outputs
   target: "html"
 
