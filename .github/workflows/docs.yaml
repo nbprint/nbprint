@@ -14,9 +14,22 @@ jobs:
       - uses: actions/checkout@v5
       - uses: actions-ext/python/setup@main
       - uses: actions-ext/node/setup@main
-      - run: uv pip install .[develop]
-      - run: uv pip install yardang
-      - run: yardang build
+      - name: Install pandoc
+        run: sudo apt install pandoc
+      - name: Install dependencies
+        run: uv pip install .[develop]
+      - name: Install yardang
+        run: uv pip install yardang
+      - name: Install chromium
+        run: playwright install chromium
+      - name: Run tests to generate HTML outputs
+        run: make tests
+      - name: Copy HTML outputs to docs directory
+        run: |
+          mkdir -p docs/html/outputs
+          cp -r outputs/*.html docs/html/outputs/ || true
+      - name: Build docs
+        run: yardang build
       - uses: peaceiris/actions-gh-pages@v4
         with:
           publish_branch: gh-pages
