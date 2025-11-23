@@ -283,6 +283,7 @@ section-order = [
 ]
 
 [tool.yardang]
+cname = "nbprint.dev"
 pages = [
     "docs/src/background.md",
     "docs/src/architecture.md",
