@@ -47,19 +47,31 @@ body[data-theme="dark"] .logo-dark {
 
 
 /* Handle mermaid diagrams in dark mode */
-body[data-theme="light"] div.mermaid-container {
-    background-color: unset;
+body[data-theme="light"] .mermaid-container {
+    background-color: #fafafa;
 }
-body[data-theme="dark"] div.mermaid-container {
-    background-color: whitesmoke;
+body[data-theme="light"] pre.mermaid svg path {
+    stroke: black !important;
+}
+body[data-theme="dark"] .mermaid-container {
+    background-color: #222;
+}
+body[data-theme="dark"] pre.mermaid svg path {
+    stroke: white !important;
 }
 @media (prefers-color-scheme: dark) {
-    div.mermaid-container {
-        background-color: whitesmoke;
+    .mermaid-container {
+        background-color: #222;
+    }
+    pre.mermaid svg path {
+        stroke: white !important;
     }
 }
 @media (prefers-color-scheme: light) {
-    div.mermaid-container {
-        background-color: unset;
+    .mermaid-container {
+        background-color: #fafafa;
+    }
+    body[data-theme="dark"] pre.mermaid svg path {
+        stroke: black !important;
     }
 }
