@@ -129,15 +129,15 @@ class Configuration(CallableModel, BaseModel):
     def __setattr__(self, name: str, value) -> None:
         if name == "parameters" and self.parameters:
             value = BaseModel._to_type(value, Parameters) if isinstance(value, dict) and "type_" in value else PapermillParameters.model_validate(value)
-
-            if not type(value) is not type(self.parameters):
+            if type(value) is not type(self.parameters):
                 # replace wholesale
                 super().__setattr__(name, value)
             else:
                 # Union new parameters with existing parameters
-                for k, v in value.model_dump(mode="json").items() if isinstance(value, Parameters) else value.items():
+                for k, v in value.model_dump(mode="json", exclude_unset=True, exclude={"type_"}).items() if isinstance(value, Parameters) else value.items():
                     setattr(self.parameters, k, v)
             self._validate()
+            return None
         return super().__setattr__(name, value)
 
     @staticmethod
