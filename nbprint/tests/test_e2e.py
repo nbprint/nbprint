@@ -141,7 +141,7 @@ def test_run_notebook_ccflow_with_notebook(parameters):
 def test_multirun():
     with patch("nbconvert.nbconvertapp.main") as mock_nbconvert_main:
         ret = run(
-            "examples/basic.ipynb",
+            "examples/parameters.ipynb",
             [
                 "++callable=/nbprintx",
                 r"""+nbprint.outputs.naming='{{name}}-{{a}}'""",
@@ -150,6 +150,12 @@ def test_multirun():
             ],
         )
         assert len(ret.outputs) == 3
+
+        for i, out in enumerate(ret.outputs):
+            text = out.notebook.read_text()
+            assert f"a = {i + 1}" in text
+            assert "b = 2.3" in text
+            assert "c = 'abc'" in text
 
         # Ensure that nbconvert was only called exactly 3 times (once per output)
         assert mock_nbconvert_main.call_count == 3
