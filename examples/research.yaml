@@ -9,11 +9,19 @@ outputs:
 context:
   _target_:  nbprint.example.ExampleResearchReferencesContext
 
+page:
+  _target_: nbprint.Page
+  bottom_right:
+    _target_: nbprint.PageRegion
+    content:
+      _target_: nbprint.PageNumber
+
+
 content:
   - _target_:  nbprint.example.ExampleResearchHeader
     content:
       - _target_:  nbprint.example.ExampleResearchTitle
-        title: "An Example Research Publication Title"
+        title: "Analysis of Superstore Time-Series Data using Computational Notebooks"
 
       - _target_:  nbprint.example.ExampleResearchAuthors
         content:
@@ -32,56 +40,103 @@ content:
       - _target_:  nbprint.example.ExampleResearchSectionTitle
         title: Abstract
       - _target_:  nbprint.example.ExampleResearchSectionText
-        text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      - _target_:  nbprint.example.ExampleResearchSectionText
-        text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        text: >
+          This paper explores the use of computational notebooks for the analysis and visualization of business intelligence data. We present a case study using a synthetic 'Superstore' dataset, focusing on time-series analysis of sales and profit data. The study demonstrates a reproducible workflow for data processing, visualization, and annotation, leveraging the NBPrint framework to generate a publication-quality report directly from the analytical code. Our findings highlight key trends and seasonal patterns in the data, showcasing the power of integrating narrative and computation for data-driven storytelling.
+
       - _target_:  nbprint.example.ExampleResearchSectionTitle
         title: 1. Introduction
       - _target_:  nbprint.example.ExampleResearchSectionText
-        text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        text: >
+          In the field of data analytics, the ability to effectively communicate findings is as critical as the analysis itself. Traditional reporting methods often create a disconnect between the analysis (code, queries) and the final report (static documents, slides). This can lead to issues with reproducibility, version control, and collaboration. Computational notebooks, such as Jupyter, have gained popularity by allowing analysts to combine live code, equations, visualizations, and narrative text in a single document.
       - _target_:  nbprint.example.ExampleResearchSectionText
-        text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        text: >
+          This research utilizes the `nbprint` library, a framework designed to streamline the conversion of these notebooks into polished, print-oriented media. By defining the document structure declaratively, researchers can automate the production of reports, ensuring that the figures and results are always in sync with the underlying code. This study applies this methodology to a time-series dataset from a fictional superstore to illustrate the end-to-end process.
+
+      - _target_:  nbprint.example.ExampleResearchSectionTitle
+        title: 2. Data and Methods
       - _target_:  nbprint.example.ExampleResearchSectionText
-        text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        text: >
+          The dataset used in this analysis contains transactional data for a superstore, including information on sales, profits, product categories, and order dates. For the purpose of this time-series analysis, we focus on the temporal distribution of sales and profits.
       - _target_:  nbprint.example.ExampleResearchSectionText
-        text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        text: >
+          The following code block demonstrates the initial data loading and preparation steps. We use the `pandas` library for data manipulation and `matplotlib` and `seaborn` for visualization. The `superstore` library is a helper module providing access to the dataset. The table below shows a preview of the data.
       - _target_:  nbprint.ContentCode
         content: |
+          # Import necessary libraries and set plotting style
           %matplotlib inline
           import pandas as pd
           import matplotlib.pyplot as plt
           import superstore as sup
           import seaborn as sns
+          from IPython.display import display, HTML
 
-          sns.set()
+          sns.set_theme(style="whitegrid")
 
-
+          # Load time series data from the helper library
           df = pd.DataFrame(sup.getTimeSeriesData())
 
-          # add to context
+          # Store the dataframe in the notebook's context for potential later use
           nbprint_ctx.df = df
 
-          fig = plt.figure(1, clear=True, figsize=(12,8));
-          ax = fig.add_subplot(111);
+          # Display the first few rows of the dataframe as a styled HTML table
+          display(HTML(df.head().to_html(classes='table table-striped', index=False)))
+      - _target_:  nbprint.example.ExampleResearchSectionText
+        text: >
+          With the data loaded, we can proceed to visualize the time-series. The primary visualization for this report is a line plot showing the trends of different metrics over time. The plot is generated programmatically and includes a descriptive caption, as shown in the next section.
 
-          _ = df.plot(ax=ax);
-          _ = fig.text(.3, -.05, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, \n'
-                                'sed do eiusmod tempor incididunt ut labore et dolore magna \n'
-                                'aliqua. Ut enim ad minim veniam, quis nostrud exercitation \n'
-                                'ullamco laboris nisi ut aliquip ex ea commodo consequat. \n'
-                                'Duis aute irure dolor in reprehenderit in voluptate velit.',
-                    fontsize=12,
-                    wrap=True,
-                    ha='left');
-          _ = fig.text(.3, .06, 'This Image:',
-                    fontsize=12,
-                    weight='bold',
-                    wrap=True,
-                    ha='left');
+      - _target_:  nbprint.example.ExampleResearchSectionTitle
+        title: 3. Results and Visualization
+      - _target_:  nbprint.example.ExampleResearchSectionText
+        text: The core of our analysis is the visualization of the sales and profit time-series data. The following figure was generated directly from our notebook environment and is embedded in this report.
+      - _target_:  nbprint.ContentCode
+        content: |
+          fig = plt.figure(1, clear=True, figsize=(12, 8))
+          ax = fig.add_subplot(111)
+
+          # Plot the entire dataframe on the given axes
+          nbprint_ctx.df.plot(ax=ax)
+          ax.set_title("Superstore Sales and Profit Over Time", fontsize=16)
+          ax.set_xlabel("Date")
+          ax.set_ylabel("Amount (USD)")
+          ax.legend(title="Metric")
+
+          # Add a detailed, multi-line caption below the figure
+          caption_text = (
+              "This figure displays the aggregated sales and profit data over the entire sample period. "
+              "Noticeable peaks and troughs may suggest seasonal effects or specific sales events. "
+              "The ability to generate and caption figures within the same workflow ensures that the "
+              "visual evidence is tightly coupled with the analytical process, a core principle of reproducible research."
+          )
+          _ = fig.text(0.5, -0.10, caption_text,
+                       fontsize=12, wrap=True, ha='center')
+          _ = fig.text(0.5, 0, 'Figure 1: Time-Series of Superstore Metrics',
+                       fontsize=14, weight='bold', ha='center')
+          plt.tight_layout(rect=[0, 0.05, 1, 1]) # Adjust layout to prevent title/caption overlap
           plt.show()
+
+      - _target_:  nbprint.example.ExampleResearchSectionTitle
+        title: 4. Discussion
       - _target_:  nbprint.example.ExampleResearchSectionText
-        text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        text: >
+          The visualization in Figure 1 clearly shows the volatility and general trends in the superstore's performance. The plot demonstrates a consistent seasonal pattern, with sales typically peaking towards the end of the year, which is a common trend in retail. The profit metric, while generally following the sales trend, exhibits much higher volatility.
       - _target_:  nbprint.example.ExampleResearchSectionText
-        text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        text: >
+          The workflow presented here offers significant advantages. By codifying the process of generating figures and their captions, we minimize the risk of manual error and ensure that any updates to the data or analysis are automatically reflected in the final report. This is a powerful paradigm for research and business reporting alike.
+
+      - _target_:  nbprint.example.ExampleResearchSectionTitle
+        title: 5. Conclusion
       - _target_:  nbprint.example.ExampleResearchSectionText
-        text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        text: >
+          We have successfully demonstrated a complete workflow for analyzing time-series data and generating a high-quality report using `nbprint`. This approach promotes reproducibility, efficiency, and clarity in scientific and data-driven communication. By treating the report itself as a computational artifact, we bridge the gap between analysis and publication, paving the way for more dynamic and reliable research outputs.
+
+      - _target_:  nbprint.example.ExampleResearchSectionTitle
+        title: 6. References
+      - _target_:  nbprint.example.ExampleResearchSectionText
+        text: |
+          [1] "Pérez, F., & Granger, B. E. (2007). IPython: a system for interactive scientific computing. Computing in Science & Engineering, 9(3), 21-29."
+      - _target_:  nbprint.example.ExampleResearchSectionText
+        text: |
+          [2] "McKinney, W. (2010). Data structures for statistical computing in python. In Proceedings of the 9th Python in Science Conference (Vol. 445, pp. 51-56)."
+      - _target_:  nbprint.example.ExampleResearchSectionText
+        text: |
+          [3] "Hunter, J. D. (2007). Matplotlib: A 2D graphics environment. Computing in science & engineering, 9(3), 90-95."
