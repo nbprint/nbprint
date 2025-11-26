@@ -41,6 +41,7 @@ h1 {
   font-weight: bold !important;
   font-size: 25px !important;
   margin: auto !important;
+  text-align: center;
 }
     """
 
