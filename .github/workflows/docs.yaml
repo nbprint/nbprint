@@ -23,7 +23,7 @@ jobs:
           uv pip install yardang
       - name: Run tests to generate HTML outputs
         run: |
-          make tests
+          make test-py
           rm -rf outputs/*.ipynb
       - name: Build docs
         run: yardang build
