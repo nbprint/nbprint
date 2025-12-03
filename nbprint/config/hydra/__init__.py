@@ -51,9 +51,15 @@ def load_config(
         if "nbprint" not in cfg:
             _logger.warning("No 'nbprint' config found in the provided configuration. Assuming entire config is for nbprint.")
             with open_dict(cfg):
-                if "_target_" not in cfg:
-                    cfg._target_ = "nbprint.Configuration"
                 cfg.nbprint = cfg.copy()
+
+        if "_target_" not in cfg.nbprint:
+            with open_dict(cfg.nbprint):
+                cfg.nbprint._target_ = "nbprint.Configuration"
+
+        if "debug" not in cfg.nbprint:
+            with open_dict(cfg.nbprint):
+                cfg.nbprint.debug = False
 
         # bridge hydra and non-hydra
         if "name" not in cfg.nbprint:
