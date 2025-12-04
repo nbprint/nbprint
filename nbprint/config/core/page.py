@@ -3,15 +3,18 @@ from typing import TYPE_CHECKING, Tuple
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
 
-from .base import BaseModel, Role, _append_or_extend
-from .common import PageOrientation, PageSize, Style
-from .exceptions import NBPrintNullCellError
+from nbprint.config.base import BaseModel, Role, _append_or_extend
+from nbprint.config.common import PageOrientation, PageSize, Style
+from nbprint.config.exceptions import NBPrintNullCellError
+
+from .content import Section
 
 if TYPE_CHECKING:
-    from .core.config import Configuration
+    from .config import Configuration
 
 __all__ = (
     "Page",
+    "PageGlobal",
     "PageNumber",
     "PageRegion",
     "PageRegionContent",
@@ -85,11 +88,6 @@ class Page(BaseModel):
     right: PageRegion | None = None
     right_top: PageRegion | None = None
     right_bottom: PageRegion | None = None
-
-    size: PageSize | Tuple[float, float] | None = Field(default=PageSize.letter)
-    orientation: PageOrientation | None = Field(default=PageOrientation.portrait)
-
-    pages: list["Page"] | None = Field(default_factory=list)
 
     css: str = ""
 
@@ -181,23 +179,6 @@ class Page(BaseModel):
     def convert_right_bottom_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "right-bottom")
 
-    def render(self, **_) -> None:
-        if "@page { size:" not in self.css:
-            if isinstance(self.size, tuple):
-                self.css = (
-                    self.css
-                    + f"""
-    @page {{ size: {self.size[0]}in {self.size[1]}in; }}
-                """
-                )
-            else:
-                self.css = (
-                    self.css
-                    + f"""
-    @page {{ size: {self.size.value} {self.orientation.value}; }}
-                """
-                )
-
     def generate(self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str = "page", **_) -> NotebookNode | list[NotebookNode] | None:
         cells = []
 
@@ -231,25 +212,53 @@ class Page(BaseModel):
             if getattr(self, set_attr) is not None:
                 # pass in `self` as `parent here`
                 _append_or_extend(cells, getattr(self, set_attr).generate(metadata=metadata, config=config, parent=self, attr=set_attr))
-        for i, cell in enumerate(self.pages):
-            _append_or_extend(
-                cells,
-                cell.generate(metadata=metadata, config=config, parent=self, attr="pages", counter=i),
-            )
+
+        if hasattr(self, "pages") and self.pages is not None:
+            for i, cell in enumerate(self.pages):
+                _append_or_extend(
+                    cells,
+                    cell.generate(metadata=metadata, config=config, parent=self, attr="pages", counter=i),
+                )
         for cell in cells:
             if cell is None:
                 raise NBPrintNullCellError
         return cells
+
+
+class PageGlobal(Page):
+    size: PageSize | Tuple[float, float] | None = Field(default=PageSize.letter)
+    orientation: PageOrientation | None = Field(default=PageOrientation.portrait)
+
+    pages: dict[Section, "Page"] | None = Field(default_factory=dict)
+
+    css: str = ""
+
+    def render(self, **_) -> None:
+        if "@page { size:" not in self.css:
+            if isinstance(self.size, tuple):
+                self.css = (
+                    self.css
+                    + f"""
+    @page {{ size: {self.size[0]}in {self.size[1]}in; }}
+                """
+                )
+            else:
+                self.css = (
+                    self.css
+                    + f"""
+    @page {{ size: {self.size.value} {self.orientation.value}; }}
+                """
+                )
 
     @field_validator("pages", mode="before")
     @classmethod
     def convert_pages_from_obj(cls, v) -> "Page":
         if v is None:
             return []
-        if isinstance(v, list):
-            for i, element in enumerate(v):
+        if isinstance(v, dict):
+            for k, element in v.items():
                 if isinstance(element, str):
-                    v[i] = Page(type_=element)
+                    v[k] = Page(type_=element)
                 elif isinstance(element, dict):
-                    v[i] = BaseModel._to_type(element)
+                    v[k] = BaseModel._to_type(element)
         return v
