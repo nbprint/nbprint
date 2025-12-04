@@ -332,13 +332,17 @@ class Configuration(CallableModel, BaseModel):
         cell.metadata.nbprint.data = ""
 
         # add extras
+        cell.metadata.nbprint.name = self.name
         cell.metadata.nbprint.debug = self.debug
         cell.metadata.nbprint.pagedjs = self.pagedjs
 
-        # add resources
-        # TODO: do this or no?
-        # cell.metadata.nbprint.resources = {k: v.model_dump_json(by_alias=True) for k, v in self.resources.items()}
+        # add core elements
+        # NOTE: double-json to ensure pydantic types are properly serialized
         cell.metadata.nbprint.outputs = self.outputs.model_dump_json(by_alias=True)
+        cell.metadata.nbprint.parameters = self.parameters.model_dump_json(by_alias=True)
+        cell.metadata.nbprint.page = self.page.model_dump_json(by_alias=True)
+        # Omit context to reduce size
+        # Omit content, will already be present in the notebook
         return cell
 
     def _generate_resources_cells(self, metadata: dict | None = None) -> NotebookNode:

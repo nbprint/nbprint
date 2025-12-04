@@ -3,6 +3,12 @@ import { build as buildpagedjs } from "./nbconvert";
 export class NBPrint {
   constructor({ configuration, notebook_info }) {
     this._configuration = configuration;
+    ["outputs", "parameters", "page"].forEach((key) => {
+      if (this._configuration[key] !== undefined) {
+        // deserialize nested JSON
+        this._configuration[key] = JSON.parse(this._configuration[key]);
+      }
+    });
     this._notebook_info = notebook_info;
   }
 
@@ -42,7 +48,7 @@ export class NBPrint {
   }
 
   async build() {
-    await buildpagedjs();
+    await buildpagedjs(this._configuration);
   }
 
   async postprocess() {
