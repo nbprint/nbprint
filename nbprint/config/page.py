@@ -71,10 +71,14 @@ class PageRegion(BaseModel):
 class Page(BaseModel):
     top: PageRegion | None = None
     top_left: PageRegion | None = None
+    top_left_corner: PageRegion | None = None
     top_right: PageRegion | None = None
+    top_right_corner: PageRegion | None = None
     bottom: PageRegion | None = None
     bottom_left: PageRegion | None = None
+    bottom_left_corner: PageRegion | None = None
     bottom_right: PageRegion | None = None
+    bottom_right_corner: PageRegion | None = None
     left: PageRegion | None = None
     left_top: PageRegion | None = None
     left_bottom: PageRegion | None = None
@@ -107,10 +111,20 @@ class Page(BaseModel):
     def convert_top_left_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "top-left")
 
+    @field_validator("top_left_corner", mode="before")
+    @classmethod
+    def convert_top_left_corner_from_obj(cls, v) -> PageRegion:
+        return Page.convert_region_from_obj(v, "top-left-corner")
+
     @field_validator("top_right", mode="before")
     @classmethod
     def convert_top_right_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "top-right")
+
+    @field_validator("top_right_corner", mode="before")
+    @classmethod
+    def convert_top_right_corner_from_obj(cls, v) -> PageRegion:
+        return Page.convert_region_from_obj(v, "top-right-corner")
 
     @field_validator("bottom", mode="before")
     @classmethod
@@ -122,10 +136,20 @@ class Page(BaseModel):
     def convert_bottom_left_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "bottom-left")
 
+    @field_validator("bottom_left_corner", mode="before")
+    @classmethod
+    def convert_bottom_left_corner_from_obj(cls, v) -> PageRegion:
+        return Page.convert_region_from_obj(v, "bottom-left-corner")
+
     @field_validator("bottom_right", mode="before")
     @classmethod
     def convert_bottom_right_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "bottom-right")
+
+    @field_validator("bottom_right_corner", mode="before")
+    @classmethod
+    def convert_bottom_right_corner_from_obj(cls, v) -> PageRegion:
+        return Page.convert_region_from_obj(v, "bottom-right-corner")
 
     @field_validator("left", mode="before")
     @classmethod
@@ -189,10 +213,14 @@ class Page(BaseModel):
         for set_attr in (
             "top",
             "top_left",
+            "top_left_corner",
             "top_right",
+            "top_right_corner",
             "bottom",
             "bottom_left",
+            "bottom_left_corner",
             "bottom_right",
+            "bottom_right_corner",
             "left",
             "left_top",
             "left_bottom",
