@@ -17,11 +17,11 @@ from nbprint import __version__
 from nbprint.config.base import BaseModel, Role, _append_or_extend
 from nbprint.config.content import Content, ContentCode, ContentMarkdown
 from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
-from nbprint.config.page import Page
 
 from .content import ContentMarshall
 from .context import Context
 from .outputs import Outputs, OutputsProcessing
+from .page import Page
 from .parameters import PapermillParameters, Parameters
 
 __all__ = (
