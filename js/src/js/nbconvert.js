@@ -17,11 +17,23 @@ export class handlers extends Handler {
   }
 }
 
-export const build = async () => {
+export const build = async (configuration) => {
   // Attach CSS Selector to body so it can be used in downstream CSS
   // Do this before any pagedjs processing so that elements can adjust
   // their styles before chunking or previewing
   document.body.classList.add("pagedjs");
+
+  // Attach orientation class to body
+  if (configuration.page.orientation) {
+    document.body.setAttribute(
+      `data-pagedjs-orientation`,
+      configuration.page.orientation,
+    );
+  }
+
+  if (configuration.page.size) {
+    document.body.setAttribute(`data-pagedjs-size`, configuration.page.size);
+  }
 
   const config = {
     auto: true,
