@@ -88,13 +88,9 @@ jobs:
     - name: Upload coverage
       uses: codecov/codecov-action@v5
 
-<<<<<<< before updating
     - name: Upload generated reports (html)
-      uses: actions/upload-artifact@v5
-      id: upload-reports-html
-=======
     - uses: actions/upload-artifact@v6
->>>>>>> after updating
+      id: upload-reports-html
       with:
         name: reports-html
         path: 'outputs/*.html'
@@ -103,7 +99,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
 
     - name: Upload generated reports (pdf)
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       id: upload-reports-pdf
       with:
         name: reports-pdf
