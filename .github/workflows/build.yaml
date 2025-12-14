@@ -89,7 +89,7 @@ jobs:
       uses: codecov/codecov-action@v5
 
     - name: Upload generated reports (html)
-    - uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v6
       id: upload-reports-html
       with:
         name: reports-html
