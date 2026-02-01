@@ -1,9 +1,12 @@
 /* Wide main page */
 .content {
-    flex: 1;
+    flex: 3;
 }
 aside.sidebar-drawer {
     width: unset;
+}
+aside.toc-drawer {
+    flex: 1;
 }
 
 /* Left-align tables */
