@@ -1,11 +1,16 @@
 [build-system]
-requires = ["hatchling", "hatch-js"]
+requires = [
+    "hatchling",
+    "hatch-js",
+]
 build-backend="hatchling.build"
 
 [project]
 name = "nbprint"
 version = "0.11.2"
-authors = [{name = "the nbprint authors", email = "t.paine154@gmail.com"}]
+authors = [
+    {name = "the nbprint authors", email = "t.paine154@gmail.com"},
+]
 description = "A framework for customizing NBConvert templates and building reports"
 readme = "README.md"
 license = { text = "Apache-2.0" }
@@ -70,6 +75,8 @@ develop = [
     "pytest-cov",
     "ruff>=0.9,<0.15",
     "twine",
+    "ty",
+    "uv",
     "wheel",
     "yardang",
     # notebook deps
@@ -173,8 +180,12 @@ exclude = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["nbprint"]
-exclude = ["/js"]
+packages = [
+    "nbprint",
+]
+exclude = [
+    "/js",
+]
 
 [tool.hatch.build.targets.wheel.shared-data]
 "nbprint/templates/nbprint" = "share/jupyter/nbconvert/templates/nbprint"
@@ -194,14 +205,19 @@ targets = [
 ]
 
 [tool.pytest.ini_options]
-addopts = ["-vvv", "--junitxml=junit.xml"]
+addopts = [
+    "-vvv",
+    "--junitxml=junit.xml",
+]
 testpaths = "nbprint/tests"
 
 [tool.ruff]
 line-length = 160
 
 [tool.ruff.lint]
-select = ["ALL"]
+select = [
+    "ALL",
+]
 ignore = [
     # TODO:remove first
     "D101",
@@ -256,7 +272,9 @@ ignore = [
 [tool.ruff.lint.isort]
 combine-as-imports = true
 default-section = "third-party"
-known-first-party = ["nbprint"]
+known-first-party = [
+    "nbprint",
+]
 section-order = [
     "future",
     "standard-library",
@@ -266,7 +284,10 @@ section-order = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["F401", "F403"]
+"__init__.py" = [
+    "F401",
+    "F403",
+]
 "nbprint/tests/*" = [
     "ANN",
     "D",
@@ -284,6 +305,7 @@ section-order = [
 
 [tool.yardang]
 cname = "nbprint.dev"
+root = "README.md"
 pages = [
     "docs/src/background.md",
     "docs/src/architecture.md",
