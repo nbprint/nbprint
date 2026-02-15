@@ -7,14 +7,10 @@ build-backend="hatchling.build"
 
 [project]
 name = "nbprint"
-<<<<<<< before updating
 version = "0.11.2"
-authors = [{name = "the nbprint authors", email = "t.paine154@gmail.com"}]
-=======
 authors = [
-    {name = "the nbprint authors", email = "3105306+timkpaine@users.noreply.github.com"},
+    {name = "the nbprint authors", email = "t.paine154@gmail.com"},
 ]
->>>>>>> after updating
 description = "A framework for customizing NBConvert templates and building reports"
 readme = "README.md"
 license = { text = "Apache-2.0" }
@@ -170,13 +166,10 @@ packages = [
     "nbprint",
     "js",
 ]
-<<<<<<< before updating
 include = [
     "LICENSE",
     "README.md",
 ]
-=======
->>>>>>> after updating
 exclude = [
     "/.github",
     "/.gitignore",
@@ -207,12 +200,8 @@ path = "js"
 build_cmd = "build"
 tool = "pnpm"
 targets = [
-<<<<<<< before updating
     "nbprint/templates/nbprint/static/nbprint.css",
     "nbprint/extension/index.js",
-=======
-    "nbprint/extension/cdn/index.js",
->>>>>>> after updating
 ]
 
 [tool.pytest.ini_options]
@@ -226,8 +215,9 @@ testpaths = "nbprint/tests"
 line-length = 160
 
 [tool.ruff.lint]
-<<<<<<< before updating
-select = ["ALL"]
+select = [
+    "ALL",
+]
 ignore = [
     # TODO:remove first
     "D101",
@@ -277,22 +267,14 @@ ignore = [
     "TC002", # typing-only-third-party-import Move third-party import {} into a type-checking block
     "TD002", # missing-todo-author - Missing author in TODO; try: # TODO(<author_name>): ... or # TODO @<author_name>: ...
     "TD003", # missing-todo-link - Missing issue link on the line following this TODO
-=======
-extend-select = [
-    "I",
->>>>>>> after updating
 ]
 
 [tool.ruff.lint.isort]
 combine-as-imports = true
 default-section = "third-party"
-<<<<<<< before updating
-known-first-party = ["nbprint"]
-=======
 known-first-party = [
     "nbprint",
 ]
->>>>>>> after updating
 section-order = [
     "future",
     "standard-library",
@@ -302,8 +284,10 @@ section-order = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-<<<<<<< before updating
-"__init__.py" = ["F401", "F403"]
+"__init__.py" = [
+    "F401",
+    "F403",
+]
 "nbprint/tests/*" = [
     "ANN",
     "D",
@@ -328,16 +312,9 @@ pages = [
     "docs/src/api.md",
 ]
 use-autoapi = false
-=======
-"__init__.py" = [
-    "F401",
-    "F403",
-]
 
 [tool.yardang]
 title = "nbprint"
 root = "README.md"
 pages = []
 use-autoapi = true
-
->>>>>>> after updating
