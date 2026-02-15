@@ -305,6 +305,7 @@ section-order = [
 
 [tool.yardang]
 cname = "nbprint.dev"
+root = "README.md"
 pages = [
     "docs/src/background.md",
     "docs/src/architecture.md",
@@ -312,9 +313,3 @@ pages = [
     "docs/src/api.md",
 ]
 use-autoapi = false
-
-[tool.yardang]
-title = "nbprint"
-root = "README.md"
-pages = []
-use-autoapi = true
