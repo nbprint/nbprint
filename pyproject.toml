@@ -160,17 +160,9 @@ include = [
     "README.md",
 ]
 exclude = [
-<<<<<<< before updating
-    "/.github",
-    "/.gitignore",
-    "/dist",
-    "/examples",
-    "/js/dist",
-    "/js/node_modules",
-=======
+    "examples",
     "js/dist",
     "js/node_modules",
->>>>>>> after updating
 ]
 
 [tool.hatch.build.targets.wheel]
