@@ -197,9 +197,9 @@ class Configuration(CallableModel, BaseModel):
         nbprint_cell_meta["content"] = cell.source
 
         # Default handling: treat as code or markdown content
-        if cell.cell_type in {"code"}:
+        if cell.cell_type == "code":
             content = ContentCode.model_validate(nbprint_cell_meta)
-        elif cell.cell_type in {"markdown"}:
+        elif cell.cell_type == "markdown":
             content = ContentMarkdown.model_validate(nbprint_cell_meta)
         else:
             # Skip, log warning
