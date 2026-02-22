@@ -156,8 +156,10 @@ nbprint/labextension
 # Rust
 target
 
-<<<<<<< before updating
-/outputs
+# Hydra
+outputs/
+multirun/
+
 /output
 nbprint/extension/*
 nbprint/templates/nbprint/static/*
@@ -169,8 +171,3 @@ examples/output
 # Plugins testing
 nbprint_example_plugin*
 *.csv
-=======
-# Hydra
-outputs/
-multirun/
->>>>>>> after updating
