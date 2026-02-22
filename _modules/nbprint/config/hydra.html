@@ -299,7 +299,7 @@
     <span class="c1"># TODO: right now, nbprint runs off a specific config file, whereas</span>
     <span class="c1"># hydra takes a config dir and config name. For now we use the nbprint</span>
     <span class="c1"># style, so we adjust accordingly</span>
-    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.yaml&quot;</span><span class="p">,):</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.yaml&quot;</span><span class="p">:</span>
         <span class="n">config_dir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">absolute</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">())</span>
         <span class="n">config_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="n">is_default</span> <span class="o">=</span> <span class="kc">False</span>
@@ -337,7 +337,7 @@
 
         <span class="c1"># If its a notebook, parse it out and run directly</span>
         <span class="c1"># Read notebook contents and shove into config</span>
-        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.ipynb&quot;</span><span class="p">,):</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.ipynb&quot;</span><span class="p">:</span>
             <span class="k">with</span> <span class="n">open_dict</span><span class="p">(</span><span class="n">cfg</span><span class="p">):</span>
                 <span class="n">cfg</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">notebook</span> <span class="o">=</span> <span class="n">path</span>
 

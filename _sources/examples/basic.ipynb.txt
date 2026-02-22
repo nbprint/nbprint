@@ -141,12 +141,12 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 14,
+   "execution_count": null,
    "id": "6bee1e5d",
    "metadata": {},
    "outputs": [],
    "source": [
-    "from superstore import superstore, getTimeSeries\n",
+    "from superstore import superstore, timeseries\n",
     "from IPython.display import JSON, Markdown, FileLink"
    ]
   },
@@ -239,11 +239,11 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 26,
+   "execution_count": null,
    "id": "83a39cf2",
    "metadata": {
     "nbprint": {
-        "output": "image"
+     "output": "image"
     }
    },
    "outputs": [
@@ -259,7 +259,7 @@
     }
    ],
    "source": [
-    "getTimeSeries().plot();"
+    "timeseries().plot();"
    ]
   },
   {
@@ -276,7 +276,7 @@
    "id": "757e342c",
    "metadata": {
     "nbprint": {
-        "output": "bool"
+     "output": "bool"
     }
    },
    "outputs": [
@@ -309,7 +309,7 @@
    "id": "0a08ca26",
    "metadata": {
     "nbprint": {
-        "output": "string"
+     "output": "string"
     }
    },
    "outputs": [

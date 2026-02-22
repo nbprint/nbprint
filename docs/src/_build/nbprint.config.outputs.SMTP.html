@@ -373,20 +373,7 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-</details></p><dl class="field-list simple">
-<dt class="field-odd">Fields<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">host</span> <span class="pre">(str)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">password</span> <span class="pre">(str</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">port</span> <span class="pre">(int</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ssl</span> <span class="pre">(bool</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">timeout</span> <span class="pre">(int</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tls</span> <span class="pre">(bool</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">user</span> <span class="pre">(str</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py attribute pydantic_field">
+</details></p><dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="nbprint.config.outputs.SMTP.host">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">host</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"> <span class="pre">[Required]</span></em><a class="headerlink" href="#nbprint.config.outputs.SMTP.host" title="Link to this definition">¶</a></dt>
 <dd><p>SMTP server host</p>
@@ -426,21 +413,6 @@
 <dt class="sig sig-object py" id="nbprint.config.outputs.SMTP.timeout">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">30</span></em><a class="headerlink" href="#nbprint.config.outputs.SMTP.timeout" title="Link to this definition">¶</a></dt>
 <dd><p>Timeout for SMTP connection in seconds</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="nbprint.config.outputs.SMTP.model_post_init">
-<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#nbprint.config.outputs.SMTP.model_post_init" title="Link to this definition">¶</a></dt>
-<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
-<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> – The BaseModel instance.</p></li>
-<li><p><strong>context</strong> – The context.</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
@@ -511,7 +483,6 @@
 <li><a class="reference internal" href="#nbprint.config.outputs.SMTP.tls"><code class="docutils literal notranslate"><span class="pre">SMTP.tls</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.outputs.SMTP.ssl"><code class="docutils literal notranslate"><span class="pre">SMTP.ssl</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.outputs.SMTP.timeout"><code class="docutils literal notranslate"><span class="pre">SMTP.timeout</span></code></a></li>
-<li><a class="reference internal" href="#nbprint.config.outputs.SMTP.model_post_init"><code class="docutils literal notranslate"><span class="pre">SMTP.model_post_init()</span></code></a></li>
 </ul>
 </li>
 </ul>

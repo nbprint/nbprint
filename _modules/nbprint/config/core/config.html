@@ -469,9 +469,9 @@
         <span class="n">nbprint_cell_meta</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">source</span>
 
         <span class="c1"># Default handling: treat as code or markdown content</span>
-        <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;code&quot;</span><span class="p">}:</span>
+        <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span>
             <span class="n">content</span> <span class="o">=</span> <span class="n">ContentCode</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">nbprint_cell_meta</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;markdown&quot;</span><span class="p">}:</span>
+        <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s2">&quot;markdown&quot;</span><span class="p">:</span>
             <span class="n">content</span> <span class="o">=</span> <span class="n">ContentMarkdown</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">nbprint_cell_meta</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Skip, log warning</span>

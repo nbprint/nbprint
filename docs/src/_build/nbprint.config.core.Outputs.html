@@ -407,21 +407,7 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-</details></p><dl class="field-list simple">
-<dt class="field-odd">Fields<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">embedded</span> <span class="pre">(bool)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hook</span> <span class="pre">(ccflow.exttypes.pyobjectpath.PyObjectPath</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ignore</span> <span class="pre">(bool)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">naming</span> <span class="pre">(str)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">postprocess</span> <span class="pre">(ccflow.exttypes.pyobjectpath.PyObjectPath</span> <span class="pre">|</span> <span class="pre">None)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">role</span> <span class="pre">(nbprint.config.base.Role)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">root</span> <span class="pre">(pathlib.Path)</span></code></p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tags</span> <span class="pre">(list[str])</span></code></p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py attribute pydantic_field">
+</details></p><dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="nbprint.config.core.Outputs.root">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Path</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PosixPath('/home/runner/work/nbprint/nbprint/outputs')</span></em><a class="headerlink" href="#nbprint.config.core.Outputs.root" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -503,21 +489,6 @@ This will be called before the runtime of the notebook, use it for code generati
 </section>
 </dd></dl>
 
-<dl class="py method">
-<dt class="sig sig-object py" id="nbprint.config.core.Outputs.model_post_init">
-<span class="sig-name descname"><span class="pre">model_post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#nbprint.config.core.Outputs.model_post_init" title="Link to this definition">¶</a></dt>
-<dd><p>This function is meant to behave like a BaseModel method to initialise private attributes.</p>
-<p>It takes context as an argument since that’s what pydantic-core passes when calling it.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>self</strong> – The BaseModel instance.</p></li>
-<li><p><strong>context</strong> – The context.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -592,7 +563,6 @@ This will be called before the runtime of the notebook, use it for code generati
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.output"><code class="docutils literal notranslate"><span class="pre">Outputs.output</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.run"><code class="docutils literal notranslate"><span class="pre">Outputs.run()</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.core.Outputs.generate"><code class="docutils literal notranslate"><span class="pre">Outputs.generate()</span></code></a></li>
-<li><a class="reference internal" href="#nbprint.config.core.Outputs.model_post_init"><code class="docutils literal notranslate"><span class="pre">Outputs.model_post_init()</span></code></a></li>
 </ul>
 </li>
 </ul>
