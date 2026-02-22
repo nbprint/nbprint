@@ -30,7 +30,7 @@ def load_config(
     # TODO: right now, nbprint runs off a specific config file, whereas
     # hydra takes a config dir and config name. For now we use the nbprint
     # style, so we adjust accordingly
-    if path.suffix in (".yaml",):
+    if path.suffix == ".yaml":
         config_dir = str(path.parent.absolute().resolve())
         config_name = str(path.name)
         is_default = False
@@ -68,7 +68,7 @@ def load_config(
 
         # If its a notebook, parse it out and run directly
         # Read notebook contents and shove into config
-        if path.suffix in (".ipynb",):
+        if path.suffix == ".ipynb":
             with open_dict(cfg):
                 cfg.nbprint.notebook = path
 

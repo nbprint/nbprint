@@ -64,7 +64,6 @@ content:
         content: |
           # Import necessary libraries and set plotting style
           %matplotlib inline
-          import pandas as pd
           import matplotlib.pyplot as plt
           import superstore as sup
           import seaborn as sns
@@ -73,7 +72,7 @@ content:
           sns.set_theme(style="whitegrid")
 
           # Load time series data from the helper library
-          df = pd.DataFrame(sup.getTimeSeriesData())
+          df = sup.timeseries()
 
           # Store the dataframe in the notebook's context for potential later use
           nbprint_ctx.df = df

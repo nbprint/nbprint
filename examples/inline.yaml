@@ -97,7 +97,7 @@ content:
       import matplotlib.pyplot as plt
       import superstore as sup
 
-      df = sup.getTimeSeries(20, ncol=7)
+      df = sup.timeseries(20, ncol=7)
 
       # add to context
       nbprint_ctx.df = df
