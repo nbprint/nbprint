@@ -146,6 +146,11 @@ target
 outputs/
 multirun/
 
+# AI
+ROADMAP.md
+AGENTS.md
+.github/hooks/sdlc.json
+
 /output
 nbprint/extension/*
 nbprint/templates/nbprint/static/*
