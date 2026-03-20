@@ -146,7 +146,11 @@ target
 outputs/
 multirun/
 
-<<<<<<< before updating
+# AI
+ROADMAP.md
+AGENTS.md
+.github/hooks/sdlc.json
+
 /output
 nbprint/extension/*
 nbprint/templates/nbprint/static/*
@@ -158,9 +162,3 @@ examples/output
 # Plugins testing
 nbprint_example_plugin*
 *.csv
-=======
-# AI
-ROADMAP.md
-AGENTS.md
-.github/hooks/sdlc.json
->>>>>>> after updating
