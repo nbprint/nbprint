@@ -5,8 +5,8 @@ from sys import version_info
 from typing import Type, Union
 
 from ccflow import CallableModel, ContextType, Flow, ResultType
-from hydra import compose, initialize_config_dir
-from hydra.utils import instantiate
+from lerna import compose, initialize_config_dir
+from lerna.utils import instantiate
 from nbformat import NotebookNode, read as nb_read
 from nbformat.v4 import new_notebook
 from pkn import getSimpleLogger
@@ -17,11 +17,11 @@ from nbprint import __version__
 from nbprint.config.base import BaseModel, Role, _append_or_extend
 from nbprint.config.content import Content, ContentCode, ContentMarkdown
 from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
-from nbprint.config.page import Page
 
 from .content import ContentMarshall
 from .context import Context
 from .outputs import Outputs, OutputsProcessing
+from .page import Page, PageGlobal
 from .parameters import PapermillParameters, Parameters
 
 __all__ = (
@@ -37,7 +37,7 @@ class Configuration(CallableModel, BaseModel):
     resources: dict[str, BaseModel] = Field(default_factory=dict)
     outputs: Outputs
     parameters: Parameters = Field(default_factory=Parameters)
-    page: Page = Field(default_factory=Page)
+    page: Page = Field(default_factory=PageGlobal)
     context: Context = Field(default_factory=Context)
 
     content: ContentMarshall = Field(default_factory=ContentMarshall)
@@ -83,8 +83,8 @@ class Configuration(CallableModel, BaseModel):
 
     @field_validator("page", mode="before")
     @classmethod
-    def _convert_page_from_obj(cls, v) -> Page:
-        return BaseModel._to_type(v, Page)
+    def _convert_page_from_obj(cls, v) -> PageGlobal:
+        return BaseModel._to_type(v, PageGlobal)
 
     @field_validator("context", mode="before")
     @classmethod
@@ -310,12 +310,18 @@ class Configuration(CallableModel, BaseModel):
         # pass in parent=self, attr=page so we do config.page
         _append_or_extend(nb.cells, self.page.generate(metadata=base_meta.copy(), config=self, parent=self, attr="page"))
 
-        # now iterate through the content, recursively generating
-        for i, content in enumerate(self.content.all):
-            _append_or_extend(
-                nb.cells,
-                content.generate(metadata=base_meta.copy(), config=self, parent=self, attr="content", counter=i),
-            )
+        # now iterate through the content, section by section
+        content_counter = 0
+        for section_name, group_name, section_contents in self.content.sections():
+            for content in section_contents:
+                cells = content.generate(metadata=base_meta.copy(), config=self, parent=self, attr="content", counter=content_counter)
+                # Tag generated cells with section metadata
+                tagged = cells if isinstance(cells, list) else [cells] if cells is not None else []
+                for cell in tagged:
+                    cell.metadata.tags.append(f"nbprint:section:{section_name}")
+                    cell.metadata.tags.append(f"nbprint:section-group:{group_name}")
+                _append_or_extend(nb.cells, cells)
+                content_counter += 1
 
         # Finally, run the outputs cell
         # NOTE: outputs cell doesnt usually actually do anything, unless

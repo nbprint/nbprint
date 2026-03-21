@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from ccflow import ModelRegistry
-from hydra import compose, initialize_config_dir
+from lerna import compose, initialize_config_dir
 from nbformat import read as nb_read
 from omegaconf import DictConfig, OmegaConf, open_dict
 

@@ -45,7 +45,6 @@ dependencies = [
     "ccflow>=0.4.0",
     "dominate",
     "emails",
-    "hydra-core",
     "ipywidgets",
     "jinja2",
     "lerna>=1.1.0",

@@ -144,6 +144,73 @@ We also see the html document itself, which will be rendered via [`pagedjs`](htt
 
 You can find a pdf form of this document [here](https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.pdf?raw=true).
 
+## Structured Sections
+
+For more complex documents, `nbprint` supports structured sections that map to a traditional book/report layout.
+Instead of a flat list of content, you can organize content into named sections:
+
+| Group        | Sections                                                               | Description                                        |
+| ------------ | ---------------------------------------------------------------------- | -------------------------------------------------- |
+| Prematter    | `prematter`                                                            | Hidden content executed before report construction |
+| Covermatter  | `covermatter`                                                          | Cover page content                                 |
+| Frontmatter  | `title`, `copyright`, `dedication`, `table_of_contents`, `frontmatter` | Title page, legal, dedication, TOC, preface        |
+| Middlematter | `middlematter`, `middlematter_separators`                              | Main body and chapter dividers                     |
+| Endmatter    | `appendix`, `index`, `endmatter`                                       | Supplementary material, index, bibliography        |
+| Rearmatter   | `rearmatter`                                                           | Back cover content                                 |
+
+```yaml
+---
+content:
+  covermatter:
+    - _target_: nbprint.ContentMarkdown
+      content: |
+        # My Report
+      css: ":scope { text-align: center; }"
+
+  table_of_contents:
+    - _target_: nbprint.ContentTableOfContents
+
+  middlematter:
+    - _target_: nbprint.ContentMarkdown
+      content: |
+        # Section One
+        Main body content.
+
+  endmatter:
+    - _target_: nbprint.ContentMarkdown
+      content: |
+        # Bibliography
+        References go here.
+```
+
+Sections are rendered in document order. Flat list content (the original format) is still fully supported — it is treated as `middlematter`.
+
+### Per-Section Page Layout
+
+Each section can have its own page layout using `PageGlobal` and its `pages` dictionary:
+
+```yaml
+page:
+  _target_: nbprint.PageGlobal
+  bottom_right:
+    _target_: nbprint.PageRegion
+    content:
+      _target_: nbprint.PageNumber
+
+  pages:
+    covermatter:
+      # No page numbers on cover (empty = default Page with no regions)
+    frontmatter:
+      counter_reset: true
+      counter_style: lower-roman
+    middlematter:
+      counter_reset: true
+```
+
+This generates CSS named page rules (`@page covermatter { ... }`) and maps section content to those rules via `data-nbprint-section` attributes, enabling section-specific headers, footers, and page numbering styles via [Paged.js](https://pagedjs.org).
+
+See `examples/sections.yaml` for a full working example.
+
 ## ccflow integration
 
 `nbprint` is compatible with [ccflow](https://github.com/point72/ccflow) callable models.
