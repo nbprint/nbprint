@@ -4,10 +4,9 @@ from pathlib import Path
 from typing import List, Optional
 
 from ccflow import ModelRegistry
+from lerna import compose, initialize_config_dir
 from nbformat import read as nb_read
 from omegaconf import DictConfig, OmegaConf, open_dict
-
-from lerna import compose, initialize_config_dir
 
 __all__ = ("load_config",)
 

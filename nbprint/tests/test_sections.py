@@ -184,16 +184,15 @@ class TestPageGlobal:
 
 
 class TestPageBackwardCompat:
-    def test_page_no_size_or_orientation(self):
-        """Base Page no longer has size/orientation (moved to PageGlobal)."""
+    def test_page_has_size_and_orientation(self):
+        """Base Page has size/orientation (same as main branch)."""
         p = Page()
-        assert not hasattr(p, "size")
-        assert not hasattr(p, "orientation")
+        assert hasattr(p, "size")
+        assert hasattr(p, "orientation")
 
     def test_page_no_pages_field(self):
-        """Base Page no longer has a pages dict (moved to PageGlobal)."""
-        p = Page()
-        assert not hasattr(p, "pages") or p.__class__.__name__ != "Page" or "pages" not in Page.model_fields
+        """Base Page does not have a pages dict (only PageGlobal has it)."""
+        assert "pages" not in Page.model_fields
 
 
 class TestSectionConstants:
