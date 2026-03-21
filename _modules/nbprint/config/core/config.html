@@ -203,6 +203,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.core.Configuration.html">nbprint.config.core.Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.core.Parameters.html">nbprint.config.core.Parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.core.Context.html">nbprint.config.core.Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.core.Page.html">nbprint.config.core.Page</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.core.Outputs.html">nbprint.config.core.Outputs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.cli.run.html">nbprint.cli.run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
@@ -272,8 +273,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">ccflow</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallableModel</span><span class="p">,</span> <span class="n">ContextType</span><span class="p">,</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">ResultType</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hydra</span><span class="w"> </span><span class="kn">import</span> <span class="n">compose</span><span class="p">,</span> <span class="n">initialize_config_dir</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hydra.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">instantiate</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lerna</span><span class="w"> </span><span class="kn">import</span> <span class="n">compose</span><span class="p">,</span> <span class="n">initialize_config_dir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lerna.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">instantiate</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbformat</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotebookNode</span><span class="p">,</span> <span class="n">read</span> <span class="k">as</span> <span class="n">nb_read</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbformat.v4</span><span class="w"> </span><span class="kn">import</span> <span class="n">new_notebook</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pkn</span><span class="w"> </span><span class="kn">import</span> <span class="n">getSimpleLogger</span>
@@ -284,11 +285,11 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Role</span><span class="p">,</span> <span class="n">_append_or_extend</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.content</span><span class="w"> </span><span class="kn">import</span> <span class="n">Content</span><span class="p">,</span> <span class="n">ContentCode</span><span class="p">,</span> <span class="n">ContentMarkdown</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NBPrintPathIsYamlError</span><span class="p">,</span> <span class="n">NBPrintPathOrModelMalformedError</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.page</span><span class="w"> </span><span class="kn">import</span> <span class="n">Page</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.content</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContentMarshall</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">Context</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.outputs</span><span class="w"> </span><span class="kn">import</span> <span class="n">Outputs</span><span class="p">,</span> <span class="n">OutputsProcessing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.page</span><span class="w"> </span><span class="kn">import</span> <span class="n">Page</span><span class="p">,</span> <span class="n">PageGlobal</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">PapermillParameters</span><span class="p">,</span> <span class="n">Parameters</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span>
@@ -306,7 +307,7 @@
     <span class="n">resources</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
     <span class="n">outputs</span><span class="p">:</span> <span class="n">Outputs</span>
     <span class="n">parameters</span><span class="p">:</span> <span class="n">Parameters</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">Parameters</span><span class="p">)</span>
-    <span class="n">page</span><span class="p">:</span> <span class="n">Page</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">Page</span><span class="p">)</span>
+    <span class="n">page</span><span class="p">:</span> <span class="n">Page</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">PageGlobal</span><span class="p">)</span>
     <span class="n">context</span><span class="p">:</span> <span class="n">Context</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">Context</span><span class="p">)</span>
 
     <span class="n">content</span><span class="p">:</span> <span class="n">ContentMarshall</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">ContentMarshall</span><span class="p">)</span>
@@ -352,8 +353,8 @@
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;page&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_convert_page_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Page</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Page</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_convert_page_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageGlobal</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">PageGlobal</span><span class="p">)</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;context&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
@@ -584,12 +585,18 @@
         <span class="c1"># pass in parent=self, attr=page so we do config.page</span>
         <span class="n">_append_or_extend</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">base_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;page&quot;</span><span class="p">))</span>
 
-        <span class="c1"># now iterate through the content, recursively generating</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">all</span><span class="p">):</span>
-            <span class="n">_append_or_extend</span><span class="p">(</span>
-                <span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span>
-                <span class="n">content</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">base_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="n">i</span><span class="p">),</span>
-            <span class="p">)</span>
+        <span class="c1"># now iterate through the content, section by section</span>
+        <span class="n">content_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">group_name</span><span class="p">,</span> <span class="n">section_contents</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">sections</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">section_contents</span><span class="p">:</span>
+                <span class="n">cells</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">base_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="n">content_counter</span><span class="p">)</span>
+                <span class="c1"># Tag generated cells with section metadata</span>
+                <span class="n">tagged</span> <span class="o">=</span> <span class="n">cells</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">cells</span><span class="p">]</span> <span class="k">if</span> <span class="n">cells</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">tagged</span><span class="p">:</span>
+                    <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;nbprint:section:</span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;nbprint:section-group:</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">_append_or_extend</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="n">cells</span><span class="p">)</span>
+                <span class="n">content_counter</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="c1"># Finally, run the outputs cell</span>
         <span class="c1"># NOTE: outputs cell doesnt usually actually do anything, unless</span>

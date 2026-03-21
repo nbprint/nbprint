@@ -203,6 +203,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../docs/src/_build/nbprint.config.core.Configuration.html">nbprint.config.core.Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../docs/src/_build/nbprint.config.core.Parameters.html">nbprint.config.core.Parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../docs/src/_build/nbprint.config.core.Context.html">nbprint.config.core.Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../docs/src/_build/nbprint.config.core.Page.html">nbprint.config.core.Page</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../docs/src/_build/nbprint.config.core.Outputs.html">nbprint.config.core.Outputs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../docs/src/_build/nbprint.cli.run.html">nbprint.cli.run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../docs/src/_build/nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
@@ -271,7 +272,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">ccflow</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelRegistry</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">hydra</span><span class="w"> </span><span class="kn">import</span> <span class="n">compose</span><span class="p">,</span> <span class="n">initialize_config_dir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lerna</span><span class="w"> </span><span class="kn">import</span> <span class="n">compose</span><span class="p">,</span> <span class="n">initialize_config_dir</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbformat</span><span class="w"> </span><span class="kn">import</span> <span class="n">read</span> <span class="k">as</span> <span class="n">nb_read</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">omegaconf</span><span class="w"> </span><span class="kn">import</span> <span class="n">DictConfig</span><span class="p">,</span> <span class="n">OmegaConf</span><span class="p">,</span> <span class="n">open_dict</span>
 

@@ -1,0 +1,6 @@
+﻿nbprint.config.core.Page
+========================
+
+.. currentmodule:: nbprint.config.core
+
+.. autopydantic_model:: Page

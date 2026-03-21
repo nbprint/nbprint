@@ -204,6 +204,7 @@
 <li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.Configuration.html">nbprint.config.core.Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.Parameters.html">nbprint.config.core.Parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.Context.html">nbprint.config.core.Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.Page.html">nbprint.config.core.Page</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.Outputs.html">nbprint.config.core.Outputs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_build/nbprint.cli.run.html">nbprint.cli.run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_build/nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
@@ -401,6 +402,95 @@ With <code class="docutils literal notranslate"><span class="pre">nbprint</span>
 <p><a class="reference internal" href="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.png?raw=true"><img alt="example basic output" src="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.png?raw=true" style="width: 800px;" /></a></a></p>
 <p>You can find a pdf form of this document <a class="reference external" href="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.pdf?raw=true">here</a>.</p>
 </section>
+<section id="structured-sections">
+<h2>Structured Sections<a class="headerlink" href="#structured-sections" title="Link to this heading">¶</a></h2>
+<p>For more complex documents, <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> supports structured sections that map to a traditional book/report layout.
+Instead of a flat list of content, you can organize content into named sections:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Group</p></th>
+<th class="head"><p>Sections</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Prematter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">prematter</span></code></p></td>
+<td><p>Hidden content executed before report construction</p></td>
+</tr>
+<tr class="row-odd"><td><p>Covermatter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">covermatter</span></code></p></td>
+<td><p>Cover page content</p></td>
+</tr>
+<tr class="row-even"><td><p>Frontmatter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">copyright</span></code>, <code class="docutils literal notranslate"><span class="pre">dedication</span></code>, <code class="docutils literal notranslate"><span class="pre">table_of_contents</span></code>, <code class="docutils literal notranslate"><span class="pre">frontmatter</span></code></p></td>
+<td><p>Title page, legal, dedication, TOC, preface</p></td>
+</tr>
+<tr class="row-odd"><td><p>Middlematter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">middlematter</span></code>, <code class="docutils literal notranslate"><span class="pre">middlematter_separators</span></code></p></td>
+<td><p>Main body and chapter dividers</p></td>
+</tr>
+<tr class="row-even"><td><p>Endmatter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">appendix</span></code>, <code class="docutils literal notranslate"><span class="pre">index</span></code>, <code class="docutils literal notranslate"><span class="pre">endmatter</span></code></p></td>
+<td><p>Supplementary material, index, bibliography</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rearmatter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rearmatter</span></code></p></td>
+<td><p>Back cover content</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">content</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">covermatter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no"># My Report</span>
+<span class="w">      </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}&quot;</span>
+
+<span class="w">  </span><span class="nt">table_of_contents</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentTableOfContents</span>
+
+<span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no"># Section One</span>
+<span class="w">        </span><span class="no">Main body content.</span>
+
+<span class="w">  </span><span class="nt">endmatter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">        </span><span class="no"># Bibliography</span>
+<span class="w">        </span><span class="no">References go here.</span>
+</pre></div>
+</div>
+<p>Sections are rendered in document order. Flat list content (the original format) is still fully supported — it is treated as <code class="docutils literal notranslate"><span class="pre">middlematter</span></code>.</p>
+<section id="per-section-page-layout">
+<h3>Per-Section Page Layout<a class="headerlink" href="#per-section-page-layout" title="Link to this heading">¶</a></h3>
+<p>Each section can have its own page layout using <code class="docutils literal notranslate"><span class="pre">PageGlobal</span></code> and its <code class="docutils literal notranslate"><span class="pre">pages</span></code> dictionary:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">page</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.PageGlobal</span>
+<span class="w">  </span><span class="nt">bottom_right</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.PageRegion</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.PageNumber</span>
+
+<span class="w">  </span><span class="nt">pages</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">covermatter</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># No page numbers on cover (empty = default Page with no regions)</span>
+<span class="w">    </span><span class="nt">frontmatter</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">counter_reset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">counter_style</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lower-roman</span>
+<span class="w">    </span><span class="nt">middlematter</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">counter_reset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>This generates CSS named page rules (<code class="docutils literal notranslate"><span class="pre">&#64;page</span> <span class="pre">covermatter</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code>) and maps section content to those rules via <code class="docutils literal notranslate"><span class="pre">data-nbprint-section</span></code> attributes, enabling section-specific headers, footers, and page numbering styles via <a class="reference external" href="https://pagedjs.org">Paged.js</a>.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">examples/sections.yaml</span></code> for a full working example.</p>
+</section>
+</section>
 <section id="ccflow-integration">
 <h2>ccflow integration<a class="headerlink" href="#ccflow-integration" title="Link to this heading">¶</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code> is compatible with <a class="reference external" href="https://github.com/point72/ccflow">ccflow</a> callable models.
@@ -481,6 +571,10 @@ With <code class="docutils literal notranslate"><span class="pre">nbprint</span>
 <li><a class="reference internal" href="#">Configuration</a><ul>
 <li><a class="reference internal" href="#yaml-based-reports">YAML-based Reports</a></li>
 <li><a class="reference internal" href="#run">Run</a></li>
+<li><a class="reference internal" href="#structured-sections">Structured Sections</a><ul>
+<li><a class="reference internal" href="#per-section-page-layout">Per-Section Page Layout</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#ccflow-integration">ccflow integration</a></li>
 <li><a class="reference internal" href="#workflows">Workflows</a></li>
 </ul>

@@ -1,13 +1,13 @@
 <!doctype html>
 <html class="no-js" lang="en" data-content_root="./">
-  <head>
-<meta charset="utf-8">
+  <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="#">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="genindex.html"><link rel="search" title="Search" href="search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-<meta name="robots" content="noindex" />
-<title>Search - nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.11.2</code></title><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+        <title>Granular Section Configuration — Roadmap - nbprint v0.11.2</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
@@ -178,7 +178,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -190,7 +190,7 @@
   
   <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.11.2</code></span>
   
-</a><form class="sidebar-search-container" method="get" action="#" role="search">
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
@@ -253,7 +253,13 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          <div class="view-this-page">
+  <a class="muted-link" href="_sources/ROADMAP.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
               <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
@@ -261,22 +267,68 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          
-<noscript>
-<div class="admonition error">
-  <p class="admonition-title">Error</p>
-  <p>
-    Please activate JavaScript to enable the search functionality.
-  </p>
-</div>
-</noscript>
-
-<div id="search-results"></div>
+          <section class="tex2jax_ignore mathjax_ignore" id="granular-section-configuration-roadmap">
+<h1>Granular Section Configuration — Roadmap<a class="headerlink" href="#granular-section-configuration-roadmap" title="Link to this heading">¶</a></h1>
+<p><strong>Branch:</strong> <code class="docutils literal notranslate"><span class="pre">tkp/details</span></code>
+<strong>Goal:</strong> Allow more granular configuration of document sections (cover, frontmatter, chapters, endmatter, etc.) with per-section page layout overrides.</p>
+<section id="what-s-been-done">
+<h2>What’s been done<a class="headerlink" href="#what-s-been-done" title="Link to this heading">¶</a></h2>
+<p>Initial commit (<code class="docutils literal notranslate"><span class="pre">6d72cce</span></code>) introduced the structural model. Subsequent work wired up all plumbing and implemented section-aware generation.</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">Section</span></code> literal type</strong> — 13-value <code class="docutils literal notranslate"><span class="pre">Literal</span></code> covering the full document structure from <code class="docutils literal notranslate"><span class="pre">prematter</span></code> through <code class="docutils literal notranslate"><span class="pre">rearmatter</span></code>.</p></li>
+<li><p><strong>Expanded <code class="docutils literal notranslate"><span class="pre">ContentMarshall</span></code></strong> — from 4 fields to 13 granular section fields, with private per-group aggregation attributes, <code class="docutils literal notranslate"><span class="pre">sections()</span></code> iterator, and <code class="docutils literal notranslate"><span class="pre">SECTION_ORDER</span></code>/<code class="docutils literal notranslate"><span class="pre">SECTION_GROUPS</span></code> constants.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">PageGlobal</span></code> subclass of <code class="docutils literal notranslate"><span class="pre">Page</span></code></strong> — holds <code class="docutils literal notranslate"><span class="pre">size</span></code>/<code class="docutils literal notranslate"><span class="pre">orientation</span></code> and a <code class="docutils literal notranslate"><span class="pre">pages:</span> <span class="pre">dict[Section,</span> <span class="pre">Page]</span></code> for per-section page overrides; generates <code class="docutils literal notranslate"><span class="pre">&#64;page</span> <span class="pre">sectionName</span></code> CSS rules.</p></li>
+<li><p><strong>Moved <code class="docutils literal notranslate"><span class="pre">page.py</span></code> into <code class="docutils literal notranslate"><span class="pre">config/core/</span></code></strong> — co-locates with the rest of the core config.</p></li>
+<li><p><strong>Section-aware <code class="docutils literal notranslate"><span class="pre">Configuration.generate()</span></code></strong> — iterates by section, tags cells with <code class="docutils literal notranslate"><span class="pre">nbprint:section:{name}</span></code> and <code class="docutils literal notranslate"><span class="pre">nbprint:section-group:{group}</span></code>.</p></li>
+<li><p><strong>Per-section page CSS</strong> — <code class="docutils literal notranslate"><span class="pre">PageGlobal.render()</span></code> generates named page rules and element selectors for Paged.js.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">counter_reset</span></code> / <code class="docutils literal notranslate"><span class="pre">counter_style</span></code></strong> — per-section page numbering control (e.g., roman numerals for frontmatter).</p></li>
+</ul>
+</section>
+<section id="phase-1-wire-up-the-plumbing">
+<h2>Phase 1 — Wire up the plumbing ✅<a class="headerlink" href="#phase-1-wire-up-the-plumbing" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>[x] <strong>1.1 Fix <code class="docutils literal notranslate"><span class="pre">ContentMarshall._all</span></code> validator</strong> — include all 13 sections in correct document order; populate private per-group attributes.</p></li>
+<li><p>[x] <strong>1.2 Switch <code class="docutils literal notranslate"><span class="pre">Configuration.page</span></code> to <code class="docutils literal notranslate"><span class="pre">PageGlobal</span></code></strong> — update field type and validator; ensure backward compat with existing region-only configs.</p></li>
+<li><p>[x] <strong>1.3 Verify <code class="docutils literal notranslate"><span class="pre">_convert_content_from_dict</span></code></strong> — confirm it handles all 13 section keys when hydrating from YAML/dict.</p></li>
+<li><p>[x] <strong>1.4 Unit tests</strong> — <code class="docutils literal notranslate"><span class="pre">Section</span></code> literal, <code class="docutils literal notranslate"><span class="pre">ContentMarshall</span></code> with content in various sections, <code class="docutils literal notranslate"><span class="pre">PageGlobal</span></code> with per-section overrides, backward compat with list-only content.</p></li>
+</ul>
+</section>
+<section id="phase-2-section-aware-generation">
+<h2>Phase 2 — Section-aware generation ✅<a class="headerlink" href="#phase-2-section-aware-generation" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>[x] <strong>2.1 Section-aware <code class="docutils literal notranslate"><span class="pre">Configuration.generate()</span></code></strong> — iterate by section group instead of flat <code class="docutils literal notranslate"><span class="pre">content.all</span></code>; inject section-boundary metadata/tags.</p></li>
+<li><p>[x] <strong>2.2 Per-section page style application</strong> — look up <code class="docutils literal notranslate"><span class="pre">page.pages[section]</span></code> during generation to apply section-specific page regions/CSS.</p></li>
+<li><p>[x] <strong>2.3 CSS generation for named pages</strong> — generate <code class="docutils literal notranslate"><span class="pre">&#64;page</span> <span class="pre">sectionName</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> rules and <code class="docutils literal notranslate"><span class="pre">[data-nbprint-section]</span></code> element attributes for Paged.js.</p></li>
+</ul>
+</section>
+<section id="phase-3-user-facing-config-examples">
+<h2>Phase 3 — User-facing config &amp; examples ✅<a class="headerlink" href="#phase-3-user-facing-config-examples" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>[x] <strong>3.1 YAML example: structured sections</strong> — <code class="docutils literal notranslate"><span class="pre">examples/sections.yaml</span></code> using dict-style <code class="docutils literal notranslate"><span class="pre">content:</span></code> with section keys and per-section page overrides.</p></li>
+<li><p>[x] <strong>3.2 Hydra config example</strong> — <code class="docutils literal notranslate"><span class="pre">examples/hydra/content/sections.yaml</span></code> for section-level content overrides.</p></li>
+<li><p>[x] <strong>3.3 Documentation</strong> — updated <code class="docutils literal notranslate"><span class="pre">docs/src/configuration.md</span></code> with section model, <code class="docutils literal notranslate"><span class="pre">Section</span></code> values, and per-section page customization examples.</p></li>
+</ul>
+</section>
+<section id="phase-4-advanced-features-partial">
+<h2>Phase 4 — Advanced features (partial)<a class="headerlink" href="#phase-4-advanced-features-partial" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>[ ] <strong>4.1 <code class="docutils literal notranslate"><span class="pre">middlematter_separators</span></code> interleaving</strong> — support list-of-lists middlematter with chapter separator/title pages. Requires schema change to support nested content lists; separators currently render as a standalone section in document order.</p></li>
+<li><p>[ ] <strong>4.2 Auto table of contents</strong> — optionally auto-generate TOC from middlematter headings when <code class="docutils literal notranslate"><span class="pre">table_of_contents</span></code> is declared but empty. Users can currently place <code class="docutils literal notranslate"><span class="pre">ContentTableOfContents</span></code> in the <code class="docutils literal notranslate"><span class="pre">table_of_contents</span></code> section explicitly.</p></li>
+<li><p>[x] <strong>4.3 Page numbering per section</strong> — <code class="docutils literal notranslate"><span class="pre">counter_reset</span></code> and <code class="docutils literal notranslate"><span class="pre">counter_style</span></code> fields on <code class="docutils literal notranslate"><span class="pre">Page</span></code>, used in per-section CSS generation (e.g., <code class="docutils literal notranslate"><span class="pre">counter(page,</span> <span class="pre">lower-roman)</span></code>).</p></li>
+</ul>
+</section>
+<section id="housekeeping">
+<h2>Housekeeping ✅<a class="headerlink" href="#housekeeping" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>[x] <strong>Migrate hydra → lerna</strong> — replaced all <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">hydra</span></code> imports with <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">lerna</span></code> equivalents; removed <code class="docutils literal notranslate"><span class="pre">hydra-core</span></code> from <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> dependencies. Lerna is a drop-in replacement with the same API.</p></li>
+</ul>
+</section>
+</section>
 
         </article>
       </div>
@@ -303,8 +355,32 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Granular Section Configuration — Roadmap</a><ul>
+<li><a class="reference internal" href="#what-s-been-done">What’s been done</a></li>
+<li><a class="reference internal" href="#phase-1-wire-up-the-plumbing">Phase 1 — Wire up the plumbing ✅</a></li>
+<li><a class="reference internal" href="#phase-2-section-aware-generation">Phase 2 — Section-aware generation ✅</a></li>
+<li><a class="reference internal" href="#phase-3-user-facing-config-examples">Phase 3 — User-facing config &amp; examples ✅</a></li>
+<li><a class="reference internal" href="#phase-4-advanced-features-partial">Phase 4 — Advanced features (partial)</a></li>
+<li><a class="reference internal" href="#housekeeping">Housekeeping ✅</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
@@ -316,453 +392,6 @@
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
-    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
-import elkLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.2.0/dist/mermaid-layout-elk.esm.min.mjs"
-
-
-
-import zenumlLayouts from "https://cdn.jsdelivr.net/npm/@mermaid-js/mermaid-zenuml@0.2.2/dist/mermaid-zenuml.esm.min.mjs"
-
-
-const initStyles = () => {
-    const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = `pre.mermaid {
-    /* Same as .mermaid-container > pre */
-    display: block;
-    width: 100%;
-}
-
-pre.mermaid > svg {
-    /* Same as .mermaid-container > pre > svg */
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}`;
-    document.head.appendChild(defaultStyle);
-
-    const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = `.mermaid-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-}
-
-.mermaid-container > pre {
-    display: block;
-    width: 100%;
-}
-
-.mermaid-container > pre > svg {
-    height: 500px;
-    width: 100%;
-    max-width: 100% !important;
-}
-
-.mermaid-fullscreen-btn {
-    width: 28px;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-size: 14px;
-    line-height: 1;
-    padding: 0;
-    color: #333;
-}
-
-.mermaid-fullscreen-btn:hover {
-    opacity: 100% !important;
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-btn.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-btn.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal {
-    display: none;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 95vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.98);
-    z-index: 9999;
-    padding: 20px;
-    overflow: auto;
-}
-
-.mermaid-fullscreen-modal.dark-theme {
-    background: rgba(0, 0, 0, 0.98);
-}
-
-.mermaid-fullscreen-modal.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen {
-    position: relative;
-    width: 95vw;
-    height: 90vh;
-    max-width: 95vw;
-    max-height: 90vh;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    overflow: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen.dark-theme {
-    background: #1a1a1a;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
-}
-
-.mermaid-container-fullscreen pre.mermaid {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.mermaid-container-fullscreen .mermaid svg {
-    height: 100% !important;
-    width: 100% !important;
-    cursor: grab;
-}
-
-.mermaid-fullscreen-close {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.2s;
-    font-size: 24px;
-    line-height: 1;
-    color: #333;
-}
-
-.mermaid-fullscreen-close:hover {
-    background: white;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-.mermaid-fullscreen-close.dark-theme {
-    background: rgba(50, 50, 50, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e0e0e0;
-}
-
-.mermaid-fullscreen-close.dark-theme:hover {
-    background: rgba(60, 60, 60, 1);
-    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
-}
-
-.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
-    display: none !important;
-}`;
-    document.head.appendChild(fullscreenStyle);
-}
-
-// Detect if page has dark background
-const isDarkTheme = () => {
-    // We use a set of heuristics:
-    // 1. Check for common dark mode classes or attributes
-    // 2. Check computed background color brightness
-    if (document.documentElement.classList.contains('dark') ||
-        document.documentElement.getAttribute('data-theme') === 'dark' ||
-        document.body.classList.contains('dark') ||
-        document.body.getAttribute('data-theme') === 'dark') {
-        // console.log("Dark theme detected via class/attribute");
-        return true;
-    }
-    if (document.documentElement.classList.contains('light') ||
-        document.documentElement.getAttribute('data-theme') === 'light' ||
-        document.body.classList.contains('light') ||
-        document.body.getAttribute('data-theme') === 'light') {
-        // console.log("Light theme detected via class/attribute");
-        return false;
-    }
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        // console.log("Dark theme detected via prefers-color-scheme");
-        return true;
-    }
-    const bgColor = window.getComputedStyle(document.body).backgroundColor;
-    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
-    if (match) {
-        const r = parseInt(match[1]);
-        const g = parseInt(match[2]);
-        const b = parseInt(match[3]);
-        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-        // console.log("Background color brightness:", brightness);
-        return brightness < 128;
-    }
-    // console.log("No dark or light theme detected, defaulting to light theme");
-    return false;
-};
-
-let darkTheme = isDarkTheme();
-let modal = null;
-let modalContent = null;
-let previousScrollOffset = [window.scrollX, window.scrollY];
-
-const runMermaid = async (rerun) => {
-    console.log("Running mermaid diagrams, rerun =", rerun);
-    // clear all existing mermaid charts
-    let all_mermaids = document.querySelectorAll(".mermaid");
-
-    if (rerun) {
-        all_mermaids.forEach((el) => {
-            if(!el.hasAttribute("data-original-code")) {
-                // store original code
-                // console.log(`Storing original code for first run: `, el.innerHTML);
-                el.setAttribute('data-original-code', el.innerHTML);
-            }
-            if(el.getAttribute("data-processed") === "true") {
-                // remove and restore original
-                el.removeAttribute("data-processed");
-                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
-                el.innerHTML = el.getAttribute('data-original-code');
-            } else {
-                // store original code
-                // console.log(`Storing original code for re-run: `, el.innerHTML);
-                el.setAttribute('data-original-code', el.innerHTML);
-            }
-        });
-        await mermaid.run();
-    }
-
-    all_mermaids = document.querySelectorAll(".mermaid");
-    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
-
-    if ("True" === "True") {
-        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
-        if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll(".mermaid svg");
-            if(all_mermaids.length !== mermaids_processed.length) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else if(svgs.size() !== mermaids_to_add_zoom) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            } else {
-                svgs.each(function() {
-                    var svg = d3.select(this);
-                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-                    var inner = svg.select("g");
-                    var zoom = d3.zoom().on("zoom", function(event) {
-                        inner.attr("transform", event.transform);
-                    });
-                    svg.call(zoom);
-                });
-            }
-        }
-    } else if(all_mermaids.length !== mermaids_processed.length) {
-        // Wait for mermaid to process all diagrams
-        setTimeout(() => runMermaid(false), 200);
-        return;
-    }
-
-    // Stop here if not adding fullscreen capability
-    if ("True" !== "True") return;
-
-    if (modal !== null ) {
-        // Destroy existing modal
-        modal.remove();
-        modal = null;
-        modalContent = null;
-    }
-
-    modal = document.createElement('div');
-    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
-    modal.innerHTML = `
-        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
-        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
-    `;
-    document.body.appendChild(modal);
-
-    modalContent = modal.querySelector('.mermaid-container-fullscreen');
-    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
-
-    const closeModal = () => {
-        modal.classList.remove('active');
-        modalContent.innerHTML = '';
-        document.body.style.overflow = ''
-        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
-    };
-
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeModal();
-        }
-    });
-
-    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
-        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
-            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
-            // Already processed, adjust button class if needed
-            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
-            if (existingBtn) {
-                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
-            }
-            return;
-        }
-
-        const container = document.createElement('div');
-        container.className = 'mermaid-container';
-        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
-        container.appendChild(mermaidDiv);
-
-        const fullscreenBtn = document.createElement('button');
-        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
-        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = '⛶';
-        fullscreenBtn.style.opacity = '50%';
-
-        // Calculate dynamic position based on diagram's margin and padding
-        const diagramStyle = window.getComputedStyle(mermaidDiv);
-        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
-        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
-        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
-        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
-        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
-        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
-
-        fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scroll, window.scrollY];
-            const clone = mermaidDiv.cloneNode(true);
-            modalContent.innerHTML = '';
-            modalContent.appendChild(clone);
-
-            const svg = clone.querySelector('svg');
-            if (svg) {
-                svg.removeAttribute('width');
-                svg.removeAttribute('height');
-                svg.style.width = '100%';
-                svg.style.height = 'auto';
-                svg.style.maxWidth = '100%';
-                svg.style.sdisplay = 'block';
-
-                if ("True" === "True") {
-                    setTimeout(() => {
-                        const g = svg.querySelector('g');
-                        if (g) {
-                            var svgD3 = d3.select(svg);
-                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
-                            var inner = svgD3.select("g");
-                            var zoom = d3.zoom().on("zoom", function(event) {
-                                inner.attr("transform", event.transform);
-                            });
-                            svgD3.call(zoom);
-                        }
-                    }, 100);
-                }
-            }
-
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-        container.appendChild(fullscreenBtn);
-    });
-};
-
-const load = async () => {
-    initStyles();
-
-    await runMermaid(true);
-
-    const reRunIfThemeChanges = async () => {
-        const newDarkTheme = isDarkTheme();
-        if (newDarkTheme !== darkTheme) {
-            darkTheme = newDarkTheme;
-            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
-            await mermaid.initialize(
-                {...JSON.parse(
-                    `{"startOnLoad": false}`
-                ),
-                ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
-                }
-            );
-            await runMermaid(true);
-        }
-    };
-
-    // Update theme classes when theme changes
-    const themeObserver = new MutationObserver(reRunIfThemeChanges);
-    themeObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class', 'style', 'data-theme']
-    });
-    themeObserver.observe(document.body, {
-        attributes: true,
-        attributeFilter: ['class', 'style', 'data-theme']
-    });
-};
-
-
-mermaid.registerLayoutLoaders(elkLayouts);
-
-
-
-mermaid.registerExternalDiagrams([zenumlLayouts]);
-
-
-console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
-mermaid.initialize(
-    {...JSON.parse(
-        `{"startOnLoad": false}`
-    ),
-    ...{ darkMode: darkTheme, theme: darkTheme ? 'dark' : 'default' },
-    }
-);
-
-window.addEventListener("load", load);
-window.runMermaid = runMermaid;</script>
     <script src="_static/js/custom.js?v=956e5d78"></script>
-    
-<script src="_static/searchtools.js"></script>
-<script src="_static/language_data.js"></script>
-<script src="searchindex.js"></script></body>
+    </body>
 </html>

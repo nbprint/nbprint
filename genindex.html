@@ -202,6 +202,7 @@
 <li class="toctree-l2"><a class="reference internal" href="docs/src/_build/nbprint.config.core.Configuration.html">nbprint.config.core.Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/src/_build/nbprint.config.core.Parameters.html">nbprint.config.core.Parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/src/_build/nbprint.config.core.Context.html">nbprint.config.core.Context</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs/src/_build/nbprint.config.core.Page.html">nbprint.config.core.Page</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/src/_build/nbprint.config.core.Outputs.html">nbprint.config.core.Outputs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/src/_build/nbprint.cli.run.html">nbprint.cli.run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="docs/src/_build/nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
@@ -288,9 +289,19 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="docs/src/_build/nbprint.config.outputs.EmailOutputs.html#nbprint.config.outputs.EmailOutputs.bcc">bcc (nbprint.config.outputs.EmailOutputs attribute)</a>
 </li>
+        <li><a href="docs/src/_build/nbprint.config.outputs.EmailOutputs.html#nbprint.config.outputs.EmailOutputs.body">body (nbprint.config.outputs.EmailOutputs attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.bottom">bottom (nbprint.config.core.Page attribute)</a>
+</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="docs/src/_build/nbprint.config.outputs.EmailOutputs.html#nbprint.config.outputs.EmailOutputs.body">body (nbprint.config.outputs.EmailOutputs attribute)</a>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.bottom_left">bottom_left (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.bottom_left_corner">bottom_left_corner (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.bottom_right">bottom_right (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.bottom_right_corner">bottom_right_corner (nbprint.config.core.Page attribute)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -312,15 +323,21 @@
           <li><a href="docs/src/_build/nbprint.config.core.Configuration.html#nbprint.config.core.Configuration.content">(nbprint.config.core.Configuration attribute)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="docs/src/_build/nbprint.config.core.Configuration.html#nbprint.config.core.Configuration.context">context (nbprint.config.core.Configuration attribute)</a>
 
         <ul>
           <li><a href="docs/src/_build/nbprint.models.SeabornDisplayConfiguration.html#nbprint.models.SeabornDisplayConfiguration.context">(nbprint.models.SeabornDisplayConfiguration attribute)</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="docs/src/_build/nbprint.config.core.Configuration.html#nbprint.config.core.Configuration.context_type">context_type (nbprint.config.core.Configuration property)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.convert_region_from_obj">convert_region_from_obj() (nbprint.config.core.Page class method)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.counter_reset">counter_reset (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.counter_style">counter_style (nbprint.config.core.Page attribute)</a>
 </li>
         <li><a href="docs/src/_build/nbprint.config.content.ContentFlexColumnLayout.html#nbprint.config.content.ContentFlexColumnLayout.css">css (nbprint.config.content.ContentFlexColumnLayout attribute)</a>
 
@@ -328,6 +345,8 @@
           <li><a href="docs/src/_build/nbprint.config.content.ContentFlexRowLayout.html#nbprint.config.content.ContentFlexRowLayout.css">(nbprint.config.content.ContentFlexRowLayout attribute)</a>
 </li>
           <li><a href="docs/src/_build/nbprint.config.content.ContentInlineLayout.html#nbprint.config.content.ContentInlineLayout.css">(nbprint.config.content.ContentInlineLayout attribute)</a>
+</li>
+          <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.css">(nbprint.config.core.Page attribute)</a>
 </li>
         </ul></li>
     </ul></td>
@@ -401,6 +420,8 @@
 </li>
           <li><a href="docs/src/_build/nbprint.config.core.Outputs.html#nbprint.config.core.Outputs.generate">(nbprint.config.core.Outputs method)</a>
 </li>
+          <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.generate">(nbprint.config.core.Page method)</a>
+</li>
           <li><a href="docs/src/_build/nbprint.config.core.PapermillParameters.html#nbprint.config.core.PapermillParameters.generate">(nbprint.config.core.PapermillParameters method)</a>
 </li>
           <li><a href="docs/src/_build/nbprint.config.core.Parameters.html#nbprint.config.core.Parameters.generate">(nbprint.config.core.Parameters method)</a>
@@ -452,10 +473,16 @@
   <h2>L</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="docs/src/_build/nbprint.config.core.Configuration.html#nbprint.config.core.Configuration.load">load() (nbprint.config.core.Configuration static method)</a>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.left">left (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.left_bottom">left_bottom (nbprint.config.core.Page attribute)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.left_top">left_top (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Configuration.html#nbprint.config.core.Configuration.load">load() (nbprint.config.core.Configuration static method)</a>
+</li>
         <li><a href="docs/src/_build/nbprint.config.hydra.load_config.html#nbprint.config.hydra.load_config">load_config() (in module nbprint.config.hydra)</a>
 </li>
     </ul></td>
@@ -500,6 +527,8 @@
   <h2>O</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.orientation">orientation (nbprint.config.core.Page attribute)</a>
+</li>
         <li><a href="docs/src/_build/nbprint.config.core.Outputs.html#nbprint.config.core.Outputs.output">output (nbprint.config.core.Outputs property)</a>
 </li>
     </ul></td>
@@ -556,6 +585,12 @@
 </li>
         <li><a href="docs/src/_build/nbprint.config.core.Configuration.html#nbprint.config.core.Configuration.result_type">result_type (nbprint.config.core.Configuration property)</a>
 </li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.right">right (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.right_bottom">right_bottom (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.right_top">right_top (nbprint.config.core.Page attribute)</a>
+</li>
         <li><a href="docs/src/_build/nbprint.config.content.ContentInlineLayout.html#nbprint.config.content.ContentInlineLayout.role">role (nbprint.config.content.ContentInlineLayout attribute)</a>
 
         <ul>
@@ -598,12 +633,14 @@
   <h2>S</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="docs/src/_build/nbprint.config.outputs.EmailOutputs.html#nbprint.config.outputs.EmailOutputs.smtp">smtp (nbprint.config.outputs.EmailOutputs attribute)</a>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.size">size (nbprint.config.core.Page attribute)</a>
 </li>
-        <li><a href="docs/src/_build/nbprint.config.outputs.SMTP.html#nbprint.config.outputs.SMTP.ssl">ssl (nbprint.config.outputs.SMTP attribute)</a>
+        <li><a href="docs/src/_build/nbprint.config.outputs.EmailOutputs.html#nbprint.config.outputs.EmailOutputs.smtp">smtp (nbprint.config.outputs.EmailOutputs attribute)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="docs/src/_build/nbprint.config.outputs.SMTP.html#nbprint.config.outputs.SMTP.ssl">ssl (nbprint.config.outputs.SMTP attribute)</a>
+</li>
         <li><a href="docs/src/_build/nbprint.models.SeabornDisplayConfiguration.html#nbprint.models.SeabornDisplayConfiguration.style">style (nbprint.models.SeabornDisplayConfiguration attribute)</a>
 </li>
         <li><a href="docs/src/_build/nbprint.config.outputs.EmailOutputs.html#nbprint.config.outputs.EmailOutputs.subject">subject (nbprint.config.outputs.EmailOutputs attribute)</a>
@@ -659,6 +696,16 @@
         <li><a href="docs/src/_build/nbprint.config.outputs.SMTP.html#nbprint.config.outputs.SMTP.tls">tls (nbprint.config.outputs.SMTP attribute)</a>
 </li>
         <li><a href="docs/src/_build/nbprint.config.outputs.EmailOutputs.html#nbprint.config.outputs.EmailOutputs.to">to (nbprint.config.outputs.EmailOutputs attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.top">top (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.top_left">top_left (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.top_left_corner">top_left_corner (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.top_right">top_right (nbprint.config.core.Page attribute)</a>
+</li>
+        <li><a href="docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.top_right_corner">top_right_corner (nbprint.config.core.Page attribute)</a>
 </li>
     </ul></td>
   </tr></table>
