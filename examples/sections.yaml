@@ -1,0 +1,89 @@
+---
+debug: false
+outputs:
+  _target_: nbprint.NBConvertOutputs
+  naming: "{{name}}"
+  root: ./outputs
+  target: "html"
+
+page:
+  _target_: nbprint.PageGlobal
+  bottom_right:
+    _target_: nbprint.PageRegion
+    content:
+      _target_: nbprint.PageNumber
+
+  pages:
+    covermatter:
+      # No page numbers on cover page
+    frontmatter:
+      counter_reset: true
+      counter_style: lower-roman
+      bottom_right:
+        _target_: nbprint.PageRegion
+        content:
+          _target_: nbprint.PageRegionContent
+          content: "counter(page, lower-roman)"
+    middlematter:
+      counter_reset: true
+
+content:
+  covermatter:
+    - _target_: nbprint.ContentMarkdown
+      content: |
+        # Structured Sections Example
+        ## Demonstrating granular section configuration
+      css: ":scope { text-align: center; }"
+
+  table_of_contents:
+    - _target_: nbprint.ContentTableOfContents
+
+  frontmatter:
+    - _target_: nbprint.ContentMarkdown
+      content: |
+        # Preface
+        This report demonstrates nbprint's structured section configuration.
+        Sections can be independently configured with their own page layouts,
+        numbering styles, and content.
+
+  middlematter:
+    - _target_: nbprint.ContentPageBreak
+
+    - _target_: nbprint.ContentMarkdown
+      content: |
+        # Section One
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.
+
+        ## Subsection One
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+        ut aliquip ex ea commodo consequat.
+
+    - _target_: nbprint.ContentPageBreak
+
+    - _target_: nbprint.ContentMarkdown
+      content: |
+        # Section Two
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+        dolore eu fugiat nulla pariatur.
+
+        ## Subsection One
+        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+        officia deserunt mollit anim id est laborum.
+
+  appendix:
+    - _target_: nbprint.ContentPageBreak
+
+    - _target_: nbprint.ContentMarkdown
+      content: |
+        # Appendix A: Data Sources
+        Supplementary material and data references.
+
+  endmatter:
+    - _target_: nbprint.ContentPageBreak
+
+    - _target_: nbprint.ContentMarkdown
+      content: |
+        # Bibliography
+        1. Author A. "Title of Work." Publisher, 2024.
+        2. Author B. "Another Work." Publisher, 2025.
