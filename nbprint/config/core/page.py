@@ -9,6 +9,25 @@ from nbprint.config.exceptions import NBPrintNullCellError
 
 from .content import Section
 
+PAGE_REGION_ATTRS = (
+    "top",
+    "top_left",
+    "top_left_corner",
+    "top_right",
+    "top_right_corner",
+    "bottom",
+    "bottom_left",
+    "bottom_left_corner",
+    "bottom_right",
+    "bottom_right_corner",
+    "left",
+    "left_top",
+    "left_bottom",
+    "right",
+    "right_top",
+    "right_bottom",
+)
+
 if TYPE_CHECKING:
     from .config import Configuration
 
@@ -88,6 +107,9 @@ class Page(BaseModel):
     right: PageRegion | None = None
     right_top: PageRegion | None = None
     right_bottom: PageRegion | None = None
+
+    counter_reset: bool = False
+    counter_style: str | None = None
 
     css: str = ""
 
@@ -191,34 +213,11 @@ class Page(BaseModel):
         main_cell.metadata.nbprint.ignore = True
         cells.append(main_cell)
 
-        for set_attr in (
-            "top",
-            "top_left",
-            "top_left_corner",
-            "top_right",
-            "top_right_corner",
-            "bottom",
-            "bottom_left",
-            "bottom_left_corner",
-            "bottom_right",
-            "bottom_right_corner",
-            "left",
-            "left_top",
-            "left_bottom",
-            "right",
-            "right_top",
-            "right_bottom",
-        ):
+        for set_attr in PAGE_REGION_ATTRS:
             if getattr(self, set_attr) is not None:
                 # pass in `self` as `parent here`
                 _append_or_extend(cells, getattr(self, set_attr).generate(metadata=metadata, config=config, parent=self, attr=set_attr))
 
-        if hasattr(self, "pages") and self.pages is not None:
-            for i, cell in enumerate(self.pages):
-                _append_or_extend(
-                    cells,
-                    cell.generate(metadata=metadata, config=config, parent=self, attr="pages", counter=i),
-                )
         for cell in cells:
             if cell is None:
                 raise NBPrintNullCellError
@@ -236,19 +235,29 @@ class PageGlobal(Page):
     def render(self, **_) -> None:
         if "@page { size:" not in self.css:
             if isinstance(self.size, tuple):
-                self.css = (
-                    self.css
-                    + f"""
-    @page {{ size: {self.size[0]}in {self.size[1]}in; }}
-                """
-                )
+                self.css += f"\n@page {{ size: {self.size[0]}in {self.size[1]}in; }}"
             else:
-                self.css = (
-                    self.css
-                    + f"""
-    @page {{ size: {self.size.value} {self.orientation.value}; }}
-                """
-                )
+                self.css += f"\n@page {{ size: {self.size.value} {self.orientation.value}; }}"
+
+        # Generate per-section named page CSS
+        for section_name, section_page in (self.pages or {}).items():
+            marker = f"@page {section_name}"
+            if marker in self.css:
+                continue
+            inner_rules = []
+            for region_attr in PAGE_REGION_ATTRS:
+                region = getattr(section_page, region_attr, None)
+                if region is not None and region.content:
+                    inner_rules.append(f"@{region._region} {{ {region.content} }}")
+            if section_page.counter_reset:
+                inner_rules.append("counter-reset: page 1;")
+            if section_page.counter_style:
+                inner_rules.append(f"@bottom-center {{ content: counter(page, {section_page.counter_style}); }}")
+            if section_page.css:
+                inner_rules.append(section_page.css)
+            if inner_rules:
+                self.css += f"\n@page {section_name} {{ {' '.join(inner_rules)} }}"
+            self.css += f'\n[data-nbprint-section="{section_name}"] {{ page: {section_name}; }}'
 
     @field_validator("pages", mode="before")
     @classmethod
@@ -261,4 +270,6 @@ class PageGlobal(Page):
                     v[k] = Page(type_=element)
                 elif isinstance(element, dict):
                     v[k] = BaseModel._to_type(element)
+                elif element is None:
+                    v[k] = Page()
         return v

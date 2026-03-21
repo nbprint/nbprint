@@ -59,7 +59,7 @@ content:
 
   - _target_: nbprint.ContentCode
     content: |
-      from superstore import superstore, getTimeSeries
+      from superstore import superstore, timeseries
       from IPython.display import JSON, Markdown, FileLink
 
   - _target_: nbprint.ContentCode
@@ -90,7 +90,7 @@ content:
 
   - _target_: nbprint.ContentCode
     content: |
-      getTimeSeries().plot();
+      timeseries().plot();
 
   - _target_: nbprint.ContentMarkdown
     content: |

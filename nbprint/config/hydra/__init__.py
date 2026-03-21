@@ -4,9 +4,10 @@ from pathlib import Path
 from typing import List, Optional
 
 from ccflow import ModelRegistry
-from hydra import compose, initialize_config_dir
 from nbformat import read as nb_read
 from omegaconf import DictConfig, OmegaConf, open_dict
+
+from lerna import compose, initialize_config_dir
 
 __all__ = ("load_config",)
 
@@ -30,7 +31,7 @@ def load_config(
     # TODO: right now, nbprint runs off a specific config file, whereas
     # hydra takes a config dir and config name. For now we use the nbprint
     # style, so we adjust accordingly
-    if path.suffix in (".yaml",):
+    if path.suffix == ".yaml":
         config_dir = str(path.parent.absolute().resolve())
         config_name = str(path.name)
         is_default = False
@@ -68,7 +69,7 @@ def load_config(
 
         # If its a notebook, parse it out and run directly
         # Read notebook contents and shove into config
-        if path.suffix in (".ipynb",):
+        if path.suffix == ".ipynb":
             with open_dict(cfg):
                 cfg.nbprint.notebook = path
 
