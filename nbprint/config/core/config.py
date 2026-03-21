@@ -5,6 +5,7 @@ from sys import version_info
 from typing import Type, Union
 
 from ccflow import CallableModel, ContextType, Flow, ResultType
+from lerna import compose, initialize_config_dir
 from lerna.utils import instantiate
 from nbformat import NotebookNode, read as nb_read
 from nbformat.v4 import new_notebook
@@ -12,7 +13,6 @@ from pkn import getSimpleLogger
 from pydantic import Field, PrivateAttr, field_validator, model_validator
 from typing_extensions import Self
 
-from lerna import compose, initialize_config_dir
 from nbprint import __version__
 from nbprint.config.base import BaseModel, Role, _append_or_extend
 from nbprint.config.content import Content, ContentCode, ContentMarkdown
@@ -21,7 +21,7 @@ from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModel
 from .content import ContentMarshall
 from .context import Context
 from .outputs import Outputs, OutputsProcessing
-from .page import PageGlobal
+from .page import Page, PageGlobal
 from .parameters import PapermillParameters, Parameters
 
 __all__ = (
@@ -37,7 +37,7 @@ class Configuration(CallableModel, BaseModel):
     resources: dict[str, BaseModel] = Field(default_factory=dict)
     outputs: Outputs
     parameters: Parameters = Field(default_factory=Parameters)
-    page: PageGlobal = Field(default_factory=PageGlobal)
+    page: Page = Field(default_factory=PageGlobal)
     context: Context = Field(default_factory=Context)
 
     content: ContentMarshall = Field(default_factory=ContentMarshall)

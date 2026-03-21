@@ -111,6 +111,9 @@ class Page(BaseModel):
     counter_reset: bool = False
     counter_style: str | None = None
 
+    size: PageSize | Tuple[float, float] | None = Field(default=PageSize.letter)
+    orientation: PageOrientation | None = Field(default=PageOrientation.portrait)
+
     css: str = ""
 
     @classmethod
@@ -225,9 +228,6 @@ class Page(BaseModel):
 
 
 class PageGlobal(Page):
-    size: PageSize | Tuple[float, float] | None = Field(default=PageSize.letter)
-    orientation: PageOrientation | None = Field(default=PageOrientation.portrait)
-
     pages: dict[Section, "Page"] | None = Field(default_factory=dict)
 
     css: str = ""

@@ -64,7 +64,6 @@ content:
         content: |
           # Import necessary libraries and set plotting style
           %matplotlib inline
-          import pandas as pd
           import matplotlib.pyplot as plt
           import superstore as sup
           import seaborn as sns
