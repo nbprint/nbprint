@@ -1,11 +1,11 @@
-from typing import Literal
+from typing import Generator, Literal
 
 from pydantic import Field, PrivateAttr, model_validator
 
 from nbprint.config.base import BaseModel
 from nbprint.config.content import Content
 
-__all__ = ("ContentMarshall", "Section")
+__all__ = ("SECTION_GROUPS", "SECTION_ORDER", "ContentMarshall", "Section")
 
 
 """
@@ -50,6 +50,41 @@ Section = Literal[
     "index",
     "rearmatter",
 ]
+
+
+# Document order for section iteration
+SECTION_ORDER: list[str] = [
+    "prematter",
+    "covermatter",
+    "title",
+    "copyright",
+    "dedication",
+    "table_of_contents",
+    "frontmatter",
+    "middlematter",
+    "middlematter_separators",
+    "appendix",
+    "index",
+    "endmatter",
+    "rearmatter",
+]
+
+# Map each section to its parent group
+SECTION_GROUPS: dict[str, str] = {
+    "prematter": "prematter",
+    "covermatter": "covermatter",
+    "title": "frontmatter",
+    "copyright": "frontmatter",
+    "dedication": "frontmatter",
+    "table_of_contents": "frontmatter",
+    "frontmatter": "frontmatter",
+    "middlematter": "middlematter",
+    "middlematter_separators": "middlematter",
+    "appendix": "endmatter",
+    "index": "endmatter",
+    "endmatter": "endmatter",
+    "rearmatter": "rearmatter",
+}
 
 
 class ContentMarshall(BaseModel):
@@ -101,9 +136,25 @@ class ContentMarshall(BaseModel):
     _rearmatter: list[Content] = PrivateAttr(default_factory=list)
 
     @model_validator(mode="after")
-    def _all(self) -> "ContentMarshall":
-        self._all = self.prematter + self.frontmatter + self.middlematter + self.endmatter
+    def _setup_groups(self) -> "ContentMarshall":
+        # Populate per-group aggregations
+        self._prematter = self.prematter
+        self._covermatter = self.covermatter
+        self._frontmatter = self.title + self.copyright + self.dedication + self.table_of_contents + self.frontmatter
+        self._middlematter = self.middlematter + self.middlematter_separators
+        self._endmatter = self.appendix + self.index + self.endmatter
+        self._rearmatter = self.rearmatter
+
+        # Full document order
+        self._all = self._prematter + self._covermatter + self._frontmatter + self._middlematter + self._endmatter + self._rearmatter
         return self
+
+    def sections(self) -> Generator[tuple[str, str, list[Content]], None, None]:
+        """Yield (section_name, group_name, contents) for non-empty sections in document order."""
+        for section in SECTION_ORDER:
+            contents = getattr(self, section)
+            if contents:
+                yield section, SECTION_GROUPS[section], contents
 
     # override indexing to return from _all
     def __getitem__(self, index: int) -> Content:

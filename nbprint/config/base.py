@@ -165,7 +165,7 @@ class BaseModel(FlowBaseModel):
         cell.metadata.nbprint.role = self.role or "undefined"
         cell.metadata.nbprint.type_ = str(self.type_)
         cell.metadata.nbprint.ignore = self.ignore or False
-        if cell.metadata.nbprint.ignore and self.role in (Role.PARAMETERS,):
+        if cell.metadata.nbprint.ignore and self.role == Role.PARAMETERS:
             # Don't collapse
             ...
         elif cell.metadata.nbprint.ignore or self.role in (

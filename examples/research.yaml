@@ -73,7 +73,7 @@ content:
           sns.set_theme(style="whitegrid")
 
           # Load time series data from the helper library
-          df = pd.DataFrame(sup.getTimeSeriesData())
+          df = sup.timeseries()
 
           # Store the dataframe in the notebook's context for potential later use
           nbprint_ctx.df = df

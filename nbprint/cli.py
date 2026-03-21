@@ -3,9 +3,10 @@ from pprint import pprint
 
 from ccflow import FlowOptions, FlowOptionsOverride, ResultBase
 from ccflow.utils.hydra import cfg_explain_cli, cfg_run
-from hydra import main as hydra_main
 from omegaconf import OmegaConf
 from typer import Argument, Option, Typer
+
+from lerna import main as hydra_main
 
 from .config import Configuration, Executor
 from .config.hydra import load_config
