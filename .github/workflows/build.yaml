@@ -86,7 +86,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
 
     - name: Upload coverage
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
 
     - name: Upload generated reports (html)
       uses: actions/upload-artifact@v7
