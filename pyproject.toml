@@ -44,7 +44,7 @@ classifiers = [
 dependencies = [
     "ccflow>=0.4.0",
     "dominate",
-    "emails",
+    "emails<1",
     "ipywidgets",
     "jinja2",
     "lerna>=1.1.0",
