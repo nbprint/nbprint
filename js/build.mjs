@@ -36,11 +36,6 @@ const BUILD = [
   },
 ];
 
-const require = createRequire(import.meta.url);
-function add(builder, path, path2) {
-  builder.add(path, fs.readFileSync(require.resolve(path2 || path)).toString());
-}
-
 async function compile_css() {
   const process_path = (path) => {
     const outpath = path.replace("src/css", "dist/css");
