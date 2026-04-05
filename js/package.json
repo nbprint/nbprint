@@ -13,18 +13,11 @@
   "scripts": {
     "build": "node build.mjs",
     "clean": "rm -rf dist playwright-report ../nbprint/extension",
-<<<<<<< before updating
-    "lint": "prettier --check \"src/**/*.{js,ts,jsx,tsx,less,css}\" \"tests/**/*\" \"*.mjs\" \"*.json\"",
-    "fix": "prettier  --write \"src/**/*.{js,ts,jsx,tsx,less,css}\" \"tests/**/*\" \"*.mjs\" \"*.json\"",
-=======
-    "dev": "npm-run-all -p start watch",
     "lint": "prettier --check \"src/**/*.{js,ts,jsx,tsx,css}\" \"tests/**/*.{js,ts,jsx,tsx}\" \"*.mjs\" \"*.json\"",
     "fix": "prettier  --write \"src/**/*.{js,ts,jsx,tsx,css}\" \"tests/**/*.{js,ts,jsx,tsx}\" \"*.mjs\" \"*.json\"",
->>>>>>> after updating
     "preinstall": "npx only-allow pnpm",
     "prepack": "pnpm run build",
     "start:tests": "http-server -p 3000 ",
-<<<<<<< before updating
     "start:examples": "http-server -p 3000 -o examples/",
     "test": "TZ=UTC playwright test"
   },
@@ -34,19 +27,10 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0",
     "pagedjs": "^0.4.3"
-=======
-    "test": "TZ=UTC playwright test",
-    "watch": "nodemon --watch src -e ts,css,html --exec \"pnpm build:debug\""
->>>>>>> after updating
   },
   "devDependencies": {
     "@finos/perspective-esbuild-plugin": "^3.2.1",
-<<<<<<< before updating
-    "@playwright/test": "^1.58.1",
-    "@prospective.co/procss": "^0.1.17",
-=======
     "@playwright/test": "^1.59.0",
->>>>>>> after updating
     "cpy": "^13.2.1",
     "esbuild": "^0.27.2",
     "lightningcss": "^1.29.3",
