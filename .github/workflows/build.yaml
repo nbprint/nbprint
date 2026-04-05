@@ -87,6 +87,12 @@ jobs:
 
     - name: Upload coverage
       uses: codecov/codecov-action@v6
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: Make dist
+      run: make dist
+      if: matrix.os == 'ubuntu-latest'
 
     - name: Upload generated reports (html)
       uses: actions/upload-artifact@v7
@@ -128,6 +134,3 @@ jobs:
             | Test Reports (HTML) | [download](${{ steps.upload-reports-html.outputs.artifact-url }}) |
             | Test Reports (PDF)  | [download](${{ steps.upload-reports-pdf.outputs.artifact-url }})  |
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'nbprint/nbprint'
-
-    - name: Twine check
-      run: make dist

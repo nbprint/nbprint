@@ -186,7 +186,7 @@ path = "js"
 build_cmd = "build"
 tool = "pnpm"
 targets = [
-    "nbprint/templates/nbprint/static/nbprint.css",
+    "nbprint/templates/nbprint/static/index.css",
     "nbprint/extension/index.js",
 ]
 
