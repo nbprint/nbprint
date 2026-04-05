@@ -87,6 +87,15 @@ jobs:
 
     - name: Upload coverage
       uses: codecov/codecov-action@v6
+<<<<<<< before updating
+=======
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: Make dist
+      run: make dist
+      if: matrix.os == 'ubuntu-latest'
+>>>>>>> after updating
 
     - name: Upload generated reports (html)
       uses: actions/upload-artifact@v7
