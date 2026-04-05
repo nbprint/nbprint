@@ -66,14 +66,14 @@
 .jp-MarkdownOutput {
   overflow: visible !important;
 }
-.jp-RenderedHTMLCommon > *:last-child {
-  // margin-bottom: 0px !important;
-}
+/* .jp-RenderedHTMLCommon > *:last-child {
+  margin-bottom: 0px !important;
+} */
 .jp-Cell {
-  // padding: var(--jp-cell-padding);
+  /* padding: var(--jp-cell-padding); */
   padding: 0px !important;
-  // padding-left: 0px !important;
-  // padding-right: 0px !important;
+  /* padding-left: 0px !important; */
+  /* padding-right: 0px !important; */
 }
 .pagedjs_page .jp-RenderedHTMLCommon h1:first-child,
 .pagedjs_page .jp-RenderedHTMLCommon h2:first-child,
