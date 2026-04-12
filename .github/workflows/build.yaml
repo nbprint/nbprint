@@ -94,9 +94,27 @@ jobs:
       run: make dist
       if: matrix.os == 'ubuntu-latest'
 
+<<<<<<< before updating
     - name: Upload generated reports (html)
       uses: actions/upload-artifact@v7
       id: upload-reports-html
+=======
+    - name: Test wheel install
+      run: |
+        python -m venv /tmp/test-wheel
+        /tmp/test-wheel/bin/pip install dist/*.whl
+        /tmp/test-wheel/bin/python -c "import nbprint"
+      if: matrix.os == 'ubuntu-latest'
+
+    - name: Test sdist install
+      run: |
+        python -m venv /tmp/test-sdist
+        /tmp/test-sdist/bin/pip install dist/*.tar.gz
+        /tmp/test-sdist/bin/python -c "import nbprint"
+      if: matrix.os == 'ubuntu-latest'
+
+    - uses: actions/upload-artifact@v7
+>>>>>>> after updating
       with:
         name: reports-html
         path: 'outputs/*.html'

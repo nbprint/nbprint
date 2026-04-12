@@ -1,18 +1,24 @@
 name: Publish Docs
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Build Status"]
+    branches: [main]
+    types: [completed]
   workflow_dispatch:
+
 permissions:
+  actions: read
   contents: write
+
 jobs:
   docs:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions-ext/python/setup@main
+<<<<<<< before updating
       - uses: actions-ext/node/setup@main
       - name: Install dependencies
         run: |
@@ -36,6 +42,34 @@ jobs:
           else
             echo "No HTML outputs found in outputs/ directory"
           fi
+=======
+
+      - name: Download dist from build
+        uses: actions/download-artifact@v7
+        with:
+          pattern: dist-ubuntu-latest*
+          merge-multiple: true
+          path: dist
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+        if: github.event_name == 'workflow_run'
+
+      - name: Install from wheel
+        run: |
+          uv pip install dist/*.whl
+          uv pip install yardang
+        if: github.event_name == 'workflow_run'
+
+      - name: Install from source (manual trigger)
+        run: |
+          uv pip install .[develop]
+          uv pip install yardang
+        if: github.event_name == 'workflow_dispatch'
+
+      - run: yardang build
+
+>>>>>>> after updating
       - uses: peaceiris/actions-gh-pages@v4
         with:
           publish_branch: gh-pages
