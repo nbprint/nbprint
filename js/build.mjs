@@ -1,10 +1,11 @@
-import { NodeModulesExternal } from "@finos/perspective-esbuild-plugin/external.js";
-import { build } from "@finos/perspective-esbuild-plugin/build.js";
-import { transform } from "lightningcss";
-import { getarg } from "./tools/getarg.mjs";
+import { bundle } from "./tools/bundle.mjs";
+import { bundle_css } from "./tools/css.mjs";
+import { node_modules_external } from "./tools/externals.mjs";
+
 import fs from "fs";
 import cpy from "cpy";
 
+<<<<<<< before updating
 const DEBUG = getarg("--debug");
 
 const BUILD = [
@@ -33,36 +34,25 @@ const BUILD = [
       ".html": "text",
     },
     outfile: "./dist/embedded.js",
+=======
+const BUNDLES = [
+  {
+    entryPoints: ["src/ts/index.ts"],
+    plugins: [node_modules_external()],
+    outfile: "dist/esm/index.js",
+  },
+  {
+    entryPoints: ["src/ts/index.ts"],
+    outfile: "dist/cdn/index.js",
+>>>>>>> after updating
   },
 ];
 
-async function compile_css() {
-  const process_path = (path) => {
-    const outpath = path.replace("src/css", "dist/css");
-    fs.mkdirSync(outpath, { recursive: true });
+async function build() {
+  // Bundle css
+  await bundle_css();
 
-    fs.readdirSync(path, { withFileTypes: true }).forEach((entry) => {
-      const input = `${path}/${entry.name}`;
-      const output = `${outpath}/${entry.name}`;
-
-      if (entry.isDirectory()) {
-        process_path(input);
-      } else if (entry.isFile() && entry.name.endsWith(".css")) {
-        const source = fs.readFileSync(input);
-        const { code } = transform({
-          filename: entry.name,
-          code: source,
-          minify: !DEBUG,
-          sourceMap: false,
-        });
-        fs.writeFileSync(output, code);
-      }
-    });
-  };
-
-  process_path("src/css");
-}
-
+<<<<<<< before updating
 async function cp_to_paths(path) {
   await cpy(path, "../nbprint/extension/", { flat: true });
   await cpy(path, "../nbprint/templates/nbprint/static/", { flat: true });
@@ -85,6 +75,22 @@ async function build_all() {
   await cp_to_paths(
     "node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css",
   );
+=======
+  // Copy HTML
+  cpy("src/html/*", "dist/");
+
+  // Copy images
+  fs.mkdirSync("dist/img", { recursive: true });
+  cpy("src/img/*", "dist/img");
+
+  await Promise.all(BUNDLES.map(bundle)).catch(() => process.exit(1));
+
+  // Copy servable assets to python extension (exclude esm/)
+  fs.mkdirSync("../nbprint/extension", { recursive: true });
+  cpy("dist/**/*", "../nbprint/extension", {
+    filter: (file) => !file.relativePath.startsWith("esm"),
+  });
+>>>>>>> after updating
 }
 
-build_all();
+build();

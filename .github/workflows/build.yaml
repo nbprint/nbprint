@@ -94,9 +94,23 @@ jobs:
       run: make dist
       if: matrix.os == 'ubuntu-latest'
 
+<<<<<<< before updating
     - name: Upload generated reports (html)
       uses: actions/upload-artifact@v7
       id: upload-reports-html
+=======
+    - uses: actions-ext/python/test-wheel@main
+      with:
+        module: nbprint
+      if: matrix.os == 'ubuntu-latest'
+
+    - uses: actions-ext/python/test-sdist@main
+      with:
+        module: nbprint
+      if: matrix.os == 'ubuntu-latest'
+
+    - uses: actions/upload-artifact@v7
+>>>>>>> after updating
       with:
         name: reports-html
         path: 'outputs/*.html'
