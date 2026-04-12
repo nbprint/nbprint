@@ -26,8 +26,6 @@ jobs:
           sudo apt install pandoc
           uv pip install playwright
           playwright install chromium
-          uv pip install -e .[develop]
-          uv pip install yardang
 
       - name: Download dist from build
         uses: actions/download-artifact@v7
@@ -43,6 +41,7 @@ jobs:
       - name: Install from wheel
         run: |
           uv pip install dist/*.whl
+          uv pip install .[develop]
           uv pip install yardang
         if: github.event_name == 'workflow_run'
 
