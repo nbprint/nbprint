@@ -90,27 +90,9 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 
-    - name: Make dist
-      run: make dist
-      if: matrix.os == 'ubuntu-latest'
-
-<<<<<<< before updating
     - name: Upload generated reports (html)
       uses: actions/upload-artifact@v7
       id: upload-reports-html
-=======
-    - uses: actions-ext/python/test-wheel@main
-      with:
-        module: nbprint
-      if: matrix.os == 'ubuntu-latest'
-
-    - uses: actions-ext/python/test-sdist@main
-      with:
-        module: nbprint
-      if: matrix.os == 'ubuntu-latest'
-
-    - uses: actions/upload-artifact@v7
->>>>>>> after updating
       with:
         name: reports-html
         path: 'outputs/*.html'
@@ -148,3 +130,23 @@ jobs:
             | Test Reports (HTML) | [download](${{ steps.upload-reports-html.outputs.artifact-url }}) |
             | Test Reports (PDF)  | [download](${{ steps.upload-reports-pdf.outputs.artifact-url }})  |
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'nbprint/nbprint'
+
+    - name: Make dist
+      run: make dist
+      if: matrix.os == 'ubuntu-latest'
+
+    - uses: actions-ext/python/test-wheel@main
+      with:
+        module: nbprint
+      if: matrix.os == 'ubuntu-latest'
+
+    - uses: actions-ext/python/test-sdist@main
+      with:
+        module: nbprint
+      if: matrix.os == 'ubuntu-latest'
+
+    - uses: actions/upload-artifact@v7
+      with:
+        name: dist-${{matrix.os}}
+        path: dist
+      if: matrix.os == 'ubuntu-latest'
