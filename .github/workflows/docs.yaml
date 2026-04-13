@@ -28,7 +28,7 @@ jobs:
           playwright install chromium
 
       - name: Download dist from build
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           pattern: dist-ubuntu-latest*
           merge-multiple: true
