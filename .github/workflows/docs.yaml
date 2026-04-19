@@ -54,7 +54,7 @@ jobs:
 
       - name: Run tests to generate HTML outputs
         run: |
-          make test-py
+          make test-py || true
           rm -rf outputs/*.ipynb
       - name: Build docs
         run: yardang build

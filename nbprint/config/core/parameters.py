@@ -1,6 +1,6 @@
 import ast
 from json import dumps
-from typing import Any, Dict
+from typing import Any
 
 from ccflow import ContextBase
 from nbformat import NotebookNode
@@ -58,7 +58,7 @@ class Parameters(ContextBase, BaseModel):
 class PapermillParameters(Parameters):
     """Papermill parameters function implicitly as a dict"""
 
-    vars: Dict[str, Any] = Field(default_factory=dict)
+    vars: dict[str, Any] = Field(default_factory=dict)
 
     def generate(self, metadata: dict, **_) -> NotebookNode:
         cell = self._base_generate_meta(metadata=metadata)

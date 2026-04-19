@@ -1,5 +1,4 @@
 import logging
-from typing import Dict, List
 
 from IPython.display import HTML
 from pydantic import Field
@@ -22,7 +21,7 @@ class LoggingBasicConfig(Content):
 class LoggingConfig(Content):
     version: int = 1
     disable_existing_loggers: bool = False
-    formatters: Dict[str, Dict[str, str | Dict[str, str]]] = Field(
+    formatters: dict[str, dict[str, str | dict[str, str]]] = Field(
         default={
             "simple": {"format": "[%(asctime)s][%(threadName)s][%(name)s][%(levelname)s]: %(message)s"},
             "colorlog": {
@@ -39,7 +38,7 @@ class LoggingConfig(Content):
             "whenAndWhere": {"format": "[%(asctime)s][%(threadName)s][%(name)s][%(filename)s:%(lineno)d][%(levelname)s]: %(message)s"},
         }
     )
-    handlers: Dict[str, Dict[str, str]] = Field(
+    handlers: dict[str, dict[str, str]] = Field(
         default={
             "console": {
                 "level": "WARNING",
@@ -49,7 +48,7 @@ class LoggingConfig(Content):
             }
         }
     )
-    root: Dict[str, str | List[str]] = Field(default={"handlers": ["console"], "level": "DEBUG"})
+    root: dict[str, str | list[str]] = Field(default={"handlers": ["console"], "level": "DEBUG"})
 
     def __call__(self, **_) -> HTML:
         logging.dictConfig(self.model_dump(exclude=["type_"]))
