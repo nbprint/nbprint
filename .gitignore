@@ -151,6 +151,7 @@ multirun/
 ROADMAP.md
 AGENTS.md
 .github/hooks/sdlc.json
+<<<<<<< before updating
 
 /output
 nbprint/extension/*
@@ -163,3 +164,6 @@ examples/output
 # Plugins testing
 nbprint_example_plugin*
 *.csv
+=======
+.superpowers
+>>>>>>> after updating
