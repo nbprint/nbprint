@@ -1,0 +1,14 @@
+diff --git a/src/modules/paged-media/print-media.js b/src/modules/paged-media/print-media.js
+index 1234567..abcdefg 100644
+--- a/src/modules/paged-media/print-media.js
++++ b/src/modules/paged-media/print-media.js
+@@ -9,6 +9,9 @@ class PrintMedia extends Handler {
+ 	onAtMedia(node, item, list) {
+ 		let media = this.getMediaName(node);
+ 		let rules;
++		if (!media) {
++			return;
++		}
+ 		if (media.includes("print")) {
+ 			rules = node.block.children;
+ 
