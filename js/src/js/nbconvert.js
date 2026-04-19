@@ -3,12 +3,44 @@ import { createToc } from "./components/table-of-content";
 import { Previewer, registerHandlers, Handler } from "pagedjs";
 import "@fortawesome/fontawesome-free/js/all";
 
+/**
+ * Sanitize element IDs so they are valid CSS selectors.
+ * Jupyter converts markdown headings like "Summary & Performance"
+ * into IDs containing characters (& · etc.) that break querySelector.
+ * We rewrite those IDs before pagedjs runs and update any anchors
+ * that reference them.
+ */
+function sanitizeIds(content) {
+  const idMap = new Map();
+  content.querySelectorAll("[id]").forEach((el) => {
+    const oldId = el.id;
+    // Replace any character that is not alphanumeric, hyphen, or underscore
+    const newId = oldId
+      .replace(/[^a-zA-Z0-9_-]/g, "-")
+      .replace(/-{2,}/g, "-")
+      .replace(/^-|-$/g, "");
+    if (newId !== oldId && newId.length > 0) {
+      el.id = newId;
+      idMap.set(oldId, newId);
+    }
+  });
+  if (idMap.size > 0) {
+    content.querySelectorAll("a[href^='#']").forEach((a) => {
+      const target = decodeURIComponent(a.getAttribute("href").slice(1));
+      if (idMap.has(target)) {
+        a.setAttribute("href", "#" + idMap.get(target));
+      }
+    });
+  }
+}
+
 export class handlers extends Handler {
   constructor(chunker, polisher, caller) {
     super(chunker, polisher, caller);
   }
 
   beforeParsed(content) {
+    sanitizeIds(content);
     createToc({
       content,
       tocElement: "#toc",
