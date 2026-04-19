@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   pagedjs@0.4.3:
-    hash: e7ed6b1f135e7c662f95fd84b00900102d8deee4474c48e0102c8b35bd606753
+    hash: a9299f1b66a49bd9633d7948a3b69514461d7a68b6ee818c3f0cd8d002cd4a1a
     path: patches/pagedjs@0.4.3.patch
 
 importers:
@@ -18,7 +18,7 @@ importers:
         version: 7.2.0
       pagedjs:
         specifier: ^0.4.3
-        version: 0.4.3(patch_hash=e7ed6b1f135e7c662f95fd84b00900102d8deee4474c48e0102c8b35bd606753)
+        version: 0.4.3(patch_hash=a9299f1b66a49bd9633d7948a3b69514461d7a68b6ee818c3f0cd8d002cd4a1a)
     devDependencies:
       '@playwright/test':
         specifier: ^1.59.1
@@ -2104,7 +2104,7 @@ snapshots:
 
   p-timeout@6.1.4: {}
 
-  pagedjs@0.4.3(patch_hash=e7ed6b1f135e7c662f95fd84b00900102d8deee4474c48e0102c8b35bd606753):
+  pagedjs@0.4.3(patch_hash=a9299f1b66a49bd9633d7948a3b69514461d7a68b6ee818c3f0cd8d002cd4a1a):
     dependencies:
       '@babel/polyfill': 7.12.1
       '@babel/runtime': 7.28.6
