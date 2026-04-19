@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 import pandas as pd
 from pydantic import Field
@@ -11,4 +11,4 @@ __all__ = ("ExampleContext",)
 class ExampleContext(Context):
     string: str = ""
     df: pd.DataFrame | None = None
-    params: Dict[str, Any] = Field(default_factory=dict)
+    params: dict[str, Any] = Field(default_factory=dict)
