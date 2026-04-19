@@ -205,6 +205,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.core.Context.html">nbprint.config.core.Context</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.core.Page.html">nbprint.config.core.Page</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.core.Outputs.html">nbprint.config.core.Outputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.config.content.Content.html">nbprint.config.content.Content</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.cli.run.html">nbprint.cli.run</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../docs/src/_build/nbprint.cli.hydra_explain.html">nbprint.cli.hydra_explain</a></li>
@@ -268,7 +269,7 @@
           <h1>Source code for nbprint.config.core.parameters</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">json</span><span class="w"> </span><span class="kn">import</span> <span class="n">dumps</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">ccflow</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContextBase</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbformat</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotebookNode</span>
@@ -334,7 +335,7 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">PapermillParameters</span><span class="p">(</span><span class="n">Parameters</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Papermill parameters function implicitly as a dict&quot;&quot;&quot;</span>
 
-    <span class="nb">vars</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="nb">vars</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
 <div class="viewcode-block" id="PapermillParameters.generate">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.PapermillParameters.html#nbprint.config.core.PapermillParameters.generate">[docs]</a>

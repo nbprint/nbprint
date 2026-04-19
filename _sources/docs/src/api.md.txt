@@ -12,9 +12,19 @@
 
     Parameters
     Context
-    Content
     Page
     Outputs
+```
+
+## Content
+
+```{eval-rst}
+.. currentmodule:: nbprint.config.content
+
+.. autosummary::
+   :toctree: _build
+
+    Content
 ```
 
 ## CLI
