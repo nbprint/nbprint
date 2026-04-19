@@ -1,5 +1,37 @@
+diff --git a/src/modules/generated-content/target-counters.js b/src/modules/generated-content/target-counters.js
+index a41e1181a258a28620c02df5b03e717aea06922d..a1720bca7f70c5c8bdd34c23934f37d24212cbaa 100644
+--- a/src/modules/generated-content/target-counters.js
++++ b/src/modules/generated-content/target-counters.js
+@@ -89,7 +89,11 @@ class TargetCounters extends Handler {
+ 					return;
+ 				}
+ 				let val = attr(selected, target.args);
+-				let element = chunker.pagesArea.querySelector(querySelectorEscape(val));
++				// Use getElementById to avoid CSS selector escaping issues with special chars
++				let defined_id = val && val.startsWith("#") ? decodeURIComponent(val.substring(1)) : val;
++				let element = defined_id ? chunker.pagesArea.ownerDocument.getElementById(defined_id) : null;
++				// Fall back: ensure element is within pagesArea
++				if (element && !chunker.pagesArea.contains(element)) { element = null; }
+ 
+ 				if (element) {
+ 					let selector = UUID();
+diff --git a/src/modules/generated-content/target-text.js b/src/modules/generated-content/target-text.js
+index 355def1c4d2b864b8994b0c200383f1cd8130396..888f3222ce7ef4f4632b4ecd59cc3ec7ce1cec96 100644
+--- a/src/modules/generated-content/target-text.js
++++ b/src/modules/generated-content/target-text.js
+@@ -96,7 +96,9 @@ class TargetText extends Handler {
+ 			let textContent;
+ 			queried.forEach((selected, index) => {
+ 				let val = attr(selected, target.args);
+-				let element = fragment.querySelector(querySelectorEscape(val));
++				// Use getElementById to avoid CSS selector escaping issues with special chars
++				let defined_id = val && val.startsWith("#") ? decodeURIComponent(val.substring(1)) : null;
++				let element = defined_id ? fragment.getElementById ? fragment.getElementById(defined_id) : (fragment.ownerDocument || document).getElementById(defined_id) : null;
+ 				if (element) {
+ 					// content & first-letter & before & after refactorized
+ 					if (target.style) {
 diff --git a/src/modules/paged-media/print-media.js b/src/modules/paged-media/print-media.js
-index 1234567..abcdefg 100644
+index 5e34b2469cc94dfca02b02c82f203b842f37b41e..ce06c5cea6dd1a4f7ab9634eb48fed476f83b4dc 100644
 --- a/src/modules/paged-media/print-media.js
 +++ b/src/modules/paged-media/print-media.js
 @@ -9,6 +9,9 @@ class PrintMedia extends Handler {
