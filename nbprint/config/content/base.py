@@ -36,6 +36,24 @@ class Content(BaseModel):
             v.append("nbprint:content")
         return v
 
+    def _merge_style_css(self) -> None:
+        """Merge structured ``style`` properties into ``self.css`` for rendering."""
+        if not isinstance(self.style, Style):
+            return
+        style_css = self.style.to_css_properties()
+        if not style_css:
+            return
+        # Wrap in :scope so @scope(...) in the template targets the cell wrapper
+        scoped = f":scope {{\n{style_css}\n}}"
+        if self.css:
+            self.css = f"{self.css}\n{scoped}"
+        else:
+            self.css = scoped
+
+    def render(self, **kwargs) -> None:
+        super().render(**kwargs)
+        self._merge_style_css()
+
     def _postprocess_cell(self, cell) -> None:
         if isinstance(self.content, str) and self.content:
             # replace content if its a str

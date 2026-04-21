@@ -54,12 +54,28 @@ class Style(BaseModel):
     font: Font | None = None
     border: Border | None = None
 
-    def __str__(self) -> str:
-        ret = f"{self.scope} {{\n"
+    def to_css_properties(self) -> str:
+        """Return just the CSS property declarations (no selector wrapping)."""
+        parts = []
         for part in (self.spacing, self.font, self.border):
             if part:
                 part_str = str(part)
                 if part_str:
-                    ret += f"{part_str}\n"
-        ret += "\n}"
-        return ret.replace("\n\n", "\n").strip()
+                    parts.append(part_str)
+        return "\n".join(parts)
+
+    def merge(self, other: "Style") -> "Style":
+        """Return a new Style with fields from ``other`` overriding ``self``."""
+        return Style(
+            scope=other.scope if other.scope is not None else self.scope,
+            spacing=other.spacing if other.spacing is not None else self.spacing,
+            font=other.font if other.font is not None else self.font,
+            border=other.border if other.border is not None else self.border,
+        )
+
+    def __str__(self) -> str:
+        props = self.to_css_properties()
+        if self.scope:
+            ret = f"{self.scope} {{\n{props}\n}}"
+            return ret.replace("\n\n", "\n").strip()
+        return props
