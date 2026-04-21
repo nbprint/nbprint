@@ -20,10 +20,6 @@ async function screenshotPages(page, testInfo, name, maxPages = Infinity) {
   return pages.length;
 }
 
-// =============================================================================
-// Visual regression tests for overflow scenario fixtures
-// =============================================================================
-
 test.describe("Visual regression — overflow fixtures", () => {
   test("oversized image", async ({ page }) => {
     await page.goto("/js/tests/fixtures/overflow/oversized-image.html");
@@ -60,10 +56,6 @@ test.describe("Visual regression — overflow fixtures", () => {
     expect(count).toBeGreaterThan(1);
   });
 });
-
-// =============================================================================
-// Visual regression tests for Phase 3 handler behaviors
-// =============================================================================
 
 test.describe("Visual regression — Phase 3 handler fixtures", () => {
   test("blank page trigger — no blank pages visible", async ({ page }) => {
@@ -102,10 +94,6 @@ test.describe("Visual regression — Phase 3 handler fixtures", () => {
     expect(count).toBeGreaterThan(1);
   });
 });
-
-// =============================================================================
-// Visual regression tests for generated report outputs
-// =============================================================================
 
 const TEMPLATES = [
   "basic",

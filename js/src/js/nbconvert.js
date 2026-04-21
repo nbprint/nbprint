@@ -55,9 +55,6 @@ export class handlers extends Handler {
     });
   }
 
-  // -------------------------------------------------------------------
-  // 3.1  afterPageLayout — overflow detection
-  // -------------------------------------------------------------------
   afterPageLayout(pageElement, page, breakToken, chunker) {
     const contentArea = pageElement.querySelector(".pagedjs_page_content");
     if (!contentArea) return;
@@ -101,13 +98,71 @@ export class handlers extends Handler {
       }
     }
 
-    // -------------------------------------------------------------------
-    // 3.2  afterPageLayout — blank page detection
-    // -------------------------------------------------------------------
     const hasVisibleContent = this._pageHasVisibleContent(contentArea);
     if (!hasVisibleContent) {
-      pageElement.setAttribute("data-nbprint-blank", "true");
+      // Only mark as blank if the page wasn't created by an explicit
+      // CSS break rule (break-before/break-after: page|recto|verso|left|right).
+      // Intentional blank pages should be preserved.
+      const intentional = this._isIntentionalBlank(pageElement, breakToken);
+      if (intentional) {
+        pageElement.setAttribute("data-nbprint-blank", "intentional");
+      } else {
+        pageElement.setAttribute("data-nbprint-blank", "true");
+      }
     }
+  }
+
+  /**
+   * Determine if a blank page was intentionally created via CSS break rules.
+   *
+   * A blank page is intentional when:
+   * - The break token's node (next content) has break-before: page|recto|verso|left|right
+   * - The previous page's last element has break-after: page|recto|verso|left|right
+   * - The page itself carries a pagedjs class indicating a forced break
+   */
+  _isIntentionalBlank(pageElement, breakToken) {
+    const BREAK_VALUES = new Set([
+      "page",
+      "left",
+      "right",
+      "recto",
+      "verso",
+      "always",
+    ]);
+
+    // Check if break token's node has an explicit break-before
+    if (breakToken?.node) {
+      const node =
+        breakToken.node.nodeType === Node.ELEMENT_NODE
+          ? breakToken.node
+          : breakToken.node.parentElement;
+      if (node) {
+        const style = getComputedStyle(node);
+        if (BREAK_VALUES.has(style.breakBefore)) return true;
+        // Legacy property
+        if (BREAK_VALUES.has(style.pageBreakBefore)) return true;
+      }
+    }
+
+    // Check if the previous page's last content element has break-after
+    const prevPage = pageElement.previousElementSibling;
+    if (prevPage?.classList?.contains("pagedjs_page")) {
+      const prevContent = prevPage.querySelector(".pagedjs_page_content");
+      if (prevContent) {
+        // Find the last non-empty element in the previous page
+        const allEls = prevContent.querySelectorAll("*");
+        for (let i = allEls.length - 1; i >= 0; i--) {
+          const el = allEls[i];
+          if (el.tagName?.toLowerCase() === "br") continue;
+          const style = getComputedStyle(el);
+          if (BREAK_VALUES.has(style.breakAfter)) return true;
+          if (BREAK_VALUES.has(style.pageBreakAfter)) return true;
+          break;
+        }
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -138,9 +193,6 @@ export class handlers extends Handler {
     return false;
   }
 
-  // -------------------------------------------------------------------
-  // 3.4  renderNode — code block line-aware splitting
-  // -------------------------------------------------------------------
   renderNode(clone, sourceNode) {
     if (!sourceNode || !clone) return;
     const tag = sourceNode.tagName?.toLowerCase();
@@ -188,9 +240,6 @@ export class handlers extends Handler {
     codeEl.setAttribute("data-nbprint-lines", "true");
   }
 
-  // -------------------------------------------------------------------
-  // 3.5  onBreakToken — keep heading with next content
-  // -------------------------------------------------------------------
   onBreakToken(breakToken, overflow, rendered) {
     if (!breakToken || !breakToken.node) return;
 

@@ -9,10 +9,6 @@
  * This module fixes those dimensions up-front.
  */
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
 /** Standard page sizes in CSS pixels (96 DPI). */
 const PAGE_SIZES = {
   letter: { width: 816, height: 1056 }, // 8.5 × 11 in
@@ -24,10 +20,6 @@ const PAGE_SIZES = {
 
 /** Default page margin (0.5 in) in pixels. */
 const DEFAULT_MARGIN_PX = 48;
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 /** Convert a CSS length string (e.g. "0.5in", "25.4mm") to pixels. */
 function cssToPixels(value) {
@@ -99,10 +91,6 @@ function getPageMargins() {
   return { top, right, bottom, left };
 }
 
-// ---------------------------------------------------------------------------
-// Page dimension computation
-// ---------------------------------------------------------------------------
-
 /**
  * Compute the usable content area for a single page.
  * Derives page size from configuration + @page CSS margins.
@@ -142,10 +130,6 @@ export function getPageContentArea(configuration) {
   };
 }
 
-// ---------------------------------------------------------------------------
-// 2.2  Scale oversized images
-// ---------------------------------------------------------------------------
-
 function scaleOversizedImages(contentRoot, contentArea) {
   for (const img of contentRoot.querySelectorAll("img")) {
     const attrW = parseFloat(img.getAttribute("width"));
@@ -164,10 +148,6 @@ function scaleOversizedImages(contentRoot, contentArea) {
     }
   }
 }
-
-// ---------------------------------------------------------------------------
-// 2.2  Scale oversized SVGs
-// ---------------------------------------------------------------------------
 
 function scaleOversizedSVGs(contentRoot, contentArea) {
   for (const svg of contentRoot.querySelectorAll("svg")) {
@@ -194,10 +174,6 @@ function scaleOversizedSVGs(contentRoot, contentArea) {
   }
 }
 
-// ---------------------------------------------------------------------------
-// 2.3  Scale oversized charts (Plotly, matplotlib)
-// ---------------------------------------------------------------------------
-
 function scaleOversizedCharts(contentRoot, contentArea) {
   // Plotly charts
   for (const chart of contentRoot.querySelectorAll(".js-plotly-plot")) {
@@ -223,10 +199,6 @@ function scaleOversizedCharts(contentRoot, contentArea) {
   }
 }
 
-// ---------------------------------------------------------------------------
-// 2.4  Annotate tall tables for chunking
-// ---------------------------------------------------------------------------
-
 function annotateTallTables(contentRoot, contentArea) {
   for (const table of contentRoot.querySelectorAll("table")) {
     const h = table.getBoundingClientRect().height || table.offsetHeight;
@@ -235,10 +207,6 @@ function annotateTallTables(contentRoot, contentArea) {
     }
   }
 }
-
-// ---------------------------------------------------------------------------
-// Entry point
-// ---------------------------------------------------------------------------
 
 /**
  * Run all pre-pagination preprocessing on the content root.
