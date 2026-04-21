@@ -17,9 +17,10 @@
     "fix": "prettier  --write \"src/**/*.{js,ts,jsx,tsx,css}\" \"tests/**/*.{js,ts,jsx,tsx}\" \"*.mjs\" \"*.json\"",
     "preinstall": "npx only-allow pnpm",
     "prepack": "pnpm run build",
-    "start:tests": "http-server -p 3000 ",
+    "start:tests": "http-server -p 3000 ..",
     "start:examples": "http-server -p 3000 -o examples/",
-    "test": "TZ=UTC playwright test"
+    "test": "TZ=UTC playwright test",
+    "test:integration": "TZ=UTC playwright test --config integration.config.js"
   },
   "publishConfig": {
     "access": "public"

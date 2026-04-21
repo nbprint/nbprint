@@ -2,7 +2,6 @@ examples/* linguist-documentation
 docs/* linguist-documentation
 *.ipynb linguist-documentation
 Makefile linguist-documentation
-
 *.css text=auto eol=lf
 *.html text=auto eol=lf
 *.js text=auto eol=lf

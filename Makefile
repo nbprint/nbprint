@@ -108,6 +108,19 @@ tests-js: test-js
 
 coverage-js: test-js  ## run js tests and collect test coverage
 
+.PHONY: test-visual test-visual-update test-integration test-integration-update
+test-visual:  ## run visual regression tests with playwright
+	cd js; pnpm test
+
+test-visual-update:  ## update visual regression baselines
+	cd js; pnpm test -- --update-snapshots
+
+test-integration:  ## run full pipeline integration tests (requires nbprint installed)
+	cd js; pnpm test:integration
+
+test-integration-update:  ## update integration test baselines
+	cd js; pnpm test:integration -- --update-snapshots
+
 .PHONY: test coverage tests
 test: test-py test-js  ## run all tests
 coverage: coverage-py coverage-js  ## run all tests and collect test coverage
