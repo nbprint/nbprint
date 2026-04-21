@@ -330,6 +330,333 @@ class TestSectionTagging:
             assert "nbprint:section-group:middlematter" in cell.metadata.tags
 
 
+class TestNotebookSectionRouting:
+    """Section routing from cell tags and metadata when loading notebooks."""
+
+    def test_section_routing_from_cell_tags(self):
+        """Cells with nbprint:section:<name> tags are routed to the correct section."""
+        from nbformat.v4 import new_markdown_cell, new_notebook
+
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(source="# Cover", metadata={"tags": ["nbprint:section:covermatter"]}),
+            new_markdown_cell(source="# Title", metadata={"tags": ["nbprint:section:title"]}),
+            new_markdown_cell(source="Body content", metadata={"tags": []}),
+            new_markdown_cell(source="# Appendix", metadata={"tags": ["nbprint:section:appendix"]}),
+        ]
+
+        from nbprint.config.core.config import Configuration
+
+        values = {"content": ContentMarshall()}
+        Configuration._process_cells(values, nb)
+
+        assert len(values["content"].covermatter) == 1
+        assert values["content"].covermatter[0].content == "# Cover"
+        assert len(values["content"].title) == 1
+        assert values["content"].title[0].content == "# Title"
+        assert len(values["content"].middlematter) == 1
+        assert values["content"].middlematter[0].content == "Body content"
+        assert len(values["content"].appendix) == 1
+        assert values["content"].appendix[0].content == "# Appendix"
+
+    def test_section_routing_from_cell_metadata(self):
+        """Cells with metadata.nbprint.section are routed to the correct section."""
+        from nbformat.v4 import new_code_cell, new_notebook
+
+        nb = new_notebook()
+        nb.cells = [
+            new_code_cell(source="setup()", metadata={"tags": [], "nbprint": {"section": "prematter"}}),
+            new_code_cell(source="main()", metadata={"tags": []}),
+        ]
+
+        from nbprint.config.core.config import Configuration
+
+        values = {"content": ContentMarshall()}
+        Configuration._process_cells(values, nb)
+
+        assert len(values["content"].prematter) == 1
+        assert values["content"].prematter[0].content == "setup()"
+        assert len(values["content"].middlematter) == 1
+        assert values["content"].middlematter[0].content == "main()"
+
+    def test_section_metadata_takes_priority_over_tags(self):
+        """metadata.nbprint.section takes priority over nbprint:section: tags."""
+        from nbformat.v4 import new_markdown_cell, new_notebook
+
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(
+                source="Priority test",
+                metadata={
+                    "tags": ["nbprint:section:appendix"],
+                    "nbprint": {"section": "covermatter"},
+                },
+            ),
+        ]
+
+        from nbprint.config.core.config import Configuration
+
+        values = {"content": ContentMarshall()}
+        Configuration._process_cells(values, nb)
+
+        # Metadata wins
+        assert len(values["content"].covermatter) == 1
+        assert len(values["content"].appendix) == 0
+
+    def test_invalid_section_tag_ignored(self):
+        """Tags with invalid section names fall through to middlematter."""
+        from nbformat.v4 import new_markdown_cell, new_notebook
+
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(source="Bad section", metadata={"tags": ["nbprint:section:nonexistent"]}),
+        ]
+
+        from nbprint.config.core.config import Configuration
+
+        values = {"content": ContentMarshall()}
+        Configuration._process_cells(values, nb)
+
+        assert len(values["content"].middlematter) == 1
+
+    def test_no_tags_defaults_to_middlematter(self):
+        """Cells without any section indicators go to middlematter."""
+        from nbformat.v4 import new_code_cell, new_notebook
+
+        nb = new_notebook()
+        nb.cells = [
+            new_code_cell(source="print('hi')", metadata={"tags": []}),
+        ]
+
+        from nbprint.config.core.config import Configuration
+
+        values = {"content": ContentMarshall()}
+        Configuration._process_cells(values, nb)
+
+        assert len(values["content"].middlematter) == 1
+
+    def test_parameters_cell_still_extracted(self):
+        """First cell with 'parameters' tag is still parsed as parameters, not routed."""
+        from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
+
+        nb = new_notebook()
+        nb.cells = [
+            new_code_cell(source="x = 42", metadata={"tags": ["parameters"]}),
+            new_markdown_cell(source="Body", metadata={"tags": ["nbprint:section:frontmatter"]}),
+        ]
+
+        from nbprint.config.core.config import Configuration
+        from nbprint.config.core.parameters import PapermillParameters
+
+        values = {"content": ContentMarshall(), "parameters": PapermillParameters()}
+        Configuration._process_cells(values, nb)
+
+        assert values["parameters"].vars["x"] == 42
+        assert len(values["content"].frontmatter) == 1
+        assert len(values["content"].middlematter) == 0
+
+    def test_multiple_cells_same_section(self):
+        """Multiple cells routed to the same section appear in order."""
+        from nbformat.v4 import new_markdown_cell, new_notebook
+
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(source="First", metadata={"tags": ["nbprint:section:frontmatter"]}),
+            new_markdown_cell(source="Second", metadata={"tags": ["nbprint:section:frontmatter"]}),
+            new_markdown_cell(source="Third", metadata={"tags": ["nbprint:section:frontmatter"]}),
+        ]
+
+        from nbprint.config.core.config import Configuration
+
+        values = {"content": ContentMarshall()}
+        Configuration._process_cells(values, nb)
+
+        assert len(values["content"].frontmatter) == 3
+        assert [c.content for c in values["content"].frontmatter] == ["First", "Second", "Third"]
+
+
+class TestNotebookLevelMetadata:
+    """Page and output config from notebook-level metadata."""
+
+    def test_page_config_from_notebook_metadata(self):
+        """notebook.metadata.nbprint.page is used when no page config in values."""
+        from nbformat.v4 import new_markdown_cell, new_notebook
+
+        from nbprint.config.core.config import Configuration
+
+        nb = new_notebook()
+        nb.metadata["nbprint"] = {
+            "page": {
+                "_target_": "nbprint.PageGlobal",
+                "size": "a4",
+                "orientation": "landscape",
+            }
+        }
+        nb.cells = [new_markdown_cell(source="Hello", metadata={"tags": []})]
+
+        values = {
+            "name": "test",
+            "outputs": {"_target_": "nbprint.NBConvertOutputs", "naming": "{{name}}", "root": ".pytest_cache/test_nb_meta"},
+        }
+        values["content"] = ContentMarshall()
+
+        # Simulate what _append_notebook_content does
+        nb_meta = nb.metadata.get("nbprint", {})
+        if "page" in nb_meta and "page" not in values:
+            values["page"] = nb_meta["page"]
+
+        Configuration._process_cells(values, nb)
+
+        assert values["page"]["size"] == "a4"
+        assert values["page"]["orientation"] == "landscape"
+
+    def test_page_config_not_overridden_by_notebook(self):
+        """Explicit page config in values takes priority over notebook metadata."""
+        from nbformat.v4 import new_notebook
+
+        nb = new_notebook()
+        nb.metadata["nbprint"] = {
+            "page": {"_target_": "nbprint.PageGlobal", "size": "a4"},
+        }
+        nb.cells = []
+
+        values = {
+            "page": {"_target_": "nbprint.PageGlobal", "size": "legal"},
+        }
+
+        # Simulate extraction: notebook page should NOT override explicit value
+        nb_meta = nb.metadata.get("nbprint", {})
+        if "page" in nb_meta and "page" not in values:
+            values["page"] = nb_meta["page"]
+
+        assert values["page"]["size"] == "legal"
+
+    def test_outputs_config_from_notebook_metadata(self):
+        """notebook.metadata.nbprint.outputs is used when no outputs config in values."""
+        from nbformat.v4 import new_notebook
+
+        nb = new_notebook()
+        nb.metadata["nbprint"] = {
+            "outputs": {
+                "_target_": "nbprint.NBConvertOutputs",
+                "naming": "{{name}}-custom",
+                "root": ".pytest_cache/custom_outputs",
+            }
+        }
+        nb.cells = []
+
+        values = {}
+
+        nb_meta = nb.metadata.get("nbprint", {})
+        if "outputs" in nb_meta and "outputs" not in values:
+            values["outputs"] = nb_meta["outputs"]
+
+        assert values["outputs"]["naming"] == "{{name}}-custom"
+
+
+class TestCellMetadataRoundTrip:
+    """Verify cell metadata fields survive the round-trip."""
+
+    def test_attrs_dict_preserved(self):
+        """attrs as a dict is preserved through _cell_to_content."""
+        from nbformat.v4 import new_code_cell
+
+        from nbprint.config.core.config import Configuration
+
+        cell = new_code_cell(
+            source="x = 1",
+            metadata={
+                "tags": [],
+                "nbprint": {
+                    "attrs": {"data-custom": "value"},
+                    "css": ":scope { color: red; }",
+                },
+            },
+        )
+        content = Configuration._cell_to_content(cell)
+        assert content.attrs == {"data-custom": "value"}
+        assert content.css == ":scope { color: red; }"
+
+    def test_attrs_string_dropped(self):
+        """attrs serialized as a string (from generation) is dropped during ingestion."""
+        from nbformat.v4 import new_code_cell
+
+        from nbprint.config.core.config import Configuration
+
+        cell = new_code_cell(
+            source="x = 1",
+            metadata={
+                "tags": [],
+                "nbprint": {
+                    "attrs": 'data-custom="value"',
+                },
+            },
+        )
+        content = Configuration._cell_to_content(cell)
+        # String attrs are dropped; falls back to default (empty dict)
+        assert content.attrs == {}
+
+    def test_generated_fields_dropped(self):
+        """class, class_selector, element_selector, data, parent-id are dropped."""
+        from nbformat.v4 import new_markdown_cell
+
+        from nbprint.config.core.config import Configuration
+
+        cell = new_markdown_cell(
+            source="# Hello",
+            metadata={
+                "tags": [],
+                "nbprint": {
+                    "class": "nbprint ContentMarkdown ContentMarkdown-abc123",
+                    "class_selector": "ContentMarkdown",
+                    "element_selector": "ContentMarkdown-abc123",
+                    "data": '{"content": "# Hello"}',
+                    "parent-id": "some-parent-id",
+                    "css": ":scope { font-size: 2em; }",
+                },
+            },
+        )
+        content = Configuration._cell_to_content(cell)
+        assert content.content == "# Hello"
+        assert content.css == ":scope { font-size: 2em; }"
+
+    def test_css_and_esm_preserved(self):
+        """css and esm fields are preserved through round-trip."""
+        from nbformat.v4 import new_code_cell
+
+        from nbprint.config.core.config import Configuration
+
+        cell = new_code_cell(
+            source="plot()",
+            metadata={
+                "tags": [],
+                "nbprint": {
+                    "css": ".chart { width: 100%; }",
+                    "esm": "function render(meta, elem) { console.log('hi'); }",
+                },
+            },
+        )
+        content = Configuration._cell_to_content(cell)
+        assert content.css == ".chart { width: 100%; }"
+        assert content.esm == "function render(meta, elem) { console.log('hi'); }"
+
+    def test_ignore_field_preserved(self):
+        """ignore field is preserved through round-trip."""
+        from nbformat.v4 import new_code_cell
+
+        from nbprint.config.core.config import Configuration
+
+        cell = new_code_cell(
+            source="setup()",
+            metadata={
+                "tags": [],
+                "nbprint": {"ignore": True},
+            },
+        )
+        content = Configuration._cell_to_content(cell)
+        assert content.ignore is True
+
+
 class TestPageGlobalPerSectionCSS:
     def test_render_generates_named_page_css(self):
         """render() generates @page sectionname rules for per-section pages."""

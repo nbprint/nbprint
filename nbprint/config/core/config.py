@@ -18,7 +18,7 @@ from nbprint.config.base import BaseModel, Role, _append_or_extend
 from nbprint.config.content import Content, ContentCode, ContentMarkdown
 from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
 
-from .content import ContentMarshall
+from .content import SECTION_ORDER, ContentMarshall
 from .context import Context
 from .outputs import Outputs, OutputsProcessing
 from .page import Page, PageGlobal
@@ -30,6 +30,9 @@ __all__ = (
 )
 
 _log = getSimpleLogger("nbprint.config.core.config")
+
+
+_SECTION_TAG_PREFIX = "nbprint:section:"
 
 
 class Configuration(CallableModel, BaseModel):
@@ -173,13 +176,22 @@ class Configuration(CallableModel, BaseModel):
         #     "type_": "nbprint.config.core.parameters.Parameters"
         #    },
         if "metadata" in cell and "nbprint" in cell["metadata"]:
-            nbprint_cell_meta = cell["metadata"]["nbprint"]
+            nbprint_cell_meta = dict(cell["metadata"]["nbprint"])
 
-            # TODO: not all fields are serdes symmetric
-            nbprint_cell_meta.pop("attrs", None)
+            # These fields are generated during output and are not
+            # part of the input model — drop them to avoid validation errors.
+            # `class` is re-derived from `classname` during generation.
             nbprint_cell_meta.pop("class", None)
             nbprint_cell_meta.pop("class_selector", None)
             nbprint_cell_meta.pop("element_selector", None)
+            nbprint_cell_meta.pop("data", None)
+            nbprint_cell_meta.pop("parent-id", None)
+
+            # Preserve `attrs` if it's a dict (the input format); drop if
+            # it was serialized as a string during generation.
+            attrs_val = nbprint_cell_meta.get("attrs")
+            if isinstance(attrs_val, str):
+                nbprint_cell_meta.pop("attrs", None)
         else:
             nbprint_cell_meta = {}
 
@@ -225,11 +237,36 @@ class Configuration(CallableModel, BaseModel):
         return new_parameters
 
     @staticmethod
+    def _extract_section_for_cell(cell) -> str | None:
+        """Determine the target section for a cell from tags or nbprint metadata.
+
+        Checks (in priority order):
+        1. ``cell.metadata.nbprint.section`` — explicit section name.
+        2. Cell tags matching ``nbprint:section:<name>`` — tag-based routing.
+
+        Returns the section name or ``None`` (meaning default to ``middlematter``).
+        """
+        # 1. Check nbprint metadata
+        nbprint_meta = cell.get("metadata", {}).get("nbprint", {})
+        section = nbprint_meta.get("section")
+        if section and section in SECTION_ORDER:
+            return section
+
+        # 2. Check cell tags
+        tags = cell.get("metadata", {}).get("tags", [])
+        for tag in tags:
+            if tag.startswith(_SECTION_TAG_PREFIX):
+                candidate = tag[len(_SECTION_TAG_PREFIX) :]
+                if candidate in SECTION_ORDER:
+                    return candidate
+
+        return None
+
+    @staticmethod
     def _process_cells(values, nb_content: NotebookNode) -> None:
         new_parameters = {}
         cells_to_process = nb_content.cells
 
-        # TODO: if first cell has tags, insert at front instead of appending
         if cells_to_process and "metadata" in cells_to_process[0] and "parameters" in cells_to_process[0]["metadata"].get("tags", []):
             # Parse first cell for parameters
             first_cell = cells_to_process[0]
@@ -248,7 +285,10 @@ class Configuration(CallableModel, BaseModel):
         for cell in cells_to_process:
             cell_instance = Configuration._cell_to_content(cell)
             if cell_instance is not None:
-                values["content"].middlematter.append(cell_instance)
+                # Route cell to the appropriate section based on tags/metadata
+                section = Configuration._extract_section_for_cell(cell)
+                target_section = section or "middlematter"
+                getattr(values["content"], target_section).append(cell_instance)
 
         for k, v in new_parameters.items():
             if k in values["parameters"].model_fields and getattr(values["parameters"], k) is None:
@@ -267,6 +307,21 @@ class Configuration(CallableModel, BaseModel):
         file = Path(values.pop("notebook"))
         with file.open("r", encoding="utf-8") as path_file:
             nb_content = nb_read(path_file, as_version=4)
+
+        # Extract notebook-level nbprint metadata for page and output config.
+        # These are low-priority defaults: explicit values in ``values`` (from
+        # YAML or CLI overrides) take precedence.
+        nb_meta = getattr(nb_content.metadata, "nbprint", None) or (nb_content.metadata.get("nbprint") if isinstance(nb_content.metadata, dict) else None)
+        if nb_meta:
+            nb_nbprint = nb_meta if isinstance(nb_meta, dict) else dict(nb_meta)
+
+            # Page config from notebook metadata
+            if "page" in nb_nbprint and "page" not in values:
+                values["page"] = nb_nbprint["page"]
+
+            # Outputs config from notebook metadata
+            if "outputs" in nb_nbprint and "outputs" not in values:
+                values["outputs"] = nb_nbprint["outputs"]
 
         cls._process_cells(values, nb_content)
 
