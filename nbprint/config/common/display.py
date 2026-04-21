@@ -48,10 +48,28 @@ class DisplayKind(StrEnum):
 
 
 class FlexOptions(_BaseCss):
-    flex_direction: FlexDirection | None
-    justify: Justify | None
+    flex_direction: FlexDirection | None = None
+    justify: Justify | None = None
+
+    def __str__(self) -> str:
+        parts = []
+        if self.flex_direction:
+            parts.append(f"flex-direction: {self.flex_direction};")
+        if self.justify:
+            parts.append(f"justify-content: {self.justify};")
+        return "\n".join(parts)
 
 
 class Display(_BaseCss):
-    display: DisplayKind | None
-    flex_options: FlexOptions | None
+    display: DisplayKind | None = None
+    flex_options: FlexOptions | None = None
+
+    def __str__(self) -> str:
+        parts = []
+        if self.display:
+            parts.append(f"display: {self.display};")
+        if self.flex_options:
+            flex_str = str(self.flex_options)
+            if flex_str:
+                parts.append(flex_str)
+        return "\n".join(parts)
