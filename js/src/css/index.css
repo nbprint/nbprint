@@ -91,6 +91,42 @@
 .pagedjs_page .jp-RenderedHTMLCommon h6:last-child {
   margin-bottom: 0px !important;
 }
+
+/* Phase 1: Pagination — constrain images and media to page dimensions */
+.pagedjs_page img,
+.pagedjs_page svg,
+.pagedjs_page .jp-OutputArea-output canvas {
+  max-width: 100%;
+  max-height: calc(var(--pagedjs-height) - 1in);
+  object-fit: contain;
+}
+
+/* Phase 1: Pagination — prevent break inside atomic content */
+.pagedjs_page .jp-OutputArea-output,
+.pagedjs_page .jp-RenderedImage,
+.pagedjs_page .js-plotly-plot,
+.pagedjs_page .jp-RenderedHTMLCommon table {
+  break-inside: avoid;
+}
+
+/* Phase 1: Pagination — avoid orphaned headings */
+.pagedjs_page h1,
+.pagedjs_page h2,
+.pagedjs_page h3,
+.pagedjs_page h4,
+.pagedjs_page h5,
+.pagedjs_page h6 {
+  break-after: avoid;
+}
+
+/* Phase 1: Pagination — table row integrity */
+.pagedjs_page tbody {
+  break-inside: auto;
+}
+.pagedjs_page tr {
+  break-inside: avoid;
+}
+
 .jp-OutputArea-output {
-  overflow: hidden !important;
+  overflow: visible !important;
 }

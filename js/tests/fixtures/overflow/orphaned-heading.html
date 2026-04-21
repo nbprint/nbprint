@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Orphaned Heading</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+p { font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon" id="filler-content"></div>
+        <script>
+          // Fill most of a page with content so the heading lands at the bottom
+          const filler = document.getElementById('filler-content');
+          let html = '<h1>Section 1</h1>';
+          for (let i = 0; i < 40; i++) {
+            html += '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>';
+          }
+          // This heading should NOT be orphaned at the bottom of a page
+          html += '<h2>Section 2 — Should Not Be Orphaned</h2>';
+          html += '<p>This paragraph should appear on the same page as the heading above, not on the next page.</p>';
+          for (let i = 0; i < 10; i++) {
+            html += '<p>More content in section 2. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>';
+          }
+          filler.innerHTML = html;
+        </script>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
