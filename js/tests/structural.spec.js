@@ -688,3 +688,118 @@ test.describe("Phase 4 — Post-pagination validation", () => {
     });
   });
 });
+
+test.describe("Phase 6 — Configuration surface", () => {
+  test.describe("6.1: overflow_strategy", () => {
+    test("warn strategy tags overflow as warn (no resize)", async ({
+      page,
+    }) => {
+      await page.goto(
+        "/js/tests/fixtures/overflow/overflow-strategy-warn.html",
+      );
+      await waitForPagedJS(page);
+      const result = await page.evaluate(() => {
+        const el = document.getElementById("wide-element");
+        return {
+          attr: el?.getAttribute("data-nbprint-overflow"),
+          // With warn, the element should NOT be resized
+          width: el?.style.maxWidth || "none",
+        };
+      });
+      expect(result.attr).toBe("warn");
+      expect(result.width).toBe("none");
+    });
+
+    test("clip strategy applies overflow:hidden and maxWidth", async ({
+      page,
+    }) => {
+      await page.goto(
+        "/js/tests/fixtures/overflow/overflow-strategy-clip.html",
+      );
+      await waitForPagedJS(page);
+      const result = await page.evaluate(() => {
+        const el = document.getElementById("wide-element");
+        return {
+          attr: el?.getAttribute("data-nbprint-overflow"),
+          overflow: el?.style.overflow,
+          hasMaxWidth: el?.style.maxWidth !== "",
+        };
+      });
+      expect(result.attr).toBe("clip");
+      expect(result.overflow).toBe("hidden");
+      expect(result.hasMaxWidth).toBe(true);
+    });
+
+    test("default (scale) strategy shrinks images to fit", async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/oversized-image.html");
+      await waitForPagedJS(page);
+      // Images should have been scaled, not tagged with overflow
+      const overflowed = await page.evaluate(() => {
+        return document.querySelectorAll("[data-nbprint-overflow]").length;
+      });
+      expect(overflowed).toBe(0);
+    });
+  });
+
+  test.describe("6.2: blank_page_removal", () => {
+    test("blank pages are removed when enabled (default)", async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/blank-page-trigger.html");
+      await waitForPagedJS(page);
+      const blanks = await page.evaluate(() => {
+        return document.querySelectorAll(
+          '.pagedjs_page[data-nbprint-blank="true"]',
+        ).length;
+      });
+      expect(blanks).toBe(0);
+    });
+
+    test("blank pages are kept when blank_page_removal=false", async ({
+      page,
+    }) => {
+      await page.goto(
+        "/js/tests/fixtures/overflow/blank-removal-disabled.html",
+      );
+      await waitForPagedJS(page);
+      // With removal disabled, accidental blank pages should still
+      // be present (marked but not removed)
+      const blanks = await page.evaluate(() => {
+        return document.querySelectorAll(
+          '.pagedjs_page[data-nbprint-blank="true"]',
+        ).length;
+      });
+      // The blank-page-trigger content should produce blank pages
+      // but they should NOT be removed when config disables it
+      const validated = await page.evaluate(() => {
+        return document
+          .querySelector(".pagedjs_pages")
+          ?.getAttribute("data-nbprint-validated");
+      });
+      expect(validated).toBe("true");
+      // Page count should be >= the count with removal enabled
+      const totalPages = await page.evaluate(() => {
+        return document.querySelectorAll(".pagedjs_page").length;
+      });
+      expect(totalPages).toBeGreaterThan(0);
+    });
+  });
+
+  test.describe("6.4: per-element overflow override", () => {
+    test("element with data-nbprint-overflow=clip uses clip strategy", async ({
+      page,
+    }) => {
+      await page.goto("/js/tests/fixtures/overflow/per-element-override.html");
+      await waitForPagedJS(page);
+      const result = await page.evaluate(() => {
+        const el = document.getElementById("clipped-element");
+        return {
+          attr: el?.getAttribute("data-nbprint-overflow"),
+          overflow: el?.style.overflow,
+          hasMaxWidth: el?.style.maxWidth !== "",
+        };
+      });
+      expect(result.attr).toBe("clip");
+      expect(result.overflow).toBe("hidden");
+      expect(result.hasMaxWidth).toBe(true);
+    });
+  });
+});

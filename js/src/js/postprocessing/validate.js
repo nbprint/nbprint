@@ -139,10 +139,15 @@ export function postvalidate(configuration) {
   const pages = document.querySelectorAll(".pagedjs_page");
   if (pages.length === 0) return { blankPagesRemoved: 0, overflows: [] };
 
+  const pageConfig = configuration?.page || {};
+
   console.debug(`[nbprint] postprocessing: validating ${pages.length} pages`);
 
-  // 4.2: Remove blank pages
-  const blankPagesRemoved = removeBlankPages();
+  // 4.2: Remove blank pages (6.2: controlled by page.blank_page_removal)
+  let blankPagesRemoved = 0;
+  if (pageConfig.blank_page_removal !== false) {
+    blankPagesRemoved = removeBlankPages();
+  }
 
   // 4.3: Detect residual overflow
   const overflows = detectResidualOverflow();
