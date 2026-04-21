@@ -307,6 +307,27 @@
             <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;nbprint:content&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_merge_style_css</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge structured ``style`` properties into ``self.css`` for rendering.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="p">,</span> <span class="n">Style</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">style_css</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">to_css_properties</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">style_css</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># Wrap in :scope so @scope(...) in the template targets the cell wrapper</span>
+        <span class="n">scoped</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;:scope </span><span class="se">{{\n</span><span class="si">{</span><span class="n">style_css</span><span class="si">}</span><span class="se">\n}}</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">css</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">scoped</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">=</span> <span class="n">scoped</span>
+
+<div class="viewcode-block" id="Content.render">
+<a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.content.Content.html#nbprint.config.content.Content.render">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_merge_style_css</span><span class="p">()</span></div>
+
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_postprocess_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
             <span class="c1"># replace content if its a str</span>
