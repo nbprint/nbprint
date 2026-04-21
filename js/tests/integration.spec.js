@@ -29,7 +29,7 @@ test.describe("Integration — full pipeline structural checks", () => {
       expect(pages.length).toBeGreaterThan(0);
 
       // Check for content overflow (logged as warnings, not hard failures —
-      // some templates have pre-existing overflow that future phases will fix)
+      // some templates have pre-existing overflow that future work will fix)
       let overflowCount = 0;
       for (const p of pages) {
         const overflow = await p.evaluate((el) => {

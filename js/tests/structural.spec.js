@@ -250,3 +250,64 @@ test.describe("Structural assertions — overflow fixtures", () => {
     });
   });
 });
+
+test.describe("Pre-pagination preprocessing", () => {
+  test("preprocessing attribute is set on content root", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/oversized-image.html");
+    await waitForPagedJS(page);
+    const attr = await page
+      .locator("main")
+      .first()
+      .getAttribute("data-nbprint-preprocessed");
+    expect(attr).toBe("true");
+  });
+
+  test("oversized image gets max-height constrained", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/oversized-image.html");
+    await waitForPagedJS(page);
+    // The 3000px tall image should have been constrained by preprocessing
+    // Verify that after pagination, the image fits within its page
+    const pages = await getPages(page);
+    for (const pageEl of pages) {
+      const pageBox = await pageEl.boundingBox();
+      const images = await pageEl.locator("img").all();
+      for (const img of images) {
+        const imgBox = await img.boundingBox();
+        if (imgBox && pageBox) {
+          expect(imgBox.height).toBeLessThanOrEqual(pageBox.height + 1);
+        }
+      }
+    }
+  });
+
+  test("wide SVG gets scaled down to fit page width", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/wide-chart.html");
+    await waitForPagedJS(page);
+    const pages = await getPages(page);
+    for (const pageEl of pages) {
+      const pageBox = await pageEl.boundingBox();
+      const svgs = await pageEl.locator("svg").all();
+      for (const svg of svgs) {
+        const svgBox = await svg.boundingBox();
+        if (svgBox && pageBox) {
+          expect(svgBox.width).toBeLessThanOrEqual(pageBox.width + 1);
+        }
+      }
+    }
+  });
+
+  test("tall table gets data-nbprint-paginate attribute", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/long-table.html");
+    await waitForPagedJS(page);
+    // The original table was >1 page tall, so it should have been annotated.
+    // After pagedjs splits it, fragments may exist — check that the attribute
+    // was set on at least one table element.
+    const annotated = await page.evaluate(() => {
+      const tables = document.querySelectorAll("table");
+      return Array.from(tables).some(
+        (t) => t.getAttribute("data-nbprint-paginate") === "table",
+      );
+    });
+    expect(annotated).toBe(true);
+  });
+});

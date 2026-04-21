@@ -1,4 +1,5 @@
 import { build as buildpagedjs } from "./nbconvert";
+import { preprocess } from "./preprocessing/measure";
 
 export class NBPrint {
   constructor({ configuration, notebook_info }) {
@@ -34,6 +35,11 @@ export class NBPrint {
     ).filter((val) => !val.textContent.includes("@scope"));
     for (let style of styles) {
       document.head.appendChild(style);
+    }
+
+    // Pre-pagination: measure and scale oversized content
+    if (this.buildPagedJS()) {
+      preprocess(document.querySelector("main"), this._configuration);
     }
 
     const myEvent = new CustomEvent("nbprint-ready", {

@@ -92,7 +92,7 @@
   margin-bottom: 0px !important;
 }
 
-/* Phase 1: Pagination — constrain images and media to page dimensions */
+/* Pagination — constrain images and media to page dimensions */
 .pagedjs_page img,
 .pagedjs_page svg,
 .pagedjs_page .jp-OutputArea-output canvas {
@@ -101,7 +101,7 @@
   object-fit: contain;
 }
 
-/* Phase 1: Pagination — prevent break inside atomic content */
+/* Pagination — prevent break inside atomic content */
 .pagedjs_page .jp-OutputArea-output,
 .pagedjs_page .jp-RenderedImage,
 .pagedjs_page .js-plotly-plot,
@@ -109,7 +109,7 @@
   break-inside: avoid;
 }
 
-/* Phase 1: Pagination — avoid orphaned headings */
+/* Pagination — avoid orphaned headings */
 .pagedjs_page h1,
 .pagedjs_page h2,
 .pagedjs_page h3,
@@ -119,7 +119,7 @@
   break-after: avoid;
 }
 
-/* Phase 1: Pagination — table row integrity */
+/* Pagination — table row integrity */
 .pagedjs_page tbody {
   break-inside: auto;
 }
