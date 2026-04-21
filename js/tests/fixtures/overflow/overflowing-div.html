@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Overflowing Div</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <h2>Section with Oversized Output</h2>
+          <p>Below is a non-image element with fixed oversized dimensions
+             that Phase 2 preprocessing doesn't handle (it only targets
+             img/svg/chart). The Phase 3 afterPageLayout overflow handler
+             should detect and mark it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <!-- A div with explicit wide dimensions — not an image, so
+               Phase 2 won't catch it. Phase 3 overflow detection should
+               tag it with data-nbprint-overflow. -->
+          <div id="wide-output" style="width: 1200px; height: 100px; background: linear-gradient(90deg, #3498db, #e74c3c); border: 2px solid #333; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: bold;">
+            Wide Output (1200px) — Should Be Detected as Overflow
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <p>Content after the oversized div.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -311,3 +311,259 @@ test.describe("Pre-pagination preprocessing", () => {
     expect(annotated).toBe(true);
   });
 });
+
+test.describe("Phase 3 — Paged.js handler hooks", () => {
+  test("3.1: no overflow attributes on well-fitting fixtures", async ({
+    page,
+  }) => {
+    await page.goto("/js/tests/fixtures/overflow/oversized-image.html");
+    await waitForPagedJS(page);
+    // Phase 2 scaling + Phase 3 overflow handler should mean no overflow
+    const overflowed = await page.evaluate(() => {
+      return document.querySelectorAll("[data-nbprint-overflow]").length;
+    });
+    expect(overflowed).toBe(0);
+  });
+
+  test("3.2: pages with content are not marked blank", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/long-table.html");
+    await waitForPagedJS(page);
+    const pages = await getPages(page);
+    for (let i = 0; i < pages.length; i++) {
+      const isBlank = await pages[i].getAttribute("data-nbprint-blank");
+      expect(isBlank, `Page ${i + 1} should not be marked blank`).toBeNull();
+    }
+  });
+
+  test("3.4: long code block has line-wrapped spans", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/long-code.html");
+    await waitForPagedJS(page);
+    // Code lines should be wrapped in spans for line-aware splitting
+    const hasLineSpans = await page.evaluate(() => {
+      const pres = document.querySelectorAll("pre");
+      for (const pre of pres) {
+        const spans = pre.querySelectorAll('span[style*="break-inside"]');
+        if (spans.length > 0) return true;
+      }
+      return false;
+    });
+    expect(hasLineSpans).toBe(true);
+  });
+
+  test("3.5: headings near page bottom have content following them", async ({
+    page,
+  }) => {
+    await page.goto("/js/tests/fixtures/overflow/orphaned-heading.html");
+    await waitForPagedJS(page);
+    // The keep-with-next hook should prevent headings from being orphaned.
+    // Verify no heading appears at the very bottom of a page without
+    // subsequent content on the same page.
+    const pages = await getPages(page);
+    for (let i = 0; i < pages.length - 1; i++) {
+      const pageBox = await pages[i].boundingBox();
+      if (!pageBox) continue;
+
+      const headings = await pages[i].locator("h1, h2, h3, h4, h5, h6").all();
+      for (const heading of headings) {
+        const headingBox = await heading.boundingBox();
+        if (!headingBox) continue;
+
+        // Check bottom 3% of page — a heading there with no following
+        // content is orphaned
+        const threshold = pageBox.y + pageBox.height * 0.97;
+        if (headingBox.y + headingBox.height > threshold) {
+          const hasNext = await heading.evaluate((el) => {
+            let next = el.nextElementSibling;
+            while (next) {
+              if (
+                next.tagName &&
+                !next.tagName.match(/^H[1-6]$/) &&
+                next.getBoundingClientRect().height > 0
+              ) {
+                return true;
+              }
+              next = next.nextElementSibling;
+            }
+            return false;
+          });
+          expect(
+            hasNext,
+            `Heading on page ${i + 1} appears orphaned at bottom`,
+          ).toBe(true);
+        }
+      }
+    }
+  });
+});
+
+test.describe("Phase 3 — targeted fixture assertions", () => {
+  test.describe("Blank page trigger", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/blank-page-trigger.html");
+      await waitForPagedJS(page);
+    });
+
+    test("should render multiple pages", async ({ page }) => {
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(1);
+    });
+
+    test("blank pages are detected and marked", async ({ page }) => {
+      // If any blank pages exist, they should be marked
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        const isBlank = await pages[i].getAttribute("data-nbprint-blank");
+        const hasContent = await pageHasVisibleContent(pages[i]);
+        if (isBlank === "true") {
+          // If marked blank, verify it really has no visible content
+          expect(
+            hasContent,
+            `Page ${i + 1} marked blank but has visible content`,
+          ).toBe(false);
+        }
+        if (hasContent) {
+          // If it has content, it should not be marked blank
+          expect(
+            isBlank,
+            `Page ${i + 1} has content but is marked blank`,
+          ).toBeNull();
+        }
+      }
+    });
+  });
+
+  test.describe("Heading at page break", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/heading-at-break.html");
+      await waitForPagedJS(page);
+    });
+
+    test("should render multiple pages", async ({ page }) => {
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(1);
+    });
+
+    test("no heading is the last visible element on a non-final page", async ({
+      page,
+    }) => {
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length - 1; i++) {
+        const pageBox = await pages[i].boundingBox();
+        if (!pageBox) continue;
+
+        const headings = await pages[i].locator("h1, h2, h3, h4, h5, h6").all();
+        for (const heading of headings) {
+          const headingBox = await heading.boundingBox();
+          if (!headingBox) continue;
+
+          // If heading is in the bottom 5% of the page
+          const threshold = pageBox.y + pageBox.height * 0.95;
+          if (headingBox.y > threshold) {
+            const hasFollowing = await heading.evaluate((el) => {
+              let next = el.nextElementSibling;
+              while (next) {
+                if (
+                  next.tagName &&
+                  !next.tagName.match(/^H[1-6]$/) &&
+                  next.textContent.trim().length > 0
+                ) {
+                  return true;
+                }
+                next = next.nextElementSibling;
+              }
+              return false;
+            });
+            expect(
+              hasFollowing,
+              `Heading "${await heading.textContent()}" on page ${i + 1} appears orphaned`,
+            ).toBe(true);
+          }
+        }
+      }
+    });
+
+    test("each h2 appears on same page as its first paragraph", async ({
+      page,
+    }) => {
+      // For each h2, verify the very next <p> sibling is on the same page
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        const headings = await pages[i].locator("h2").all();
+        for (const heading of headings) {
+          const headingBox = await heading.boundingBox();
+          if (!headingBox) continue;
+
+          // Find the next paragraph on the same page
+          const nextP = await heading.evaluate((el) => {
+            let next = el.nextElementSibling;
+            while (next) {
+              if (next.tagName === "P") {
+                const rect = next.getBoundingClientRect();
+                return { y: rect.y, height: rect.height };
+              }
+              next = next.nextElementSibling;
+            }
+            return null;
+          });
+
+          if (nextP && nextP.height > 0) {
+            const pageBox = await pages[i].boundingBox();
+            // The paragraph should be on the same page as the heading
+            expect(nextP.y).toBeLessThan(pageBox.y + pageBox.height);
+          }
+        }
+      }
+    });
+  });
+
+  test.describe("Overflowing div", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/overflowing-div.html");
+      await waitForPagedJS(page);
+    });
+
+    test("should render at least one page", async ({ page }) => {
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(0);
+    });
+
+    test("wide div is tagged with data-nbprint-overflow", async ({ page }) => {
+      const overflowed = await page.evaluate(() => {
+        return document.querySelectorAll("[data-nbprint-overflow]").length;
+      });
+      expect(overflowed).toBeGreaterThan(0);
+    });
+  });
+
+  test.describe("Code line integrity", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/code-line-integrity.html");
+      await waitForPagedJS(page);
+    });
+
+    test("should span multiple pages", async ({ page }) => {
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(1);
+    });
+
+    test("code lines are wrapped for break control", async ({ page }) => {
+      const lineCount = await page.evaluate(() => {
+        const spans = document.querySelectorAll(
+          'pre span[style*="break-inside"]',
+        );
+        return spans.length;
+      });
+      expect(lineCount).toBeGreaterThan(10);
+    });
+
+    test("no blank pages", async ({ page }) => {
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        const hasContent = await pageHasVisibleContent(pages[i]);
+        expect(hasContent, `Page ${i + 1} should have visible content`).toBe(
+          true,
+        );
+      }
+    });
+  });
+});

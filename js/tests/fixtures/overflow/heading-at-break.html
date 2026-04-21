@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Heading at Page Break</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+p { font-size: 14px; line-height: 1.6; margin-bottom: 10px; }
+h2 { font-size: 22px; margin-top: 24px; margin-bottom: 12px; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon" id="content"></div>
+        <script>
+          // Create content designed to push headings to awkward positions.
+          // Multiple sections where a heading would naturally land at the
+          // very bottom of a page. The keep-with-next hook should move
+          // the heading to the next page.
+          const content = document.getElementById('content');
+          let html = '<h1>Report Title</h1>';
+
+          // Section 1: fill most of first page
+          html += '<h2>Section 1 — Introduction</h2>';
+          for (let i = 0; i < 28; i++) {
+            html += '<p>Paragraph ' + (i + 1) + ': Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>';
+          }
+
+          // Section 2 heading should land at bottom of page — keep-with-next
+          // should push it to the next page
+          html += '<h2>Section 2 — Analysis</h2>';
+          html += '<p>This paragraph must appear on the same page as the Section 2 heading above.</p>';
+          for (let i = 0; i < 25; i++) {
+            html += '<p>Analysis paragraph ' + (i + 1) + ': Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>';
+          }
+
+          // Section 3 — another potential orphan
+          html += '<h2>Section 3 — Conclusions</h2>';
+          html += '<p>The conclusions section should also have its heading with its content.</p>';
+          for (let i = 0; i < 10; i++) {
+            html += '<p>Conclusion paragraph ' + (i + 1) + ': Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>';
+          }
+
+          content.innerHTML = html;
+        </script>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

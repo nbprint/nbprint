@@ -62,6 +62,48 @@ test.describe("Visual regression — overflow fixtures", () => {
 });
 
 // =============================================================================
+// Visual regression tests for Phase 3 handler behaviors
+// =============================================================================
+
+test.describe("Visual regression — Phase 3 handler fixtures", () => {
+  test("blank page trigger — no blank pages visible", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/blank-page-trigger.html");
+    await waitForPagedJS(page);
+    const count = await screenshotPages(
+      page,
+      test.info(),
+      "blank-page-trigger",
+    );
+    expect(count).toBeGreaterThan(1);
+  });
+
+  test("heading at break — heading stays with content", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/heading-at-break.html");
+    await waitForPagedJS(page);
+    const count = await screenshotPages(page, test.info(), "heading-at-break");
+    expect(count).toBeGreaterThan(1);
+  });
+
+  test("overflowing div — overflow detected", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/overflowing-div.html");
+    await waitForPagedJS(page);
+    const count = await screenshotPages(page, test.info(), "overflowing-div");
+    expect(count).toBeGreaterThan(0);
+  });
+
+  test("code line integrity — clean line breaks", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/code-line-integrity.html");
+    await waitForPagedJS(page);
+    const count = await screenshotPages(
+      page,
+      test.info(),
+      "code-line-integrity",
+    );
+    expect(count).toBeGreaterThan(1);
+  });
+});
+
+// =============================================================================
 // Visual regression tests for generated report outputs
 // =============================================================================
 
