@@ -567,3 +567,124 @@ test.describe("Phase 3 — targeted fixture assertions", () => {
     });
   });
 });
+
+test.describe("Phase 4 — Post-pagination validation", () => {
+  test("validation attribute is set after processing", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/oversized-image.html");
+    await waitForPagedJS(page);
+    const attr = await page.evaluate(() => {
+      const container = document.querySelector(".pagedjs_pages");
+      return container?.getAttribute("data-nbprint-validated");
+    });
+    expect(attr).toBe("true");
+  });
+
+  test("no blank pages remain after validation", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/overflow/blank-page-trigger.html");
+    await waitForPagedJS(page);
+    // After Phase 4, any blank pages should have been removed
+    const pages = await getPages(page);
+    for (let i = 0; i < pages.length; i++) {
+      const hasContent = await pageHasVisibleContent(pages[i]);
+      expect(hasContent, `Page ${i + 1} should have visible content`).toBe(
+        true,
+      );
+    }
+  });
+
+  test("overflow elements are detected by post-validation", async ({
+    page,
+  }) => {
+    await page.goto("/js/tests/fixtures/overflow/overflowing-div.html");
+    await waitForPagedJS(page);
+    // The wide div should be tagged by Phase 3 and confirmed by Phase 4
+    const overflowed = await page.evaluate(() => {
+      return document.querySelectorAll("[data-nbprint-overflow]").length;
+    });
+    expect(overflowed).toBeGreaterThan(0);
+  });
+
+  test("well-fitting content has no overflow after validation", async ({
+    page,
+  }) => {
+    await page.goto("/js/tests/fixtures/overflow/long-table.html");
+    await waitForPagedJS(page);
+    const overflowed = await page.evaluate(() => {
+      return document.querySelectorAll("[data-nbprint-overflow]").length;
+    });
+    expect(overflowed).toBe(0);
+  });
+
+  test.describe("Blank page intent detection", () => {
+    test("accidental blank pages are removed", async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/blank-page-trigger.html");
+      await waitForPagedJS(page);
+      // No pages should have data-nbprint-blank="true" remaining
+      const accidentalBlanks = await page.evaluate(() => {
+        return document.querySelectorAll(
+          '.pagedjs_page[data-nbprint-blank="true"]',
+        ).length;
+      });
+      expect(accidentalBlanks).toBe(0);
+      // Every remaining page should have visible content
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        const hasContent = await pageHasVisibleContent(pages[i]);
+        expect(hasContent, `Page ${i + 1} should have visible content`).toBe(
+          true,
+        );
+      }
+    });
+
+    test("intentional blank pages are preserved", async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/intentional-blank.html");
+      await waitForPagedJS(page);
+      const pages = await getPages(page);
+      // Should have at least 2 pages (chapter 1 + chapter 2)
+      expect(pages.length).toBeGreaterThanOrEqual(2);
+
+      // No accidental blanks should remain
+      const accidentalBlanks = await page.evaluate(() => {
+        return document.querySelectorAll(
+          '.pagedjs_page[data-nbprint-blank="true"]',
+        ).length;
+      });
+      expect(accidentalBlanks).toBe(0);
+
+      // If pagedjs inserted a blank verso for recto alignment,
+      // it should still be in the DOM (not removed)
+      const intentionalBlanks = await page.evaluate(() => {
+        return document.querySelectorAll(
+          '.pagedjs_page[data-nbprint-blank="intentional"]',
+        ).length;
+      });
+      // The total page count includes any intentional blanks
+      const totalPagesIncludingBlanks = pages.length;
+      const contentPages = totalPagesIncludingBlanks - intentionalBlanks;
+      expect(contentPages).toBeGreaterThanOrEqual(2);
+    });
+
+    test("intentional blank page has correct attribute value", async ({
+      page,
+    }) => {
+      await page.goto("/js/tests/fixtures/overflow/intentional-blank.html");
+      await waitForPagedJS(page);
+      // Any blank pages should be marked "intentional", not "true"
+      const blankPages = await page.evaluate(() => {
+        const pages = document.querySelectorAll(
+          ".pagedjs_page[data-nbprint-blank]",
+        );
+        return Array.from(pages).map((p) => ({
+          value: p.getAttribute("data-nbprint-blank"),
+          pageNum: p.getAttribute("data-page-number"),
+        }));
+      });
+      for (const bp of blankPages) {
+        expect(
+          bp.value,
+          `Blank page ${bp.pageNum} should be "intentional"`,
+        ).toBe("intentional");
+      }
+    });
+  });
+});

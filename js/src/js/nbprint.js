@@ -1,5 +1,6 @@
 import { build as buildpagedjs } from "./nbconvert";
 import { preprocess } from "./preprocessing/measure";
+import { postvalidate } from "./postprocessing/validate";
 
 export class NBPrint {
   constructor({ configuration, notebook_info }) {
@@ -55,6 +56,7 @@ export class NBPrint {
 
   async build() {
     await buildpagedjs(this._configuration);
+    postvalidate(this._configuration);
   }
 
   async postprocess() {
