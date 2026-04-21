@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Code Line Integrity</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+pre {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 12px 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  border-radius: 4px;
+  white-space: pre;
+}
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <h2>Code Output — Line Integrity Check</h2>
+          <p>The code block below should only break between complete lines,
+             never in the middle of a line of code.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedText">
+          <pre id="code-block"><code></code></pre>
+          <script>
+            // Generate a realistic multi-page code block with varying
+            // line lengths — visual regression will catch mid-line splits
+            const code = document.querySelector('#code-block code');
+            const lines = [];
+            lines.push('import pandas as pd');
+            lines.push('import numpy as np');
+            lines.push('from datetime import datetime, timedelta');
+            lines.push('');
+            lines.push('def generate_report(start_date, end_date, granularity="daily"):');
+            lines.push('    """Generate a comprehensive data report."""');
+            lines.push('    date_range = pd.date_range(start=start_date, end=end_date, freq="D")');
+            lines.push('    data = []');
+            lines.push('');
+            for (let i = 1; i <= 60; i++) {
+              lines.push(`    # Processing batch ${i}`);
+              lines.push(`    batch_${i} = pd.DataFrame({`);
+              lines.push(`        "timestamp": date_range,`);
+              lines.push(`        "value_a": np.random.randn(len(date_range)) * ${(100 + i * 5)},`);
+              lines.push(`        "value_b": np.random.uniform(0, 1, len(date_range)),`);
+              lines.push(`        "category": np.random.choice(["A", "B", "C", "D"], len(date_range)),`);
+              lines.push(`    })`);
+              lines.push(`    data.append(batch_${i})`);
+              lines.push('');
+            }
+            lines.push('    result = pd.concat(data, ignore_index=True)');
+            lines.push('    return result.describe()');
+            code.textContent = lines.join('\n');
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <p>Output continues below the code block.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
