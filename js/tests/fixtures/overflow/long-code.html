@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Long Code Block</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+pre { background: #f8f8f8; padding: 10px; font-size: 12px; line-height: 1.4; border: 1px solid #ddd; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <h2>Code Output</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedText">
+          <pre id="code-block"></pre>
+          <script>
+            // Generate 100 lines of code output
+            const pre = document.getElementById('code-block');
+            let lines = [];
+            for (let i = 1; i <= 100; i++) {
+              lines.push(`Line ${String(i).padStart(3, '0')}: result = process_data(input_${i}, threshold=${(Math.random() * 10).toFixed(2)})  # batch ${Math.ceil(i/10)}`);
+            }
+            pre.textContent = lines.join('\n');
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <p>Content after the code block.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

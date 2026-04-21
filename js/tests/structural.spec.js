@@ -1,0 +1,252 @@
+import { test, expect } from "@playwright/test";
+
+// Helper: wait for pagedjs to finish rendering
+async function waitForPagedJS(page, timeout = 30000) {
+  // Wait for the pagedjs_pages container to appear, which indicates rendering is complete
+  await page.waitForSelector(".pagedjs_pages", { timeout });
+  // Additional wait for any remaining layout
+  await page.waitForTimeout(500);
+}
+
+// Helper: get all pagedjs page elements
+async function getPages(page) {
+  return page.locator(".pagedjs_page").all();
+}
+
+// Helper: check if a page has visible content
+async function pageHasVisibleContent(pageEl) {
+  const contentArea = pageEl.locator(".pagedjs_page_content");
+  const children = await contentArea.locator(":scope > *").all();
+  for (const child of children) {
+    const box = await child.boundingBox();
+    if (box && box.width > 0 && box.height > 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+test.describe("Structural assertions — overflow fixtures", () => {
+  test.describe("Oversized image", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/oversized-image.html");
+      await waitForPagedJS(page);
+    });
+
+    test("should render at least one page", async ({ page }) => {
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(0);
+    });
+
+    test("image should not overflow page width", async ({ page }) => {
+      const pages = await getPages(page);
+      for (const pageEl of pages) {
+        const pageBox = await pageEl.boundingBox();
+        const images = await pageEl.locator("img").all();
+        for (const img of images) {
+          const imgBox = await img.boundingBox();
+          if (imgBox && pageBox) {
+            expect(imgBox.x + imgBox.width).toBeLessThanOrEqual(
+              pageBox.x + pageBox.width + 1,
+            );
+          }
+        }
+      }
+    });
+
+    test("image should not overflow page height", async ({ page }) => {
+      const pages = await getPages(page);
+      for (const pageEl of pages) {
+        const pageBox = await pageEl.boundingBox();
+        const images = await pageEl.locator("img").all();
+        for (const img of images) {
+          const imgBox = await img.boundingBox();
+          if (imgBox && pageBox) {
+            expect(imgBox.y + imgBox.height).toBeLessThanOrEqual(
+              pageBox.y + pageBox.height + 1,
+            );
+          }
+        }
+      }
+    });
+
+    test("no blank pages", async ({ page }) => {
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        const hasContent = await pageHasVisibleContent(pages[i]);
+        expect(hasContent, `Page ${i + 1} should have visible content`).toBe(
+          true,
+        );
+      }
+    });
+  });
+
+  test.describe("Wide chart", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/wide-chart.html");
+      await waitForPagedJS(page);
+    });
+
+    test("should render at least one page", async ({ page }) => {
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(0);
+    });
+
+    test("SVG should not overflow page width", async ({ page }) => {
+      const pages = await getPages(page);
+      for (const pageEl of pages) {
+        const pageBox = await pageEl.boundingBox();
+        const svgs = await pageEl.locator("svg").all();
+        for (const svg of svgs) {
+          const svgBox = await svg.boundingBox();
+          if (svgBox && pageBox) {
+            expect(svgBox.x + svgBox.width).toBeLessThanOrEqual(
+              pageBox.x + pageBox.width + 1,
+            );
+          }
+        }
+      }
+    });
+
+    test("no blank pages", async ({ page }) => {
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        const hasContent = await pageHasVisibleContent(pages[i]);
+        expect(hasContent, `Page ${i + 1} should have visible content`).toBe(
+          true,
+        );
+      }
+    });
+  });
+
+  test.describe("Long table", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/long-table.html");
+      await waitForPagedJS(page);
+    });
+
+    test("should span multiple pages", async ({ page }) => {
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(1);
+    });
+
+    test("table rows should not be split across pages", async ({ page }) => {
+      // Check that no <tr> straddles a page boundary by verifying
+      // each row fits within its page's bounding box
+      const pages = await getPages(page);
+      for (const pageEl of pages) {
+        const pageBox = await pageEl.boundingBox();
+        const rows = await pageEl.locator("tr").all();
+        for (const row of rows) {
+          const rowBox = await row.boundingBox();
+          if (rowBox && pageBox) {
+            expect(rowBox.y + rowBox.height).toBeLessThanOrEqual(
+              pageBox.y + pageBox.height + 1,
+            );
+          }
+        }
+      }
+    });
+
+    test("no blank pages", async ({ page }) => {
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        const hasContent = await pageHasVisibleContent(pages[i]);
+        expect(hasContent, `Page ${i + 1} should have visible content`).toBe(
+          true,
+        );
+      }
+    });
+  });
+
+  test.describe("Long code block", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/long-code.html");
+      await waitForPagedJS(page);
+    });
+
+    test("should span multiple pages", async ({ page }) => {
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(1);
+    });
+
+    test("no blank pages", async ({ page }) => {
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        const hasContent = await pageHasVisibleContent(pages[i]);
+        expect(hasContent, `Page ${i + 1} should have visible content`).toBe(
+          true,
+        );
+      }
+    });
+  });
+
+  test.describe("Orphaned heading", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/orphaned-heading.html");
+      await waitForPagedJS(page);
+    });
+
+    test("should render multiple pages", async ({ page }) => {
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(1);
+    });
+
+    test("headings should not be the last element on a page", async ({
+      page,
+    }) => {
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        // Skip the last page — a heading at the end of the last page is fine
+        if (i === pages.length - 1) continue;
+
+        const pageBox = await pages[i].boundingBox();
+        if (!pageBox) continue;
+
+        // Find all headings on this page
+        const headings = await pages[i].locator("h1, h2, h3, h4, h5, h6").all();
+
+        for (const heading of headings) {
+          const headingBox = await heading.boundingBox();
+          if (!headingBox) continue;
+
+          // Check if this heading is near the bottom of the page
+          // (within the last 5% of page height)
+          const threshold = pageBox.y + pageBox.height * 0.95;
+          if (headingBox.y > threshold) {
+            // If the heading is near the bottom, there should be
+            // substantive content after it on the same page
+            const nextSibling = await heading.evaluate((el) => {
+              let next = el.nextElementSibling;
+              while (next) {
+                if (
+                  next.tagName &&
+                  !next.tagName.match(/^H[1-6]$/) &&
+                  next.textContent.trim().length > 0
+                ) {
+                  return true;
+                }
+                next = next.nextElementSibling;
+              }
+              return false;
+            });
+            expect(
+              nextSibling,
+              `Heading on page ${i + 1} appears orphaned at the bottom`,
+            ).toBe(true);
+          }
+        }
+      }
+    });
+
+    test("no blank pages", async ({ page }) => {
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        const hasContent = await pageHasVisibleContent(pages[i]);
+        expect(hasContent, `Page ${i + 1} should have visible content`).toBe(
+          true,
+        );
+      }
+    });
+  });
+});

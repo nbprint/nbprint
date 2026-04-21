@@ -4,6 +4,9 @@ export default defineConfig({
   // Look for test files in the "tests" directory, relative to this configuration file.
   testDir: "tests",
 
+  // Exclude integration tests — they use a separate config (integration.config.js).
+  testIgnore: "integration.*",
+
   // Run all tests in parallel.
   fullyParallel: true,
 
@@ -17,7 +20,15 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   // Reporter to use
-  reporter: "html",
+  reporter: [["html", { open: "never" }]],
+
+  // Snapshot configuration for visual regression tests
+  snapshotPathTemplate: "{testDir}/{testFileDir}/{testFileName}-snapshots/{arg}{ext}",
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.01,
+    },
+  },
 
   use: {
     // Base URL to use in actions like `await page.goto('/')`.
@@ -35,7 +46,7 @@ export default defineConfig({
   ],
   // Run your local dev server before starting the tests.
   webServer: {
-    command: "yarn start:tests",
+    command: "pnpm start:tests",
     url: "http://127.0.0.1:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,

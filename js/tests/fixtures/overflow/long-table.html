@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Long Table</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; font-size: 12px; }
+th { background-color: #3498db; color: white; }
+tr:nth-child(even) { background-color: #f2f2f2; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <h2>Long DataFrame</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <table>
+            <thead>
+              <tr><th>Row</th><th>Name</th><th>Value A</th><th>Value B</th><th>Category</th></tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+          <script>
+            // Generate 100 rows to force multi-page table
+            const tbody = document.getElementById('table-body');
+            const categories = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon'];
+            for (let i = 1; i <= 100; i++) {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${i}</td><td>Item ${i}</td><td>${(Math.random() * 1000).toFixed(2)}</td><td>${(Math.random() * 100).toFixed(1)}%</td><td>${categories[i % 5]}</td>`;
+              tbody.appendChild(tr);
+            }
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <p>Content after the long table.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

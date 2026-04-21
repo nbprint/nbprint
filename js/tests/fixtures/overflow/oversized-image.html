@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Oversized Image</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedImage">
+          <!-- 3000px tall image that should be constrained to page height -->
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='3000'%3E%3Crect width='600' height='3000' fill='%234a90d9'/%3E%3Ctext x='300' y='1500' text-anchor='middle' fill='white' font-size='40'%3EOversized Image (600x3000)%3C/text%3E%3C/svg%3E" alt="oversized test image" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <p>This paragraph should appear on a page after the image, not overlapped by it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
