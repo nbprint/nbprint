@@ -4,6 +4,13 @@ import { Previewer, registerHandlers, Handler } from "pagedjs";
 import "@fortawesome/fontawesome-free/js/all";
 
 /**
+ * Module-level configuration reference.
+ * Set by `build()` before pagedjs runs so that the handler class
+ * can read page-level settings (overflow_strategy, etc.).
+ */
+let _pageConfig = {};
+
+/**
  * Sanitize element IDs so they are valid CSS selectors.
  * Jupyter converts markdown headings like "Summary & Performance"
  * into IDs containing characters (& · etc.) that break querySelector.
@@ -60,6 +67,7 @@ export class handlers extends Handler {
     if (!contentArea) return;
 
     const pageBox = pageElement.getBoundingClientRect();
+    const strategy = _pageConfig.overflow_strategy || "scale";
 
     // Walk all elements inside the page content area
     const walker = document.createTreeWalker(
@@ -82,20 +90,20 @@ export class handlers extends Handler {
 
       if (!overflowsWidth && !overflowsHeight) continue;
 
-      // For images — shrink to fit
-      const tag = el.tagName.toLowerCase();
-      if (tag === "img" || tag === "svg" || tag === "canvas") {
-        if (overflowsWidth) {
-          el.style.maxWidth = pageBox.width + "px";
-        }
-        if (overflowsHeight) {
-          el.style.maxHeight = pageBox.height + "px";
-        }
-        el.style.objectFit = "contain";
-      } else {
-        // Mark for post-processing
-        el.setAttribute("data-nbprint-overflow", "true");
-      }
+      // 6.4: Per-element override via data-nbprint-overflow attribute
+      // If the element (or an ancestor) has a specific strategy, use that
+      const elStrategy =
+        el
+          .closest("[data-nbprint-overflow]")
+          ?.getAttribute("data-nbprint-overflow") || strategy;
+
+      // Skip elements already marked as overflow from a previous pass
+      if (elStrategy === "true") continue;
+
+      this._applyOverflowStrategy(el, elStrategy, pageBox, {
+        overflowsWidth,
+        overflowsHeight,
+      });
     }
 
     const hasVisibleContent = this._pageHasVisibleContent(contentArea);
@@ -109,6 +117,61 @@ export class handlers extends Handler {
       } else {
         pageElement.setAttribute("data-nbprint-blank", "true");
       }
+    }
+  }
+
+  /**
+   * Apply the chosen overflow strategy to an element.
+   *
+   * Strategies (6.1):
+   *   "scale" — shrink images/SVGs to fit; mark others (default)
+   *   "clip"  — hide overflow via CSS, no resize
+   *   "warn"  — log only, no DOM changes
+   *   "break" — force a page break before the element
+   */
+  _applyOverflowStrategy(
+    el,
+    strategy,
+    pageBox,
+    { overflowsWidth, overflowsHeight },
+  ) {
+    const tag = el.tagName.toLowerCase();
+
+    switch (strategy) {
+      case "scale":
+        if (tag === "img" || tag === "svg" || tag === "canvas") {
+          if (overflowsWidth) el.style.maxWidth = pageBox.width + "px";
+          if (overflowsHeight) el.style.maxHeight = pageBox.height + "px";
+          el.style.objectFit = "contain";
+        } else {
+          el.setAttribute("data-nbprint-overflow", "true");
+        }
+        break;
+
+      case "clip":
+        el.style.overflow = "hidden";
+        if (overflowsWidth) el.style.maxWidth = pageBox.width + "px";
+        if (overflowsHeight) el.style.maxHeight = pageBox.height + "px";
+        el.setAttribute("data-nbprint-overflow", "clip");
+        break;
+
+      case "warn":
+        console.warn(
+          `[nbprint] overflow (warn-only): <${tag}> overflows page`,
+          el,
+        );
+        el.setAttribute("data-nbprint-overflow", "warn");
+        break;
+
+      case "break":
+        el.style.breakBefore = "page";
+        el.setAttribute("data-nbprint-overflow", "break");
+        break;
+
+      default:
+        // Unknown strategy — fall through to scale behavior
+        el.setAttribute("data-nbprint-overflow", "true");
+        break;
     }
   }
 
@@ -276,6 +339,9 @@ export class handlers extends Handler {
 }
 
 export const build = async (configuration) => {
+  // Store page config for handler access
+  _pageConfig = configuration.page || {};
+
   // Attach CSS Selector to body so it can be used in downstream CSS
   // Do this before any pagedjs processing so that elements can adjust
   // their styles before chunking or previewing

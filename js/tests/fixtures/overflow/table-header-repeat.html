@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Table Header Repeat (Plain)</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; font-size: 12px; }
+th { background: #f0f0f0; font-weight: bold; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <h1>Long Plain Table</h1>
+          <p>This table has 100 rows and should span multiple pages. Each continuation page should have the thead repeated.</p>
+          <table>
+            <thead>
+              <tr><th>Row</th><th>Name</th><th>Value A</th><th>Value B</th><th>Category</th></tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+          <script>
+            const tbody = document.getElementById('table-body');
+            const categories = ['Alpha', 'Beta', 'Gamma', 'Delta'];
+            for (let i = 1; i <= 100; i++) {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${i}</td><td>Item ${i}</td><td>${(Math.random() * 1000).toFixed(2)}</td><td>${(Math.random() * 100).toFixed(1)}</td><td>${categories[i % 4]}</td>`;
+              tbody.appendChild(tr);
+            }
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Blank Page Removal Disabled</title>
+<script>
+var _nbprint_configuration = {
+  pagedjs: true,
+  debug: false,
+  page: "{\"orientation\": null, \"size\": null, \"blank_page_removal\": false}"
+};
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+p { font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon" id="content"></div>
+        <script>
+          // Same content as blank-page-trigger but with blank_page_removal=false
+          const content = document.getElementById('content');
+          let html = '<h1>Page 1 Content</h1>';
+          for (let i = 0; i < 30; i++) {
+            html += '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>';
+          }
+          html += '<div style="margin-top: 200px; padding-top: 100px;"><h2>Delayed Section</h2>';
+          html += '<p>This section has a large margin-top that could cause pagedjs to insert a blank page.</p>';
+          for (let i = 0; i < 15; i++) {
+            html += '<p>More content after the large gap.</p>';
+          }
+          html += '</div>';
+          content.innerHTML = html;
+        </script>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

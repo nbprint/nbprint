@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Table Starting Mid-Page</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #ddd; padding: 6px 10px; text-align: left; font-size: 12px; }
+th { background-color: #3498db; color: white; }
+tr:nth-child(even) { background-color: #f2f2f2; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <!-- Filler content to push the table roughly halfway down the first page -->
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <h2>Report Summary</h2>
+          <p>This section contains introductory content that occupies the top
+          portion of the first page, pushing the table below to start mid-page.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+          ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+          voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+          <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+          officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde
+          omnis iste natus error sit voluptatem accusantium doloremque laudantium.</p>
+          <p>Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et
+          quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
+          voluptatem quia voluptas sit aspernatur aut odit aut fugit.</p>
+          <h3>Key Findings</h3>
+          <ul>
+            <li>Finding one with extended description text for filler</li>
+            <li>Finding two with more extended description text</li>
+            <li>Finding three with additional padding content here</li>
+            <li>Finding four to ensure we use enough vertical space</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- The table that starts mid-page and spills onto next page(s) -->
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <table id="midpage-table">
+            <thead>
+              <tr><th>Row</th><th>Name</th><th>Value A</th><th>Value B</th><th>Category</th></tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+          <script>
+            // Generate 60 rows — enough to spill off the first page
+            // when starting mid-page, but not as many as the full 100-row test
+            const tbody = document.getElementById('table-body');
+            const categories = ['Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon'];
+            for (let i = 1; i <= 60; i++) {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td>${i}</td><td>Item ${i}</td><td>${(Math.random() * 1000).toFixed(2)}</td><td>${(Math.random() * 100).toFixed(1)}%</td><td>${categories[i % 5]}</td>`;
+              tbody.appendChild(tr);
+            }
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <p>Content after the table that should appear on the final page.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

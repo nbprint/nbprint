@@ -209,6 +209,199 @@ function annotateTallTables(contentRoot, contentArea) {
 }
 
 /**
+ * 3.3: Split tall tables into page-sized chunks, each with its own thead.
+ *
+ * This runs BEFORE pagedjs so that pagedjs sees multiple small tables
+ * instead of one giant table. No data is lost — every row appears in
+ * exactly one chunk.
+ *
+ * GT tables: only repeat column heading rows, skip title/subtitle.
+ */
+function splitTallTables(contentRoot, contentArea, configuration) {
+  if (configuration?.page?.table_header_repeat === false) return;
+
+  const tables = contentRoot.querySelectorAll(
+    'table[data-nbprint-paginate="table"]',
+  );
+
+  for (const table of tables) {
+    const thead = table.querySelector("thead");
+    const tbody = table.querySelector("tbody");
+    if (!thead || !tbody) continue;
+
+    const rows = Array.from(tbody.querySelectorAll(":scope > tr"));
+    if (rows.length === 0) continue;
+
+    const isGT = table.classList.contains("gt_table");
+
+    // Build the header that will be repeated on each chunk.
+    // For GT tables, skip title/subtitle rows.
+    const repeatedHeader = isGT
+      ? cloneGTColumnHeaders(thead)
+      : thead.cloneNode(true);
+
+    if (!repeatedHeader) continue;
+
+    // Use a hidden measuring table to get accurate chunk heights.
+    // Instead of summing individual row heights (which are inaccurate
+    // due to border-collapse, table layout distribution, etc.) we add
+    // rows one at a time and measure the real rendered table height.
+    const measuringTable = document.createElement("table");
+    for (const attr of table.attributes) {
+      measuringTable.setAttribute(attr.name, attr.value);
+    }
+    measuringTable.style.visibility = "hidden";
+    measuringTable.style.position = "absolute";
+    measuringTable.style.width = table.getBoundingClientRect().width + "px";
+    contentRoot.appendChild(measuringTable);
+
+    // The first chunk shares a page with whatever content precedes the
+    // table.  Estimate how far into the current logical page the table
+    // starts so the first chunk is sized to fit the remaining space.
+    // We must also account for any padding/margin the table's wrapper
+    // elements add below the table itself.
+    const contentTop = contentRoot.getBoundingClientRect().top;
+    const tableTop = table.getBoundingClientRect().top;
+    const offsetFromRoot = tableTop - contentTop;
+    const offsetIntoPage = offsetFromRoot % contentArea.height;
+
+    const firstChunkMaxHeight = contentArea.height - offsetIntoPage;
+
+    const maxHeight = contentArea.height;
+    const chunks = [];
+    let currentChunk = [];
+    let isFirstChunk = true;
+
+    // Reset the measuring table with the appropriate header for the
+    // current chunk (first chunk uses full thead, continuations use
+    // column-only header for GT tables).
+    function resetMeasuringTable() {
+      measuringTable.innerHTML = "";
+      const header = isFirstChunk
+        ? thead.cloneNode(true)
+        : repeatedHeader.cloneNode(true);
+      measuringTable.appendChild(header);
+      const newTbody = document.createElement("tbody");
+      newTbody.className = tbody.className;
+      measuringTable.appendChild(newTbody);
+      return newTbody;
+    }
+
+    let measuringTbody = resetMeasuringTable();
+
+    for (const row of rows) {
+      const clonedRow = row.cloneNode(true);
+      measuringTbody.appendChild(clonedRow);
+
+      const tableHeight = measuringTable.getBoundingClientRect().height;
+      const limit = isFirstChunk ? firstChunkMaxHeight : maxHeight;
+
+      if (tableHeight > limit && currentChunk.length > 0) {
+        // This row pushed us over — remove it, finalize the current
+        // chunk, then start a new chunk beginning with this row.
+        clonedRow.remove();
+        chunks.push(currentChunk);
+        currentChunk = [];
+        isFirstChunk = false;
+        measuringTbody = resetMeasuringTable();
+        measuringTbody.appendChild(row.cloneNode(true));
+      }
+
+      currentChunk.push(row);
+    }
+    if (currentChunk.length > 0) {
+      chunks.push(currentChunk);
+    }
+
+    measuringTable.remove();
+
+    // If it fits in one chunk, no splitting needed
+    if (chunks.length <= 1) continue;
+
+    // Build replacement tables
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < chunks.length; i++) {
+      const chunkTable = document.createElement("table");
+
+      // Copy attributes from original (class, style, data-* etc)
+      for (const attr of table.attributes) {
+        chunkTable.setAttribute(attr.name, attr.value);
+      }
+      // Remove the paginate annotation — chunks should fit
+      chunkTable.removeAttribute("data-nbprint-paginate");
+      chunkTable.setAttribute(
+        "data-nbprint-table-chunk",
+        `${i + 1}/${chunks.length}`,
+      );
+
+      // First chunk gets the original full thead (with title/subtitle for GT)
+      // Continuation chunks get column-only headers
+      if (i === 0) {
+        chunkTable.appendChild(thead.cloneNode(true));
+      } else {
+        const header = repeatedHeader.cloneNode(true);
+        header.setAttribute("data-nbprint-repeated", "true");
+        chunkTable.appendChild(header);
+      }
+
+      const chunkBody = document.createElement("tbody");
+      chunkBody.className = tbody.className;
+      for (const row of chunks[i]) {
+        chunkBody.appendChild(row.cloneNode(true));
+      }
+      chunkTable.appendChild(chunkBody);
+
+      // Copy tfoot if present (only on last chunk)
+      if (i === chunks.length - 1) {
+        const tfoot = table.querySelector("tfoot");
+        if (tfoot) {
+          chunkTable.appendChild(tfoot.cloneNode(true));
+        }
+      }
+
+      fragment.appendChild(chunkTable);
+    }
+
+    // Replace the original table with the chunks
+    const parent = table.parentNode;
+    parent.replaceChild(fragment, table);
+
+    // If the parent container has break-inside: avoid (applied by
+    // .pagedjs_page .jp-OutputArea-output in CSS), pagedjs would treat
+    // all chunks as a single atomic block.  Set an inline override so
+    // the chunks can flow naturally across page breaks.
+    const outputDiv = parent.closest(".jp-OutputArea-output") || parent;
+    outputDiv.style.breakInside = "auto";
+
+    console.debug(
+      `[nbprint] preprocessing: split table into ${chunks.length} chunks`,
+    );
+  }
+}
+
+/**
+ * Clone GT-aware headers: only the column heading rows,
+ * skipping title/subtitle rows.
+ */
+function cloneGTColumnHeaders(sourceThead) {
+  const thead = document.createElement("thead");
+  thead.className = sourceThead.className;
+
+  for (const row of sourceThead.children) {
+    // Skip title/subtitle rows
+    if (row.classList.contains("gt_heading")) {
+      const hasTitle = row.querySelector(".gt_title, .gt_subtitle");
+      if (hasTitle) continue;
+    }
+
+    thead.appendChild(row.cloneNode(true));
+  }
+
+  return thead.children.length > 0 ? thead : null;
+}
+
+/**
  * Run all pre-pagination preprocessing on the content root.
  *
  * @param {Element} contentRoot  The <main> element containing report content.
@@ -227,6 +420,7 @@ export function preprocess(contentRoot, configuration) {
   scaleOversizedSVGs(contentRoot, contentArea);
   scaleOversizedCharts(contentRoot, contentArea);
   annotateTallTables(contentRoot, contentArea);
+  splitTallTables(contentRoot, contentArea, configuration);
 
   contentRoot.setAttribute("data-nbprint-preprocessed", "true");
 }

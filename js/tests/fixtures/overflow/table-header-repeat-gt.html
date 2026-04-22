@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Table Header Repeat (GT)</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+.gt_table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.gt_title { font-size: 16px; font-weight: bold; padding: 8px; }
+.gt_subtitle { font-size: 13px; color: #666; padding: 4px 8px 8px; }
+.gt_col_heading { background: #f0f0f0; font-weight: bold; padding: 6px 10px; border-bottom: 2px solid #999; text-align: left; }
+.gt_row { padding: 6px 10px; border-bottom: 1px solid #ddd; }
+.gt_right { text-align: right; }
+.gt_center { text-align: center; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <h1>Long GT Table</h1>
+          <p>This GT table has a title, subtitle, column headers, and 100 data rows. On continuation pages, only column headers should repeat — NOT the title/subtitle.</p>
+          <table class="gt_table">
+            <thead>
+              <tr class="gt_heading">
+                <td class="gt_heading gt_title gt_font_normal" colspan="5">Superstore Data</td>
+              </tr>
+              <tr class="gt_heading">
+                <td class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" colspan="5">Example Dataset for Testing</td>
+              </tr>
+              <tr class="gt_col_headings">
+                <th class="gt_col_heading gt_columns_bottom_border gt_right" scope="col">Row ID</th>
+                <th class="gt_col_heading gt_columns_bottom_border gt_center" scope="col">Order ID</th>
+                <th class="gt_col_heading gt_columns_bottom_border gt_center" scope="col">Category</th>
+                <th class="gt_col_heading gt_columns_bottom_border gt_right" scope="col">Sales</th>
+                <th class="gt_col_heading gt_columns_bottom_border gt_right" scope="col">Profit</th>
+              </tr>
+            </thead>
+            <tbody class="gt_table_body" id="gt-body"></tbody>
+          </table>
+          <script>
+            const gtBody = document.getElementById('gt-body');
+            const cats = ['Technology', 'Furniture', 'Office Supplies'];
+            for (let i = 1; i <= 100; i++) {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `<td class="gt_row gt_right">${i}</td><td class="gt_row gt_center">${17000000 + i}</td><td class="gt_row gt_center">${cats[i % 3]}</td><td class="gt_row gt_right">$${(Math.random() * 5000).toFixed(2)}</td><td class="gt_row gt_right">$${(Math.random() * 1000 - 200).toFixed(2)}</td>`;
+              gtBody.appendChild(tr);
+            }
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

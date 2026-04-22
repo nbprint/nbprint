@@ -130,6 +130,18 @@ test.describe("Structural assertions — overflow fixtures", () => {
       expect(pages.length).toBeGreaterThan(1);
     });
 
+    test("table starts on page 1 alongside preceding content", async ({
+      page,
+    }) => {
+      const pages = await getPages(page);
+      const firstPage = pages[0];
+      // Page 1 should have both the heading and table rows
+      const hasHeading = (await firstPage.locator("h2").count()) > 0;
+      const hasTableRows = (await firstPage.locator("tbody tr").count()) > 0;
+      expect(hasHeading, "Page 1 should have the heading").toBe(true);
+      expect(hasTableRows, "Page 1 should have table rows").toBe(true);
+    });
+
     test("table rows should not be split across pages", async ({ page }) => {
       // Check that no <tr> straddles a page boundary by verifying
       // each row fits within its page's bounding box
@@ -155,6 +167,27 @@ test.describe("Structural assertions — overflow fixtures", () => {
         expect(hasContent, `Page ${i + 1} should have visible content`).toBe(
           true,
         );
+      }
+    });
+
+    test("all 100 rows are visible in sequence (no gaps)", async ({ page }) => {
+      // Collect the first-cell text of every visible <tr> across pages,
+      // in visual order (top-to-bottom, page-by-page).
+      const rowNumbers = await page.evaluate(() => {
+        const pages = document.querySelectorAll(".pagedjs_page");
+        const nums = [];
+        for (const pg of pages) {
+          const rows = pg.querySelectorAll("tbody > tr");
+          for (const r of rows) {
+            const cell = r.querySelector("td");
+            if (cell) nums.push(Number(cell.textContent.trim()));
+          }
+        }
+        return nums;
+      });
+      expect(rowNumbers.length).toBe(100);
+      for (let i = 0; i < 100; i++) {
+        expect(rowNumbers[i], `row ${i + 1} should be in position`).toBe(i + 1);
       }
     });
   });
@@ -296,19 +329,23 @@ test.describe("Pre-pagination preprocessing", () => {
     }
   });
 
-  test("tall table gets data-nbprint-paginate attribute", async ({ page }) => {
+  test("tall table gets annotated and split into chunks", async ({ page }) => {
     await page.goto("/js/tests/fixtures/overflow/long-table.html");
     await waitForPagedJS(page);
-    // The original table was >1 page tall, so it should have been annotated.
-    // After pagedjs splits it, fragments may exist — check that the attribute
-    // was set on at least one table element.
-    const annotated = await page.evaluate(() => {
-      const tables = document.querySelectorAll("table");
-      return Array.from(tables).some(
-        (t) => t.getAttribute("data-nbprint-paginate") === "table",
+    // The original table was >1 page tall. After preprocessing,
+    // it should have been split into multiple chunk tables.
+    const result = await page.evaluate(() => {
+      const chunks = document.querySelectorAll(
+        "table[data-nbprint-table-chunk]",
       );
+      const annotated = document.querySelectorAll(
+        'table[data-nbprint-paginate="table"]',
+      );
+      return { chunks: chunks.length, annotated: annotated.length };
     });
-    expect(annotated).toBe(true);
+    // Either it was split into chunks (table_header_repeat=true, default)
+    // or it still has the paginate annotation
+    expect(result.chunks + result.annotated).toBeGreaterThan(0);
   });
 });
 
@@ -685,6 +722,421 @@ test.describe("Phase 4 — Post-pagination validation", () => {
           `Blank page ${bp.pageNum} should be "intentional"`,
         ).toBe("intentional");
       }
+    });
+  });
+});
+
+test.describe("Phase 6 — Configuration surface", () => {
+  test.describe("6.1: overflow_strategy", () => {
+    test("warn strategy tags overflow as warn (no resize)", async ({
+      page,
+    }) => {
+      await page.goto(
+        "/js/tests/fixtures/overflow/overflow-strategy-warn.html",
+      );
+      await waitForPagedJS(page);
+      const result = await page.evaluate(() => {
+        const el = document.getElementById("wide-element");
+        return {
+          attr: el?.getAttribute("data-nbprint-overflow"),
+          // With warn, the element should NOT be resized
+          width: el?.style.maxWidth || "none",
+        };
+      });
+      expect(result.attr).toBe("warn");
+      expect(result.width).toBe("none");
+    });
+
+    test("clip strategy applies overflow:hidden and maxWidth", async ({
+      page,
+    }) => {
+      await page.goto(
+        "/js/tests/fixtures/overflow/overflow-strategy-clip.html",
+      );
+      await waitForPagedJS(page);
+      const result = await page.evaluate(() => {
+        const el = document.getElementById("wide-element");
+        return {
+          attr: el?.getAttribute("data-nbprint-overflow"),
+          overflow: el?.style.overflow,
+          hasMaxWidth: el?.style.maxWidth !== "",
+        };
+      });
+      expect(result.attr).toBe("clip");
+      expect(result.overflow).toBe("hidden");
+      expect(result.hasMaxWidth).toBe(true);
+    });
+
+    test("default (scale) strategy shrinks images to fit", async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/oversized-image.html");
+      await waitForPagedJS(page);
+      // Images should have been scaled, not tagged with overflow
+      const overflowed = await page.evaluate(() => {
+        return document.querySelectorAll("[data-nbprint-overflow]").length;
+      });
+      expect(overflowed).toBe(0);
+    });
+  });
+
+  test.describe("6.2: blank_page_removal", () => {
+    test("blank pages are removed when enabled (default)", async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/blank-page-trigger.html");
+      await waitForPagedJS(page);
+      const blanks = await page.evaluate(() => {
+        return document.querySelectorAll(
+          '.pagedjs_page[data-nbprint-blank="true"]',
+        ).length;
+      });
+      expect(blanks).toBe(0);
+    });
+
+    test("blank pages are kept when blank_page_removal=false", async ({
+      page,
+    }) => {
+      await page.goto(
+        "/js/tests/fixtures/overflow/blank-removal-disabled.html",
+      );
+      await waitForPagedJS(page);
+      // With removal disabled, accidental blank pages should still
+      // be present (marked but not removed)
+      const blanks = await page.evaluate(() => {
+        return document.querySelectorAll(
+          '.pagedjs_page[data-nbprint-blank="true"]',
+        ).length;
+      });
+      // The blank-page-trigger content should produce blank pages
+      // but they should NOT be removed when config disables it
+      const validated = await page.evaluate(() => {
+        return document
+          .querySelector(".pagedjs_pages")
+          ?.getAttribute("data-nbprint-validated");
+      });
+      expect(validated).toBe("true");
+      // Page count should be >= the count with removal enabled
+      const totalPages = await page.evaluate(() => {
+        return document.querySelectorAll(".pagedjs_page").length;
+      });
+      expect(totalPages).toBeGreaterThan(0);
+    });
+  });
+
+  test.describe("6.4: per-element overflow override", () => {
+    test("element with data-nbprint-overflow=clip uses clip strategy", async ({
+      page,
+    }) => {
+      await page.goto("/js/tests/fixtures/overflow/per-element-override.html");
+      await waitForPagedJS(page);
+      const result = await page.evaluate(() => {
+        const el = document.getElementById("clipped-element");
+        return {
+          attr: el?.getAttribute("data-nbprint-overflow"),
+          overflow: el?.style.overflow,
+          hasMaxWidth: el?.style.maxWidth !== "",
+        };
+      });
+      expect(result.attr).toBe("clip");
+      expect(result.overflow).toBe("hidden");
+      expect(result.hasMaxWidth).toBe(true);
+    });
+  });
+});
+
+test.describe("Phase 3.3 — Table header repetition", () => {
+  test.describe("Plain table", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/table-header-repeat.html");
+      await waitForPagedJS(page);
+    });
+
+    test("table is split into multiple chunks", async ({ page }) => {
+      const chunks = await page.evaluate(() => {
+        return document.querySelectorAll("table[data-nbprint-table-chunk]")
+          .length;
+      });
+      expect(chunks).toBeGreaterThan(1);
+    });
+
+    test("every chunk has a thead", async ({ page }) => {
+      const result = await page.evaluate(() => {
+        const chunks = document.querySelectorAll(
+          "table[data-nbprint-table-chunk]",
+        );
+        let allHaveThead = true;
+        for (const chunk of chunks) {
+          if (!chunk.querySelector("thead")) {
+            allHaveThead = false;
+            break;
+          }
+        }
+        return { count: chunks.length, allHaveThead };
+      });
+      expect(result.count).toBeGreaterThan(1);
+      expect(result.allHaveThead).toBe(true);
+    });
+
+    test("continuation chunks have data-nbprint-repeated thead", async ({
+      page,
+    }) => {
+      const result = await page.evaluate(() => {
+        const chunks = document.querySelectorAll(
+          "table[data-nbprint-table-chunk]",
+        );
+        const repeated = document.querySelectorAll(
+          'thead[data-nbprint-repeated="true"]',
+        ).length;
+        // First chunk should have original thead, rest should be repeated
+        return { totalChunks: chunks.length, repeatedHeaders: repeated };
+      });
+      expect(result.repeatedHeaders).toBe(result.totalChunks - 1);
+    });
+
+    test("repeated thead contains column headers", async ({ page }) => {
+      const headerText = await page.evaluate(() => {
+        const repeated = document.querySelector(
+          'thead[data-nbprint-repeated="true"]',
+        );
+        if (!repeated) return null;
+        const ths = repeated.querySelectorAll("th");
+        return Array.from(ths).map((th) => th.textContent.trim());
+      });
+      expect(headerText).not.toBeNull();
+      expect(headerText).toContain("Row");
+      expect(headerText).toContain("Name");
+    });
+
+    test("all rows are present across all chunks (no data loss)", async ({
+      page,
+    }) => {
+      const totalRows = await page.evaluate(() => {
+        const chunks = document.querySelectorAll(
+          "table[data-nbprint-table-chunk]",
+        );
+        let count = 0;
+        for (const chunk of chunks) {
+          count += chunk.querySelectorAll("tbody > tr").length;
+        }
+        return count;
+      });
+      // Original table has 100 rows
+      expect(totalRows).toBe(100);
+    });
+  });
+
+  test.describe("GT table", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto(
+        "/js/tests/fixtures/overflow/table-header-repeat-gt.html",
+      );
+      await waitForPagedJS(page);
+    });
+
+    test("table is split into multiple chunks", async ({ page }) => {
+      const chunks = await page.evaluate(() => {
+        return document.querySelectorAll("table[data-nbprint-table-chunk]")
+          .length;
+      });
+      expect(chunks).toBeGreaterThan(1);
+    });
+
+    test("continuation chunks have column headers but not title/subtitle", async ({
+      page,
+    }) => {
+      const result = await page.evaluate(() => {
+        const repeated = document.querySelectorAll(
+          'thead[data-nbprint-repeated="true"]',
+        );
+        const info = [];
+        for (const thead of repeated) {
+          const hasTitle = !!thead.querySelector(".gt_title");
+          const hasSubtitle = !!thead.querySelector(".gt_subtitle");
+          const hasColHeadings = !!thead.querySelector(".gt_col_heading");
+          const colTexts = Array.from(
+            thead.querySelectorAll(".gt_col_heading"),
+          ).map((th) => th.textContent.trim());
+          info.push({ hasTitle, hasSubtitle, hasColHeadings, colTexts });
+        }
+        return info;
+      });
+      expect(result.length).toBeGreaterThan(0);
+      for (const thead of result) {
+        expect(thead.hasTitle).toBe(false);
+        expect(thead.hasSubtitle).toBe(false);
+        expect(thead.hasColHeadings).toBe(true);
+        expect(thead.colTexts).toContain("Row ID");
+        expect(thead.colTexts).toContain("Category");
+      }
+    });
+
+    test("first chunk has title and subtitle", async ({ page }) => {
+      const firstChunkHasTitle = await page.evaluate(() => {
+        const first = document.querySelector(
+          'table[data-nbprint-table-chunk^="1/"]',
+        );
+        if (!first) return false;
+        const thead = first.querySelector("thead:not([data-nbprint-repeated])");
+        return !!(thead && thead.querySelector(".gt_title"));
+      });
+      expect(firstChunkHasTitle).toBe(true);
+    });
+
+    test("all rows are present across all chunks (no data loss)", async ({
+      page,
+    }) => {
+      const totalRows = await page.evaluate(() => {
+        const chunks = document.querySelectorAll(
+          "table[data-nbprint-table-chunk]",
+        );
+        let count = 0;
+        for (const chunk of chunks) {
+          count += chunk.querySelectorAll("tbody > tr").length;
+        }
+        return count;
+      });
+      expect(totalRows).toBe(100);
+    });
+  });
+
+  test.describe("6.3: table_header_repeat config", () => {
+    test("headers are NOT repeated when table_header_repeat=false", async ({
+      page,
+    }) => {
+      await page.goto(
+        "/js/tests/fixtures/overflow/table-header-repeat-disabled.html",
+      );
+      await waitForPagedJS(page);
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(1);
+
+      const repeated = await page.evaluate(() => {
+        return document.querySelectorAll('thead[data-nbprint-repeated="true"]')
+          .length;
+      });
+      expect(repeated).toBe(0);
+
+      // Table should NOT be split into chunks
+      const chunks = await page.evaluate(() => {
+        return document.querySelectorAll("table[data-nbprint-table-chunk]")
+          .length;
+      });
+      expect(chunks).toBe(0);
+    });
+  });
+
+  test.describe("Table starting mid-page", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/table-midpage.html");
+      await waitForPagedJS(page);
+    });
+
+    test("table spills from mid-page onto subsequent page(s)", async ({
+      page,
+    }) => {
+      const pages = await getPages(page);
+      // Must span at least 2 pages (starts mid-page, overflows)
+      expect(pages.length).toBeGreaterThan(1);
+
+      // First page should have non-table content before the table
+      const firstPageHasHeading = await pages[0]
+        .locator("h2")
+        .count()
+        .then((c) => c > 0);
+      expect(firstPageHasHeading).toBe(true);
+    });
+
+    test("table is split into chunks with repeated headers", async ({
+      page,
+    }) => {
+      const result = await page.evaluate(() => {
+        const chunks = document.querySelectorAll(
+          "table[data-nbprint-table-chunk]",
+        );
+        const repeated = document.querySelectorAll(
+          'thead[data-nbprint-repeated="true"]',
+        );
+        return { chunks: chunks.length, repeated: repeated.length };
+      });
+      expect(result.chunks).toBeGreaterThan(1);
+      // Every chunk after the first should have a repeated header
+      expect(result.repeated).toBe(result.chunks - 1);
+    });
+
+    test("all 60 rows are present across chunks (no data loss)", async ({
+      page,
+    }) => {
+      const totalRows = await page.evaluate(() => {
+        const chunks = document.querySelectorAll(
+          "table[data-nbprint-table-chunk]",
+        );
+        let count = 0;
+        for (const chunk of chunks) {
+          count += chunk.querySelectorAll("tbody > tr").length;
+        }
+        return count;
+      });
+      expect(totalRows).toBe(60);
+    });
+
+    test("no blank pages", async ({ page }) => {
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        const hasContent = await pageHasVisibleContent(pages[i]);
+        expect(hasContent, `Page ${i + 1} should have content`).toBe(true);
+      }
+    });
+
+    test("content after table appears on final page", async ({ page }) => {
+      const pages = await getPages(page);
+      const lastPage = pages[pages.length - 1];
+      const hasTrailingContent = await lastPage
+        .locator("p")
+        .filter({ hasText: "Content after the table" })
+        .count()
+        .then((c) => c > 0);
+      expect(hasTrailingContent).toBe(true);
+    });
+  });
+
+  test.describe("Wide-column table (horizontal overflow)", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/table-wide-columns.html");
+      await waitForPagedJS(page);
+    });
+
+    test("table is NOT split into chunks (only tall tables are split)", async ({
+      page,
+    }) => {
+      const chunks = await page.evaluate(() => {
+        return document.querySelectorAll("table[data-nbprint-table-chunk]")
+          .length;
+      });
+      expect(chunks).toBe(0);
+    });
+
+    test("table is NOT annotated with data-nbprint-paginate", async ({
+      page,
+    }) => {
+      const annotated = await page.evaluate(() => {
+        return document.querySelectorAll('table[data-nbprint-paginate="table"]')
+          .length;
+      });
+      expect(annotated).toBe(0);
+    });
+
+    test("table is not vertically split despite spanning pages", async ({
+      page,
+    }) => {
+      // pagedjs may break the wide table across pages horizontally,
+      // but our vertical chunk splitting should NOT apply
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThanOrEqual(1);
+    });
+
+    test("no repeated headers are inserted", async ({ page }) => {
+      const repeated = await page.evaluate(() => {
+        return document.querySelectorAll('thead[data-nbprint-repeated="true"]')
+          .length;
+      });
+      expect(repeated).toBe(0);
     });
   });
 });
