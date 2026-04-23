@@ -206,6 +206,7 @@ class TestSectionConstants:
             "esm",
             "classname",
             "attrs",
+            "section_styles",
         }
 
     def test_section_groups_keys_match_order(self):

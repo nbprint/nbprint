@@ -3,6 +3,7 @@ from typing import Generator, Literal
 from pydantic import Field, PrivateAttr, model_validator
 
 from nbprint.config.base import BaseModel
+from nbprint.config.common import Style
 from nbprint.config.content import Content
 
 __all__ = ("SECTION_GROUPS", "SECTION_ORDER", "ContentMarshall", "Section")
@@ -125,6 +126,13 @@ class ContentMarshall(BaseModel):
     # Rearmatter
     rearmatter: list[Content] = Field(
         default_factory=list, description="Content that appears on the back cover. for physical books, this corresponds to the back cover."
+    )
+
+    # Per-section default styles — applied to any cell in that section
+    # whose own ``style`` field does not override the same property.
+    section_styles: dict[Section, Style] = Field(
+        default_factory=dict,
+        description="Default Style per section; inherited by cells in that section unless overridden.",
     )
 
     _all: list[Content] = PrivateAttr(default_factory=list)

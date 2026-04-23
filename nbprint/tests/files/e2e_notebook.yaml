@@ -1,0 +1,11 @@
+---
+# End-to-end test fixture: wraps e2e_notebook.ipynb and fixes output naming
+# so the generated HTML has a stable path for visual snapshot tests.
+name: "e2e_notebook"
+notebook: nbprint/tests/files/e2e_notebook.ipynb
+
+outputs:
+  _target_: nbprint.NBConvertOutputs
+  naming: "{{name}}"
+  root: ./outputs
+  target: "html"
