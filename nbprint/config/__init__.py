@@ -1,5 +1,7 @@
 from .base import *
+from .cell import *
 from .common import *
 from .content import *
 from .core import *
+from .magic import *
 from .outputs import *
