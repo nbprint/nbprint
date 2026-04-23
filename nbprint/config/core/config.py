@@ -15,8 +15,10 @@ from typing_extensions import Self
 
 from nbprint import __version__
 from nbprint.config.base import BaseModel, Role, _append_or_extend
+from nbprint.config.cell import NBPRINT_MIME
 from nbprint.config.content import Content, ContentCode, ContentMarkdown
 from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
+from nbprint.config.magic import _parse_magic_line
 
 from .content import SECTION_ORDER, ContentMarshall
 from .context import Context
@@ -195,6 +197,23 @@ class Configuration(CallableModel, BaseModel):
         else:
             nbprint_cell_meta = {}
 
+        # ── Runtime metadata from NBPrintCell (MIME output) ──────────
+        runtime_meta = Configuration._extract_nbprint_mime(cell)
+        if runtime_meta:
+            for key, value in runtime_meta.items():
+                # Runtime metadata augments but does not overwrite
+                # explicit cell.metadata.nbprint values.
+                nbprint_cell_meta.setdefault(key, value)
+
+        # ── Runtime metadata from %%nbprint magic ────────────────────
+        magic_meta = Configuration._extract_nbprint_magic(source)
+        if magic_meta:
+            for key, value in magic_meta.items():
+                nbprint_cell_meta.setdefault(key, value)
+            # Strip the magic line from the source so the Content
+            # model stores the real code, not the directive.
+            source = "\n".join(source.splitlines()[1:])
+
         # Attach cell tags in to content
         if "tags" in cell["metadata"]:
             nbprint_cell_meta["tags"] = cell["metadata"]["tags"]
@@ -206,7 +225,7 @@ class Configuration(CallableModel, BaseModel):
             return content_model.model_validate(nbprint_cell_meta)
 
         # Set source
-        nbprint_cell_meta["content"] = cell.source
+        nbprint_cell_meta["content"] = source
 
         # Default handling: treat as code or markdown content
         if cell.cell_type == "code":
@@ -217,6 +236,42 @@ class Configuration(CallableModel, BaseModel):
             # Skip, log warning
             _log.warning(f"Unsupported cell type when loading from notebook: {cell.cell_type}")
         return content
+
+    @staticmethod
+    def _extract_nbprint_mime(cell) -> dict | None:
+        """Extract nbprint metadata from a cell's outputs (MIME type output).
+
+        Looks for outputs containing ``application/nbprint.cell+json`` and
+        returns the parsed metadata dict, or ``None``.
+        """
+        import json as _json
+
+        outputs = cell.get("outputs", [])
+        for output in outputs:
+            data = output.get("data", {})
+            if NBPRINT_MIME in data:
+                raw = data[NBPRINT_MIME]
+                if isinstance(raw, str):
+                    return _json.loads(raw)
+                if isinstance(raw, dict):
+                    return raw
+        return None
+
+    @staticmethod
+    def _extract_nbprint_magic(source: str) -> dict | None:
+        """Parse ``%%nbprint key=value ...`` from the first line of source.
+
+        Returns the parsed kwargs dict, or ``None`` if the cell does not
+        start with the magic.
+        """
+        first_line = source.split("\n", 1)[0].strip()
+        if not first_line.startswith("%%nbprint"):
+            return None
+        # Strip the ``%%nbprint`` prefix and parse the rest
+        line = first_line[len("%%nbprint") :].strip()
+        if not line:
+            return {}
+        return _parse_magic_line(line)
 
     @staticmethod
     def _parse_parameters_cell(cell) -> dict:
@@ -285,8 +340,16 @@ class Configuration(CallableModel, BaseModel):
         for cell in cells_to_process:
             cell_instance = Configuration._cell_to_content(cell)
             if cell_instance is not None:
-                # Route cell to the appropriate section based on tags/metadata
+                # Route cell to the appropriate section based on tags/metadata.
+                # Check raw cell metadata/tags first (highest priority).
                 section = Configuration._extract_section_for_cell(cell)
+                # Fall back to runtime metadata: MIME output, then %%nbprint magic.
+                if section is None:
+                    runtime_meta = Configuration._extract_nbprint_mime(cell) or {}
+                    magic_meta = Configuration._extract_nbprint_magic(cell.source.strip()) or {}
+                    runtime_section = runtime_meta.get("section") or magic_meta.get("section")
+                    if runtime_section and runtime_section in SECTION_ORDER:
+                        section = runtime_section
                 target_section = section or "middlematter"
                 getattr(values["content"], target_section).append(cell_instance)
 

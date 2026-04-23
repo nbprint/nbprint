@@ -402,6 +402,59 @@ function cloneGTColumnHeaders(sourceThead) {
 }
 
 /**
+ * Override break-inside: avoid for non-table content taller than a single page.
+ * Tables are already handled by splitTallTables; this covers code blocks and
+ * other tall output wrappers that would otherwise be pushed to the next page.
+ *
+ * For tall code blocks (<pre>), we also wrap individual lines in block-level
+ * spans so pagedjs has breakpoints between lines (plain text nodes don't
+ * provide breakpoints).
+ */
+function allowTallContentToBreak(contentRoot, contentArea) {
+  for (const el of contentRoot.querySelectorAll(".jp-OutputArea-output")) {
+    // Skip elements already handled by splitTallTables
+    if (el.querySelector("[data-nbprint-table-chunk]")) continue;
+    if (el.getBoundingClientRect().height > contentArea.height) {
+      el.style.breakInside = "auto";
+
+      // Wrap code lines so pagedjs can break between them
+      for (const pre of el.querySelectorAll("pre")) {
+        wrapCodeLinesForBreaking(pre);
+      }
+    }
+  }
+}
+
+/**
+ * Wrap individual lines in a <pre> element with block-level spans
+ * that prevent mid-line breaks while allowing breaks between lines.
+ * This must run before pagedjs so it has breakpoints to work with.
+ */
+function wrapCodeLinesForBreaking(preElement) {
+  const codeEl = preElement.querySelector("code") || preElement;
+  if (codeEl.getAttribute("data-nbprint-lines") === "true") return;
+
+  const text = codeEl.textContent;
+  if (!text || !text.includes("\n")) return;
+
+  const lines = text.split("\n");
+  if (lines.length <= 1) return;
+
+  const fragment = document.createDocumentFragment();
+  for (const line of lines) {
+    const span = document.createElement("span");
+    span.style.display = "block";
+    span.style.breakInside = "avoid";
+    span.textContent = line;
+    fragment.appendChild(span);
+  }
+
+  codeEl.textContent = "";
+  codeEl.appendChild(fragment);
+  codeEl.setAttribute("data-nbprint-lines", "true");
+}
+
+/**
  * Run all pre-pagination preprocessing on the content root.
  *
  * @param {Element} contentRoot  The <main> element containing report content.
@@ -421,6 +474,7 @@ export function preprocess(contentRoot, configuration) {
   scaleOversizedCharts(contentRoot, contentArea);
   annotateTallTables(contentRoot, contentArea);
   splitTallTables(contentRoot, contentArea, configuration);
+  allowTallContentToBreak(contentRoot, contentArea);
 
   contentRoot.setAttribute("data-nbprint-preprocessed", "true");
 }

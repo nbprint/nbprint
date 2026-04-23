@@ -160,6 +160,15 @@ test.describe("Structural assertions — overflow fixtures", () => {
       }
     });
 
+    test("table starts on page 1 alongside heading", async ({ page }) => {
+      const pages = await getPages(page);
+      const page1 = pages[0];
+      const headings = await page1.locator("h2").count();
+      const rows = await page1.locator("tr").count();
+      expect(headings).toBeGreaterThan(0);
+      expect(rows).toBeGreaterThan(0);
+    });
+
     test("no blank pages", async ({ page }) => {
       const pages = await getPages(page);
       for (let i = 0; i < pages.length; i++) {
@@ -201,6 +210,15 @@ test.describe("Structural assertions — overflow fixtures", () => {
     test("should span multiple pages", async ({ page }) => {
       const pages = await getPages(page);
       expect(pages.length).toBeGreaterThan(1);
+    });
+
+    test("code starts on page 1 alongside heading", async ({ page }) => {
+      const pages = await getPages(page);
+      const page1 = pages[0];
+      const headings = await page1.locator("h2").count();
+      const preBlocks = await page1.locator("pre").count();
+      expect(headings).toBeGreaterThan(0);
+      expect(preBlocks).toBeGreaterThan(0);
     });
 
     test("no blank pages", async ({ page }) => {

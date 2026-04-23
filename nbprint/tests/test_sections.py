@@ -739,3 +739,242 @@ class TestPageCounterFields:
     def test_page_counter_style(self):
         p = Page(counter_style="lower-roman")
         assert p.counter_style == "lower-roman"
+
+
+class TestNBPrintCellRuntime:
+    """Phase 6.5 — NBPrintCell runtime API and %%nbprint magic ingestion."""
+
+    def test_nbprint_cell_to_dict(self):
+        """NBPrintCell.to_dict() returns only non-None fields."""
+        from nbprint import NBPrintCell
+
+        cell = NBPrintCell(section="covermatter", css=":scope { color: red; }", emit=False)
+        d = cell.to_dict()
+        assert d == {"section": "covermatter", "css": ":scope { color: red; }"}
+
+    def test_nbprint_cell_to_dict_with_style(self):
+        """NBPrintCell.to_dict() serializes Style objects."""
+        from nbprint import NBPrintCell
+        from nbprint.config.common import Font, Style
+
+        cell = NBPrintCell(style=Style(font=Font(size=24)), emit=False)
+        d = cell.to_dict()
+        assert "style" in d
+        assert d["style"]["font"]["size"] == 24
+
+    def test_nbprint_cell_to_dict_with_all_fields(self):
+        """NBPrintCell.to_dict() includes classname, attrs, ignore."""
+        from nbprint import NBPrintCell
+
+        cell = NBPrintCell(
+            section="frontmatter",
+            css=":scope { margin: 0; }",
+            classname="highlight",
+            attrs={"data-foo": "bar"},
+            ignore=True,
+            emit=False,
+        )
+        d = cell.to_dict()
+        assert d["section"] == "frontmatter"
+        assert d["classname"] == "highlight"
+        assert d["attrs"] == {"data-foo": "bar"}
+        assert d["ignore"] is True
+
+    def test_nbprint_cell_to_dict_empty(self):
+        """NBPrintCell with no args produces empty dict."""
+        from nbprint import NBPrintCell
+
+        cell = NBPrintCell(emit=False)
+        assert cell.to_dict() == {}
+
+    def test_extract_nbprint_mime_from_cell_output(self):
+        """_extract_nbprint_mime finds MIME-type metadata in cell outputs."""
+        import json
+
+        from nbformat.v4 import new_code_cell
+
+        from nbprint import NBPRINT_MIME
+        from nbprint.config.core.config import Configuration
+
+        meta = {"section": "covermatter", "css": ":scope { text-align: center; }"}
+        cell = new_code_cell(
+            source="NBPrintCell(section='covermatter')",
+            metadata={"tags": []},
+        )
+        cell.outputs = [
+            {
+                "output_type": "display_data",
+                "data": {NBPRINT_MIME: json.dumps(meta)},
+                "metadata": {},
+            }
+        ]
+        result = Configuration._extract_nbprint_mime(cell)
+        assert result == meta
+
+    def test_extract_nbprint_mime_missing(self):
+        """_extract_nbprint_mime returns None when no MIME output."""
+        from nbformat.v4 import new_code_cell
+
+        from nbprint.config.core.config import Configuration
+
+        cell = new_code_cell(source="x = 1", metadata={"tags": []})
+        cell.outputs = []
+        assert Configuration._extract_nbprint_mime(cell) is None
+
+    def test_cell_to_content_merges_mime_metadata(self):
+        """_cell_to_content merges MIME output metadata into Content."""
+        import json
+
+        from nbformat.v4 import new_code_cell
+
+        from nbprint import NBPRINT_MIME
+        from nbprint.config.core.config import Configuration
+
+        cell = new_code_cell(
+            source="display('hello')",
+            metadata={"tags": []},
+        )
+        cell.outputs = [
+            {
+                "output_type": "display_data",
+                "data": {NBPRINT_MIME: json.dumps({"css": ":scope { font-size: 2em; }", "classname": "big"})},
+                "metadata": {},
+            }
+        ]
+        content = Configuration._cell_to_content(cell)
+        assert content.css == ":scope { font-size: 2em; }"
+        assert content.classname == "big"
+
+    def test_cell_to_content_metadata_priority_over_mime(self):
+        """Explicit cell.metadata.nbprint takes priority over MIME output."""
+        import json
+
+        from nbformat.v4 import new_code_cell
+
+        from nbprint import NBPRINT_MIME
+        from nbprint.config.core.config import Configuration
+
+        cell = new_code_cell(
+            source="code()",
+            metadata={
+                "tags": [],
+                "nbprint": {"css": "explicit-css"},
+            },
+        )
+        cell.outputs = [
+            {
+                "output_type": "display_data",
+                "data": {NBPRINT_MIME: json.dumps({"css": "mime-css", "classname": "from-mime"})},
+                "metadata": {},
+            }
+        ]
+        content = Configuration._cell_to_content(cell)
+        # Explicit metadata wins for css
+        assert content.css == "explicit-css"
+        # MIME fills in classname since it's not in explicit metadata
+        assert content.classname == "from-mime"
+
+    def test_section_routing_from_mime_output(self):
+        """Cells with section in MIME output are routed to the correct section."""
+        import json
+
+        from nbformat.v4 import new_code_cell, new_notebook
+
+        from nbprint import NBPRINT_MIME
+        from nbprint.config.core.config import Configuration
+
+        nb = new_notebook()
+        cell = new_code_cell(
+            source="display('cover')",
+            metadata={"tags": []},
+        )
+        cell.outputs = [
+            {
+                "output_type": "display_data",
+                "data": {NBPRINT_MIME: json.dumps({"section": "covermatter"})},
+                "metadata": {},
+            }
+        ]
+        nb.cells = [cell]
+
+        values = {"content": ContentMarshall()}
+        Configuration._process_cells(values, nb)
+
+        assert len(values["content"].covermatter) == 1
+        assert len(values["content"].middlematter) == 0
+
+
+class TestNBPrintMagicParsing:
+    """%%nbprint cell magic parsing."""
+
+    def test_extract_magic_basic(self):
+        """_extract_nbprint_magic parses key=value pairs."""
+        from nbprint.config.core.config import Configuration
+
+        result = Configuration._extract_nbprint_magic('%%nbprint section=frontmatter css=":scope { color: red; }"')
+        assert result == {"section": "frontmatter", "css": ":scope { color: red; }"}
+
+    def test_extract_magic_ignore(self):
+        """_extract_nbprint_magic parses ignore as boolean."""
+        from nbprint.config.core.config import Configuration
+
+        result = Configuration._extract_nbprint_magic("%%nbprint ignore=true")
+        assert result == {"ignore": True}
+
+    def test_extract_magic_no_magic(self):
+        """_extract_nbprint_magic returns None for non-magic source."""
+        from nbprint.config.core.config import Configuration
+
+        assert Configuration._extract_nbprint_magic("x = 1") is None
+
+    def test_extract_magic_empty(self):
+        """_extract_nbprint_magic with no args returns empty dict."""
+        from nbprint.config.core.config import Configuration
+
+        result = Configuration._extract_nbprint_magic("%%nbprint")
+        assert result == {}
+
+    def test_cell_to_content_strips_magic_line(self):
+        """_cell_to_content strips the %%nbprint magic line from source."""
+        from nbformat.v4 import new_code_cell
+
+        from nbprint.config.core.config import Configuration
+
+        cell = new_code_cell(
+            source="%%nbprint section=frontmatter\ndisplay('hello')",
+            metadata={"tags": []},
+        )
+        cell.outputs = []
+        content = Configuration._cell_to_content(cell)
+        assert content.content == "display('hello')"
+
+    def test_cell_to_content_magic_sets_section_in_metadata(self):
+        """%%nbprint section= is available for section routing during _process_cells."""
+        from nbformat.v4 import new_code_cell, new_notebook
+
+        from nbprint.config.core.config import Configuration
+
+        nb = new_notebook()
+        nb.cells = [
+            new_code_cell(
+                source="%%nbprint section=endmatter\nresult()",
+                metadata={"tags": []},
+            ),
+        ]
+        # Need to set outputs to empty list
+        nb.cells[0].outputs = []
+
+        values = {"content": ContentMarshall()}
+        Configuration._process_cells(values, nb)
+
+        assert len(values["content"].endmatter) == 1
+        assert values["content"].endmatter[0].content == "result()"
+        assert len(values["content"].middlematter) == 0
+
+    def test_parse_magic_line_quoted_values(self):
+        """_parse_magic_line handles quoted values with spaces."""
+        from nbprint.config.magic import _parse_magic_line
+
+        result = _parse_magic_line('section=frontmatter css=":scope { font-size: 18px; }"')
+        assert result["section"] == "frontmatter"
+        assert result["css"] == ":scope { font-size: 18px; }"
