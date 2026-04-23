@@ -284,8 +284,10 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Role</span><span class="p">,</span> <span class="n">_append_or_extend</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.cell</span><span class="w"> </span><span class="kn">import</span> <span class="n">NBPRINT_MIME</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.content</span><span class="w"> </span><span class="kn">import</span> <span class="n">Content</span><span class="p">,</span> <span class="n">ContentCode</span><span class="p">,</span> <span class="n">ContentMarkdown</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NBPrintPathIsYamlError</span><span class="p">,</span> <span class="n">NBPrintPathOrModelMalformedError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.magic</span><span class="w"> </span><span class="kn">import</span> <span class="n">_parse_magic_line</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.content</span><span class="w"> </span><span class="kn">import</span> <span class="n">SECTION_ORDER</span><span class="p">,</span> <span class="n">ContentMarshall</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.context</span><span class="w"> </span><span class="kn">import</span> <span class="n">Context</span>
@@ -469,6 +471,23 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">nbprint_cell_meta</span> <span class="o">=</span> <span class="p">{}</span>
 
+        <span class="c1"># ── Runtime metadata from NBPrintCell (MIME output) ──────────</span>
+        <span class="n">runtime_meta</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_extract_nbprint_mime</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">runtime_meta</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">runtime_meta</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># Runtime metadata augments but does not overwrite</span>
+                <span class="c1"># explicit cell.metadata.nbprint values.</span>
+                <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># ── Runtime metadata from %%nbprint magic ────────────────────</span>
+        <span class="n">magic_meta</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_extract_nbprint_magic</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">magic_meta</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">magic_meta</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="c1"># Strip the magic line from the source so the Content</span>
+            <span class="c1"># model stores the real code, not the directive.</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>
+
         <span class="c1"># Attach cell tags in to content</span>
         <span class="k">if</span> <span class="s2">&quot;tags&quot;</span> <span class="ow">in</span> <span class="n">cell</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]:</span>
             <span class="n">nbprint_cell_meta</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span>
@@ -480,7 +499,7 @@
             <span class="k">return</span> <span class="n">content_model</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">nbprint_cell_meta</span><span class="p">)</span>
 
         <span class="c1"># Set source</span>
-        <span class="n">nbprint_cell_meta</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">source</span>
+        <span class="n">nbprint_cell_meta</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">source</span>
 
         <span class="c1"># Default handling: treat as code or markdown content</span>
         <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span>
@@ -491,6 +510,42 @@
             <span class="c1"># Skip, log warning</span>
             <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported cell type when loading from notebook: </span><span class="si">{</span><span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">content</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_nbprint_mime</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract nbprint metadata from a cell&#39;s outputs (MIME type output).</span>
+
+<span class="sd">        Looks for outputs containing ``application/nbprint.cell+json`` and</span>
+<span class="sd">        returns the parsed metadata dict, or ``None``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">json</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_json</span>
+
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;outputs&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="n">NBPRINT_MIME</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">raw</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">NBPRINT_MIME</span><span class="p">]</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">_json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">raw</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_nbprint_magic</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse ``%%nbprint key=value ...`` from the first line of source.</span>
+
+<span class="sd">        Returns the parsed kwargs dict, or ``None`` if the cell does not</span>
+<span class="sd">        start with the magic.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">first_line</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">first_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%%</span><span class="s2">nbprint&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="c1"># Strip the ``%%nbprint`` prefix and parse the rest</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">first_line</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%%</span><span class="s2">nbprint&quot;</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="n">_parse_magic_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_parse_parameters_cell</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -559,8 +614,16 @@
         <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">cells_to_process</span><span class="p">:</span>
             <span class="n">cell_instance</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_cell_to_content</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">cell_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="c1"># Route cell to the appropriate section based on tags/metadata</span>
+                <span class="c1"># Route cell to the appropriate section based on tags/metadata.</span>
+                <span class="c1"># Check raw cell metadata/tags first (highest priority).</span>
                 <span class="n">section</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_extract_section_for_cell</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+                <span class="c1"># Fall back to runtime metadata: MIME output, then %%nbprint magic.</span>
+                <span class="k">if</span> <span class="n">section</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">runtime_meta</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_extract_nbprint_mime</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+                    <span class="n">magic_meta</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_extract_nbprint_magic</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="ow">or</span> <span class="p">{}</span>
+                    <span class="n">runtime_section</span> <span class="o">=</span> <span class="n">runtime_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;section&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">magic_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;section&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">runtime_section</span> <span class="ow">and</span> <span class="n">runtime_section</span> <span class="ow">in</span> <span class="n">SECTION_ORDER</span><span class="p">:</span>
+                        <span class="n">section</span> <span class="o">=</span> <span class="n">runtime_section</span>
                 <span class="n">target_section</span> <span class="o">=</span> <span class="n">section</span> <span class="ow">or</span> <span class="s2">&quot;middlematter&quot;</span>
                 <span class="nb">getattr</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">],</span> <span class="n">target_section</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell_instance</span><span class="p">)</span>
 
