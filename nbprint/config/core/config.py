@@ -16,9 +16,11 @@ from typing_extensions import Self
 from nbprint import __version__
 from nbprint.config.base import BaseModel, Role, _append_or_extend
 from nbprint.config.cell import NBPRINT_MIME
+from nbprint.config.common import Style
 from nbprint.config.content import Content, ContentCode, ContentMarkdown
 from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
 from nbprint.config.magic import _parse_magic_line
+from nbprint.config.overlay import Overlay, apply_overlays
 
 from .content import SECTION_ORDER, ContentMarshall
 from .context import Context
@@ -46,6 +48,12 @@ class Configuration(CallableModel, BaseModel):
     context: Context = Field(default_factory=Context)
 
     content: ContentMarshall = Field(default_factory=ContentMarshall)
+
+    # Formatting overlays — applied during notebook ingestion only (Phase 7.1)
+    overlays: list[Overlay] = Field(
+        default_factory=list,
+        description="Formatting overlays merged into ingested notebook cells.",
+    )
 
     # basic metadata
     tags: list[str] = Field(default_factory=list)
@@ -337,7 +345,17 @@ class Configuration(CallableModel, BaseModel):
         else:
             cells_to_process = nb_content.cells
 
-        for cell in cells_to_process:
+        # Resolve overlays — accept either pre-built Overlay instances or
+        # dict-shaped specs from YAML/notebook metadata.
+        raw_overlays = values.get("overlays") or []
+        overlays: list[Overlay] = []
+        for spec in raw_overlays:
+            if isinstance(spec, Overlay):
+                overlays.append(spec)
+            elif isinstance(spec, dict):
+                overlays.append(Overlay.model_validate(spec))
+
+        for i, cell in enumerate(cells_to_process):
             cell_instance = Configuration._cell_to_content(cell)
             if cell_instance is not None:
                 # Route cell to the appropriate section based on tags/metadata.
@@ -351,6 +369,10 @@ class Configuration(CallableModel, BaseModel):
                     if runtime_section and runtime_section in SECTION_ORDER:
                         section = runtime_section
                 target_section = section or "middlematter"
+
+                # Apply formatting overlays (Phase 7.1)
+                apply_overlays(overlays, cell=cell, content=cell_instance, index=i, section=target_section)
+
                 getattr(values["content"], target_section).append(cell_instance)
 
         for k, v in new_parameters.items():
@@ -385,6 +407,13 @@ class Configuration(CallableModel, BaseModel):
             # Outputs config from notebook metadata
             if "outputs" in nb_nbprint and "outputs" not in values:
                 values["outputs"] = nb_nbprint["outputs"]
+
+            # Overlays from notebook metadata (appended to any explicit
+            # overlays so YAML-defined overlays still apply).
+            if "overlays" in nb_nbprint:
+                nb_overlays = list(nb_nbprint["overlays"])
+                existing = values.get("overlays") or []
+                values["overlays"] = [*existing, *nb_overlays]
 
         cls._process_cells(values, nb_content)
 
@@ -431,13 +460,26 @@ class Configuration(CallableModel, BaseModel):
         # now iterate through the content, section by section
         content_counter = 0
         for section_name, group_name, section_contents in self.content.sections():
+            section_default_style = self.content.section_styles.get(section_name)
             for content in section_contents:
+                # Apply section-level default style (Phase 7.2): section
+                # default is merged with the content's own style; content
+                # style fields override the section default.
+                if section_default_style is not None and isinstance(content, Content):
+                    if isinstance(content.style, Style):
+                        content.style = section_default_style.merge(content.style)
+                    elif content.style is None:
+                        content.style = section_default_style
                 cells = content.generate(metadata=base_meta.copy(), config=self, parent=self, attr="content", counter=content_counter)
                 # Tag generated cells with section metadata
                 tagged = cells if isinstance(cells, list) else [cells] if cells is not None else []
                 for cell in tagged:
-                    cell.metadata.tags.append(f"nbprint:section:{section_name}")
-                    cell.metadata.tags.append(f"nbprint:section-group:{group_name}")
+                    section_tag = f"nbprint:section:{section_name}"
+                    group_tag = f"nbprint:section-group:{group_name}"
+                    if section_tag not in cell.metadata.tags:
+                        cell.metadata.tags.append(section_tag)
+                    if group_tag not in cell.metadata.tags:
+                        cell.metadata.tags.append(group_tag)
                 _append_or_extend(nb.cells, cells)
                 content_counter += 1
 

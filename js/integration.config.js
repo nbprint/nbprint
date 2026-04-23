@@ -9,7 +9,16 @@ import { defineConfig, devices } from "@playwright/test";
  */
 export default defineConfig({
   testDir: "tests",
-  testMatch: "integration.spec.js",
+  testMatch: ["integration.spec.js", "integration-visual.spec.js"],
+
+  // Snapshot configuration for visual regression tests
+  snapshotPathTemplate:
+    "{testDir}/{testFileDir}/{testFileName}-snapshots/{arg}{ext}",
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.01,
+    },
+  },
 
   fullyParallel: true,
   forbidOnly: !!process.env.CI,

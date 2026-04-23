@@ -78,8 +78,6 @@ class NBPrintCell:
         if emit:
             self._emit()
 
-    # -- serialisation --------------------------------------------------------
-
     def to_dict(self) -> dict[str, Any]:
         """Return a plain dict of non-None fields."""
         d: dict[str, Any] = {}
@@ -97,8 +95,6 @@ class NBPrintCell:
             d["ignore"] = self.ignore
         return d
 
-    # -- display --------------------------------------------------------------
-
     def _emit(self) -> None:
         """Publish metadata via IPython ``display()``."""
         if self._emitted:
@@ -106,8 +102,6 @@ class NBPrintCell:
         data = {NBPRINT_MIME: json.dumps(self.to_dict())}
         display(data, raw=True)
         self._emitted = True
-
-    # -- context manager ------------------------------------------------------
 
     def __enter__(self) -> Self:
         if not self._emitted:
