@@ -28,6 +28,9 @@ _integration_templates = (
 _integration_notebooks = (
     "basic",
     "parameters",
+    "notebook-sections",
+    "notebook-runtime",
+    "notebook-overlays",
 )
 _integration_formats = (
     "ipynb",

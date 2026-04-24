@@ -21,11 +21,15 @@ const REPO_ROOT = resolve(__dirname, "..", "..");
 // YAML-driven report templates (under examples/)
 const TEMPLATES = ["basic", "inline", "finance", "research", "landscape"];
 
-// Notebook-first E2E fixtures (under nbprint/tests/files/). Each entry is a
-// YAML wrapper that references an .ipynb and pins a deterministic output
-// naming so the generated HTML lands at a predictable path.
+// Notebook-first E2E fixtures. The YAML wrapper variant pins output naming
+// via a thin YAML; the bare .ipynb variants embed `outputs.naming` in their
+// own notebook-level nbprint metadata so the generated HTML lands at a
+// predictable path.
 const NOTEBOOK_FIXTURES = [
   { name: "e2e_notebook", config: "nbprint/tests/files/e2e_notebook.yaml" },
+  { name: "notebook-sections", config: "examples/notebook-sections.ipynb" },
+  { name: "notebook-runtime", config: "examples/notebook-runtime.ipynb" },
+  { name: "notebook-overlays", config: "examples/notebook-overlays.ipynb" },
 ];
 
 function runConfig(name, configPath) {
