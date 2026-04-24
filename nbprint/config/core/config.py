@@ -21,6 +21,7 @@ from nbprint.config.content import Content, ContentCode, ContentMarkdown
 from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
 from nbprint.config.magic import _parse_magic_line
 from nbprint.config.overlay import LayoutOverlay, Overlay, apply_layout_overlays, apply_overlays
+from nbprint.config.page_runtime import NBPRINT_PAGE_MIME
 
 from .content import SECTION_ORDER, ContentMarshall
 from .context import Context
@@ -230,14 +231,18 @@ class Configuration(CallableModel, BaseModel):
         if "tags" in cell["metadata"]:
             nbprint_cell_meta["tags"] = cell["metadata"]["tags"]
 
+        # Ensure source is captured as the content payload. Models that
+        # already declare ``content`` in metadata (e.g. YAML-authored
+        # Content) are left untouched. For runtime-typed cells (e.g.
+        # NBPrintPage emits ``type_=nbprint.ContentPageBox``) the source
+        # becomes the cell body that re-runs on regeneration.
+        nbprint_cell_meta.setdefault("content", source)
+
         # If this is an nbprint defined type, use that
         if "type_" in nbprint_cell_meta:
             content_type = nbprint_cell_meta["type_"]
             content_model = BaseModel._to_type({"type_": content_type}, Content)
             return content_model.model_validate(nbprint_cell_meta)
-
-        # Set source
-        nbprint_cell_meta["content"] = source
 
         # Default handling: treat as code or markdown content
         if cell.cell_type == "code":
@@ -253,20 +258,25 @@ class Configuration(CallableModel, BaseModel):
     def _extract_nbprint_mime(cell) -> dict | None:
         """Extract nbprint metadata from a cell's outputs (MIME type output).
 
-        Looks for outputs containing ``application/nbprint.cell+json`` and
-        returns the parsed metadata dict, or ``None``.
+        Looks for outputs containing any of the nbprint runtime MIME
+        types (``application/nbprint.cell+json``,
+        ``application/nbprint.page+json``) and returns the parsed
+        metadata dict, or ``None``. Both MIME types use the same merge
+        semantics into the cell's nbprint metadata; the kind of model
+        constructed is later driven by the embedded ``type_`` field.
         """
         import json as _json
 
         outputs = cell.get("outputs", [])
         for output in outputs:
             data = output.get("data", {})
-            if NBPRINT_MIME in data:
-                raw = data[NBPRINT_MIME]
-                if isinstance(raw, str):
-                    return _json.loads(raw)
-                if isinstance(raw, dict):
-                    return raw
+            for mime in (NBPRINT_MIME, NBPRINT_PAGE_MIME):
+                if mime in data:
+                    raw = data[mime]
+                    if isinstance(raw, str):
+                        return _json.loads(raw)
+                    if isinstance(raw, dict):
+                        return raw
         return None
 
     @staticmethod

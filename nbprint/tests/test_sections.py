@@ -1043,3 +1043,217 @@ class TestNBPrintMagicParsing:
         result = _parse_magic_line('section=frontmatter css=":scope { font-size: 18px; }"')
         assert result["section"] == "frontmatter"
         assert result["css"] == ":scope { font-size: 18px; }"
+
+
+class TestContentPageBox:
+    """Phase 9.1 — ContentPageBox model."""
+
+    def test_defaults(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox()
+        assert box.fit == "scale"
+        assert box.min_pages == 1
+        assert box.page_size is None
+        assert box.page_orientation is None
+        assert box.page_margins is None
+        assert "nbprint:content:page-box" in box.tags
+
+    def test_default_css_has_page_breaks(self):
+        from nbprint.config.content import ContentPageBox
+
+        css = ContentPageBox().css
+        assert "break-before: page" in css
+        assert "break-after: page" in css
+        assert ":scope" in css
+
+    def test_data_attrs_populated(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox()
+        assert box.attrs["data-nbprint-page-box"] == box._id
+        assert box.attrs["data-nbprint-fit"] == "scale"
+        # min_pages default (1) does NOT add data-nbprint-min-pages
+        assert "data-nbprint-min-pages" not in box.attrs
+
+    def test_fit_override_reflected_in_attrs(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(fit="strict")
+        assert box.fit == "strict"
+        assert box.attrs["data-nbprint-fit"] == "strict"
+
+    def test_min_pages_attr_set_when_greater_than_one(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(min_pages=3)
+        assert box.attrs["data-nbprint-min-pages"] == "3"
+
+    def test_user_attrs_preserved(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(attrs={"data-custom": "x", "data-nbprint-page-box": "override"})
+        # User override of the data-nbprint-page-box wins (setdefault).
+        assert box.attrs["data-nbprint-page-box"] == "override"
+        assert box.attrs["data-custom"] == "x"
+
+    def test_page_overrides(self):
+        from nbprint.config.common import PageOrientation, PageSize
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(
+            page_size=PageSize.A4,
+            page_orientation=PageOrientation.landscape,
+            page_margins="1in",
+        )
+        assert box.page_size == PageSize.A4
+        assert box.page_orientation == PageOrientation.landscape
+        assert box.page_margins == "1in"
+
+    def test_min_pages_validation(self):
+        import pytest
+        from pydantic import ValidationError
+
+        from nbprint.config.content import ContentPageBox
+
+        with pytest.raises(ValidationError):
+            ContentPageBox(min_pages=0)
+
+    def test_accepts_children(self):
+        from nbprint.config.content import ContentMarkdown, ContentPageBox
+
+        box = ContentPageBox(content=[ContentMarkdown(content="# hi")])
+        assert isinstance(box.content, list)
+        assert len(box.content) == 1
+
+    def test_is_content_subclass(self):
+        from nbprint.config.content import Content, ContentPageBox
+
+        assert issubclass(ContentPageBox, Content)
+
+    def test_top_level_export(self):
+        import nbprint
+
+        assert hasattr(nbprint, "ContentPageBox")
+
+
+class TestNBPrintPage:
+    """Phase 9.2 — NBPrintPage runtime API."""
+
+    def test_top_level_export(self):
+        import nbprint
+
+        assert hasattr(nbprint, "NBPrintPage")
+        assert hasattr(nbprint, "NBPRINT_PAGE_MIME")
+
+    def test_to_dict_emits_type(self):
+        from nbprint import NBPrintPage
+
+        page = NBPrintPage(emit=False)
+        d = page.to_dict()
+        assert d["type_"] == "nbprint.ContentPageBox"
+        assert d["fit"] == "scale"
+        assert d["min_pages"] == 1
+
+    def test_to_dict_omits_none_fields(self):
+        from nbprint import NBPrintPage
+
+        d = NBPrintPage(emit=False).to_dict()
+        for key in ("section", "page_size", "page_orientation", "page_margins", "css", "style", "classname", "attrs", "ignore"):
+            assert key not in d
+
+    def test_to_dict_includes_overrides(self):
+        from nbprint import NBPrintPage
+
+        page = NBPrintPage(
+            emit=False,
+            section="covermatter",
+            fit="strict",
+            page_size="A4",
+            page_orientation="landscape",
+            page_margins="1in",
+            min_pages=2,
+            css=":scope { background: red; }",
+            classname="hero",
+            attrs={"data-test": "1"},
+            ignore=False,
+        )
+        d = page.to_dict()
+        assert d["section"] == "covermatter"
+        assert d["fit"] == "strict"
+        assert d["page_size"] == "A4"
+        assert d["page_orientation"] == "landscape"
+        assert d["page_margins"] == "1in"
+        assert d["min_pages"] == 2
+        assert d["css"] == ":scope { background: red; }"
+        assert d["classname"] == "hero"
+        assert d["attrs"] == {"data-test": "1"}
+        assert d["ignore"] is False
+
+    def test_emit_publishes_mime(self):
+        from unittest.mock import patch
+
+        from nbprint import NBPRINT_PAGE_MIME, NBPrintPage
+
+        with patch("nbprint.config.page_runtime.display") as mock_display:
+            NBPrintPage(fit="shrink")
+            assert mock_display.call_count == 1
+            args, kwargs = mock_display.call_args
+            data = args[0]
+            assert NBPRINT_PAGE_MIME in data
+            assert kwargs == {"raw": True}
+
+    def test_context_manager_emits_once(self):
+        from unittest.mock import patch
+
+        from nbprint import NBPrintPage
+
+        with patch("nbprint.config.page_runtime.display") as mock_display:
+            page = NBPrintPage(emit=False)
+            assert mock_display.call_count == 0
+            with page:
+                pass
+            assert mock_display.call_count == 1
+            # Re-entering should not re-emit.
+            with page:
+                pass
+            assert mock_display.call_count == 1
+
+    def test_ingestion_produces_page_box(self):
+        """Runtime MIME output builds a ContentPageBox in Configuration ingestion."""
+        import json
+
+        from nbformat.v4 import new_code_cell, new_notebook
+
+        from nbprint import NBPRINT_PAGE_MIME
+        from nbprint.config.content import ContentPageBox
+        from nbprint.config.core.config import Configuration
+
+        nb = new_notebook()
+        cell = new_code_cell(source="display('chart')", metadata={"tags": []})
+        payload = {
+            "type_": "nbprint.ContentPageBox",
+            "fit": "strict",
+            "min_pages": 2,
+            "page_orientation": "landscape",
+        }
+        cell.outputs = [
+            {
+                "output_type": "display_data",
+                "data": {NBPRINT_PAGE_MIME: json.dumps(payload)},
+                "metadata": {},
+            }
+        ]
+        nb.cells = [cell]
+
+        values = {"content": ContentMarshall()}
+        Configuration._process_cells(values, nb)
+
+        assert len(values["content"].middlematter) == 1
+        box = values["content"].middlematter[0]
+        assert isinstance(box, ContentPageBox)
+        assert box.fit == "strict"
+        assert box.min_pages == 2
+        assert str(box.page_orientation) == "landscape"
+        # Source is preserved as the box's content.
+        assert box.content == "display('chart')"
