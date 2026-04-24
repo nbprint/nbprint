@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Multi-output cell (stacked figures overflow one page)</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+.mock-fig { width: 100%; height: 3.5in; background: linear-gradient(135deg, #cde, #abd); border: 1px solid #678; display: flex; align-items: center; justify-content: center; font-family: sans-serif; color: #234; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <!-- Single code cell whose OutputArea contains multiple outputs (e.g. 4 plots
+       emitted from one cell). Cumulative height (~14in) exceeds one page.
+       Mirrors the PCAT layout where a single cell emits many figures. -->
+  <div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-child">
+          <div class="jp-RenderedImage jp-OutputArea-output"><div class="mock-fig">Figure A</div></div>
+        </div>
+        <div class="jp-OutputArea-child">
+          <div class="jp-RenderedImage jp-OutputArea-output"><div class="mock-fig">Figure B</div></div>
+        </div>
+        <div class="jp-OutputArea-child">
+          <div class="jp-RenderedImage jp-OutputArea-output"><div class="mock-fig">Figure C</div></div>
+        </div>
+        <div class="jp-OutputArea-child">
+          <div class="jp-RenderedImage jp-OutputArea-output"><div class="mock-fig">Figure D</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

@@ -1156,3 +1156,141 @@ test.describe("Table header repetition", () => {
     });
   });
 });
+
+// ------------------------------------------------------------------
+// Regression fixtures for layout bugs uncovered by paginating a
+// report whose cells emit multiple figures, whose section headings
+// sit in their own cell just before a tall table, and whose tables
+// are wrapped in the real `.jp-OutputArea-child` div (which has
+// `break-inside: avoid-page` from notebook.css).
+// ------------------------------------------------------------------
+
+test.describe("Multi-output cell and section-heading pairs", () => {
+  test.describe("Multi-output cell (stacked figures overflow one page)", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/js/tests/fixtures/overflow/multi-output-cell.html");
+      await waitForPagedJS(page);
+    });
+
+    test("renders onto multiple pages", async ({ page }) => {
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(1);
+    });
+
+    test("no figure overflows its page", async ({ page }) => {
+      const pages = await getPages(page);
+      for (const pageEl of pages) {
+        const pageBox = await pageEl.boundingBox();
+        const figs = await pageEl.locator(".mock-fig").all();
+        for (const fig of figs) {
+          const b = await fig.boundingBox();
+          if (b && pageBox) {
+            expect(b.y + b.height).toBeLessThanOrEqual(
+              pageBox.y + pageBox.height + 1,
+            );
+          }
+        }
+      }
+    });
+
+    test("no page is mostly blank", async ({ page }) => {
+      // Every page should hold at least one figure.  This catches the
+      // bug where `splitMultiOutputCells` inserted a pagebreak before
+      // content taller than a page, leaving the prior page empty.
+      const pages = await getPages(page);
+      for (let i = 0; i < pages.length; i++) {
+        const figs = await pages[i].locator(".mock-fig").count();
+        expect(
+          figs,
+          `Page ${i + 1} should contain at least one figure`,
+        ).toBeGreaterThan(0);
+      }
+    });
+  });
+
+  test.describe("Section heading with tall table in next cell", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto(
+        "/js/tests/fixtures/overflow/section-heading-with-table.html",
+      );
+      await waitForPagedJS(page);
+    });
+
+    test("heading is not orphaned at the bottom of its page", async ({
+      page,
+    }) => {
+      // The H1 heading must share a page with at least the first few
+      // rows of the table that follows it — it must not sit alone with
+      // empty space below.
+      const heading = page.locator("h1").first();
+      const hb = await heading.boundingBox();
+      expect(hb).not.toBeNull();
+
+      // Find the page element that contains the heading
+      const pages = await getPages(page);
+      let headingPage = null;
+      for (const p of pages) {
+        const pb = await p.boundingBox();
+        if (hb.y >= pb.y && hb.y + hb.height <= pb.y + pb.height + 1) {
+          headingPage = p;
+          break;
+        }
+      }
+      expect(headingPage, "heading should land on a page").not.toBeNull();
+
+      const rowsOnHeadingPage = await headingPage.locator("tbody tr").count();
+      expect(
+        rowsOnHeadingPage,
+        "heading's page should also contain table rows",
+      ).toBeGreaterThan(0);
+    });
+
+    test("table spans multiple pages", async ({ page }) => {
+      // The table is tall enough that it must split across pages even
+      // though its `.jp-OutputArea-child` wrapper has
+      // `break-inside: avoid-page` in notebook.css.
+      const pages = await getPages(page);
+      let pagesWithRows = 0;
+      for (const p of pages) {
+        if ((await p.locator("tbody tr").count()) > 0) pagesWithRows += 1;
+      }
+      expect(pagesWithRows).toBeGreaterThan(1);
+    });
+  });
+
+  test.describe("Tall table wrapped in jp-OutputArea-child", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto(
+        "/js/tests/fixtures/overflow/tall-table-in-output-child.html",
+      );
+      await waitForPagedJS(page);
+    });
+
+    test("table splits across multiple pages", async ({ page }) => {
+      const pages = await getPages(page);
+      expect(pages.length).toBeGreaterThan(1);
+      let pagesWithRows = 0;
+      for (const p of pages) {
+        if ((await p.locator("tbody tr").count()) > 0) pagesWithRows += 1;
+      }
+      expect(
+        pagesWithRows,
+        "rows should be distributed across multiple pages",
+      ).toBeGreaterThan(1);
+    });
+
+    test("no table row is clipped by page boundary", async ({ page }) => {
+      const pages = await getPages(page);
+      for (const pageEl of pages) {
+        const pb = await pageEl.boundingBox();
+        const rows = await pageEl.locator("tbody tr").all();
+        for (const row of rows) {
+          const rb = await row.boundingBox();
+          if (rb && pb) {
+            expect(rb.y + rb.height).toBeLessThanOrEqual(pb.y + pb.height + 1);
+          }
+        }
+      }
+    });
+  });
+});

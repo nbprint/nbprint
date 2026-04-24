@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: Tall table wrapped in jp-OutputArea-child</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #ccc; padding: 6px 10px; font-size: 12px; }
+th { background: #444; color: white; }
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <!-- A tall table, wrapped in `.jp-OutputArea-child` exactly as Jupyter
+       emits it.  notebook.css applies `break-inside: avoid-page` to that
+       wrapper, which used to prevent the chunked table from splitting
+       across pages after `splitTallTables` had chunked it.  The fix
+       also resets `break-inside: auto` on the enclosing child div. -->
+  <div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-child">
+          <div class="jp-RenderedHTMLCommon jp-OutputArea-output">
+            <table>
+              <thead>
+                <tr><th>#</th><th>A</th><th>B</th><th>C</th><th>D</th></tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const tbody = document.getElementById('rows');
+    for (let i = 1; i <= 120; i++) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${i}</td><td>${i * 2}</td><td>${i * 3}</td><td>${i * 4}</td><td>${i * 5}</td>`;
+      tbody.appendChild(tr);
+    }
+  </script>
+</main>
+</body>
+</html>
