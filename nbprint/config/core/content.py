@@ -4,7 +4,7 @@ from pydantic import Field, PrivateAttr, model_validator
 
 from nbprint.config.base import BaseModel
 from nbprint.config.common import Style
-from nbprint.config.content import Content
+from nbprint.config.content import Content, ContentTableOfContents
 
 __all__ = ("SECTION_GROUPS", "SECTION_ORDER", "ContentMarshall", "Section")
 
@@ -135,6 +135,26 @@ class ContentMarshall(BaseModel):
         description="Default Style per section; inherited by cells in that section unless overridden.",
     )
 
+    # Phase 8.2 — auto-generate a ``ContentTableOfContents`` into the
+    # ``table_of_contents`` section when that section is left empty.  The
+    # JS-side component (``createToc``) populates the rendered TOC from
+    # middlematter headings at paged.js time.
+    auto_table_of_contents: bool = Field(
+        default=False,
+        description=("If True and ``table_of_contents`` is empty, auto-inject a single ``ContentTableOfContents`` entry so the JS TOC generator runs."),
+    )
+
+    # Phase 8.1 — when ``middlematter`` is supplied as a list-of-lists, each
+    # sublist is treated as a chapter with its first element promoted to
+    # ``middlematter_separators``.  The resulting chapter sizes (items per
+    # chapter *after* separator extraction) are stashed here so
+    # ``_setup_groups`` can interleave separators with their chapter bodies
+    # rather than appending all separators at the end.
+    middlematter_chapter_sizes: list[int] | None = Field(
+        default=None,
+        description=("Per-chapter item counts for middlematter when supplied as a list-of-lists. Populated automatically; rarely set by hand."),
+    )
+
     _all: list[Content] = PrivateAttr(default_factory=list)
     _prematter: list[Content] = PrivateAttr(default_factory=list)
     _covermatter: list[Content] = PrivateAttr(default_factory=list)
@@ -143,19 +163,87 @@ class ContentMarshall(BaseModel):
     _endmatter: list[Content] = PrivateAttr(default_factory=list)
     _rearmatter: list[Content] = PrivateAttr(default_factory=list)
 
+    @model_validator(mode="before")
+    @classmethod
+    def _normalize_nested_middlematter(cls, values: object) -> object:
+        """Split a list-of-lists ``middlematter`` into flat content + separators.
+
+        Each sublist is treated as a chapter. Its first element becomes a
+        chapter separator (landing in ``middlematter_separators``), and the
+        remainder is flattened into ``middlematter``.  Per-chapter sizes are
+        recorded in ``middlematter_chapter_sizes`` so the render order can
+        interleave separators with their chapter bodies in ``_setup_groups``.
+        """
+        if not isinstance(values, dict):
+            return values
+        mid = values.get("middlematter")
+        if not (mid and isinstance(mid, list) and all(isinstance(item, list) for item in mid)):
+            return values
+
+        separators: list = []
+        flat: list = []
+        chapter_sizes: list[int] = []
+        for sublist in mid:
+            if not sublist:
+                chapter_sizes.append(0)
+                continue
+            separators.append(sublist[0])
+            rest = list(sublist[1:])
+            chapter_sizes.append(len(rest))
+            flat.extend(rest)
+
+        # Only auto-populate separators if the user didn't also pass them.
+        if not values.get("middlematter_separators"):
+            values["middlematter_separators"] = separators
+        values["middlematter"] = flat
+        values["middlematter_chapter_sizes"] = chapter_sizes
+        return values
+
     @model_validator(mode="after")
     def _setup_groups(self) -> "ContentMarshall":
+        # 8.2 — inject a TOC placeholder when requested and the section is empty
+        if self.auto_table_of_contents and not self.table_of_contents:
+            self.table_of_contents = [ContentTableOfContents()]
+
         # Populate per-group aggregations
         self._prematter = self.prematter
         self._covermatter = self.covermatter
         self._frontmatter = self.title + self.copyright + self.dedication + self.table_of_contents + self.frontmatter
-        self._middlematter = self.middlematter + self.middlematter_separators
+        self._middlematter = self._compose_middlematter()
         self._endmatter = self.appendix + self.index + self.endmatter
         self._rearmatter = self.rearmatter
 
         # Full document order
         self._all = self._prematter + self._covermatter + self._frontmatter + self._middlematter + self._endmatter + self._rearmatter
         return self
+
+    def _compose_middlematter(self) -> list[Content]:
+        """Build middlematter in render order.
+
+        * When ``middlematter_chapter_sizes`` is set (list-of-lists input),
+          interleave separators with their chapter bodies:
+          ``[sep0, *chap0, sep1, *chap1, ...]``.
+        * Otherwise, preserve the legacy behavior of appending all separators
+          after the flat middlematter body.
+        """
+        sizes = self.middlematter_chapter_sizes
+        if not sizes:
+            return self.middlematter + self.middlematter_separators
+
+        out: list[Content] = []
+        cursor = 0
+        for i, size in enumerate(sizes):
+            if i < len(self.middlematter_separators):
+                out.append(self.middlematter_separators[i])
+            out.extend(self.middlematter[cursor : cursor + size])
+            cursor += size
+        # Any trailing separators past the last chapter (unusual but allowed)
+        if len(self.middlematter_separators) > len(sizes):
+            out.extend(self.middlematter_separators[len(sizes) :])
+        # Any middlematter items past declared chapter sizes
+        if cursor < len(self.middlematter):
+            out.extend(self.middlematter[cursor:])
+        return out
 
     def sections(self) -> Generator[tuple[str, str, list[Content]], None, None]:
         """Yield (section_name, group_name, contents) for non-empty sections in document order."""
