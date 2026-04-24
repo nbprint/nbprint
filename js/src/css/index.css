@@ -92,10 +92,14 @@
   margin-bottom: 0px !important;
 }
 
-/* Pagination — constrain images and media to page dimensions */
-.pagedjs_page img,
-.pagedjs_page svg,
-.pagedjs_page .jp-OutputArea-output canvas {
+/* Pagination — constrain images and media to page dimensions.
+   Applied globally (not just inside .pagedjs_page) so that preprocessing
+   measurements reflect the final rendered size. Without the global
+   rule, images render at natural size pre-pagination and inflate cell
+   height measurements, causing the shrink-to-fit heuristics to misfire. */
+img,
+svg,
+.jp-OutputArea-output canvas {
   max-width: 100%;
   max-height: calc(var(--pagedjs-height) - 1in);
   object-fit: contain;
@@ -109,13 +113,21 @@
   break-inside: avoid;
 }
 
-/* Pagination — avoid orphaned headings */
+/* Pagination — avoid orphaned headings.
+   Applied both to the heading tag itself and to any cell wrapper that ends
+   with a heading. pagedjs honors break-after: avoid on block boxes, so
+   setting it on the heading alone is insufficient when the heading is the
+   last child of a Jupyter cell wrapper <div> — the wrapper would otherwise
+   be free to break before the next cell. The [data-nbprint-heading-only]
+   attribute is set by the preprocessing pass for cell wrappers whose only
+   visible content is a heading. */
 .pagedjs_page h1,
 .pagedjs_page h2,
 .pagedjs_page h3,
 .pagedjs_page h4,
 .pagedjs_page h5,
-.pagedjs_page h6 {
+.pagedjs_page h6,
+.pagedjs_page [data-nbprint-heading-only] {
   break-after: avoid;
 }
 
