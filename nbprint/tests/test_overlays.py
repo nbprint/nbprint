@@ -1,9 +1,9 @@
-"""Tests for Phase 7.1 (cell-addressing overlays) and 7.2 (section-level
-default styles)."""
+"""Tests for cell-addressing overlays, layout-wrapping overlays, and
+section-level default styles."""
 
 from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
 
-from nbprint import CellMatcher, Overlay, Style
+from nbprint import CellMatcher, LayoutOverlay, Overlay, Style
 from nbprint.config.common import Font
 from nbprint.config.content import ContentMarkdown
 from nbprint.config.core.config import Configuration
@@ -233,7 +233,7 @@ class TestOverlayIngestion:
 
 
 class TestSectionStyleDefaults:
-    """Phase 7.2 — section-level default Style inherited by cells in that section."""
+    """Section-level default Style inherited by cells in that section."""
 
     def test_section_styles_field_default(self):
         """section_styles defaults to empty dict."""
@@ -354,3 +354,158 @@ class TestConfigurationOverlaysField:
         )
         assert isinstance(config.overlays[0], Overlay)
         assert config.overlays[0].match.tag == "chart"
+
+
+class TestLayoutOverlay:
+    """LayoutOverlay wraps contiguous runs of matched cells in a flex layout."""
+
+    def test_wraps_contiguous_run_by_tag(self):
+        """Two adjacent cells tagged 'sbs' are wrapped in a row layout."""
+        from nbprint.config.content.page import ContentFlexRowLayout
+
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(source="# Intro"),
+            new_markdown_cell(source="Left", metadata={"tags": ["sbs"]}),
+            new_markdown_cell(source="Right", metadata={"tags": ["sbs"]}),
+            new_markdown_cell(source="After"),
+        ]
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [LayoutOverlay(match=CellMatcher(tag="sbs"), layout="row", sizes=[1, 1])],
+        }
+        Configuration._process_cells(values, nb)
+        mm = values["content"].middlematter
+        assert len(mm) == 3, [type(c).__name__ for c in mm]
+        wrapper = mm[1]
+        assert isinstance(wrapper, ContentFlexRowLayout)
+        assert wrapper.sizes == [1, 1]
+        assert len(wrapper.content) == 2
+
+    def test_wraps_column_layout(self):
+        """layout='column' produces a ContentFlexColumnLayout."""
+        from nbprint.config.content.page import ContentFlexColumnLayout
+
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(source="A", metadata={"tags": ["col"]}),
+            new_markdown_cell(source="B", metadata={"tags": ["col"]}),
+        ]
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [LayoutOverlay(match=CellMatcher(tag="col"), layout="column")],
+        }
+        Configuration._process_cells(values, nb)
+        assert isinstance(values["content"].middlematter[0], ContentFlexColumnLayout)
+
+    def test_index_range_matching(self):
+        """index_range scopes the overlay to an inclusive [lo, hi] range."""
+        from nbprint.config.content.page import ContentFlexRowLayout
+
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(source="0"),
+            new_markdown_cell(source="1"),
+            new_markdown_cell(source="2"),
+            new_markdown_cell(source="3"),
+        ]
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [LayoutOverlay(index_range=(1, 2), layout="row")],
+        }
+        Configuration._process_cells(values, nb)
+        mm = values["content"].middlematter
+        # cells 1 and 2 get wrapped; cells 0 and 3 remain
+        assert len(mm) == 3
+        assert isinstance(mm[1], ContentFlexRowLayout)
+
+    def test_non_contiguous_matches_form_separate_wrappers(self):
+        """Two disjoint runs of matching cells produce two wrappers."""
+        from nbprint.config.content.page import ContentFlexRowLayout
+
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(source="A", metadata={"tags": ["grp"]}),
+            new_markdown_cell(source="B", metadata={"tags": ["grp"]}),
+            new_markdown_cell(source="gap"),
+            new_markdown_cell(source="C", metadata={"tags": ["grp"]}),
+            new_markdown_cell(source="D", metadata={"tags": ["grp"]}),
+        ]
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [LayoutOverlay(match=CellMatcher(tag="grp"), layout="row")],
+        }
+        Configuration._process_cells(values, nb)
+        mm = values["content"].middlematter
+        wrappers = [c for c in mm if isinstance(c, ContentFlexRowLayout)]
+        assert len(wrappers) == 2
+        assert len(wrappers[0].content) == 2
+        assert len(wrappers[1].content) == 2
+
+    def test_layout_overlay_with_formatting(self):
+        """Wrapper itself receives css/classname/attrs from the overlay."""
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(source="A", metadata={"tags": ["w"]}),
+            new_markdown_cell(source="B", metadata={"tags": ["w"]}),
+        ]
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [
+                LayoutOverlay(
+                    match=CellMatcher(tag="w"),
+                    layout="row",
+                    css=":scope { gap: 20px; }",
+                    classname="wrapper-cls",
+                ),
+            ],
+        }
+        Configuration._process_cells(values, nb)
+        wrapper = values["content"].middlematter[0]
+        assert "gap: 20px" in wrapper.css
+        assert wrapper.classname in ("wrapper-cls", ["wrapper-cls"])
+
+    def test_layout_overlay_from_dict_spec(self):
+        """Layout overlays specified as dicts are validated correctly."""
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(source="A", metadata={"tags": ["d"]}),
+            new_markdown_cell(source="B", metadata={"tags": ["d"]}),
+        ]
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [{"match": {"tag": "d"}, "layout": "row", "sizes": [2, 1]}],
+        }
+        Configuration._process_cells(values, nb)
+        wrapper = values["content"].middlematter[0]
+        assert wrapper.sizes == [2, 1]
+
+    def test_configuration_accepts_layout_overlays_field(self):
+        config = Configuration(
+            name="test-layout-overlays-field",
+            outputs={"_target_": "nbprint.NBConvertOutputs", "naming": "{{name}}", "root": ".pytest_cache/test_layout_overlays_field"},
+            layout_overlays=[LayoutOverlay(match=CellMatcher(tag="x"), layout="column")],
+        )
+        assert len(config.layout_overlays) == 1
+        assert config.layout_overlays[0].layout == "column"
+
+    def test_formatting_and_layout_overlay_compose(self):
+        """Formatting overlay applies to child cell; layout overlay wraps them."""
+        from nbprint.config.content.page import ContentFlexRowLayout
+
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(source="A", metadata={"tags": ["w"]}),
+            new_markdown_cell(source="B", metadata={"tags": ["w"]}),
+        ]
+        values = {
+            "content": ContentMarshall(),
+            "overlays": [Overlay(match=CellMatcher(tag="w"), classname="child")],
+            "layout_overlays": [LayoutOverlay(match=CellMatcher(tag="w"), layout="row")],
+        }
+        Configuration._process_cells(values, nb)
+        wrapper = values["content"].middlematter[0]
+        assert isinstance(wrapper, ContentFlexRowLayout)
+        # Children were first tagged with classname "child" by the formatting overlay
+        for child in wrapper.content:
+            assert child.classname == "child" or "child" in (child.classname or [])

@@ -743,7 +743,7 @@ class TestPageCounterFields:
 
 
 class TestNBPrintCellRuntime:
-    """Phase 6.5 — NBPrintCell runtime API and %%nbprint magic ingestion."""
+    """NBPrintCell runtime API and %%nbprint magic ingestion."""
 
     def test_nbprint_cell_to_dict(self):
         """NBPrintCell.to_dict() returns only non-None fields."""

@@ -20,7 +20,7 @@ from nbprint.config.common import Style
 from nbprint.config.content import Content, ContentCode, ContentMarkdown
 from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
 from nbprint.config.magic import _parse_magic_line
-from nbprint.config.overlay import Overlay, apply_overlays
+from nbprint.config.overlay import LayoutOverlay, Overlay, apply_layout_overlays, apply_overlays
 
 from .content import SECTION_ORDER, ContentMarshall
 from .context import Context
@@ -49,10 +49,14 @@ class Configuration(CallableModel, BaseModel):
 
     content: ContentMarshall = Field(default_factory=ContentMarshall)
 
-    # Formatting overlays — applied during notebook ingestion only (Phase 7.1)
+    # Formatting overlays — applied during notebook ingestion only.
     overlays: list[Overlay] = Field(
         default_factory=list,
         description="Formatting overlays merged into ingested notebook cells.",
+    )
+    layout_overlays: list[LayoutOverlay] = Field(
+        default_factory=list,
+        description="Layout overlays that wrap contiguous ranges of ingested cells in a flex container.",
     )
 
     # basic metadata
@@ -355,6 +359,16 @@ class Configuration(CallableModel, BaseModel):
             elif isinstance(spec, dict):
                 overlays.append(Overlay.model_validate(spec))
 
+        raw_layouts = values.get("layout_overlays") or []
+        layout_overlays: list[LayoutOverlay] = []
+        for spec in raw_layouts:
+            if isinstance(spec, LayoutOverlay):
+                layout_overlays.append(spec)
+            elif isinstance(spec, dict):
+                layout_overlays.append(LayoutOverlay.model_validate(spec))
+
+        placements: list = [None] * len(cells_to_process)
+
         for i, cell in enumerate(cells_to_process):
             cell_instance = Configuration._cell_to_content(cell)
             if cell_instance is not None:
@@ -370,10 +384,15 @@ class Configuration(CallableModel, BaseModel):
                         section = runtime_section
                 target_section = section or "middlematter"
 
-                # Apply formatting overlays (Phase 7.1)
+                # Apply formatting overlays
                 apply_overlays(overlays, cell=cell, content=cell_instance, index=i, section=target_section)
 
                 getattr(values["content"], target_section).append(cell_instance)
+                placements[i] = (target_section, cell_instance)
+
+        # Apply layout-wrapping overlays after all cells are placed.
+        if layout_overlays:
+            apply_layout_overlays(layout_overlays, cells_to_process, placements, values["content"])
 
         for k, v in new_parameters.items():
             if k in values["parameters"].model_fields and getattr(values["parameters"], k) is None:
@@ -414,6 +433,11 @@ class Configuration(CallableModel, BaseModel):
                 nb_overlays = list(nb_nbprint["overlays"])
                 existing = values.get("overlays") or []
                 values["overlays"] = [*existing, *nb_overlays]
+
+            if "layout_overlays" in nb_nbprint:
+                nb_layouts = list(nb_nbprint["layout_overlays"])
+                existing = values.get("layout_overlays") or []
+                values["layout_overlays"] = [*existing, *nb_layouts]
 
         cls._process_cells(values, nb_content)
 
@@ -462,9 +486,9 @@ class Configuration(CallableModel, BaseModel):
         for section_name, group_name, section_contents in self.content.sections():
             section_default_style = self.content.section_styles.get(section_name)
             for content in section_contents:
-                # Apply section-level default style (Phase 7.2): section
-                # default is merged with the content's own style; content
-                # style fields override the section default.
+                # Apply section-level default style: section default is
+                # merged with the content's own style; content style fields
+                # override the section default.
                 if section_default_style is not None and isinstance(content, Content):
                     if isinstance(content.style, Style):
                         content.style = section_default_style.merge(content.style)

@@ -7,7 +7,7 @@
  * Two kinds of fixtures are processed:
  *   1. YAML templates under examples/ — traditional YAML-driven configs.
  *   2. Notebook / YAML wrapper fixtures under nbprint/tests/files/ — E2E
- *      fixtures that originate from an .ipynb and exercise Phase 6/7
+ *      fixtures that originate from an .ipynb and exercise notebook-first
  *      features (section routing, overlays, section-level styles).
  */
 import { execSync } from "child_process";
