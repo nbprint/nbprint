@@ -177,9 +177,44 @@ Content has a few key attributes:
 - `Content.content`: string text content, or a `list[Content]` of subcontent for layout elements
 - `Content.style`: A `Style` element based on CSS for styling this content
 - `css`: Generic string content to be injected into a `<style>` tag scoped to this cell
-- `esm`: Generic string content to be injected into a `<script>` tag scoped to this cell. It is expected to contain a function `render(cell_nbprint_metadata_as_json, cell_dom_element)`.
+- `esm`: Generic string content to be injected into a `<script>` tag scoped to this cell. It is expected to contain a function `render(cell_nbprint_metadata_as_json, cell_dom_element)`. The function may be `async` — the render lifecycle (below) awaits it before Paged.js runs.
 
-The following items are provided:
+#### Render lifecycle
+
+Every cell with an `esm` string is wrapped in a `<script type="module">` that listens for the global `nbprint-ready` event, then invokes the cell's `render(meta, elem)` function. To guarantee pagination only starts after every cell has finished mutating the DOM, `nbprint` coordinates renders through a small lifecycle API on the global `NBPrint` instance (`window._n`).
+
+Phases, in order:
+
+1. **`DOMContentLoaded`** — `embedded.js` creates the `NBPrint` singleton and waits for every `<img>` to finish decoding (so measurements see correct `naturalWidth` / `naturalHeight`).
+2. **`nbprint.process()`** — reparents elements by `data-nbprint-parent-id`, hoists non-`@scope` styles to `<head>`, and runs the pre-pagination preprocessor.
+3. **`nbprint-ready` event dispatched** — every cell's ESM listener runs *synchronously* (the `CustomEvent` dispatch is synchronous), and inside its listener each cell calls `nbp.trackRender(async () => render(meta, elem))`. The registered promise is retained by the lifecycle.
+4. **Barrier: `nbp.waitForRenders()`** — awaits every tracked promise. If a render schedules further renders, the barrier loops until a tick passes with no new registrations, so cascading async work (e.g. dynamic imports, sub-renders) all settles. A rejection in one cell is logged and isolated; it does not block other cells.
+5. **`nbprint-esm-complete` event dispatched** — signals "DOM is stable, pagination starts now". Use this instead of `nbprint-ready` for any code that wants to run after user-land renders are done (diagnostics, measure-phase tweaks, future overflow detection).
+6. **`nbprint.build()`** — hands off to Paged.js. By this point the DOM is final.
+7. **`nbprint.postprocess()`** — dispatches `nbprint-done`.
+
+**Writing a cell `render()` function.** The template handles registration automatically; author your ESM as if it were stand-alone:
+
+```javascript
+// esm string on a Content model
+export function render(meta, elem) {
+    // synchronous render
+    elem.querySelector(".my-chart").style.opacity = "1";
+}
+
+// async is fine — the lifecycle awaits the promise
+export async function render(meta, elem) {
+    const data = await fetch(meta.data_url).then((r) => r.json());
+    renderChart(elem, data);
+}
+```
+
+Key guarantees:
+
+- **Isolation.** One cell's failure never blocks pagination of the rest of the document; the error is logged to the console with `[nbprint] cell render failed:` and the rejected promise resolves.
+- **Order independence.** `render()` calls run concurrently; do not rely on cell execution order. If you need cross-cell coordination, use the Phase 7 `Context` mechanism (typed, ordered, Python-side) rather than ad-hoc JS globals.
+- **Late registration is legal but not useful.** Calling `trackRender()` after `nbprint-esm-complete` has already fired produces a console warning and returns the promise ungated; pagedjs will not wait for it.
+- **Standalone fallback.** When the template is rendered outside the normal embedded pipeline (stand-alone fixtures, structural tests), the cell script falls back to fire-and-forget invocation — `trackRender` is optional.
 
 #### `ContentCode`
 
