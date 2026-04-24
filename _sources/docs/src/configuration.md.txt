@@ -38,6 +38,12 @@ Point nbprint at a `.ipynb` and it is treated as a full configuration input. All
 nbprint path/to/report.ipynb
 ```
 
+Worked examples live in [`examples/`](../../examples):
+
+- [`notebook-sections.ipynb`](../../examples/notebook-sections.ipynb) — section routing via tags and cell metadata, with page/output config in notebook metadata.
+- [`notebook-runtime.ipynb`](../../examples/notebook-runtime.ipynb) — runtime API (`NBPrintCell`) and `%%nbprint` magic.
+- [`notebook-overlays.ipynb`](../../examples/notebook-overlays.ipynb) — `overlays` and `layout_overlays` embedded in notebook metadata.
+
 ### Section routing from cell tags
 
 By default every ingested cell lands in `middlematter`. To route cells to named sections, tag them:

@@ -1,0 +1,131 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "892c480b",
+   "metadata": {
+    "tags": [
+     "nbprint:section:covermatter"
+    ],
+    "nbprint": {
+     "css": ":scope { text-align: center; margin-top: 30%; }"
+    }
+   },
+   "source": [
+    "# Quarterly Report\n",
+    "## Q1 2026"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f011d80d",
+   "metadata": {
+    "nbprint": {
+     "section": "frontmatter"
+    }
+   },
+   "source": [
+    "# Preface\n",
+    "\n",
+    "This is a notebook-first report. Every cell in this notebook is routed\n",
+    "to a document section by either a tag (`nbprint:section:<name>`) or the\n",
+    "`cell.metadata.nbprint.section` field \u2014 no YAML required."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "de2c8de1",
+   "metadata": {
+    "tags": [
+     "nbprint:section:middlematter"
+    ]
+   },
+   "source": [
+    "# Executive Summary\n",
+    "\n",
+    "Results were solid this quarter."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "id": "ac0fe7c3",
+   "execution_count": null,
+   "metadata": {
+    "nbprint": {
+     "section": "middlematter"
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "df = pd.DataFrame({'metric': ['revenue', 'cost', 'profit'],\n",
+    "                   'value': [1200, 800, 400]})\n",
+    "df"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "97c7de56",
+   "metadata": {
+    "tags": [
+     "nbprint:section:appendix"
+    ]
+   },
+   "source": [
+    "# Appendix A: Methodology\n",
+    "\n",
+    "Data was collected from internal ledgers."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.12.12"
+  },
+  "nbprint": {
+   "page": {
+    "_target_": "nbprint.PageGlobal",
+    "size": "Letter",
+    "orientation": "portrait",
+    "bottom_right": {
+     "_target_": "nbprint.PageRegion",
+     "content": {
+      "_target_": "nbprint.PageNumber"
+     }
+    },
+    "pages": {
+     "covermatter": {},
+     "frontmatter": {
+      "counter_reset": true,
+      "counter_style": "lower-roman"
+     },
+     "middlematter": {
+      "counter_reset": true
+     }
+    }
+   },
+   "outputs": {
+    "_target_": "nbprint.NBConvertOutputs",
+    "naming": "{{name}}",
+    "root": "./outputs",
+    "target": "html"
+   }
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
