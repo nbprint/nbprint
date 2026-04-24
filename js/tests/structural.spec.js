@@ -367,20 +367,18 @@ test.describe("Pre-pagination preprocessing", () => {
   });
 });
 
-test.describe("Phase 3 — Paged.js handler hooks", () => {
-  test("3.1: no overflow attributes on well-fitting fixtures", async ({
-    page,
-  }) => {
+test.describe("Paged.js handler hooks", () => {
+  test("no overflow attributes on well-fitting fixtures", async ({ page }) => {
     await page.goto("/js/tests/fixtures/overflow/oversized-image.html");
     await waitForPagedJS(page);
-    // Phase 2 scaling + Phase 3 overflow handler should mean no overflow
+    // Preprocessing scaling + overflow handler should mean no overflow
     const overflowed = await page.evaluate(() => {
       return document.querySelectorAll("[data-nbprint-overflow]").length;
     });
     expect(overflowed).toBe(0);
   });
 
-  test("3.2: pages with content are not marked blank", async ({ page }) => {
+  test("pages with content are not marked blank", async ({ page }) => {
     await page.goto("/js/tests/fixtures/overflow/long-table.html");
     await waitForPagedJS(page);
     const pages = await getPages(page);
@@ -390,7 +388,7 @@ test.describe("Phase 3 — Paged.js handler hooks", () => {
     }
   });
 
-  test("3.4: long code block has line-wrapped spans", async ({ page }) => {
+  test("long code block has line-wrapped spans", async ({ page }) => {
     await page.goto("/js/tests/fixtures/overflow/long-code.html");
     await waitForPagedJS(page);
     // Code lines should be wrapped in spans for line-aware splitting
@@ -405,7 +403,7 @@ test.describe("Phase 3 — Paged.js handler hooks", () => {
     expect(hasLineSpans).toBe(true);
   });
 
-  test("3.5: headings near page bottom have content following them", async ({
+  test("headings near page bottom have content following them", async ({
     page,
   }) => {
     await page.goto("/js/tests/fixtures/overflow/orphaned-heading.html");
@@ -451,7 +449,7 @@ test.describe("Phase 3 — Paged.js handler hooks", () => {
   });
 });
 
-test.describe("Phase 3 — targeted fixture assertions", () => {
+test.describe("Handler hooks — targeted fixture assertions", () => {
   test.describe("Blank page trigger", () => {
     test.beforeEach(async ({ page }) => {
       await page.goto("/js/tests/fixtures/overflow/blank-page-trigger.html");
@@ -623,7 +621,7 @@ test.describe("Phase 3 — targeted fixture assertions", () => {
   });
 });
 
-test.describe("Phase 4 — Post-pagination validation", () => {
+test.describe("Post-pagination validation", () => {
   test("validation attribute is set after processing", async ({ page }) => {
     await page.goto("/js/tests/fixtures/overflow/oversized-image.html");
     await waitForPagedJS(page);
@@ -637,7 +635,7 @@ test.describe("Phase 4 — Post-pagination validation", () => {
   test("no blank pages remain after validation", async ({ page }) => {
     await page.goto("/js/tests/fixtures/overflow/blank-page-trigger.html");
     await waitForPagedJS(page);
-    // After Phase 4, any blank pages should have been removed
+    // After post-pagination validation, any blank pages should have been removed
     const pages = await getPages(page);
     for (let i = 0; i < pages.length; i++) {
       const hasContent = await pageHasVisibleContent(pages[i]);
@@ -652,7 +650,7 @@ test.describe("Phase 4 — Post-pagination validation", () => {
   }) => {
     await page.goto("/js/tests/fixtures/overflow/overflowing-div.html");
     await waitForPagedJS(page);
-    // The wide div should be tagged by Phase 3 and confirmed by Phase 4
+    // The wide div should be tagged by the handler and confirmed by post-pagination validation
     const overflowed = await page.evaluate(() => {
       return document.querySelectorAll("[data-nbprint-overflow]").length;
     });
@@ -744,8 +742,8 @@ test.describe("Phase 4 — Post-pagination validation", () => {
   });
 });
 
-test.describe("Phase 6 — Configuration surface", () => {
-  test.describe("6.1: overflow_strategy", () => {
+test.describe("Configuration surface", () => {
+  test.describe("overflow_strategy", () => {
     test("warn strategy tags overflow as warn (no resize)", async ({
       page,
     }) => {
@@ -796,7 +794,7 @@ test.describe("Phase 6 — Configuration surface", () => {
     });
   });
 
-  test.describe("6.2: blank_page_removal", () => {
+  test.describe("blank_page_removal", () => {
     test("blank pages are removed when enabled (default)", async ({ page }) => {
       await page.goto("/js/tests/fixtures/overflow/blank-page-trigger.html");
       await waitForPagedJS(page);
@@ -838,7 +836,7 @@ test.describe("Phase 6 — Configuration surface", () => {
     });
   });
 
-  test.describe("6.4: per-element overflow override", () => {
+  test.describe("per-element overflow override", () => {
     test("element with data-nbprint-overflow=clip uses clip strategy", async ({
       page,
     }) => {
@@ -859,7 +857,7 @@ test.describe("Phase 6 — Configuration surface", () => {
   });
 });
 
-test.describe("Phase 3.3 — Table header repetition", () => {
+test.describe("Table header repetition", () => {
   test.describe("Plain table", () => {
     test.beforeEach(async ({ page }) => {
       await page.goto("/js/tests/fixtures/overflow/table-header-repeat.html");

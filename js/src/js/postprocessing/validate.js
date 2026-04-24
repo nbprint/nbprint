@@ -3,7 +3,8 @@
  *
  * Runs AFTER pagedjs `previewer.preview()` returns but BEFORE
  * `nbprint.postprocess()` dispatches the `nbprint-done` event.
- * This is the safety net — it catches anything Phases 1-3 missed.
+ * This is the safety net — it catches anything the earlier
+ * preprocessing and handler hooks missed.
  */
 
 /**
@@ -22,7 +23,8 @@ function removeBlankPages() {
     // Intentional blank pages are preserved
     if (blankAttr === "intentional") continue;
 
-    // Remove pages explicitly marked as accidental blanks by Phase 3
+    // Remove pages explicitly marked as accidental blanks by the
+    // pagedjs afterPageLayout handler.
     if (blankAttr === "true") {
       removed.push(page);
     }
@@ -67,12 +69,12 @@ function updatePageCounters() {
 
 /**
  * Scan all pages for content areas that still overflow after all
- * previous phases. Uses scrollWidth/scrollHeight checks per the
- * roadmap. Returns an array of overflow descriptors.
+ * earlier preprocessing and handler passes. Uses scrollWidth/scrollHeight
+ * checks per the roadmap. Returns an array of overflow descriptors.
  *
  * NOTE: This is purely diagnostic — it does NOT add data attributes.
- * Phase 3 already tags individual elements; Phase 4 just logs
- * anything that slipped through.
+ * The afterPageLayout handler already tags individual elements; this
+ * post-pagination pass just logs anything that slipped through.
  */
 function detectResidualOverflow() {
   const pages = document.querySelectorAll(".pagedjs_page");
@@ -83,13 +85,13 @@ function detectResidualOverflow() {
     const contentArea = page.querySelector(".pagedjs_page_content");
     if (!contentArea) continue;
 
-    // Report Phase 3 tagged elements
+    // Report elements tagged by the afterPageLayout handler
     const marked = contentArea.querySelectorAll("[data-nbprint-overflow]");
     for (const el of marked) {
       overflows.push({
         page: i + 1,
         element: describeElement(el),
-        source: "phase3-marked",
+        source: "handler-marked",
       });
     }
 
@@ -103,7 +105,7 @@ function detectResidualOverflow() {
       overflows.push({
         page: i + 1,
         element: "pagedjs_page_content",
-        source: "phase4-scroll-overflow",
+        source: "postprocess-scroll-overflow",
         horizontalOverflow,
         verticalOverflow,
       });

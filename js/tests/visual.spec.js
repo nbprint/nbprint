@@ -57,7 +57,7 @@ test.describe("Visual regression — overflow fixtures", () => {
   });
 });
 
-test.describe("Visual regression — Phase 3 handler fixtures", () => {
+test.describe("Visual regression — handler fixtures", () => {
   test("blank page trigger — no blank pages visible", async ({ page }) => {
     await page.goto("/js/tests/fixtures/overflow/blank-page-trigger.html");
     await waitForPagedJS(page);

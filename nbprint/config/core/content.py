@@ -135,7 +135,7 @@ class ContentMarshall(BaseModel):
         description="Default Style per section; inherited by cells in that section unless overridden.",
     )
 
-    # Phase 8.2 — auto-generate a ``ContentTableOfContents`` into the
+    # Auto-generate a ``ContentTableOfContents`` into the
     # ``table_of_contents`` section when that section is left empty.  The
     # JS-side component (``createToc``) populates the rendered TOC from
     # middlematter headings at paged.js time.
@@ -144,8 +144,8 @@ class ContentMarshall(BaseModel):
         description=("If True and ``table_of_contents`` is empty, auto-inject a single ``ContentTableOfContents`` entry so the JS TOC generator runs."),
     )
 
-    # Phase 8.1 — when ``middlematter`` is supplied as a list-of-lists, each
-    # sublist is treated as a chapter with its first element promoted to
+    # When ``middlematter`` is supplied as a list-of-lists, each sublist is
+    # treated as a chapter with its first element promoted to
     # ``middlematter_separators``.  The resulting chapter sizes (items per
     # chapter *after* separator extraction) are stashed here so
     # ``_setup_groups`` can interleave separators with their chapter bodies

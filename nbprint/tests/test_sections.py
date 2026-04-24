@@ -117,7 +117,7 @@ class TestContentMarshall:
         assert cm._middlematter == [mid, sep]
 
     def test_middlematter_list_of_lists_interleaves_separators(self):
-        """Phase 8.1 — list-of-lists middlematter promotes first item of each sublist to a separator."""
+        """List-of-lists middlematter promotes first item of each sublist to a separator."""
         c1_sep = ContentMarkdown(content="chap1-title")
         c1_a = ContentMarkdown(content="chap1-a")
         c1_b = ContentMarkdown(content="chap1-b")
@@ -156,7 +156,7 @@ class TestContentMarshall:
         assert [c.content for c in cm._middlematter] == ["a", "b", "sep"]
 
     def test_auto_table_of_contents_injects_when_empty(self):
-        """Phase 8.2 — auto_table_of_contents=True injects a ContentTableOfContents when section is empty."""
+        """auto_table_of_contents=True injects a ContentTableOfContents when section is empty."""
         from nbprint.config.content import ContentTableOfContents
 
         cm = ContentMarshall(auto_table_of_contents=True)
