@@ -12,6 +12,59 @@ export class NBPrint {
       }
     });
     this._notebook_info = notebook_info;
+
+    // Tracks render() promises registered by per-cell ESM scripts so
+    // that build() can wait for every user-land render to complete
+    // before handing off to pagedjs. Cell scripts call trackRender()
+    // from within their nbprint-ready listener (see index.html.j2).
+    this._renderPromises = [];
+    this._renderPhaseComplete = false;
+  }
+
+  /**
+   * Register an in-flight cell render with the nbprint lifecycle.
+   *
+   * Accepts either a Promise or a nullary function returning a Promise
+   * (the latter is the ergonomic form for `trackRender(async () => {...})`).
+   * Any rejection is caught and logged so one failing cell cannot block
+   * pagination of the rest of the document.
+   */
+  trackRender(promiseOrThunk) {
+    if (this._renderPhaseComplete) {
+      // Late registration is accepted but logged — it will not block
+      // pagedjs, and its effect on layout is undefined.
+      console.warn(
+        "[nbprint] trackRender() called after the ESM render phase completed; " +
+          "DOM mutations may not be reflected in pagination.",
+      );
+    }
+    const p =
+      typeof promiseOrThunk === "function"
+        ? Promise.resolve().then(() => promiseOrThunk())
+        : Promise.resolve(promiseOrThunk);
+    const guarded = p.catch((err) => {
+      console.error("[nbprint] cell render failed:", err);
+    });
+    this._renderPromises.push(guarded);
+    return guarded;
+  }
+
+  /**
+   * Wait for every render registered via trackRender() to settle.
+   * Resolves once the ESM render phase is complete; subsequent calls
+   * are idempotent and resolve immediately.
+   */
+  async waitForRenders() {
+    // Allow new promises to be registered while we await the current
+    // batch — some renders schedule follow-up work synchronously.
+    // Loop until a tick passes with no new entries.
+    let settledCount = 0;
+    while (settledCount < this._renderPromises.length) {
+      const batch = this._renderPromises.slice(settledCount);
+      settledCount = this._renderPromises.length;
+      await Promise.allSettled(batch);
+    }
+    this._renderPhaseComplete = true;
   }
 
   async process() {
@@ -43,7 +96,11 @@ export class NBPrint {
       preprocess(document.querySelector("main"), this._configuration);
     }
 
-    const myEvent = new CustomEvent("nbprint-ready", {
+    // Dispatch nbprint-ready: per-cell ESM listeners register their
+    // render promises via trackRender() synchronously inside their
+    // listener callback. CustomEvent dispatch is synchronous, so every
+    // listener has run before dispatchEvent returns.
+    const readyEvent = new CustomEvent("nbprint-ready", {
       detail: {
         nbprint: this,
       },
@@ -51,7 +108,25 @@ export class NBPrint {
       cancelable: true,
       composed: false,
     });
-    document.dispatchEvent(myEvent);
+    document.dispatchEvent(readyEvent);
+
+    // Barrier: wait for every registered cell render to settle before
+    // returning. Callers (embedded.js) then proceed to build() with a
+    // fully populated DOM.
+    await this.waitForRenders();
+
+    // Signal "all user-land ESM renders done; DOM is stable".
+    // Pagination-adjacent code (measure tweaks, diagnostics) can
+    // listen for this to run after all render() calls.
+    const esmCompleteEvent = new CustomEvent("nbprint-esm-complete", {
+      detail: {
+        nbprint: this,
+      },
+      bubbles: true,
+      cancelable: true,
+      composed: false,
+    });
+    document.dispatchEvent(esmCompleteEvent);
   }
 
   async build() {
