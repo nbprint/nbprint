@@ -27,27 +27,38 @@ const TEMPLATES = ["basic", "inline", "finance", "research", "landscape"];
 // predictable path.
 const NOTEBOOK_FIXTURES = [
   { name: "e2e_notebook", config: "nbprint/tests/files/e2e_notebook.yaml" },
-  { name: "notebook-sections", config: "examples/notebook-sections.ipynb" },
-  { name: "notebook-runtime", config: "examples/notebook-runtime.ipynb" },
-  { name: "notebook-overlays", config: "examples/notebook-overlays.ipynb" },
+  {
+    name: "notebook-sections",
+    config: "examples/notebook-sections.ipynb",
+    overrides: ["++nbprint.outputs.naming='{{name}}'"],
+  },
+  {
+    name: "notebook-runtime",
+    config: "examples/notebook-runtime.ipynb",
+    overrides: ["++nbprint.outputs.naming='{{name}}'"],
+  },
+  {
+    name: "notebook-overlays",
+    config: "examples/notebook-overlays.ipynb",
+    overrides: ["++nbprint.outputs.naming='{{name}}'"],
+  },
 ];
 
-function runConfig(name, configPath) {
+function runConfig(name, configPath, overrides = []) {
   const abs = resolve(REPO_ROOT, configPath);
   if (!existsSync(abs)) {
     console.warn(`Skipping ${name}: ${abs} not found`);
     return;
   }
   console.log(`Generating ${name}.html ...`);
+  const script = `from nbprint.cli import run\nrun(${JSON.stringify(configPath)}, overrides=${JSON.stringify(overrides)})\n`;
   try {
-    execSync(
-      `python -c "from nbprint.cli import run; run('${configPath}')"`,
-      {
-        cwd: REPO_ROOT,
-        stdio: "pipe",
-        timeout: 180_000,
-      },
-    );
+    execSync(`python -`, {
+      cwd: REPO_ROOT,
+      input: script,
+      stdio: ["pipe", "pipe", "pipe"],
+      timeout: 180_000,
+    });
   } catch (e) {
     console.error(`Failed to generate ${name}: ${e.message}`);
   }
@@ -66,8 +77,8 @@ export default function globalSetup() {
     runConfig(template, `examples/${template}.yaml`);
   }
 
-  for (const { name, config } of NOTEBOOK_FIXTURES) {
-    runConfig(name, config);
+  for (const { name, config, overrides } of NOTEBOOK_FIXTURES) {
+    runConfig(name, config, overrides);
   }
 }
 
