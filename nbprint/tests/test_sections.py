@@ -116,6 +116,68 @@ class TestContentMarshall:
         cm = ContentMarshall(middlematter=[mid], middlematter_separators=[sep])
         assert cm._middlematter == [mid, sep]
 
+    def test_middlematter_list_of_lists_interleaves_separators(self):
+        """List-of-lists middlematter promotes first item of each sublist to a separator."""
+        c1_sep = ContentMarkdown(content="chap1-title")
+        c1_a = ContentMarkdown(content="chap1-a")
+        c1_b = ContentMarkdown(content="chap1-b")
+        c2_sep = ContentMarkdown(content="chap2-title")
+        c2_a = ContentMarkdown(content="chap2-a")
+        cm = ContentMarshall(
+            middlematter=[
+                [c1_sep, c1_a, c1_b],
+                [c2_sep, c2_a],
+            ]
+        )
+        # separators extracted and flat middlematter holds remainder
+        assert [c.content for c in cm.middlematter_separators] == ["chap1-title", "chap2-title"]
+        assert [c.content for c in cm.middlematter] == ["chap1-a", "chap1-b", "chap2-a"]
+        # rendered order interleaves separator before each chapter
+        assert [c.content for c in cm._middlematter] == [
+            "chap1-title",
+            "chap1-a",
+            "chap1-b",
+            "chap2-title",
+            "chap2-a",
+        ]
+
+    def test_middlematter_list_of_lists_empty_sublist(self):
+        """Empty sublists contribute nothing but don't break indexing."""
+        a = ContentMarkdown(content="a")
+        cm = ContentMarshall(middlematter=[[], [a]])
+        assert [c.content for c in cm._middlematter] == ["a"]
+
+    def test_middlematter_single_flat_list_unchanged(self):
+        """Backwards compat: flat list still appends separators at the end."""
+        a = ContentMarkdown(content="a")
+        b = ContentMarkdown(content="b")
+        sep = ContentMarkdown(content="sep")
+        cm = ContentMarshall(middlematter=[a, b], middlematter_separators=[sep])
+        assert [c.content for c in cm._middlematter] == ["a", "b", "sep"]
+
+    def test_auto_table_of_contents_injects_when_empty(self):
+        """auto_table_of_contents=True injects a ContentTableOfContents when section is empty."""
+        from nbprint.config.content import ContentTableOfContents
+
+        cm = ContentMarshall(auto_table_of_contents=True)
+        assert len(cm.table_of_contents) == 1
+        assert isinstance(cm.table_of_contents[0], ContentTableOfContents)
+        # TOC lives in the frontmatter group
+        assert cm._frontmatter == cm.table_of_contents
+
+    def test_auto_table_of_contents_noop_when_populated(self):
+        """auto_table_of_contents must not overwrite a user-supplied TOC."""
+        from nbprint.config.content import ContentTableOfContents
+
+        user_toc = ContentTableOfContents()
+        cm = ContentMarshall(auto_table_of_contents=True, table_of_contents=[user_toc])
+        assert cm.table_of_contents == [user_toc]
+
+    def test_auto_table_of_contents_default_false(self):
+        """Default behavior unchanged — no TOC auto-injected."""
+        cm = ContentMarshall()
+        assert cm.table_of_contents == []
+
     def test_indexing(self):
         a = ContentMarkdown(content="a")
         b = ContentMarkdown(content="b")
@@ -207,6 +269,8 @@ class TestSectionConstants:
             "classname",
             "attrs",
             "section_styles",
+            "auto_table_of_contents",
+            "middlematter_chapter_sizes",
         }
 
     def test_section_groups_keys_match_order(self):

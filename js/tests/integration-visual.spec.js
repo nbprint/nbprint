@@ -41,6 +41,11 @@ async function screenshotPages(page, name, maxPages = Infinity) {
 const FIXTURES = [
   // Notebook-first fixture (wraps nbprint/tests/files/e2e_notebook.ipynb).
   { name: "e2e_notebook", source: "ipynb", minPages: 1, maxPages: 6 },
+  // Notebook-first examples from examples/ — exercise section routing,
+  // runtime API, and embedded overlays.
+  { name: "notebook-sections", source: "ipynb", minPages: 1, maxPages: 6 },
+  { name: "notebook-runtime", source: "ipynb", minPages: 1, maxPages: 4 },
+  { name: "notebook-overlays", source: "ipynb", minPages: 1, maxPages: 4 },
   // YAML-driven fixtures, representative subset to keep the run bounded.
   { name: "basic", source: "yaml", minPages: 1, maxPages: 6 },
   { name: "inline", source: "yaml", minPages: 1, maxPages: 6 },

@@ -25,8 +25,8 @@ body.jp-Notebook { margin: 0; padding: 0 !important; }
         <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
           <h2>Section with Oversized Output</h2>
           <p>Below is a non-image element with fixed oversized dimensions
-             that Phase 2 preprocessing doesn't handle (it only targets
-             img/svg/chart). The Phase 3 afterPageLayout overflow handler
+             that preprocessing doesn't handle (it only targets
+             img/svg/chart). The afterPageLayout overflow handler
              should detect and mark it.</p>
         </div>
       </div>
@@ -37,8 +37,8 @@ body.jp-Notebook { margin: 0; padding: 0 !important; }
       <div class="jp-OutputArea jp-Cell-outputArea">
         <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
           <!-- A div with explicit wide dimensions — not an image, so
-               Phase 2 won't catch it. Phase 3 overflow detection should
-               tag it with data-nbprint-overflow. -->
+               preprocessing won't catch it. The afterPageLayout overflow
+               detection should tag it with data-nbprint-overflow. -->
           <div id="wide-output" style="width: 1200px; height: 100px; background: linear-gradient(90deg, #3498db, #e74c3c); border: 2px solid #333; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: bold;">
             Wide Output (1200px) — Should Be Detected as Overflow
           </div>
