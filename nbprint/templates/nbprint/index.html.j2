@@ -122,20 +122,34 @@ a.anchor-link {
     {% if cell.metadata["nbprint"].get("esm", None) %}
     <script type="module">
 
-        document.addEventListener("nbprint-ready", async () => {
-
-            // TODO formal entrypoint a la anywidget
-            // TODO put onto global nbprint so we can wait
-            // for all to be done before moving to pagedjs phase
-            {{ cell.metadata["nbprint"]["esm"] }}
-
-            typeof(render) !== undefined &&
-            render(
-                {{ cell.metadata["nbprint"] | json_dumps }},
-                document.querySelector(
-                    `[data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}`,
-                )
+        document.addEventListener("nbprint-ready", (ev) => {
+            // Phase 8.5 — register this cell's render() with the nbprint
+            // lifecycle so pagedjs waits for every cell to finish
+            // rendering before paginating. trackRender accepts an async
+            // thunk; rejections are logged but do not block other cells.
+            const nbp = (ev && ev.detail && ev.detail.nbprint) || window._n;
+            const meta = {{ cell.metadata["nbprint"] | json_dumps }};
+            const elem = document.querySelector(
+                `[data-nbprint-id="{{ cell.metadata["nbprint"]["id"] }}"]`,
             );
+
+            const invoke = async () => {
+                {{ cell.metadata["nbprint"]["esm"] }}
+
+                if (typeof render !== "undefined") {
+                    await render(meta, elem);
+                }
+            };
+
+            if (nbp && typeof nbp.trackRender === "function") {
+                nbp.trackRender(invoke);
+            } else {
+                // Fallback for environments without the lifecycle (tests,
+                // standalone pages): run inline, fire-and-forget.
+                invoke().catch((err) =>
+                    console.error("[nbprint] cell render failed:", err),
+                );
+            }
         });
     </script>
     {% endif %}
