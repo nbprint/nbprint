@@ -236,6 +236,69 @@ Content that is executed as a Markdown cell.
 - `ContentFlexRowLayout`
 - `ContentPageBreak`
 
+#### Page-box primitives
+
+The page-box primitives (Phase 9.1 / 9.3) are first-class `Content`
+models for WYSIWYG, page-level authoring. Both are plain pydantic
+classes so every field is reachable from a hydra/lerna CLI override
+such as `+nbprint.content.middlematter[3].fit=strict`.
+
+##### `ContentPageBox`
+
+A single logical page. Always emits at least one page (even when
+empty), forces a `break-before` and `break-after`, and exposes
+per-page overrides for `page_size`, `page_orientation`, and
+`page_margins`. Children flow inside it as page-blocks; overflow
+spills onto additional pages without dropping content.
+
+Key fields: `fit` (`scale` / `shrink` / `strict` / `none`),
+`min_pages`, `page_size`, `page_orientation`, `page_margins`. Emits
+`data-nbprint-page-box`, `data-nbprint-fit`, and (when overridden)
+`data-nbprint-min-pages` for downstream JS measurement and CSS
+targeting.
+
+##### `ContentPageBlock`
+
+The atomic layout item inside a `ContentPageBox`. Defaults to
+`break-inside: avoid` so each block is a "keep together" unit.
+Supports grid placement (`span`, `rows`, `area`), aspect-ratio and
+height constraints (`aspect`, `min_height`, `max_height`), and an
+explicit `scalable` hint that the page-box's `fit` pass will respect
+when shrinking content to fit.
+
+Per-instance values are emitted both as discoverable
+`data-nbprint-*` attributes (for JS measurement and CSS attribute
+selectors) and as inline `style=` rules so they win over any preset
+CSS from the parent page-box. User-supplied `attrs.style` is
+preserved and appended after the generated rules.
+
+```yaml
+# YAML usage inside a ContentPageBox
+content:
+  middlematter:
+    - type_: nbprint.ContentPageBox
+      fit: scale
+      content:
+        - type_: nbprint.ContentPageBlock
+          span: 2
+          aspect: "16:9"
+          content:
+            - type_: nbprint.ContentImage
+              src: hero.png
+        - type_: nbprint.ContentPageBlock
+          break_inside: auto       # this one is allowed to flow
+          content:
+            - type_: nbprint.ContentMarkdown
+              content: "Long narrative text..."
+```
+
+```bash
+# Hydra CLI override of a single block's span
+nbprint examples/research.yaml \
+    '+nbprint.content.middlematter[0].content[0].span=3' \
+    '+nbprint.content.middlematter[0].content[0].aspect=1.7777'
+```
+
 #### Library Configuration Elements
 
 - `LoggingConfig`

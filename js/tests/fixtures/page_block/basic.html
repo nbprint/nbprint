@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: ContentPageBlock — basic</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+/* Mimic the wrapper a ContentPageBlock receives from the nbprint
+   template: a jp-Cell carrying the data-nbprint-block attribute, the
+   inline `style` produced by ContentPageBlock._populate_block_metadata,
+   and (for grid-positioned variants) the data-nbprint-span etc. */
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell"
+       data-nbprint-block="block-default"
+       data-nbprint-break-inside="avoid"
+       style="break-inside: avoid">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <h2>Default block</h2>
+          <p>Break-inside: avoid by default. Should stay together on one page.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="jp-Cell"
+       data-nbprint-block="block-spanned"
+       data-nbprint-break-inside="avoid"
+       data-nbprint-span="2"
+       style="break-inside: avoid; grid-column: span 2">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <h2>Spanned block</h2>
+          <p>Carries data-nbprint-span="2" and grid-column: span 2 inline.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="jp-Cell"
+       data-nbprint-block="block-aspect"
+       data-nbprint-break-inside="avoid"
+       style="break-inside: avoid; aspect-ratio: 16/9; min-height: 2in">
+    <div class="jp-Cell-outputWrapper">
+      <div class="jp-OutputArea jp-Cell-outputArea">
+        <div class="jp-OutputArea-output jp-RenderedHTMLCommon">
+          <h2>Aspect-ratio block</h2>
+          <p>16:9 aspect, min-height 2in.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>
