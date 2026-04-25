@@ -272,6 +272,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Role</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">._layout_presets</span><span class="w"> </span><span class="kn">import</span> <span class="n">FLEX_COLUMN_CSS</span><span class="p">,</span> <span class="n">FLEX_ROW_CSS</span><span class="p">,</span> <span class="n">INLINE_CSS</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Content</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span>
@@ -338,7 +339,7 @@
     <span class="c1"># override role</span>
     <span class="n">role</span><span class="p">:</span> <span class="n">Role</span> <span class="o">=</span> <span class="n">Role</span><span class="o">.</span><span class="n">LAYOUT</span>
 
-    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;:scope { display: block; }&quot;</span>
+    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;:scope </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">INLINE_CSS</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">&quot;</span>
     <span class="n">esm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">function render(meta, elem) {</span>
 <span class="s2">    let data = JSON.parse(meta.data);</span>
@@ -368,18 +369,14 @@
 <div class="viewcode-block" id="ContentFlexColumnLayout">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.content.ContentFlexColumnLayout.html#nbprint.config.content.ContentFlexColumnLayout">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ContentFlexColumnLayout</span><span class="p">(</span><span class="n">_ContentFlexLayout</span><span class="p">):</span>
-    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">:scope { display: flex; flex-direction: column; break-inside: auto; }</span>
-<span class="s2">&quot;&quot;&quot;</span></div>
+    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;:scope </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">FLEX_COLUMN_CSS</span><span class="si">}</span><span class="s2"> </span><span class="se">}}\n</span><span class="s2">&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="ContentFlexRowLayout">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.content.ContentFlexRowLayout.html#nbprint.config.content.ContentFlexRowLayout">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ContentFlexRowLayout</span><span class="p">(</span><span class="n">_ContentFlexLayout</span><span class="p">):</span>
-    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">:scope { display: flex; flex-direction: row; break-inside: auto; }</span>
-<span class="s2">&quot;&quot;&quot;</span></div>
+    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;:scope </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">FLEX_ROW_CSS</span><span class="si">}</span><span class="s2"> </span><span class="se">}}\n</span><span class="s2">&quot;</span></div>
 
 </pre></div>
         </article>

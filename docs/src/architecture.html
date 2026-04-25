@@ -515,10 +515,134 @@ per-page overrides for <code class="docutils literal notranslate"><span class="p
 <code class="docutils literal notranslate"><span class="pre">page_margins</span></code>. Children flow inside it as page-blocks; overflow
 spills onto additional pages without dropping content.</p>
 <p>Key fields: <code class="docutils literal notranslate"><span class="pre">fit</span></code> (<code class="docutils literal notranslate"><span class="pre">scale</span></code> / <code class="docutils literal notranslate"><span class="pre">shrink</span></code> / <code class="docutils literal notranslate"><span class="pre">strict</span></code> / <code class="docutils literal notranslate"><span class="pre">none</span></code>),
-<code class="docutils literal notranslate"><span class="pre">min_pages</span></code>, <code class="docutils literal notranslate"><span class="pre">page_size</span></code>, <code class="docutils literal notranslate"><span class="pre">page_orientation</span></code>, <code class="docutils literal notranslate"><span class="pre">page_margins</span></code>. Emits
-<code class="docutils literal notranslate"><span class="pre">data-nbprint-page-box</span></code>, <code class="docutils literal notranslate"><span class="pre">data-nbprint-fit</span></code>, and (when overridden)
+<code class="docutils literal notranslate"><span class="pre">min_pages</span></code>, <code class="docutils literal notranslate"><span class="pre">page_size</span></code>, <code class="docutils literal notranslate"><span class="pre">page_orientation</span></code>, <code class="docutils literal notranslate"><span class="pre">page_margins</span></code>,
+<code class="docutils literal notranslate"><span class="pre">layout</span></code>, <code class="docutils literal notranslate"><span class="pre">gap</span></code>, <code class="docutils literal notranslate"><span class="pre">padding</span></code>, <code class="docutils literal notranslate"><span class="pre">align</span></code>, <code class="docutils literal notranslate"><span class="pre">justify</span></code>. Emits
+<code class="docutils literal notranslate"><span class="pre">data-nbprint-page-box</span></code>, <code class="docutils literal notranslate"><span class="pre">data-nbprint-fit</span></code>,
+<code class="docutils literal notranslate"><span class="pre">data-nbprint-layout</span></code>, and (when overridden)
 <code class="docutils literal notranslate"><span class="pre">data-nbprint-min-pages</span></code> for downstream JS measurement and CSS
 targeting.</p>
+<section id="layout-presets">
+<h6>Layout presets<a class="headerlink" href="#layout-presets" title="Link to this heading">¶</a></h6>
+<p><code class="docutils literal notranslate"><span class="pre">ContentPageBox.layout</span></code> selects a built-in arrangement for child
+blocks. Each preset emits the corresponding CSS on <code class="docutils literal notranslate"><span class="pre">:scope</span></code>; they
+share constants with the existing flex/inline layout containers so
+there is one source of truth for “what does <code class="docutils literal notranslate"><span class="pre">display:</span> <span class="pre">flex</span></code> mean.”</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">layout</span></code></p></th>
+<th class="head"><p>CSS emitted</p></th>
+<th class="head"><p>Use for</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flow</span></code></p></td>
+<td><p>normal block flow (<code class="docutils literal notranslate"><span class="pre">gap</span></code> → <code class="docutils literal notranslate"><span class="pre">margin-top</span></code> between siblings)</p></td>
+<td><p>default — long-form content</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">columns-2/3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">column-count:</span> <span class="pre">N;</span> <span class="pre">column-fill:</span> <span class="pre">balance</span></code></p></td>
+<td><p>newspaper-style multi-column layouts</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">grid-2x2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">display:</span> <span class="pre">grid;</span> <span class="pre">grid-template-columns:</span> <span class="pre">repeat(2,</span> <span class="pre">1fr)</span></code></p></td>
+<td><p>4-cell dashboards</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">grid-3x2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">display:</span> <span class="pre">grid;</span> <span class="pre">grid-template-columns:</span> <span class="pre">repeat(3,</span> <span class="pre">1fr)</span></code></p></td>
+<td><p>6-cell dashboards</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">grid-3x3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">display:</span> <span class="pre">grid;</span> <span class="pre">grid-template-columns:</span> <span class="pre">repeat(3,</span> <span class="pre">1fr)</span></code></p></td>
+<td><p>9-cell mosaics</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">grid</span></code></p></td>
+<td><p>bare <code class="docutils literal notranslate"><span class="pre">display:</span> <span class="pre">grid</span></code> for named-area templates (Phase 9.5)</p></td>
+<td><p>custom grids with <code class="docutils literal notranslate"><span class="pre">grid_template</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flex-row</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">display:</span> <span class="pre">flex;</span> <span class="pre">flex-direction:</span> <span class="pre">row</span></code> (shared with <code class="docutils literal notranslate"><span class="pre">ContentFlexRowLayout</span></code>)</p></td>
+<td><p>side-by-side panels</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flex-column</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">display:</span> <span class="pre">flex;</span> <span class="pre">flex-direction:</span> <span class="pre">column</span></code> (shared with <code class="docutils literal notranslate"><span class="pre">ContentFlexColumnLayout</span></code>)</p></td>
+<td><p>stacked panels with gap</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">inline</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">display:</span> <span class="pre">block</span></code> + per-sibling <code class="docutils literal notranslate"><span class="pre">margin-left</span></code> for <code class="docutils literal notranslate"><span class="pre">gap</span></code></p></td>
+<td><p>header/badge rows</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">masonry</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">display:</span> <span class="pre">grid;</span> <span class="pre">grid-template-rows:</span> <span class="pre">masonry</span></code> (+ JS polyfill, Phase 9.17)</p></td>
+<td><p>tile galleries</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">custom</span></code></p></td>
+<td><p>suppresses preset CSS — user owns <code class="docutils literal notranslate"><span class="pre">:scope</span></code> via <code class="docutils literal notranslate"><span class="pre">css</span></code></p></td>
+<td><p>full manual control</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">gap</span></code>, <code class="docutils literal notranslate"><span class="pre">padding</span></code>, <code class="docutils literal notranslate"><span class="pre">align</span></code>, <code class="docutils literal notranslate"><span class="pre">justify</span></code> are passed to whichever preset
+makes sense for them; they are no-ops for presets that don’t apply
+(e.g. <code class="docutils literal notranslate"><span class="pre">align</span></code> on <code class="docutils literal notranslate"><span class="pre">flow</span></code>).</p>
+<p>Crucially, the page-box runs an <strong>auto-wrap validator</strong>: any bare
+child <code class="docutils literal notranslate"><span class="pre">Content</span></code> inside its <code class="docutils literal notranslate"><span class="pre">content</span></code> list is wrapped in a
+<code class="docutils literal notranslate"><span class="pre">ContentPageBlock</span></code> so the DOM shape is always
+<code class="docutils literal notranslate"><span class="pre">page-box</span> <span class="pre">&gt;</span> <span class="pre">block</span> <span class="pre">&gt;</span> <span class="pre">&lt;user</span> <span class="pre">content&gt;</span></code>. Authors who want to escape
+auto-placement (e.g. “this hero spans both columns”) write the
+block explicitly.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBox</span>
+<span class="w">      </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grid-2x2</span>
+<span class="w">      </span><span class="nt">gap</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.25in</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span>
+<span class="w">        </span><span class="c1"># auto-wrapped — no explicit ContentPageBlock needed</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">          </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;##</span><span class="nv"> </span><span class="s">Quarter</span><span class="nv"> </span><span class="s">highlights&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentImage</span>
+<span class="w">          </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">revenue.png</span>
+<span class="w">        </span><span class="c1"># explicit block to span both columns</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBlock</span>
+<span class="w">          </span><span class="nt">span</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">          </span><span class="nt">content</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentImage</span>
+<span class="w">              </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hero.png</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hydra CLI override switches a page-box from flow to a 3-column grid</span>
+nbprint<span class="w"> </span>examples/research.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s1">&#39;+nbprint.content.middlematter[2].layout=grid-3x2&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s1">&#39;+nbprint.content.middlematter[2].gap=0.5in&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="named-area-grids-grid-template">
+<h6>Named-area grids (<code class="docutils literal notranslate"><span class="pre">grid_template</span></code>)<a class="headerlink" href="#named-area-grids-grid-template" title="Link to this heading">¶</a></h6>
+<p>When <code class="docutils literal notranslate"><span class="pre">layout=&quot;grid&quot;</span></code>, set <code class="docutils literal notranslate"><span class="pre">grid_template</span></code> to a raw CSS
+<code class="docutils literal notranslate"><span class="pre">grid-template</span></code> value to lay out children by name. Each child block
+references a cell via <code class="docutils literal notranslate"><span class="pre">area=</span></code>; the page-box validator cross-checks
+that every referenced area exists in the template (unused template
+areas are allowed — they just produce empty cells). The <code class="docutils literal notranslate"><span class="pre">.</span></code>
+placeholder is treated as an empty cell, not an area name.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBox</span>
+<span class="w">  </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grid</span>
+<span class="w">  </span><span class="nt">grid_template</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;hero</span><span class="nv"> </span><span class="s">hero&#39;</span><span class="nv"> </span><span class="s">&#39;chart</span><span class="nv"> </span><span class="s">table&#39;</span><span class="nv"> </span><span class="s">/</span><span class="nv"> </span><span class="s">1fr</span><span class="nv"> </span><span class="s">1fr&quot;</span>
+<span class="w">  </span><span class="nt">gap</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.25in</span>
+<span class="w">  </span><span class="nt">content</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBlock</span>
+<span class="w">      </span><span class="nt">area</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hero</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">...</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBlock</span>
+<span class="w">      </span><span class="nt">area</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chart</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">...</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBlock</span>
+<span class="w">      </span><span class="nt">area</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">table</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">...</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="contentpageblock">
 <h5><code class="docutils literal notranslate"><span class="pre">ContentPageBlock</span></code><a class="headerlink" href="#contentpageblock" title="Link to this heading">¶</a></h5>
@@ -558,6 +682,41 @@ nbprint<span class="w"> </span>examples/research.yaml<span class="w"> </span><sp
 <span class="w">    </span><span class="s1">&#39;+nbprint.content.middlematter[0].content[0].aspect=1.7777&#39;</span>
 </pre></div>
 </div>
+</section>
+<section id="runtime-api-nbprintpage-and-nbprintblock">
+<h5>Runtime API: <code class="docutils literal notranslate"><span class="pre">NBPrintPage</span></code> and <code class="docutils literal notranslate"><span class="pre">NBPrintBlock</span></code><a class="headerlink" href="#runtime-api-nbprintpage-and-nbprintblock" title="Link to this heading">¶</a></h5>
+<p><code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code> and <code class="docutils literal notranslate"><span class="pre">ContentPageBlock</span></code> can also be authored from
+inside a notebook via the matching runtime context managers, which
+emit hidden <code class="docutils literal notranslate"><span class="pre">application/nbprint.page+json</span></code> /
+<code class="docutils literal notranslate"><span class="pre">application/nbprint.block+json</span></code> MIME outputs. The ingestion path
+extracts those payloads and routes them through the same
+<code class="docutils literal notranslate"><span class="pre">type_</span></code>-aware machinery that handles YAML — there is no separate
+runtime path.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">NBPrintPage</span><span class="p">,</span> <span class="n">NBPrintBlock</span>
+
+<span class="c1"># A landscape dashboard page split into a hero + 2 mid + 1 footer.</span>
+<span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span>
+    <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+    <span class="n">grid_template</span><span class="o">=</span><span class="s2">&quot;&#39;hero hero&#39; &#39;chart table&#39; &#39;footer footer&#39; / 1fr 1fr&quot;</span><span class="p">,</span>
+    <span class="n">page_orientation</span><span class="o">=</span><span class="s2">&quot;landscape&quot;</span><span class="p">,</span>
+    <span class="n">fit</span><span class="o">=</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span>
+    <span class="n">gap</span><span class="o">=</span><span class="s2">&quot;0.25in&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">&quot;hero&quot;</span><span class="p">):</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">banner_image</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">&quot;chart&quot;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;16:9&quot;</span><span class="p">):</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">revenue_chart</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">break_inside</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">):</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">deals_table</span><span class="p">)</span>  <span class="c1"># allowed to flow if it overflows</span>
+    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">&quot;footer&quot;</span><span class="p">):</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">disclaimer_md</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Both context managers accept every field of their corresponding
+<code class="docutils literal notranslate"><span class="pre">Content</span></code> model. Outside a <code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code>, <code class="docutils literal notranslate"><span class="pre">NBPrintBlock</span></code> still
+applies — <code class="docutils literal notranslate"><span class="pre">break_inside:</span> <span class="pre">avoid</span></code> is a useful “keep together”
+primitive even in long-scroll reports.</p>
 </section>
 </section>
 <section id="library-configuration-elements">
@@ -813,8 +972,13 @@ we can customize, tweak, and extend <code class="docutils literal notranslate"><
 <li><a class="reference internal" href="#contenttableofcontents"><code class="docutils literal notranslate"><span class="pre">ContentTableOfContents</span></code></a></li>
 <li><a class="reference internal" href="#layout-elements">Layout Elements</a></li>
 <li><a class="reference internal" href="#page-box-primitives">Page-box primitives</a><ul>
-<li><a class="reference internal" href="#contentpagebox"><code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code></a></li>
+<li><a class="reference internal" href="#contentpagebox"><code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code></a><ul>
+<li><a class="reference internal" href="#layout-presets">Layout presets</a></li>
+<li><a class="reference internal" href="#named-area-grids-grid-template">Named-area grids (<code class="docutils literal notranslate"><span class="pre">grid_template</span></code>)</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#contentpageblock"><code class="docutils literal notranslate"><span class="pre">ContentPageBlock</span></code></a></li>
+<li><a class="reference internal" href="#runtime-api-nbprintpage-and-nbprintblock">Runtime API: <code class="docutils literal notranslate"><span class="pre">NBPrintPage</span></code> and <code class="docutils literal notranslate"><span class="pre">NBPrintBlock</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#library-configuration-elements">Library Configuration Elements</a></li>

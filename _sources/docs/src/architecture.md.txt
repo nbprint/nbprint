@@ -252,10 +252,97 @@ per-page overrides for `page_size`, `page_orientation`, and
 spills onto additional pages without dropping content.
 
 Key fields: `fit` (`scale` / `shrink` / `strict` / `none`),
-`min_pages`, `page_size`, `page_orientation`, `page_margins`. Emits
-`data-nbprint-page-box`, `data-nbprint-fit`, and (when overridden)
+`min_pages`, `page_size`, `page_orientation`, `page_margins`,
+`layout`, `gap`, `padding`, `align`, `justify`. Emits
+`data-nbprint-page-box`, `data-nbprint-fit`,
+`data-nbprint-layout`, and (when overridden)
 `data-nbprint-min-pages` for downstream JS measurement and CSS
 targeting.
+
+###### Layout presets
+
+`ContentPageBox.layout` selects a built-in arrangement for child
+blocks. Each preset emits the corresponding CSS on `:scope`; they
+share constants with the existing flex/inline layout containers so
+there is one source of truth for "what does `display: flex` mean."
+
+| `layout`      | CSS emitted                                                                     | Use for                              |
+| ------------- | ------------------------------------------------------------------------------- | ------------------------------------ |
+| `flow`        | normal block flow (`gap` → `margin-top` between siblings)                       | default — long-form content          |
+| `columns-2/3` | `column-count: N; column-fill: balance`                                         | newspaper-style multi-column layouts |
+| `grid-2x2`    | `display: grid; grid-template-columns: repeat(2, 1fr)`                          | 4-cell dashboards                    |
+| `grid-3x2`    | `display: grid; grid-template-columns: repeat(3, 1fr)`                          | 6-cell dashboards                    |
+| `grid-3x3`    | `display: grid; grid-template-columns: repeat(3, 1fr)`                          | 9-cell mosaics                       |
+| `grid`        | bare `display: grid` for named-area templates (Phase 9.5)                       | custom grids with `grid_template`    |
+| `flex-row`    | `display: flex; flex-direction: row` (shared with `ContentFlexRowLayout`)       | side-by-side panels                  |
+| `flex-column` | `display: flex; flex-direction: column` (shared with `ContentFlexColumnLayout`) | stacked panels with gap              |
+| `inline`      | `display: block` + per-sibling `margin-left` for `gap`                          | header/badge rows                    |
+| `masonry`     | `display: grid; grid-template-rows: masonry` (+ JS polyfill, Phase 9.17)        | tile galleries                       |
+| `custom`      | suppresses preset CSS — user owns `:scope` via `css`                            | full manual control                  |
+
+`gap`, `padding`, `align`, `justify` are passed to whichever preset
+makes sense for them; they are no-ops for presets that don't apply
+(e.g. `align` on `flow`).
+
+Crucially, the page-box runs an **auto-wrap validator**: any bare
+child `Content` inside its `content` list is wrapped in a
+`ContentPageBlock` so the DOM shape is always
+`page-box > block > <user content>`. Authors who want to escape
+auto-placement (e.g. "this hero spans both columns") write the
+block explicitly.
+
+```yaml
+content:
+  middlematter:
+    - type_: nbprint.ContentPageBox
+      layout: grid-2x2
+      gap: 0.25in
+      content:
+        # auto-wrapped — no explicit ContentPageBlock needed
+        - type_: nbprint.ContentMarkdown
+          content: "## Quarter highlights"
+        - type_: nbprint.ContentImage
+          src: revenue.png
+        # explicit block to span both columns
+        - type_: nbprint.ContentPageBlock
+          span: 2
+          content:
+            - type_: nbprint.ContentImage
+              src: hero.png
+```
+
+```bash
+# Hydra CLI override switches a page-box from flow to a 3-column grid
+nbprint examples/research.yaml \
+    '+nbprint.content.middlematter[2].layout=grid-3x2' \
+    '+nbprint.content.middlematter[2].gap=0.5in'
+```
+
+###### Named-area grids (`grid_template`)
+
+When `layout="grid"`, set `grid_template` to a raw CSS
+`grid-template` value to lay out children by name. Each child block
+references a cell via `area=`; the page-box validator cross-checks
+that every referenced area exists in the template (unused template
+areas are allowed — they just produce empty cells). The `.`
+placeholder is treated as an empty cell, not an area name.
+
+```yaml
+- type_: nbprint.ContentPageBox
+  layout: grid
+  grid_template: "'hero hero' 'chart table' / 1fr 1fr"
+  gap: 0.25in
+  content:
+    - type_: nbprint.ContentPageBlock
+      area: hero
+      content: [...]
+    - type_: nbprint.ContentPageBlock
+      area: chart
+      content: [...]
+    - type_: nbprint.ContentPageBlock
+      area: table
+      content: [...]
+```
 
 ##### `ContentPageBlock`
 
@@ -298,6 +385,43 @@ nbprint examples/research.yaml \
     '+nbprint.content.middlematter[0].content[0].span=3' \
     '+nbprint.content.middlematter[0].content[0].aspect=1.7777'
 ```
+
+##### Runtime API: `NBPrintPage` and `NBPrintBlock`
+
+`ContentPageBox` and `ContentPageBlock` can also be authored from
+inside a notebook via the matching runtime context managers, which
+emit hidden `application/nbprint.page+json` /
+`application/nbprint.block+json` MIME outputs. The ingestion path
+extracts those payloads and routes them through the same
+`type_`-aware machinery that handles YAML — there is no separate
+runtime path.
+
+```python
+from IPython.display import display
+from nbprint import NBPrintPage, NBPrintBlock
+
+# A landscape dashboard page split into a hero + 2 mid + 1 footer.
+with NBPrintPage(
+    layout="grid",
+    grid_template="'hero hero' 'chart table' 'footer footer' / 1fr 1fr",
+    page_orientation="landscape",
+    fit="scale",
+    gap="0.25in",
+):
+    with NBPrintBlock(area="hero"):
+        display(banner_image)
+    with NBPrintBlock(area="chart", aspect="16:9"):
+        display(revenue_chart)
+    with NBPrintBlock(area="table", break_inside="auto"):
+        display(deals_table)  # allowed to flow if it overflows
+    with NBPrintBlock(area="footer"):
+        display(disclaimer_md)
+```
+
+Both context managers accept every field of their corresponding
+`Content` model. Outside a `ContentPageBox`, `NBPrintBlock` still
+applies — `break_inside: avoid` is a useful "keep together"
+primitive even in long-scroll reports.
 
 #### Library Configuration Elements
 

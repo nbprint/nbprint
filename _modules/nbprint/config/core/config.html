@@ -284,6 +284,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">__version__</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Role</span><span class="p">,</span> <span class="n">_append_or_extend</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.block_runtime</span><span class="w"> </span><span class="kn">import</span> <span class="n">NBPRINT_BLOCK_MIME</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.cell</span><span class="w"> </span><span class="kn">import</span> <span class="n">NBPRINT_MIME</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">Style</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.content</span><span class="w"> </span><span class="kn">import</span> <span class="n">Content</span><span class="p">,</span> <span class="n">ContentCode</span><span class="p">,</span> <span class="n">ContentMarkdown</span>
@@ -534,8 +535,9 @@
 
 <span class="sd">        Looks for outputs containing any of the nbprint runtime MIME</span>
 <span class="sd">        types (``application/nbprint.cell+json``,</span>
-<span class="sd">        ``application/nbprint.page+json``) and returns the parsed</span>
-<span class="sd">        metadata dict, or ``None``. Both MIME types use the same merge</span>
+<span class="sd">        ``application/nbprint.page+json``,</span>
+<span class="sd">        ``application/nbprint.block+json``) and returns the parsed</span>
+<span class="sd">        metadata dict, or ``None``. All MIME types use the same merge</span>
 <span class="sd">        semantics into the cell&#39;s nbprint metadata; the kind of model</span>
 <span class="sd">        constructed is later driven by the embedded ``type_`` field.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -544,7 +546,7 @@
         <span class="n">outputs</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;outputs&quot;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="k">for</span> <span class="n">mime</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NBPRINT_MIME</span><span class="p">,</span> <span class="n">NBPRINT_PAGE_MIME</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">mime</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NBPRINT_MIME</span><span class="p">,</span> <span class="n">NBPRINT_PAGE_MIME</span><span class="p">,</span> <span class="n">NBPRINT_BLOCK_MIME</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">mime</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                     <span class="n">raw</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">mime</span><span class="p">]</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
