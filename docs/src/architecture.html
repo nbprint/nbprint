@@ -501,6 +501,65 @@ It can also be convenient to reuse display configuration.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">ContentPageBreak</span></code></p></li>
 </ul>
 </section>
+<section id="page-box-primitives">
+<h4>Page-box primitives<a class="headerlink" href="#page-box-primitives" title="Link to this heading">¶</a></h4>
+<p>The page-box primitives (Phase 9.1 / 9.3) are first-class <code class="docutils literal notranslate"><span class="pre">Content</span></code>
+models for WYSIWYG, page-level authoring. Both are plain pydantic
+classes so every field is reachable from a hydra/lerna CLI override
+such as <code class="docutils literal notranslate"><span class="pre">+nbprint.content.middlematter[3].fit=strict</span></code>.</p>
+<section id="contentpagebox">
+<h5><code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code><a class="headerlink" href="#contentpagebox" title="Link to this heading">¶</a></h5>
+<p>A single logical page. Always emits at least one page (even when
+empty), forces a <code class="docutils literal notranslate"><span class="pre">break-before</span></code> and <code class="docutils literal notranslate"><span class="pre">break-after</span></code>, and exposes
+per-page overrides for <code class="docutils literal notranslate"><span class="pre">page_size</span></code>, <code class="docutils literal notranslate"><span class="pre">page_orientation</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">page_margins</span></code>. Children flow inside it as page-blocks; overflow
+spills onto additional pages without dropping content.</p>
+<p>Key fields: <code class="docutils literal notranslate"><span class="pre">fit</span></code> (<code class="docutils literal notranslate"><span class="pre">scale</span></code> / <code class="docutils literal notranslate"><span class="pre">shrink</span></code> / <code class="docutils literal notranslate"><span class="pre">strict</span></code> / <code class="docutils literal notranslate"><span class="pre">none</span></code>),
+<code class="docutils literal notranslate"><span class="pre">min_pages</span></code>, <code class="docutils literal notranslate"><span class="pre">page_size</span></code>, <code class="docutils literal notranslate"><span class="pre">page_orientation</span></code>, <code class="docutils literal notranslate"><span class="pre">page_margins</span></code>. Emits
+<code class="docutils literal notranslate"><span class="pre">data-nbprint-page-box</span></code>, <code class="docutils literal notranslate"><span class="pre">data-nbprint-fit</span></code>, and (when overridden)
+<code class="docutils literal notranslate"><span class="pre">data-nbprint-min-pages</span></code> for downstream JS measurement and CSS
+targeting.</p>
+</section>
+<section id="contentpageblock">
+<h5><code class="docutils literal notranslate"><span class="pre">ContentPageBlock</span></code><a class="headerlink" href="#contentpageblock" title="Link to this heading">¶</a></h5>
+<p>The atomic layout item inside a <code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code>. Defaults to
+<code class="docutils literal notranslate"><span class="pre">break-inside:</span> <span class="pre">avoid</span></code> so each block is a “keep together” unit.
+Supports grid placement (<code class="docutils literal notranslate"><span class="pre">span</span></code>, <code class="docutils literal notranslate"><span class="pre">rows</span></code>, <code class="docutils literal notranslate"><span class="pre">area</span></code>), aspect-ratio and
+height constraints (<code class="docutils literal notranslate"><span class="pre">aspect</span></code>, <code class="docutils literal notranslate"><span class="pre">min_height</span></code>, <code class="docutils literal notranslate"><span class="pre">max_height</span></code>), and an
+explicit <code class="docutils literal notranslate"><span class="pre">scalable</span></code> hint that the page-box’s <code class="docutils literal notranslate"><span class="pre">fit</span></code> pass will respect
+when shrinking content to fit.</p>
+<p>Per-instance values are emitted both as discoverable
+<code class="docutils literal notranslate"><span class="pre">data-nbprint-*</span></code> attributes (for JS measurement and CSS attribute
+selectors) and as inline <code class="docutils literal notranslate"><span class="pre">style=</span></code> rules so they win over any preset
+CSS from the parent page-box. User-supplied <code class="docutils literal notranslate"><span class="pre">attrs.style</span></code> is
+preserved and appended after the generated rules.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># YAML usage inside a ContentPageBox</span>
+<span class="nt">content</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBox</span>
+<span class="w">      </span><span class="nt">fit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">scale</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBlock</span>
+<span class="w">          </span><span class="nt">span</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">          </span><span class="nt">aspect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;16:9&quot;</span>
+<span class="w">          </span><span class="nt">content</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentImage</span>
+<span class="w">              </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hero.png</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBlock</span>
+<span class="w">          </span><span class="nt">break_inside</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auto</span><span class="w">       </span><span class="c1"># this one is allowed to flow</span>
+<span class="w">          </span><span class="nt">content</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">              </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Long</span><span class="nv"> </span><span class="s">narrative</span><span class="nv"> </span><span class="s">text...&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hydra CLI override of a single block&#39;s span</span>
+nbprint<span class="w"> </span>examples/research.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s1">&#39;+nbprint.content.middlematter[0].content[0].span=3&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s1">&#39;+nbprint.content.middlematter[0].content[0].aspect=1.7777&#39;</span>
+</pre></div>
+</div>
+</section>
+</section>
 <section id="library-configuration-elements">
 <h4>Library Configuration Elements<a class="headerlink" href="#library-configuration-elements" title="Link to this heading">¶</a></h4>
 <ul class="simple">
@@ -753,6 +812,11 @@ we can customize, tweak, and extend <code class="docutils literal notranslate"><
 <li><a class="reference internal" href="#contentimage"><code class="docutils literal notranslate"><span class="pre">ContentImage</span></code></a></li>
 <li><a class="reference internal" href="#contenttableofcontents"><code class="docutils literal notranslate"><span class="pre">ContentTableOfContents</span></code></a></li>
 <li><a class="reference internal" href="#layout-elements">Layout Elements</a></li>
+<li><a class="reference internal" href="#page-box-primitives">Page-box primitives</a><ul>
+<li><a class="reference internal" href="#contentpagebox"><code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code></a></li>
+<li><a class="reference internal" href="#contentpageblock"><code class="docutils literal notranslate"><span class="pre">ContentPageBlock</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#library-configuration-elements">Library Configuration Elements</a></li>
 </ul>
 </li>
