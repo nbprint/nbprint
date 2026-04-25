@@ -309,21 +309,47 @@ nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span>nbpri
 </div>
 <pre  class="mermaid">
         graph TB
-    nb(&quot;notebook&lt;br&gt;(.ipynb)&quot;)
-    nbc{nbconvert}
-    nbct[/nbprint &lt;br&gt; template/]
-    pjs[/paged.js &lt;br&gt; layout engine/]
-    o&#64;{ shape: doc, label: &quot;output (html,pdf,etc)&quot; }
+    subgraph author[&quot;authoring&quot;]
+        nb(&quot;notebook&lt;br&gt;(.ipynb)&quot;)
+        yaml[/&quot;YAML config&lt;br&gt;(hydra)&quot;/]
+    end
 
-    nb e2&#64;---&gt;nbc
+    subgraph build[&quot;build time — Python&quot;]
+        nbc{&quot;nbconvert&quot;}
+        nbct[/&quot;nbprint template&lt;br&gt;(Jinja2)&quot;/]
+        html&#64;{ shape: doc, label: &quot;standalone html&lt;br&gt;+ embedded JS/CSS&quot; }
+    end
+
+    subgraph browser[&quot;render time — browser&quot;]
+        direction TB
+        init[&quot;1 · initialize&lt;br&gt;decode images&quot;]
+        proc[&quot;2 · process&lt;br&gt;reparent DOM · hoist styles&quot;]
+        pre[&quot;3 · preprocess&lt;br&gt;measure · scale · split&quot;]
+        esm[&quot;4 · cell render()&lt;br&gt;await trackRender barrier&quot;]
+        pjs[/&quot;5 · paged.js&lt;br&gt;paginate&quot;/]
+        post[&quot;6 · postvalidate&lt;br&gt;drop blanks · warn overflow&quot;]
+    end
+
+    out&#64;{ shape: doc, label: &quot;final output&lt;br&gt;(html · pdf via webpdf)&quot; }
+
+    nb e1&#64;--&gt; nbc
+    yaml --&gt; nbc
+    nbct --&gt; nbc
+    e1&#64;{animate: true}
+
+    nbc e2&#64;--&gt; html
     e2&#64;{animate: true}
 
-    nbct --&gt; nbc
-    pjs --- nbct
+    html --&gt; init
+    init --&gt; proc --&gt; pre --&gt; esm --&gt; pjs --&gt; post
 
-    nbc e3&#64;--&gt;o
+    post e3&#64;--&gt; out
     e3&#64;{animate: true}
-    </pre><p>For more information, see <a class="reference external" href="https://nbprint.github.io/nbprint/docs/src/architecture.html">the architecture documentation</a>.</p>
+
+    classDef browserPhase fill:#eef,stroke:#557,color:#000
+    class init,proc,pre,esm,pjs,post browserPhase
+    </pre><p>nbprint splits work across three stages. Authoring happens in the notebook (plus optional YAML overrides via <a class="reference external" href="https://hydra.cc">hydra</a>). At <strong>build time</strong>, <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> runs the nbprint Jinja2 template to emit a single self-contained HTML file with all JS, CSS, and data embedded. At <strong>render time</strong>, the browser does the heavy lifting: reparenting the DOM by parent-id, hoisting global styles, running a preprocessing pass that measures and scales oversized content, awaiting every cell’s <code class="docutils literal notranslate"><span class="pre">render()</span></code> function through a <a class="reference external" href="https://nbprint.github.io/nbprint/docs/src/architecture.html#render-lifecycle">lifecycle barrier</a> so pagination only starts after the DOM is stable, then handing off to <a class="reference external" href="https://pagedjs.org"><code class="docutils literal notranslate"><span class="pre">paged.js</span></code></a> for layout, and finally running a postvalidation pass that drops blank pages and surfaces overflow warnings. PDF output is produced by rendering the same HTML with <code class="docutils literal notranslate"><span class="pre">nbconvert</span> <span class="pre">--to</span> <span class="pre">webpdf</span></code> (headless Chromium); there is no separate PDF codepath.</p>
+<p>For more information, see <a class="reference external" href="https://nbprint.github.io/nbprint/docs/src/architecture.html">the architecture documentation</a>.</p>
 <section id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>
 <p>See the <a class="reference external" href="https://nbprint.github.io/nbprint/docs/src/configuration.html">configuration framework documentation</a> for more information on building pure YAML-based report workflows with <code class="docutils literal notranslate"><span class="pre">hydra</span></code>.</p>

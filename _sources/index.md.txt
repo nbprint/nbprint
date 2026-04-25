@@ -62,21 +62,48 @@ nbprint examples/basic.ipynb nbprint/content/frontmatter=nbprint/title_toc
 
 ```mermaid
 graph TB
-    nb("notebook<br>(.ipynb)")
-    nbc{nbconvert}
-    nbct[/nbprint <br> template/]
-    pjs[/paged.js <br> layout engine/]
-    o@{ shape: doc, label: "output (html,pdf,etc)" }
+    subgraph author["authoring"]
+        nb("notebook<br>(.ipynb)")
+        yaml[/"YAML config<br>(hydra)"/]
+    end
 
-    nb e2@--->nbc
+    subgraph build["build time — Python"]
+        nbc{"nbconvert"}
+        nbct[/"nbprint template<br>(Jinja2)"/]
+        html@{ shape: doc, label: "standalone html<br>+ embedded JS/CSS" }
+    end
+
+    subgraph browser["render time — browser"]
+        direction TB
+        init["1 · initialize<br>decode images"]
+        proc["2 · process<br>reparent DOM · hoist styles"]
+        pre["3 · preprocess<br>measure · scale · split"]
+        esm["4 · cell render()<br>await trackRender barrier"]
+        pjs[/"5 · paged.js<br>paginate"/]
+        post["6 · postvalidate<br>drop blanks · warn overflow"]
+    end
+
+    out@{ shape: doc, label: "final output<br>(html · pdf via webpdf)" }
+
+    nb e1@--> nbc
+    yaml --> nbc
+    nbct --> nbc
+    e1@{animate: true}
+
+    nbc e2@--> html
     e2@{animate: true}
 
-    nbct --> nbc
-    pjs --- nbct
+    html --> init
+    init --> proc --> pre --> esm --> pjs --> post
 
-    nbc e3@-->o
+    post e3@--> out
     e3@{animate: true}
+
+    classDef browserPhase fill:#eef,stroke:#557,color:#000
+    class init,proc,pre,esm,pjs,post browserPhase
 ```
+
+nbprint splits work across three stages. Authoring happens in the notebook (plus optional YAML overrides via [hydra](https://hydra.cc)). At **build time**, `nbconvert` runs the nbprint Jinja2 template to emit a single self-contained HTML file with all JS, CSS, and data embedded. At **render time**, the browser does the heavy lifting: reparenting the DOM by parent-id, hoisting global styles, running a preprocessing pass that measures and scales oversized content, awaiting every cell's `render()` function through a [lifecycle barrier](https://nbprint.github.io/nbprint/docs/src/architecture.html#render-lifecycle) so pagination only starts after the DOM is stable, then handing off to [`paged.js`](https://pagedjs.org) for layout, and finally running a postvalidation pass that drops blank pages and surfaces overflow warnings. PDF output is produced by rendering the same HTML with `nbconvert --to webpdf` (headless Chromium); there is no separate PDF codepath.
 
 For more information, see [the architecture documentation](https://nbprint.github.io/nbprint/docs/src/architecture.html).
 
