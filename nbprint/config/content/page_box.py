@@ -42,6 +42,31 @@ __all__ = ("ContentPageBox", "PageBoxFit", "PageBoxLayout")
 PageBoxFit = Literal["scale", "shrink", "strict", "none"]
 
 
+def _extract_grid_template_areas(template: str) -> set[str]:
+    """Pull the set of area names from a CSS ``grid-template`` value.
+
+    The ``grid-template`` shorthand interleaves quoted row strings (the
+    area names) with track sizes and a ``/`` separator. Non-area tokens
+    (``.`` placeholders, sizes, fractions, the ``/`` itself) are
+    discarded. Empty quotes parse to no areas, which is fine.
+
+    Robust to:
+      * single or double quotes
+      * multi-row templates (``"a a" "b c"``)
+      * track sizes interleaved (``"a a" 1fr "b c" 2fr / 1fr 1fr``)
+      * the ``.`` placeholder (denotes an empty cell)
+    """
+    import re
+
+    quoted = re.findall(r"['\"]([^'\"]*)['\"]", template)
+    areas: set[str] = set()
+    for row in quoted:
+        for token in row.split():
+            if token and token != ".":  # noqa: S105 - "token" here is a CSS grid area name, not a credential
+                areas.add(token)
+    return areas
+
+
 # Default CSS: force page breaks around the box, fill the page vertically
 # so empty or near-empty boxes still render a full page (at-least-one-page
 # guarantee), and allow children to break inside when overflowing to the
@@ -124,6 +149,15 @@ class ContentPageBox(Content):
         default=None,
         description=("CSS `justify-items` (grid presets) or `justify-content` (flex presets). No-op for `flow`/`columns-*`/`custom`."),
     )
+    grid_template: str | None = Field(
+        default=None,
+        description=(
+            "Raw CSS `grid-template` value (e.g. `\"'hero hero' 'chart table' / 1fr 1fr\"`). "
+            "Only meaningful when `layout='grid'`. Validator cross-checks "
+            "that every `ContentPageBlock.area` referenced by children "
+            "appears in the template; unused areas are allowed."
+        ),
+    )
 
     # Inherit ``content: str | list[Content] | None`` from ``Content``.
     # Runtime (NBPrintPage single-cell) use sets it to the cell source;
@@ -159,17 +193,40 @@ class ContentPageBox(Content):
         # but no preset rules are appended, so the user's ``:scope``
         # additions win cleanly.
         if self.css in {_DEFAULT_PAGE_BOX_CSS, PAGE_BOX_BASE_CSS}:
-            object.__setattr__(
-                self,
-                "css",
-                build_page_box_css(
-                    self.layout,
-                    gap=self.gap,
-                    padding=self.padding,
-                    align=self.align,
-                    justify=self.justify,
-                ),
+            preset_css = build_page_box_css(
+                self.layout,
+                gap=self.gap,
+                padding=self.padding,
+                align=self.align,
+                justify=self.justify,
             )
+            # When ``grid_template`` is set, append a ``grid-template``
+            # declaration. We don't gate on ``layout='grid'`` because
+            # ``grid-template`` is harmless for non-grid layouts (the
+            # browser ignores it) and gating would surprise users who
+            # try ``layout='grid-2x2'`` + ``grid_template``.
+            if self.grid_template is not None:
+                preset_css += f":scope {{ grid-template: {self.grid_template}; }}\n"
+            object.__setattr__(self, "css", preset_css)
+
+        # Cross-check: every referenced area in child blocks must
+        # appear in ``grid_template``. Unused template areas are
+        # allowed (empty cells). Skipped when ``grid_template`` is
+        # ``None`` (no constraint) or when the user supplied a custom
+        # ``css`` (we don't know what areas it defines).
+        if self.grid_template is not None and isinstance(self.content, list):
+            template_areas = _extract_grid_template_areas(self.grid_template)
+            for child in self.content:
+                if not isinstance(child, ContentPageBlock):
+                    continue
+                if child.area is not None and child.area not in template_areas:
+                    msg = (
+                        f"ContentPageBox.grid_template does not define "
+                        f"area '{child.area}' referenced by child block "
+                        f"'{child._id}'. Defined areas: "
+                        f"{sorted(template_areas) or '<none>'}"
+                    )
+                    raise ValueError(msg)
 
         # Auto-wrap any bare child Content into a ContentPageBlock so
         # downstream layout passes can rely on a uniform DOM shape.

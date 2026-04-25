@@ -95,6 +95,7 @@ class NBPrintPage:
         padding: str | None = None,
         align: str | None = None,
         justify: str | None = None,
+        grid_template: str | None = None,
         css: str | None = None,
         style: Style | None = None,
         classname: str | list[str] | None = None,
@@ -113,6 +114,7 @@ class NBPrintPage:
         self.padding = padding
         self.align = align
         self.justify = justify
+        self.grid_template = grid_template
         self.css = css
         self.style = style
         self.classname = classname
@@ -151,6 +153,8 @@ class NBPrintPage:
             d["align"] = self.align
         if self.justify is not None:
             d["justify"] = self.justify
+        if self.grid_template is not None:
+            d["grid_template"] = self.grid_template
         if self.css is not None:
             d["css"] = self.css
         if self.style is not None:

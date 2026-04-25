@@ -1586,3 +1586,265 @@ class TestPageBoxLayout:
         assert d["layout"] == "grid-2x2"
         assert d["gap"] == "1rem"
         assert d["padding"] == "0.5in"
+
+
+class TestPageBoxGridTemplate:
+    """Phase 9.5 — named-area grids on ContentPageBox."""
+
+    def test_grid_template_emitted_in_css(self):
+        from nbprint.config.content import ContentPageBox
+
+        tmpl = "'hero hero' 'chart table' / 1fr 1fr"
+        box = ContentPageBox(layout="grid", grid_template=tmpl)
+        assert f"grid-template: {tmpl}" in box.css
+
+    def test_grid_template_default_none(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="grid")
+        assert box.grid_template is None
+        assert "grid-template:" not in box.css
+
+    def test_grid_template_validator_accepts_referenced_areas(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        ContentPageBox(
+            layout="grid",
+            grid_template="'hero hero' 'chart table' / 1fr 1fr",
+            content=[
+                ContentPageBlock(area="hero", content=[ContentMarkdown(content="h")]),
+                ContentPageBlock(area="chart", content=[ContentMarkdown(content="c")]),
+                ContentPageBlock(area="table", content=[ContentMarkdown(content="t")]),
+            ],
+        )
+        # No exception → success.
+
+    def test_grid_template_validator_allows_unused_areas(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        ContentPageBox(
+            layout="grid",
+            grid_template="'hero hero' 'a b' 'c d' / 1fr 1fr",
+            content=[
+                ContentPageBlock(area="hero", content=[ContentMarkdown(content="h")]),
+                # 'a', 'b', 'c', 'd' all unreferenced — allowed.
+            ],
+        )
+
+    def test_grid_template_validator_rejects_undefined_area(self):
+        import pytest
+        from pydantic import ValidationError
+
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        with pytest.raises(ValidationError, match="does not define area 'sidebar'"):
+            ContentPageBox(
+                layout="grid",
+                grid_template="'hero hero' 'chart table' / 1fr 1fr",
+                content=[
+                    ContentPageBlock(area="sidebar", content=[ContentMarkdown(content="x")]),
+                ],
+            )
+
+    def test_grid_template_extracts_areas_with_dot_placeholder(self):
+        """``.`` is the empty-cell placeholder — must not be treated as an area name."""
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        # No exception even though template uses '.'; child only references 'a'.
+        ContentPageBox(
+            layout="grid",
+            grid_template="'a a' '. b' / 1fr 1fr",
+            content=[
+                ContentPageBlock(area="a", content=[ContentMarkdown(content="x")]),
+            ],
+        )
+
+    def test_grid_template_with_track_sizes_interleaved(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        ContentPageBox(
+            layout="grid",
+            grid_template='"a a" 1fr "b c" 2fr / 1fr 1fr',
+            content=[
+                ContentPageBlock(area="a", content=[ContentMarkdown(content="x")]),
+                ContentPageBlock(area="b", content=[ContentMarkdown(content="y")]),
+                ContentPageBlock(area="c", content=[ContentMarkdown(content="z")]),
+            ],
+        )
+
+    def test_extract_grid_template_areas_helper(self):
+        from nbprint.config.content.page_box import _extract_grid_template_areas
+
+        assert _extract_grid_template_areas("'a b' 'c d' / 1fr 1fr") == {"a", "b", "c", "d"}
+        assert _extract_grid_template_areas("'a a' '. b'") == {"a", "b"}
+        assert _extract_grid_template_areas('"hero hero" "chart table"') == {"hero", "chart", "table"}
+        assert _extract_grid_template_areas("") == set()
+
+
+class TestNBPrintBlock:
+    """Phase 9.6 — NBPrintBlock runtime API."""
+
+    def test_top_level_export(self):
+        import nbprint
+
+        assert hasattr(nbprint, "NBPrintBlock")
+        assert hasattr(nbprint, "NBPRINT_BLOCK_MIME")
+
+    def test_to_dict_emits_type(self):
+        from nbprint import NBPrintBlock
+
+        block = NBPrintBlock(emit=False)
+        d = block.to_dict()
+        assert d["type_"] == "nbprint.ContentPageBlock"
+        assert d["break_inside"] == "avoid"
+
+    def test_to_dict_omits_none_fields(self):
+        from nbprint import NBPrintBlock
+
+        d = NBPrintBlock(emit=False).to_dict()
+        # Only type_ and break_inside present at minimum.
+        for key in (
+            "section",
+            "span",
+            "rows",
+            "area",
+            "aspect",
+            "min_height",
+            "max_height",
+            "scalable",
+            "css",
+            "style",
+            "classname",
+            "attrs",
+            "ignore",
+        ):
+            assert key not in d
+
+    def test_to_dict_includes_all_overrides(self):
+        from nbprint import NBPrintBlock
+
+        block = NBPrintBlock(
+            emit=False,
+            section="middlematter",
+            span=2,
+            rows=1,
+            area="hero",
+            aspect="16:9",
+            min_height="2in",
+            max_height="6in",
+            break_inside="auto",
+            scalable=True,
+            css=":scope { background: blue; }",
+            classname="hero-block",
+            attrs={"data-test": "1"},
+            ignore=False,
+        )
+        d = block.to_dict()
+        assert d["section"] == "middlematter"
+        assert d["span"] == 2
+        assert d["rows"] == 1
+        assert d["area"] == "hero"
+        assert d["aspect"] == "16:9"
+        assert d["min_height"] == "2in"
+        assert d["max_height"] == "6in"
+        assert d["break_inside"] == "auto"
+        assert d["scalable"] is True
+        assert d["css"] == ":scope { background: blue; }"
+        assert d["classname"] == "hero-block"
+        assert d["attrs"] == {"data-test": "1"}
+        assert d["ignore"] is False
+
+    def test_emit_publishes_mime(self):
+        from unittest.mock import patch
+
+        from nbprint import NBPRINT_BLOCK_MIME, NBPrintBlock
+
+        with patch("nbprint.config.block_runtime.display") as mock_display:
+            NBPrintBlock(span=2)
+            assert mock_display.call_count == 1
+            args, kwargs = mock_display.call_args
+            data = args[0]
+            assert NBPRINT_BLOCK_MIME in data
+            assert kwargs == {"raw": True}
+
+    def test_context_manager_emits_once(self):
+        from unittest.mock import patch
+
+        from nbprint import NBPrintBlock
+
+        with patch("nbprint.config.block_runtime.display") as mock_display:
+            block = NBPrintBlock(emit=False)
+            assert mock_display.call_count == 0
+            with block:
+                pass
+            assert mock_display.call_count == 1
+            with block:
+                pass
+            assert mock_display.call_count == 1
+
+    def test_ingestion_produces_page_block(self):
+        """Runtime MIME output builds a ContentPageBlock in Configuration ingestion."""
+        import json
+
+        from nbformat.v4 import new_code_cell, new_notebook
+
+        from nbprint import NBPRINT_BLOCK_MIME
+        from nbprint.config.content import ContentPageBlock
+        from nbprint.config.core.config import Configuration
+
+        nb = new_notebook()
+        cell = new_code_cell(source="display(chart)", metadata={"tags": []})
+        payload = {
+            "type_": "nbprint.ContentPageBlock",
+            "span": 2,
+            "aspect": "16:9",
+            "break_inside": "avoid",
+        }
+        cell.outputs = [
+            {
+                "output_type": "display_data",
+                "data": {NBPRINT_BLOCK_MIME: json.dumps(payload)},
+                "metadata": {},
+            }
+        ]
+        nb.cells = [cell]
+
+        values = {"content": ContentMarshall()}
+        Configuration._process_cells(values, nb)
+
+        assert len(values["content"].middlematter) == 1
+        block = values["content"].middlematter[0]
+        assert isinstance(block, ContentPageBlock)
+        assert block.span == 2
+        assert block.aspect == "16:9"
+        # Source preserved as the block's content.
+        assert block.content == "display(chart)"
+
+    def test_nbprint_page_runtime_passes_grid_template(self):
+        """Phase 9.5 + runtime: NBPrintPage carries grid_template through."""
+        from nbprint import NBPrintPage
+
+        tmpl = "'a a' 'b c' / 1fr 1fr"
+        page = NBPrintPage(emit=False, layout="grid", grid_template=tmpl)
+        d = page.to_dict()
+        assert d["grid_template"] == tmpl
