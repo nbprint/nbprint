@@ -32,9 +32,11 @@ from pydantic import Field, model_validator
 
 from nbprint.config.common import PageOrientation, PageSize
 
+from ._layout_presets import PAGE_BOX_BASE_CSS, PageBoxLayout, build_page_box_css
 from .base import Content
+from .page_block import ContentPageBlock
 
-__all__ = ("ContentPageBox", "PageBoxFit")
+__all__ = ("ContentPageBox", "PageBoxFit", "PageBoxLayout")
 
 
 PageBoxFit = Literal["scale", "shrink", "strict", "none"]
@@ -44,15 +46,7 @@ PageBoxFit = Literal["scale", "shrink", "strict", "none"]
 # so empty or near-empty boxes still render a full page (at-least-one-page
 # guarantee), and allow children to break inside when overflowing to the
 # next page.
-_DEFAULT_PAGE_BOX_CSS = (
-    ":scope {\n"
-    "  break-before: page;\n"
-    "  break-after: page;\n"
-    "  break-inside: auto;\n"
-    "  display: block;\n"
-    "  min-height: var(--pagedjs-pagebox-min-height, 100%);\n"
-    "}\n"
-)
+_DEFAULT_PAGE_BOX_CSS = PAGE_BOX_BASE_CSS
 
 
 class ContentPageBox(Content):
@@ -97,6 +91,40 @@ class ContentPageBox(Content):
         description="Minimum number of pages this box must produce. Guaranteed even when the box is empty.",
     )
 
+    # ── Layout preset ────────────────────────────────────────────────
+    # Each preset emits the corresponding CSS on ``:scope``; the
+    # ``custom`` preset suppresses preset CSS so the user owns
+    # ``:scope`` styling via the inherited ``css`` field.
+    layout: PageBoxLayout = Field(
+        default="flow",
+        description=(
+            "Built-in layout for child blocks. 'flow' (default): "
+            "native block-flow. 'columns-2'/'columns-3': CSS multi-column. "
+            "'grid-2x2'/'grid-3x2'/'grid-3x3': fixed grids. 'grid': bare "
+            "`display: grid` — pair with `grid_template` (Phase 9.5) for "
+            "named areas. 'flex-row'/'flex-column'/'inline': reuse the "
+            "existing flex/inline layout containers' CSS. 'masonry': "
+            "native CSS masonry with a JS polyfill (Phase 9.17). "
+            "'custom': suppress preset CSS — the user owns `:scope`."
+        ),
+    )
+    gap: str | None = Field(
+        default=None,
+        description="CSS `gap` (or `column-gap` for the columns presets) between children.",
+    )
+    padding: str | None = Field(
+        default=None,
+        description="CSS `padding` applied to the page-box `:scope`.",
+    )
+    align: str | None = Field(
+        default=None,
+        description="CSS `align-items` for grid/flex presets (no-op for `flow`/`columns-*`/`custom`).",
+    )
+    justify: str | None = Field(
+        default=None,
+        description=("CSS `justify-items` (grid presets) or `justify-content` (flex presets). No-op for `flow`/`columns-*`/`custom`."),
+    )
+
     # Inherit ``content: str | list[Content] | None`` from ``Content``.
     # Runtime (NBPrintPage single-cell) use sets it to the cell source;
     # YAML use sets it to a list of child ``Content`` models.
@@ -105,7 +133,10 @@ class ContentPageBox(Content):
 
     @model_validator(mode="after")
     def _populate_data_attrs(self) -> ContentPageBox:
-        """Seed ``attrs`` and ``tags`` with page-box defaults.
+        """Seed ``attrs`` and ``tags`` with page-box defaults, build the
+        preset CSS, and auto-wrap bare child :class:`Content` into
+        :class:`ContentPageBlock` so the DOM shape is always
+        ``page-box > block > <user content>``.
 
         Values already present in ``attrs`` win (so CLI overrides of
         ``attrs.data-nbprint-*`` take precedence). Mutates in place to
@@ -118,8 +149,46 @@ class ContentPageBox(Content):
         attrs = self.attrs  # type: ignore[assignment]
         attrs.setdefault("data-nbprint-page-box", self._id)
         attrs["data-nbprint-fit"] = str(self.fit)
+        attrs["data-nbprint-layout"] = self.layout
         if self.min_pages > 1:
             attrs.setdefault("data-nbprint-min-pages", str(self.min_pages))
+
+        # Build preset CSS unless the user has supplied a non-default
+        # ``css`` value (which fully overrides — opt-out for power
+        # users). When ``layout='custom'`` the base CSS is preserved
+        # but no preset rules are appended, so the user's ``:scope``
+        # additions win cleanly.
+        if self.css in {_DEFAULT_PAGE_BOX_CSS, PAGE_BOX_BASE_CSS}:
+            object.__setattr__(
+                self,
+                "css",
+                build_page_box_css(
+                    self.layout,
+                    gap=self.gap,
+                    padding=self.padding,
+                    align=self.align,
+                    justify=self.justify,
+                ),
+            )
+
+        # Auto-wrap any bare child Content into a ContentPageBlock so
+        # downstream layout passes can rely on a uniform DOM shape.
+        # Strings (single-cell runtime use) and existing blocks pass
+        # through unchanged.
+        if isinstance(self.content, list):
+            wrapped: list = []
+            for child in self.content:
+                if isinstance(child, ContentPageBlock):
+                    wrapped.append(child)
+                elif isinstance(child, Content):
+                    wrapped.append(ContentPageBlock(content=[child]))
+                else:
+                    # Non-Content payload (shouldn't happen via normal
+                    # construction); pass through to surface the issue
+                    # downstream rather than silently mangle it.
+                    wrapped.append(child)
+            object.__setattr__(self, "content", wrapped)
+
         return self
 
     def __call__(self, **_) -> HTML:

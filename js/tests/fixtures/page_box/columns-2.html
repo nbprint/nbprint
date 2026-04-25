@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: ContentPageBox layout=columns-2</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+/* Mimic the CSS that ContentPageBox(layout="columns-2", gap="0.5in")
+   emits via build_page_box_css(). */
+[data-nbprint-page-box="box-cols"] {
+  break-before: page;
+  break-after: page;
+  break-inside: auto;
+  display: block;
+  min-height: 100%;
+  column-count: 2;
+  column-fill: balance;
+  column-gap: 0.5in;
+}
+[data-nbprint-block] {
+  break-inside: avoid;
+  min-width: 0;
+  min-height: 0;
+}
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell"
+       data-nbprint-page-box="box-cols"
+       data-nbprint-fit="scale"
+       data-nbprint-layout="columns-2">
+    <div class="jp-Cell" data-nbprint-block="b1" data-nbprint-break-inside="avoid">
+      <h2>Block 1</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      Quisque ut metus sed nibh dapibus aliquet. Aenean a tortor ac
+      neque condimentum dictum. Nulla facilisi.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="b2" data-nbprint-break-inside="avoid">
+      <h2>Block 2</h2>
+      <p>Phasellus auctor, mauris a tincidunt egestas, neque erat
+      hendrerit risus, vitae rhoncus turpis nibh nec lectus.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="b3" data-nbprint-break-inside="avoid">
+      <h2>Block 3</h2>
+      <p>Sed posuere consectetur est at lobortis. Cras justo odio,
+      dapibus ac facilisis in, egestas eget quam.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="b4" data-nbprint-break-inside="avoid">
+      <h2>Block 4</h2>
+      <p>Donec ullamcorper nulla non metus auctor fringilla. Maecenas
+      sed diam eget risus varius blandit sit amet non magna.</p>
+    </div>
+  </div>
+</main>
+</body>
+</html>

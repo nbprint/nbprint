@@ -35,7 +35,7 @@ from IPython.display import display
 from typing_extensions import Self
 
 from nbprint.config.common import PageOrientation, PageSize, Style
-from nbprint.config.content.page_box import PageBoxFit
+from nbprint.config.content.page_box import PageBoxFit, PageBoxLayout
 
 __all__ = ("NBPRINT_PAGE_MIME", "NBPrintPage")
 
@@ -90,6 +90,11 @@ class NBPrintPage:
         page_orientation: PageOrientation | str | None = None,
         page_margins: str | None = None,
         min_pages: int = 1,
+        layout: PageBoxLayout = "flow",
+        gap: str | None = None,
+        padding: str | None = None,
+        align: str | None = None,
+        justify: str | None = None,
         css: str | None = None,
         style: Style | None = None,
         classname: str | list[str] | None = None,
@@ -103,6 +108,11 @@ class NBPrintPage:
         self.page_orientation = page_orientation
         self.page_margins = page_margins
         self.min_pages = min_pages
+        self.layout = layout
+        self.gap = gap
+        self.padding = padding
+        self.align = align
+        self.justify = justify
         self.css = css
         self.style = style
         self.classname = classname
@@ -123,6 +133,7 @@ class NBPrintPage:
             "type_": _PAGE_BOX_TYPE,
             "fit": self.fit,
             "min_pages": self.min_pages,
+            "layout": self.layout,
         }
         if self.section is not None:
             d["section"] = self.section
@@ -132,6 +143,14 @@ class NBPrintPage:
             d["page_orientation"] = str(self.page_orientation)
         if self.page_margins is not None:
             d["page_margins"] = self.page_margins
+        if self.gap is not None:
+            d["gap"] = self.gap
+        if self.padding is not None:
+            d["padding"] = self.padding
+        if self.align is not None:
+            d["align"] = self.align
+        if self.justify is not None:
+            d["justify"] = self.justify
         if self.css is not None:
             d["css"] = self.css
         if self.style is not None:

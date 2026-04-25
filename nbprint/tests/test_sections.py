@@ -1404,3 +1404,185 @@ class TestContentPageBlock:
         block = ContentPageBlock(content=[ContentMarkdown(content="# hi")])
         assert isinstance(block.content, list)
         assert len(block.content) == 1
+
+
+class TestPageBoxLayout:
+    """Phase 9.4 — layout presets on ContentPageBox + auto-wrap."""
+
+    def test_layout_default_is_flow(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox()
+        assert box.layout == "flow"
+        assert box.attrs["data-nbprint-layout"] == "flow"
+
+    def test_columns_2_emits_column_count(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="columns-2")
+        assert "column-count: 2" in box.css
+        assert box.attrs["data-nbprint-layout"] == "columns-2"
+
+    def test_columns_3_emits_column_count(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="columns-3", gap="0.5in")
+        assert "column-count: 3" in box.css
+        assert "column-gap: 0.5in" in box.css
+
+    def test_grid_2x2_emits_grid_template(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="grid-2x2")
+        assert "display: grid" in box.css
+        assert "grid-template-columns: repeat(2, 1fr)" in box.css
+
+    def test_grid_3x2_emits_grid_template(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="grid-3x2", gap="1rem", align="center", justify="stretch")
+        assert "grid-template-columns: repeat(3, 1fr)" in box.css
+        assert "gap: 1rem" in box.css
+        assert "align-items: center" in box.css
+        assert "justify-items: stretch" in box.css
+
+    def test_grid_bare_no_template_columns(self):
+        """layout='grid' is the named-area form — emits display: grid but no fixed columns."""
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="grid")
+        assert "display: grid" in box.css
+        assert "grid-template-columns" not in box.css
+
+    def test_flex_row_reuses_shared_css(self):
+        from nbprint.config.content import ContentFlexRowLayout, ContentPageBox
+
+        box = ContentPageBox(layout="flex-row")
+        assert "display: flex" in box.css
+        assert "flex-direction: row" in box.css
+        # Shared constant — verify the existing layout container
+        # carries the same direction CSS.
+        assert "flex-direction: row" in ContentFlexRowLayout().css
+
+    def test_flex_column_reuses_shared_css(self):
+        from nbprint.config.content import ContentFlexColumnLayout, ContentPageBox
+
+        box = ContentPageBox(layout="flex-column", gap="1rem", justify="space-between")
+        assert "flex-direction: column" in box.css
+        assert "gap: 1rem" in box.css
+        assert "justify-content: space-between" in box.css
+        assert "flex-direction: column" in ContentFlexColumnLayout().css
+
+    def test_inline_preset(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="inline", gap="1rem")
+        assert "display: block" in box.css
+        # Inline gap maps to margin-left on adjacent siblings.
+        assert "margin-left: 1rem" in box.css
+
+    def test_masonry_preset(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="masonry", gap="0.25in")
+        assert "display: grid" in box.css
+        assert "grid-template-rows: masonry" in box.css
+        assert "gap: 0.25in" in box.css
+
+    def test_flow_preset_with_gap_emits_margin(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="flow", gap="1rem")
+        assert "margin-top: 1rem" in box.css
+
+    def test_custom_layout_preserves_base_only(self):
+        """layout='custom' suppresses preset CSS so the user owns :scope."""
+        from nbprint.config.content import ContentPageBox
+        from nbprint.config.content._layout_presets import PAGE_BOX_BASE_CSS
+
+        box = ContentPageBox(layout="custom")
+        assert box.css == PAGE_BOX_BASE_CSS
+        # Preset-only rules are absent.
+        assert "column-count" not in box.css
+        assert "display: grid" not in box.css
+
+    def test_user_css_override_wins(self):
+        """When the user supplies non-default css, preset CSS is not emitted."""
+        from nbprint.config.content import ContentPageBox
+
+        custom = ":scope { background: red; }\n"
+        box = ContentPageBox(layout="columns-2", css=custom)
+        assert box.css == custom
+        # Preset rules suppressed.
+        assert "column-count" not in box.css
+
+    def test_padding_emitted(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="grid-2x2", padding="0.5in")
+        assert "padding: 0.5in" in box.css
+
+    def test_auto_wrap_bare_content_into_block(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        md = ContentMarkdown(content="# hi")
+        box = ContentPageBox(content=[md])
+        assert len(box.content) == 1
+        assert isinstance(box.content[0], ContentPageBlock)
+        # The block wraps the original content as its single child.
+        assert box.content[0].content[0] is md
+
+    def test_auto_wrap_preserves_existing_blocks(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        block = ContentPageBlock(content=[ContentMarkdown(content="a")], span=2)
+        box = ContentPageBox(content=[block])
+        # Existing block passes through verbatim.
+        assert box.content[0] is block
+        assert box.content[0].span == 2
+
+    def test_auto_wrap_mixed_children(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        md = ContentMarkdown(content="a")
+        block = ContentPageBlock(content=[ContentMarkdown(content="b")])
+        box = ContentPageBox(content=[md, block])
+        # First child auto-wrapped; second passes through.
+        assert isinstance(box.content[0], ContentPageBlock)
+        assert box.content[1] is block
+
+    def test_auto_wrap_does_not_apply_to_string_content(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(content="raw cell source")
+        assert box.content == "raw cell source"
+
+    def test_layout_invalid_raises(self):
+        import pytest
+        from pydantic import ValidationError
+
+        from nbprint.config.content import ContentPageBox
+
+        with pytest.raises(ValidationError):
+            ContentPageBox(layout="not-a-real-preset")
+
+    def test_nbprint_page_runtime_passes_layout(self):
+        from nbprint import NBPrintPage
+
+        page = NBPrintPage(emit=False, layout="grid-2x2", gap="1rem", padding="0.5in")
+        d = page.to_dict()
+        assert d["layout"] == "grid-2x2"
+        assert d["gap"] == "1rem"
+        assert d["padding"] == "0.5in"
