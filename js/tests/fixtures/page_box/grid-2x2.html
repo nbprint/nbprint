@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: ContentPageBox layout=grid-2x2</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+/* Mimic ContentPageBox(layout="grid-2x2", gap="0.25in"). */
+[data-nbprint-page-box="box-grid"] {
+  break-before: page;
+  break-after: page;
+  break-inside: auto;
+  display: grid;
+  min-height: 100%;
+  grid-auto-flow: row dense;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.25in;
+}
+[data-nbprint-block] {
+  break-inside: avoid;
+  min-width: 0;
+  min-height: 0;
+  border: 1px dashed #999;
+}
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell"
+       data-nbprint-page-box="box-grid"
+       data-nbprint-fit="scale"
+       data-nbprint-layout="grid-2x2">
+    <div class="jp-Cell" data-nbprint-block="g1" data-nbprint-break-inside="avoid">
+      <h2>Cell 1,1</h2>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="g2" data-nbprint-break-inside="avoid">
+      <h2>Cell 1,2</h2>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="g3" data-nbprint-break-inside="avoid"
+         data-nbprint-span="2" style="grid-column: span 2">
+      <h2>Cell 2 spanning both columns</h2>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="g4" data-nbprint-break-inside="avoid">
+      <h2>Cell 3,1</h2>
+    </div>
+  </div>
+</main>
+</body>
+</html>

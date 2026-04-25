@@ -3,6 +3,7 @@ from pydantic import Field
 
 from nbprint.config.base import Role
 
+from ._layout_presets import FLEX_COLUMN_CSS, FLEX_ROW_CSS, INLINE_CSS
 from .base import Content
 
 __all__ = (
@@ -64,7 +65,7 @@ class ContentInlineLayout(Content):
     # override role
     role: Role = Role.LAYOUT
 
-    css: str = ":scope { display: block; }"
+    css: str = f":scope {{ {INLINE_CSS} }}"
     esm: str = """
 function render(meta, elem) {
     let data = JSON.parse(meta.data);
@@ -91,12 +92,8 @@ function render(meta, elem) {
 
 
 class ContentFlexColumnLayout(_ContentFlexLayout):
-    css: str = """
-:scope { display: flex; flex-direction: column; break-inside: auto; }
-"""
+    css: str = f":scope {{ {FLEX_COLUMN_CSS} }}\n"
 
 
 class ContentFlexRowLayout(_ContentFlexLayout):
-    css: str = """
-:scope { display: flex; flex-direction: row; break-inside: auto; }
-"""
+    css: str = f":scope {{ {FLEX_ROW_CSS} }}\n"

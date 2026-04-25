@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fixture: ContentPageBox layout=grid + grid_template</title>
+    <script>
+      var _nbprint_configuration = {
+        pagedjs: true,
+        debug: false,
+        page: '{"orientation": null, "size": null}',
+      };
+      var _nbprint_notebook_info = new Map();
+      window.FontAwesomeConfig = { searchPseudoElements: true };
+    </script>
+    <script type="module" src="/js/dist/embedded.js"></script>
+    <link rel="stylesheet" href="/js/dist/css/embedded.css" />
+    <link rel="stylesheet" href="/js/dist/css/index.css" />
+    <style>
+      body.jp-Notebook {
+        margin: 0;
+        padding: 0 !important;
+      }
+      @page {
+        margin: 0.5in;
+      }
+      /* Mimic ContentPageBox(layout="grid",
+   grid_template="'hero hero' 'chart table' / 1fr 1fr",
+   gap="0.25in"). */
+      [data-nbprint-page-box="box-areas"] {
+        break-before: page;
+        break-after: page;
+        break-inside: auto;
+        display: grid;
+        min-height: 100%;
+        grid-auto-flow: row dense;
+        gap: 0.25in;
+        grid-template: "hero hero" "chart table" / 1fr 1fr;
+      }
+      [data-nbprint-block] {
+        break-inside: avoid;
+        min-width: 0;
+        min-height: 0;
+        border: 1px solid #555;
+        padding: 0.5rem;
+        font-family: sans-serif;
+      }
+      [data-nbprint-area="hero"] {
+        background: #d0e6ff;
+        min-height: 1.5in;
+      }
+      [data-nbprint-area="chart"] {
+        background: #e6f5d0;
+        min-height: 3in;
+      }
+      [data-nbprint-area="table"] {
+        background: #fff1c2;
+        min-height: 3in;
+      }
+    </style>
+  </head>
+  <body
+    class="jp-Notebook"
+    data-jp-theme-light="true"
+    data-jp-theme-name="JupyterLab Light"
+  >
+    <main>
+      <div
+        class="jp-Cell"
+        data-nbprint-page-box="box-areas"
+        data-nbprint-fit="scale"
+        data-nbprint-layout="grid"
+      >
+        <div
+          class="jp-Cell"
+          data-nbprint-block="b-hero"
+          data-nbprint-area="hero"
+          data-nbprint-break-inside="avoid"
+          style="grid-area: hero"
+        >
+          <h2>Hero (spans both columns)</h2>
+        </div>
+        <div
+          class="jp-Cell"
+          data-nbprint-block="b-chart"
+          data-nbprint-area="chart"
+          data-nbprint-break-inside="avoid"
+          style="grid-area: chart"
+        >
+          <h3>Chart</h3>
+        </div>
+        <div
+          class="jp-Cell"
+          data-nbprint-block="b-table"
+          data-nbprint-area="table"
+          data-nbprint-break-inside="avoid"
+          style="grid-area: table"
+        >
+          <h3>Table</h3>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

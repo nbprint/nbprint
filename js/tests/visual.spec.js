@@ -106,6 +106,46 @@ const TEMPLATES = [
   "greattables",
 ];
 
+test.describe("Visual regression — page-box layout fixtures", () => {
+  test("columns-2 layout", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/page_box/columns-2.html");
+    await waitForPagedJS(page);
+    const count = await screenshotPages(
+      page,
+      test.info(),
+      "page-box-columns-2",
+    );
+    expect(count).toBeGreaterThan(0);
+  });
+
+  test("grid-2x2 layout", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/page_box/grid-2x2.html");
+    await waitForPagedJS(page);
+    const count = await screenshotPages(page, test.info(), "page-box-grid-2x2");
+    expect(count).toBeGreaterThan(0);
+  });
+
+  test("named-area grid (grid_template)", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/page_box/named-areas.html");
+    await waitForPagedJS(page);
+    const count = await screenshotPages(
+      page,
+      test.info(),
+      "page-box-named-areas",
+    );
+    expect(count).toBeGreaterThan(0);
+  });
+});
+
+test.describe("Visual regression — page-block fixtures", () => {
+  test("basic blocks", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/page_block/basic.html");
+    await waitForPagedJS(page);
+    const count = await screenshotPages(page, test.info(), "page-block-basic");
+    expect(count).toBeGreaterThan(0);
+  });
+});
+
 test.describe("Visual regression — report outputs", () => {
   // Report outputs can be large (many pages), so allow more time
   test.describe.configure({ timeout: 120_000 });

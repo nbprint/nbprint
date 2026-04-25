@@ -1404,3 +1404,447 @@ class TestContentPageBlock:
         block = ContentPageBlock(content=[ContentMarkdown(content="# hi")])
         assert isinstance(block.content, list)
         assert len(block.content) == 1
+
+
+class TestPageBoxLayout:
+    """Phase 9.4 — layout presets on ContentPageBox + auto-wrap."""
+
+    def test_layout_default_is_flow(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox()
+        assert box.layout == "flow"
+        assert box.attrs["data-nbprint-layout"] == "flow"
+
+    def test_columns_2_emits_column_count(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="columns-2")
+        assert "column-count: 2" in box.css
+        assert box.attrs["data-nbprint-layout"] == "columns-2"
+
+    def test_columns_3_emits_column_count(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="columns-3", gap="0.5in")
+        assert "column-count: 3" in box.css
+        assert "column-gap: 0.5in" in box.css
+
+    def test_grid_2x2_emits_grid_template(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="grid-2x2")
+        assert "display: grid" in box.css
+        assert "grid-template-columns: repeat(2, 1fr)" in box.css
+
+    def test_grid_3x2_emits_grid_template(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="grid-3x2", gap="1rem", align="center", justify="stretch")
+        assert "grid-template-columns: repeat(3, 1fr)" in box.css
+        assert "gap: 1rem" in box.css
+        assert "align-items: center" in box.css
+        assert "justify-items: stretch" in box.css
+
+    def test_grid_bare_no_template_columns(self):
+        """layout='grid' is the named-area form — emits display: grid but no fixed columns."""
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="grid")
+        assert "display: grid" in box.css
+        assert "grid-template-columns" not in box.css
+
+    def test_flex_row_reuses_shared_css(self):
+        from nbprint.config.content import ContentFlexRowLayout, ContentPageBox
+
+        box = ContentPageBox(layout="flex-row")
+        assert "display: flex" in box.css
+        assert "flex-direction: row" in box.css
+        # Shared constant — verify the existing layout container
+        # carries the same direction CSS.
+        assert "flex-direction: row" in ContentFlexRowLayout().css
+
+    def test_flex_column_reuses_shared_css(self):
+        from nbprint.config.content import ContentFlexColumnLayout, ContentPageBox
+
+        box = ContentPageBox(layout="flex-column", gap="1rem", justify="space-between")
+        assert "flex-direction: column" in box.css
+        assert "gap: 1rem" in box.css
+        assert "justify-content: space-between" in box.css
+        assert "flex-direction: column" in ContentFlexColumnLayout().css
+
+    def test_inline_preset(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="inline", gap="1rem")
+        assert "display: block" in box.css
+        # Inline gap maps to margin-left on adjacent siblings.
+        assert "margin-left: 1rem" in box.css
+
+    def test_masonry_preset(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="masonry", gap="0.25in")
+        assert "display: grid" in box.css
+        assert "grid-template-rows: masonry" in box.css
+        assert "gap: 0.25in" in box.css
+
+    def test_flow_preset_with_gap_emits_margin(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="flow", gap="1rem")
+        assert "margin-top: 1rem" in box.css
+
+    def test_custom_layout_preserves_base_only(self):
+        """layout='custom' suppresses preset CSS so the user owns :scope."""
+        from nbprint.config.content import ContentPageBox
+        from nbprint.config.content._layout_presets import PAGE_BOX_BASE_CSS
+
+        box = ContentPageBox(layout="custom")
+        assert box.css == PAGE_BOX_BASE_CSS
+        # Preset-only rules are absent.
+        assert "column-count" not in box.css
+        assert "display: grid" not in box.css
+
+    def test_user_css_override_wins(self):
+        """When the user supplies non-default css, preset CSS is not emitted."""
+        from nbprint.config.content import ContentPageBox
+
+        custom = ":scope { background: red; }\n"
+        box = ContentPageBox(layout="columns-2", css=custom)
+        assert box.css == custom
+        # Preset rules suppressed.
+        assert "column-count" not in box.css
+
+    def test_padding_emitted(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="grid-2x2", padding="0.5in")
+        assert "padding: 0.5in" in box.css
+
+    def test_auto_wrap_bare_content_into_block(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        md = ContentMarkdown(content="# hi")
+        box = ContentPageBox(content=[md])
+        assert len(box.content) == 1
+        assert isinstance(box.content[0], ContentPageBlock)
+        # The block wraps the original content as its single child.
+        assert box.content[0].content[0] is md
+
+    def test_auto_wrap_preserves_existing_blocks(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        block = ContentPageBlock(content=[ContentMarkdown(content="a")], span=2)
+        box = ContentPageBox(content=[block])
+        # Existing block passes through verbatim.
+        assert box.content[0] is block
+        assert box.content[0].span == 2
+
+    def test_auto_wrap_mixed_children(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        md = ContentMarkdown(content="a")
+        block = ContentPageBlock(content=[ContentMarkdown(content="b")])
+        box = ContentPageBox(content=[md, block])
+        # First child auto-wrapped; second passes through.
+        assert isinstance(box.content[0], ContentPageBlock)
+        assert box.content[1] is block
+
+    def test_auto_wrap_does_not_apply_to_string_content(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(content="raw cell source")
+        assert box.content == "raw cell source"
+
+    def test_layout_invalid_raises(self):
+        import pytest
+        from pydantic import ValidationError
+
+        from nbprint.config.content import ContentPageBox
+
+        with pytest.raises(ValidationError):
+            ContentPageBox(layout="not-a-real-preset")
+
+    def test_nbprint_page_runtime_passes_layout(self):
+        from nbprint import NBPrintPage
+
+        page = NBPrintPage(emit=False, layout="grid-2x2", gap="1rem", padding="0.5in")
+        d = page.to_dict()
+        assert d["layout"] == "grid-2x2"
+        assert d["gap"] == "1rem"
+        assert d["padding"] == "0.5in"
+
+
+class TestPageBoxGridTemplate:
+    """Phase 9.5 — named-area grids on ContentPageBox."""
+
+    def test_grid_template_emitted_in_css(self):
+        from nbprint.config.content import ContentPageBox
+
+        tmpl = "'hero hero' 'chart table' / 1fr 1fr"
+        box = ContentPageBox(layout="grid", grid_template=tmpl)
+        assert f"grid-template: {tmpl}" in box.css
+
+    def test_grid_template_default_none(self):
+        from nbprint.config.content import ContentPageBox
+
+        box = ContentPageBox(layout="grid")
+        assert box.grid_template is None
+        assert "grid-template:" not in box.css
+
+    def test_grid_template_validator_accepts_referenced_areas(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        ContentPageBox(
+            layout="grid",
+            grid_template="'hero hero' 'chart table' / 1fr 1fr",
+            content=[
+                ContentPageBlock(area="hero", content=[ContentMarkdown(content="h")]),
+                ContentPageBlock(area="chart", content=[ContentMarkdown(content="c")]),
+                ContentPageBlock(area="table", content=[ContentMarkdown(content="t")]),
+            ],
+        )
+        # No exception → success.
+
+    def test_grid_template_validator_allows_unused_areas(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        ContentPageBox(
+            layout="grid",
+            grid_template="'hero hero' 'a b' 'c d' / 1fr 1fr",
+            content=[
+                ContentPageBlock(area="hero", content=[ContentMarkdown(content="h")]),
+                # 'a', 'b', 'c', 'd' all unreferenced — allowed.
+            ],
+        )
+
+    def test_grid_template_validator_rejects_undefined_area(self):
+        import pytest
+        from pydantic import ValidationError
+
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        with pytest.raises(ValidationError, match="does not define area 'sidebar'"):
+            ContentPageBox(
+                layout="grid",
+                grid_template="'hero hero' 'chart table' / 1fr 1fr",
+                content=[
+                    ContentPageBlock(area="sidebar", content=[ContentMarkdown(content="x")]),
+                ],
+            )
+
+    def test_grid_template_extracts_areas_with_dot_placeholder(self):
+        """``.`` is the empty-cell placeholder — must not be treated as an area name."""
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        # No exception even though template uses '.'; child only references 'a'.
+        ContentPageBox(
+            layout="grid",
+            grid_template="'a a' '. b' / 1fr 1fr",
+            content=[
+                ContentPageBlock(area="a", content=[ContentMarkdown(content="x")]),
+            ],
+        )
+
+    def test_grid_template_with_track_sizes_interleaved(self):
+        from nbprint.config.content import (
+            ContentMarkdown,
+            ContentPageBlock,
+            ContentPageBox,
+        )
+
+        ContentPageBox(
+            layout="grid",
+            grid_template='"a a" 1fr "b c" 2fr / 1fr 1fr',
+            content=[
+                ContentPageBlock(area="a", content=[ContentMarkdown(content="x")]),
+                ContentPageBlock(area="b", content=[ContentMarkdown(content="y")]),
+                ContentPageBlock(area="c", content=[ContentMarkdown(content="z")]),
+            ],
+        )
+
+    def test_extract_grid_template_areas_helper(self):
+        from nbprint.config.content.page_box import _extract_grid_template_areas
+
+        assert _extract_grid_template_areas("'a b' 'c d' / 1fr 1fr") == {"a", "b", "c", "d"}
+        assert _extract_grid_template_areas("'a a' '. b'") == {"a", "b"}
+        assert _extract_grid_template_areas('"hero hero" "chart table"') == {"hero", "chart", "table"}
+        assert _extract_grid_template_areas("") == set()
+
+
+class TestNBPrintBlock:
+    """Phase 9.6 — NBPrintBlock runtime API."""
+
+    def test_top_level_export(self):
+        import nbprint
+
+        assert hasattr(nbprint, "NBPrintBlock")
+        assert hasattr(nbprint, "NBPRINT_BLOCK_MIME")
+
+    def test_to_dict_emits_type(self):
+        from nbprint import NBPrintBlock
+
+        block = NBPrintBlock(emit=False)
+        d = block.to_dict()
+        assert d["type_"] == "nbprint.ContentPageBlock"
+        assert d["break_inside"] == "avoid"
+
+    def test_to_dict_omits_none_fields(self):
+        from nbprint import NBPrintBlock
+
+        d = NBPrintBlock(emit=False).to_dict()
+        # Only type_ and break_inside present at minimum.
+        for key in (
+            "section",
+            "span",
+            "rows",
+            "area",
+            "aspect",
+            "min_height",
+            "max_height",
+            "scalable",
+            "css",
+            "style",
+            "classname",
+            "attrs",
+            "ignore",
+        ):
+            assert key not in d
+
+    def test_to_dict_includes_all_overrides(self):
+        from nbprint import NBPrintBlock
+
+        block = NBPrintBlock(
+            emit=False,
+            section="middlematter",
+            span=2,
+            rows=1,
+            area="hero",
+            aspect="16:9",
+            min_height="2in",
+            max_height="6in",
+            break_inside="auto",
+            scalable=True,
+            css=":scope { background: blue; }",
+            classname="hero-block",
+            attrs={"data-test": "1"},
+            ignore=False,
+        )
+        d = block.to_dict()
+        assert d["section"] == "middlematter"
+        assert d["span"] == 2
+        assert d["rows"] == 1
+        assert d["area"] == "hero"
+        assert d["aspect"] == "16:9"
+        assert d["min_height"] == "2in"
+        assert d["max_height"] == "6in"
+        assert d["break_inside"] == "auto"
+        assert d["scalable"] is True
+        assert d["css"] == ":scope { background: blue; }"
+        assert d["classname"] == "hero-block"
+        assert d["attrs"] == {"data-test": "1"}
+        assert d["ignore"] is False
+
+    def test_emit_publishes_mime(self):
+        from unittest.mock import patch
+
+        from nbprint import NBPRINT_BLOCK_MIME, NBPrintBlock
+
+        with patch("nbprint.config.block_runtime.display") as mock_display:
+            NBPrintBlock(span=2)
+            assert mock_display.call_count == 1
+            args, kwargs = mock_display.call_args
+            data = args[0]
+            assert NBPRINT_BLOCK_MIME in data
+            assert kwargs == {"raw": True}
+
+    def test_context_manager_emits_once(self):
+        from unittest.mock import patch
+
+        from nbprint import NBPrintBlock
+
+        with patch("nbprint.config.block_runtime.display") as mock_display:
+            block = NBPrintBlock(emit=False)
+            assert mock_display.call_count == 0
+            with block:
+                pass
+            assert mock_display.call_count == 1
+            with block:
+                pass
+            assert mock_display.call_count == 1
+
+    def test_ingestion_produces_page_block(self):
+        """Runtime MIME output builds a ContentPageBlock in Configuration ingestion."""
+        import json
+
+        from nbformat.v4 import new_code_cell, new_notebook
+
+        from nbprint import NBPRINT_BLOCK_MIME
+        from nbprint.config.content import ContentPageBlock
+        from nbprint.config.core.config import Configuration
+
+        nb = new_notebook()
+        cell = new_code_cell(source="display(chart)", metadata={"tags": []})
+        payload = {
+            "type_": "nbprint.ContentPageBlock",
+            "span": 2,
+            "aspect": "16:9",
+            "break_inside": "avoid",
+        }
+        cell.outputs = [
+            {
+                "output_type": "display_data",
+                "data": {NBPRINT_BLOCK_MIME: json.dumps(payload)},
+                "metadata": {},
+            }
+        ]
+        nb.cells = [cell]
+
+        values = {"content": ContentMarshall()}
+        Configuration._process_cells(values, nb)
+
+        assert len(values["content"].middlematter) == 1
+        block = values["content"].middlematter[0]
+        assert isinstance(block, ContentPageBlock)
+        assert block.span == 2
+        assert block.aspect == "16:9"
+        # Source preserved as the block's content.
+        assert block.content == "display(chart)"
+
+    def test_nbprint_page_runtime_passes_grid_template(self):
+        """Phase 9.5 + runtime: NBPrintPage carries grid_template through."""
+        from nbprint import NBPrintPage
+
+        tmpl = "'a a' 'b c' / 1fr 1fr"
+        page = NBPrintPage(emit=False, layout="grid", grid_template=tmpl)
+        d = page.to_dict()
+        assert d["grid_template"] == tmpl

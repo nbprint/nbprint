@@ -15,6 +15,7 @@ from typing_extensions import Self
 
 from nbprint import __version__
 from nbprint.config.base import BaseModel, Role, _append_or_extend
+from nbprint.config.block_runtime import NBPRINT_BLOCK_MIME
 from nbprint.config.cell import NBPRINT_MIME
 from nbprint.config.common import Style
 from nbprint.config.content import Content, ContentCode, ContentMarkdown
@@ -260,8 +261,9 @@ class Configuration(CallableModel, BaseModel):
 
         Looks for outputs containing any of the nbprint runtime MIME
         types (``application/nbprint.cell+json``,
-        ``application/nbprint.page+json``) and returns the parsed
-        metadata dict, or ``None``. Both MIME types use the same merge
+        ``application/nbprint.page+json``,
+        ``application/nbprint.block+json``) and returns the parsed
+        metadata dict, or ``None``. All MIME types use the same merge
         semantics into the cell's nbprint metadata; the kind of model
         constructed is later driven by the embedded ``type_`` field.
         """
@@ -270,7 +272,7 @@ class Configuration(CallableModel, BaseModel):
         outputs = cell.get("outputs", [])
         for output in outputs:
             data = output.get("data", {})
-            for mime in (NBPRINT_MIME, NBPRINT_PAGE_MIME):
+            for mime in (NBPRINT_MIME, NBPRINT_PAGE_MIME, NBPRINT_BLOCK_MIME):
                 if mime in data:
                     raw = data[mime]
                     if isinstance(raw, str):
