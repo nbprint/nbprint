@@ -1257,3 +1257,150 @@ class TestNBPrintPage:
         assert str(box.page_orientation) == "landscape"
         # Source is preserved as the box's content.
         assert box.content == "display('chart')"
+
+
+class TestContentPageBlock:
+    """Phase 9.3 — ContentPageBlock primitive."""
+
+    def test_defaults(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock()
+        assert block.span is None
+        assert block.rows is None
+        assert block.area is None
+        assert block.aspect is None
+        assert block.min_height is None
+        assert block.max_height is None
+        assert block.break_inside == "avoid"
+        assert block.scalable is None
+        assert "nbprint:content:page-block" in block.tags
+
+    def test_default_css(self):
+        from nbprint.config.content import ContentPageBlock
+
+        css = ContentPageBlock().css
+        assert ":scope" in css
+        assert "min-width: 0" in css
+        assert "min-height: 0" in css
+
+    def test_data_attrs_populated_with_id(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock()
+        assert block.attrs["data-nbprint-block"] == block._id
+        assert block.attrs["data-nbprint-break-inside"] == "avoid"
+        # Optional placement attrs absent by default.
+        for absent in ("data-nbprint-span", "data-nbprint-rows", "data-nbprint-area", "data-nbprint-scalable"):
+            assert absent not in block.attrs
+
+    def test_span_attr_and_inline_style(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock(span=2)
+        assert block.attrs["data-nbprint-span"] == "2"
+        assert "grid-column: span 2" in block.attrs["style"]
+
+    def test_rows_attr_and_inline_style(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock(rows=3)
+        assert block.attrs["data-nbprint-rows"] == "3"
+        assert "grid-row: span 3" in block.attrs["style"]
+
+    def test_area_attr_and_inline_style(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock(area="hero")
+        assert block.attrs["data-nbprint-area"] == "hero"
+        assert "grid-area: hero" in block.attrs["style"]
+
+    def test_aspect_float(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock(aspect=1.7777)
+        assert "aspect-ratio: 1.7777" in block.attrs["style"]
+
+    def test_aspect_string_colon(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock(aspect="16:9")
+        assert "aspect-ratio: 16/9" in block.attrs["style"]
+
+    def test_aspect_string_passthrough(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock(aspect="16/9")
+        assert "aspect-ratio: 16/9" in block.attrs["style"]
+
+    def test_break_inside_default_avoid(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock()
+        assert "break-inside: avoid" in block.attrs["style"]
+        assert block.attrs["data-nbprint-break-inside"] == "avoid"
+
+    def test_break_inside_override(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock(break_inside="auto")
+        assert block.break_inside == "auto"
+        assert block.attrs["data-nbprint-break-inside"] == "auto"
+        assert "break-inside: auto" in block.attrs["style"]
+
+    def test_min_max_height_emitted(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock(min_height="2in", max_height="6in")
+        assert "min-height: 2in" in block.attrs["style"]
+        assert "max-height: 6in" in block.attrs["style"]
+
+    def test_scalable_attr(self):
+        from nbprint.config.content import ContentPageBlock
+
+        true_block = ContentPageBlock(scalable=True)
+        false_block = ContentPageBlock(scalable=False)
+        assert true_block.attrs["data-nbprint-scalable"] == "true"
+        assert false_block.attrs["data-nbprint-scalable"] == "false"
+
+    def test_user_attrs_preserved_block_id(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock(attrs={"data-nbprint-block": "override", "data-custom": "x"})
+        # User's data-nbprint-block wins (setdefault).
+        assert block.attrs["data-nbprint-block"] == "override"
+        assert block.attrs["data-custom"] == "x"
+
+    def test_user_style_preserved(self):
+        from nbprint.config.content import ContentPageBlock
+
+        block = ContentPageBlock(span=2, attrs={"style": "color: red"})
+        # User style is appended after our generated style.
+        assert "grid-column: span 2" in block.attrs["style"]
+        assert "color: red" in block.attrs["style"]
+
+    def test_span_validation(self):
+        import pytest
+        from pydantic import ValidationError
+
+        from nbprint.config.content import ContentPageBlock
+
+        with pytest.raises(ValidationError):
+            ContentPageBlock(span=0)
+
+    def test_is_content_subclass(self):
+        from nbprint.config.content import Content, ContentPageBlock
+
+        assert issubclass(ContentPageBlock, Content)
+
+    def test_top_level_export(self):
+        import nbprint
+
+        assert hasattr(nbprint, "ContentPageBlock")
+
+    def test_accepts_children(self):
+        from nbprint.config.content import ContentMarkdown, ContentPageBlock
+
+        block = ContentPageBlock(content=[ContentMarkdown(content="# hi")])
+        assert isinstance(block.content, list)
+        assert len(block.content) == 1
