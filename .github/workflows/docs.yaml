@@ -40,8 +40,12 @@ jobs:
 
       - name: Install from wheel
         run: |
+<<<<<<< before updating
           uv pip install dist/*.whl
           uv pip install .[develop]
+=======
+          uv pip install dist/*.whl --target .
+>>>>>>> after updating
           uv pip install yardang
         if: github.event_name == 'workflow_run'
 
