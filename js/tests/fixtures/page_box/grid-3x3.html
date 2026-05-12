@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: ContentPageBox layout=grid-3x3</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+/* Mimic ContentPageBox(layout="grid-3x3", gap="0.15in"). */
+[data-nbprint-page-box="box-grid33"] {
+  break-before: page;
+  break-after: page;
+  break-inside: auto;
+  display: grid;
+  min-height: 100%;
+  grid-auto-flow: row dense;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.15in;
+}
+[data-nbprint-block] {
+  break-inside: avoid;
+  min-width: 0;
+  min-height: 0;
+  border: 1px dashed #666;
+  padding: 0.25rem;
+}
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell"
+       data-nbprint-page-box="box-grid33"
+       data-nbprint-fit="scale"
+       data-nbprint-layout="grid-3x3">
+    <div class="jp-Cell" data-nbprint-block="t1" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h3>1,1</h3>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="t2" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h3>1,2</h3>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="t3" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h3>1,3</h3>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="t4" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h3>2,1</h3>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="t5" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h3>2,2</h3>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="t6" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h3>2,3</h3>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="t7" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h3>3,1</h3>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="t8" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h3>3,2</h3>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="t9" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h3>3,3</h3>
+    </div>
+  </div>
+</main>
+</body>
+</html>

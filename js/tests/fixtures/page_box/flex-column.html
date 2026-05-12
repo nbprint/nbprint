@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: ContentPageBox layout=flex-column</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+/* Mimic ContentPageBox(layout="flex-column", gap="0.25in"). */
+[data-nbprint-page-box="box-flexcol"] {
+  break-before: page;
+  break-after: page;
+  break-inside: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  gap: 0.25in;
+}
+[data-nbprint-block] {
+  break-inside: avoid;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid #999;
+  padding: 0.25rem;
+}
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell"
+       data-nbprint-page-box="box-flexcol"
+       data-nbprint-fit="scale"
+       data-nbprint-layout="flex-column">
+    <div class="jp-Cell" data-nbprint-block="fc1" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h2>Top</h2>
+      <p>Flex column items are laid out vertically with explicit flex layout.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="fc2" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h2>Middle</h2>
+      <p>Unlike flow layout, flex column allows align/justify controls.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="fc3" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h2>Bottom</h2>
+      <p>Third item stacked vertically.</p>
+    </div>
+  </div>
+</main>
+</body>
+</html>

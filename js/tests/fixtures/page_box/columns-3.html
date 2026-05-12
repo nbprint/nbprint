@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: ContentPageBox layout=columns-3</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+/* Mimic ContentPageBox(layout="columns-3", gap="0.25in"). */
+[data-nbprint-page-box="box-cols3"] {
+  break-before: page;
+  break-after: page;
+  break-inside: auto;
+  display: block;
+  min-height: 100%;
+  column-count: 3;
+  column-fill: balance;
+  column-gap: 0.25in;
+}
+[data-nbprint-page-box="box-cols3"] > [data-nbprint-block] {
+  display: flow-root;
+}
+[data-nbprint-page-box="box-cols3"] > [data-nbprint-block] > :first-child {
+  margin-top: 0;
+}
+[data-nbprint-block] {
+  break-inside: avoid;
+  min-width: 0;
+  min-height: 0;
+}
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell"
+       data-nbprint-page-box="box-cols3"
+       data-nbprint-fit="scale"
+       data-nbprint-layout="columns-3">
+    <div class="jp-Cell" data-nbprint-block="c1" data-nbprint-break-inside="avoid">
+      <h2>Block 1</h2>
+      <p>First block in a three-column layout.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="c2" data-nbprint-break-inside="avoid">
+      <h2>Block 2</h2>
+      <p>Second block, balanced across columns.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="c3" data-nbprint-break-inside="avoid">
+      <h2>Block 3</h2>
+      <p>Third block in the three-column layout.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="c4" data-nbprint-break-inside="avoid">
+      <h2>Block 4</h2>
+      <p>Fourth block wrapping into the next row.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="c5" data-nbprint-break-inside="avoid">
+      <h2>Block 5</h2>
+      <p>Fifth block — demonstrates balanced fill.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="c6" data-nbprint-break-inside="avoid">
+      <h2>Block 6</h2>
+      <p>Sixth block across three columns.</p>
+    </div>
+  </div>
+</main>
+</body>
+</html>
