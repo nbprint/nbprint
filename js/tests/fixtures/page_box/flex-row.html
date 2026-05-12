@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fixture: ContentPageBox layout=flex-row</title>
+<script>
+var _nbprint_configuration = { pagedjs: true, debug: false, page: "{\"orientation\": null, \"size\": null}" };
+var _nbprint_notebook_info = new Map();
+window.FontAwesomeConfig = { searchPseudoElements: true };
+</script>
+<script type="module" src="/js/dist/embedded.js"></script>
+<link rel="stylesheet" href="/js/dist/css/embedded.css" />
+<link rel="stylesheet" href="/js/dist/css/index.css" />
+<style>
+body.jp-Notebook { margin: 0; padding: 0 !important; }
+@page { margin: 0.5in; }
+/* Mimic ContentPageBox(layout="flex-row", gap="0.25in"). */
+[data-nbprint-page-box="box-flexrow"] {
+  break-before: page;
+  break-after: page;
+  break-inside: auto;
+  display: flex;
+  flex-direction: row;
+  min-height: 100%;
+  gap: 0.25in;
+}
+[data-nbprint-block] {
+  break-inside: avoid;
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  border: 1px solid #999;
+  padding: 0.25rem;
+}
+</style>
+</head>
+<body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
+<main>
+  <div class="jp-Cell"
+       data-nbprint-page-box="box-flexrow"
+       data-nbprint-fit="scale"
+       data-nbprint-layout="flex-row">
+    <div class="jp-Cell" data-nbprint-block="fr1" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h2>Left</h2>
+      <p>Flex row items are laid out horizontally.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="fr2" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h2>Center</h2>
+      <p>Each block takes equal width by default.</p>
+    </div>
+    <div class="jp-Cell" data-nbprint-block="fr3" data-nbprint-break-inside="avoid"
+         style="break-inside: avoid">
+      <h2>Right</h2>
+      <p>Three items side by side in a row.</p>
+    </div>
+  </div>
+</main>
+</body>
+</html>

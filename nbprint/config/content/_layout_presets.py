@@ -81,7 +81,10 @@ def _columns_builder(count: int) -> _Builder:
             rules.append(f"column-gap: {gap};")
         if padding is not None:
             rules.append(f"padding: {padding};")
-        return _scope_block(rules)
+        scope = _scope_block(rules)
+        scope += ":scope > [data-nbprint-block] { display: flow-root; }\n"
+        scope += ":scope > [data-nbprint-block] > :first-child { margin-top: 0; }\n"
+        return scope
 
     return build
 

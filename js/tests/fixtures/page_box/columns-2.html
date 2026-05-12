@@ -27,6 +27,12 @@ body.jp-Notebook { margin: 0; padding: 0 !important; }
   column-fill: balance;
   column-gap: 0.5in;
 }
+[data-nbprint-page-box="box-cols"] > [data-nbprint-block] {
+  display: flow-root;
+}
+[data-nbprint-page-box="box-cols"] > [data-nbprint-block] > :first-child {
+  margin-top: 0;
+}
 [data-nbprint-block] {
   break-inside: avoid;
   min-width: 0;

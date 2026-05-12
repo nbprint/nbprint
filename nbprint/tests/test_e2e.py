@@ -31,6 +31,7 @@ _integration_notebooks = (
     "notebook-sections",
     "notebook-runtime",
     "notebook-overlays",
+    "notebook-page-boxes",
 )
 _integration_formats = (
     "ipynb",

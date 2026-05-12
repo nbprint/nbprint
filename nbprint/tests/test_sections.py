@@ -1421,6 +1421,8 @@ class TestPageBoxLayout:
 
         box = ContentPageBox(layout="columns-2")
         assert "column-count: 2" in box.css
+        assert "> [data-nbprint-block] { display: flow-root" in box.css
+        assert "> [data-nbprint-block] > :first-child { margin-top: 0" in box.css
         assert box.attrs["data-nbprint-layout"] == "columns-2"
 
     def test_columns_3_emits_column_count(self):
@@ -1429,6 +1431,8 @@ class TestPageBoxLayout:
         box = ContentPageBox(layout="columns-3", gap="0.5in")
         assert "column-count: 3" in box.css
         assert "column-gap: 0.5in" in box.css
+        assert "> [data-nbprint-block] { display: flow-root" in box.css
+        assert "> [data-nbprint-block] > :first-child { margin-top: 0" in box.css
 
     def test_grid_2x2_emits_grid_template(self):
         from nbprint.config.content import ContentPageBox
