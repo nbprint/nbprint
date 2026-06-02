@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
       - uses: actions-ext/python/setup@main
 
       - uses: actions-ext/node/setup@main
@@ -28,7 +28,7 @@ jobs:
           playwright install chromium
 
       - name: Download dist from build
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           pattern: dist-ubuntu-latest*
           merge-multiple: true
@@ -40,8 +40,12 @@ jobs:
 
       - name: Install from wheel
         run: |
+<<<<<<< before updating
           uv pip install dist/*.whl
           uv pip install .[develop]
+=======
+          uv pip install dist/*.whl --target .
+>>>>>>> after updating
           uv pip install yardang
         if: github.event_name == 'workflow_run'
 
@@ -70,7 +74,7 @@ jobs:
 
       - run: yardang build
 
-      - uses: peaceiris/actions-gh-pages@v4
+      - uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
         with:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
