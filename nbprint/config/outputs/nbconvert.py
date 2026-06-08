@@ -11,6 +11,21 @@ from nbprint.config import Configuration, Outputs, OutputsProcessing
 __all__ = ("HTMLOutputs", "NBConvertOutputs", "NBConvertShortCircuitOutputs", "NotebookOutputs", "PDFOutputs", "WebHTMLOutputs", "short_circuit_hook")
 
 
+def _run_nbconvert(argv: list[str]) -> None:
+    """Run nbconvert in-process without reusing the global NbConvertApp singleton.
+
+    nbconvert's ``main()`` goes through ``NbConvertApp.launch_instance``, which caches
+    one app on the class. Reusing it across conversions in a single process leaks config
+    (notably ``ExecutePreprocessor.enabled``), so a later plain convert pass re-executes
+    the notebook. A fresh instance per call avoids that.
+    """
+    from nbconvert.nbconvertapp import NbConvertApp
+
+    app = NbConvertApp()
+    app.initialize(argv)
+    app.start()  # ty: ignore[missing-argument]
+
+
 class NBConvertOutputs(Outputs):
     target: Literal["ipynb", "notebook", "html", "webhtml", "pdf", "webpdf"] | None = "html"  # TODO: nbconvert types
     execute: bool | None = True
@@ -124,8 +139,6 @@ class NBConvertOutputs(Outputs):
             self._collected_cells[output_key].extend(outputs)
 
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
-        from nbconvert.nbconvertapp import main as execute_nbconvert
-
         # Run parent to create notebook
         notebook = super().run(config=config, gen=gen)
 
@@ -160,7 +173,7 @@ class NBConvertOutputs(Outputs):
             cmd[0] = str(self.executed_notebook)
 
             # Execute nbconvert
-            execute_nbconvert(nbex_cmd)
+            _run_nbconvert(nbex_cmd)
 
             # Extract cells by tags
             self._extract_cell_outputs()
@@ -170,7 +183,7 @@ class NBConvertOutputs(Outputs):
 
         if not (self.execute and self.target == "ipynb"):
             # If target is notebook, we already did it above
-            execute_nbconvert(cmd)
+            _run_nbconvert(cmd)
 
         if self.nbconvert_hook and self.nbconvert_hook.object(config) in (OutputsProcessing.STOP, None):
             return OutputsProcessing.STOP
