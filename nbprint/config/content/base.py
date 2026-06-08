@@ -100,7 +100,6 @@ class Content(BaseModel):
 
         # prefix cells with magics
         for cell in cells:
-            cell: NotebookNode
             if self.magics:
                 for magic in self.magics:
                     cell.source = f"%%{magic}\n{cell.source}"
