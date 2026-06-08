@@ -68,7 +68,7 @@ class Executor(CallableModel):
         )
 
     @Flow.call
-    def __call__(self, context: ExecutorParameters = None) -> ExecutorOutputs:  # noqa: ARG002
+    def __call__(self, context: ExecutorParameters = None) -> ExecutorOutputs:  # noqa: ARG002  # ty: ignore[invalid-parameter-default]
         op = []
         for p in self._parameters:
             nb = self.nbprint.model_copy(deep=True, update={"_multi": True})

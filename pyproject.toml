@@ -197,6 +197,27 @@ addopts = [
 ]
 testpaths = "nbprint/tests"
 
+[tool.ty.src]
+# Tests rely on dynamic Pydantic construction and assertion-style access that
+# ty cannot model well; skip them so `make check-types` reflects production code.
+exclude = ["nbprint/tests"]
+
+[tool.ty.rules]
+# Pydantic models in this project use `Optional[X] = None` fields that runtime
+# validators populate before access. ty cannot infer those invariants, so the
+# rules below produce many false positives. Demote to `warn` to keep them
+# surfaced in editor diagnostics without failing `make check-types`. Tighten
+# back to `error` as the codebase adopts stricter `Annotated`/discriminated
+# typing.
+call-non-callable = "warn"
+invalid-argument-type = "warn"
+invalid-assignment = "warn"
+invalid-method-override = "warn"
+invalid-return-type = "warn"
+not-subscriptable = "warn"
+unresolved-attribute = "warn"
+unsupported-operator = "warn"
+
 [tool.ruff]
 line-length = 160
 
