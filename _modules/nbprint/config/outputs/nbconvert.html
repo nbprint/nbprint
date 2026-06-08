@@ -280,6 +280,21 @@
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;HTMLOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;NBConvertOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;NBConvertShortCircuitOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;NotebookOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;PDFOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;WebHTMLOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;short_circuit_hook&quot;</span><span class="p">)</span>
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_run_nbconvert</span><span class="p">(</span><span class="n">argv</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run nbconvert in-process without reusing the global NbConvertApp singleton.</span>
+
+<span class="sd">    nbconvert&#39;s ``main()`` goes through ``NbConvertApp.launch_instance``, which caches</span>
+<span class="sd">    one app on the class. Reusing it across conversions in a single process leaks config</span>
+<span class="sd">    (notably ``ExecutePreprocessor.enabled``), so a later plain convert pass re-executes</span>
+<span class="sd">    the notebook. A fresh instance per call avoids that.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">nbconvert.nbconvertapp</span><span class="w"> </span><span class="kn">import</span> <span class="n">NbConvertApp</span>
+
+    <span class="n">app</span> <span class="o">=</span> <span class="n">NbConvertApp</span><span class="p">()</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">initialize</span><span class="p">(</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>  <span class="c1"># ty: ignore[missing-argument]</span>
+
+
 <div class="viewcode-block" id="NBConvertOutputs">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html#nbprint.config.outputs.NBConvertOutputs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NBConvertOutputs</span><span class="p">(</span><span class="n">Outputs</span><span class="p">):</span>
@@ -400,8 +415,6 @@
 <div class="viewcode-block" id="NBConvertOutputs.run">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html#nbprint.config.outputs.NBConvertOutputs.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">,</span> <span class="n">gen</span><span class="p">:</span> <span class="n">NotebookNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">nbconvert.nbconvertapp</span><span class="w"> </span><span class="kn">import</span> <span class="n">main</span> <span class="k">as</span> <span class="n">execute_nbconvert</span>
-
         <span class="c1"># Run parent to create notebook</span>
         <span class="n">notebook</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">gen</span><span class="o">=</span><span class="n">gen</span><span class="p">)</span>
 
@@ -436,7 +449,7 @@
             <span class="n">cmd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">executed_notebook</span><span class="p">)</span>
 
             <span class="c1"># Execute nbconvert</span>
-            <span class="n">execute_nbconvert</span><span class="p">(</span><span class="n">nbex_cmd</span><span class="p">)</span>
+            <span class="n">_run_nbconvert</span><span class="p">(</span><span class="n">nbex_cmd</span><span class="p">)</span>
 
             <span class="c1"># Extract cells by tags</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_extract_cell_outputs</span><span class="p">()</span>
@@ -446,7 +459,7 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">execute</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;ipynb&quot;</span><span class="p">):</span>
             <span class="c1"># If target is notebook, we already did it above</span>
-            <span class="n">execute_nbconvert</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+            <span class="n">_run_nbconvert</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbconvert_hook</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbconvert_hook</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span>
