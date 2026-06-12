@@ -477,6 +477,41 @@
 </pre></div>
 </div>
 <p>Flat-list <code class="docutils literal notranslate"><span class="pre">content:</span></code> is still fully supported — it is treated as <code class="docutils literal notranslate"><span class="pre">middlematter</span></code>.</p>
+<section id="chapters-list-of-lists-middlematter">
+<h3>Chapters (list-of-lists middlematter)<a class="headerlink" href="#chapters-list-of-lists-middlematter" title="Link to this heading">¶</a></h3>
+<p>For multi-chapter documents, supply <code class="docutils literal notranslate"><span class="pre">middlematter</span></code> as a <strong>list of lists</strong>. Each
+sublist is a chapter: its <strong>first element</strong> is promoted to a chapter separator
+and the remaining elements form the chapter body. nbprint interleaves them in
+document order — <code class="docutils literal notranslate"><span class="pre">[chapter1-title,</span> <span class="pre">*chapter1-body,</span> <span class="pre">chapter2-title,</span> <span class="pre">*chapter2-body,</span> <span class="pre">…]</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="c1"># Chapter One — first item becomes the title page</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#</span><span class="nv"> </span><span class="s">Chapter</span><span class="nv"> </span><span class="s">One&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Body</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">first</span><span class="nv"> </span><span class="s">chapter…&quot;</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="c1"># Chapter Two</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#</span><span class="nv"> </span><span class="s">Chapter</span><span class="nv"> </span><span class="s">Two&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Body</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">second</span><span class="nv"> </span><span class="s">chapter…&quot;</span>
+</pre></div>
+</div>
+<p>By default each separator renders as a <strong>standalone chapter title page</strong> — a hard
+page break is inserted before and after it. To keep separators inline with their
+chapter body instead, disable the behavior:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">separator_title_pages</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">...</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>The promoted separators are also available directly under the
+<code class="docutils literal notranslate"><span class="pre">middlematter_separators</span></code> section if you prefer to populate them explicitly
+alongside a flat <code class="docutils literal notranslate"><span class="pre">middlematter</span></code> list.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">examples/chapters.yaml</span></code> for a full working example.</p>
+</section>
 <section id="per-section-page-layout">
 <h3>Per-section page layout<a class="headerlink" href="#per-section-page-layout" title="Link to this heading">¶</a></h3>
 <p>Each section can carry its own page layout via <code class="docutils literal notranslate"><span class="pre">PageGlobal.pages</span></code>. This generates CSS <code class="docutils literal notranslate"><span class="pre">&#64;page</span> <span class="pre">&lt;section&gt;</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> rules and maps cells to them via <code class="docutils literal notranslate"><span class="pre">data-nbprint-section</span></code> attributes:</p>
@@ -802,6 +837,7 @@ nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="n
 </li>
 <li><a class="reference internal" href="#yaml-first-workflow">YAML-First Workflow</a></li>
 <li><a class="reference internal" href="#structured-sections">Structured Sections</a><ul>
+<li><a class="reference internal" href="#chapters-list-of-lists-middlematter">Chapters (list-of-lists middlematter)</a></li>
 <li><a class="reference internal" href="#per-section-page-layout">Per-section page layout</a></li>
 <li><a class="reference internal" href="#section-level-style-defaults">Section-level style defaults</a></li>
 </ul>

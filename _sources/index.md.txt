@@ -1,6 +1,5 @@
 ```{toctree}
 ---
-caption: ""
 maxdepth: 2
 hidden: true
 ---

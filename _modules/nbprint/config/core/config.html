@@ -382,23 +382,38 @@
         <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Context</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_convert_content_from_list</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ContentMarshall</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_coerce_content_list</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Coerce the elements of a content list into :class:`Content` objects.</span>
+
+<span class="sd">        Strings become ``Content`` placeholders and ``_target_`` dicts are</span>
+<span class="sd">        instantiated. Nested lists (list-of-lists ``middlematter``, where each</span>
+<span class="sd">        sublist is a chapter whose first element becomes a separator) are</span>
+<span class="sd">        coerced recursively so the chapter structure survives long enough for</span>
+<span class="sd">        :class:`ContentMarshall` to extract the separators.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Content</span><span class="p">(</span><span class="n">type_</span><span class="o">=</span><span class="n">element</span><span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">ContentMarshall</span><span class="p">(</span><span class="n">middlematter</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_coerce_content_list</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_convert_content_from_list</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ContentMarshall</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ContentMarshall</span><span class="p">(</span><span class="n">middlematter</span><span class="o">=</span><span class="n">Configuration</span><span class="o">.</span><span class="n">_coerce_content_list</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_convert_content_from_dict</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ContentMarshall</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ContentMarshall</span><span class="o">.</span><span class="n">model_fields</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">v</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
-                <span class="n">v</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_convert_content_from_list</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">key</span><span class="p">])</span><span class="o">.</span><span class="n">all</span>
+                <span class="c1"># Preserve a list-of-lists ``middlematter`` (chapter structure)</span>
+                <span class="c1"># so ContentMarshall can promote each sublist&#39;s first item to a</span>
+                <span class="c1"># separator. Flat lists are coerced element-wise as before.</span>
+                <span class="n">v</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_coerce_content_list</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">ContentMarshall</span><span class="p">(</span><span class="o">**</span><span class="n">v</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Configuration.convert_content_from_obj">
-<a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.Configuration.html#nbprint.config.core.Configuration.convert_content_from_obj">[docs]</a>
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_content_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ContentMarshall</span><span class="p">:</span>
@@ -408,8 +423,7 @@
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_convert_content_from_list</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_convert_content_from_dict</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">v</span></div>
-
+        <span class="k">return</span> <span class="n">v</span>
 
     <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>

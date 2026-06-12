@@ -334,8 +334,6 @@
         <span class="c1"># NOTE: parent class has `output`</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collected_cells</span>
 
-<div class="viewcode-block" id="NBConvertOutputs.validate_target">
-<a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html#nbprint.config.outputs.NBConvertOutputs.validate_target">[docs]</a>
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_target</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -345,8 +343,7 @@
             <span class="k">return</span> <span class="s2">&quot;webpdf&quot;</span>
         <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;notebook&quot;</span><span class="p">:</span>
             <span class="k">return</span> <span class="s2">&quot;ipynb&quot;</span>
-        <span class="k">return</span> <span class="n">v</span></div>
-
+        <span class="k">return</span> <span class="n">v</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_compute_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_compute_outputs</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
