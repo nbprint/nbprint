@@ -27,12 +27,24 @@ const DEFAULT_RESOLVER = {
   },
 };
 
+// paged.js (css-tree@1.1.3) cannot parse Media Queries Level 4 range syntax
+// (e.g. `(width<=1180px)`). Without explicit targets, lightningcss minifies
+// `min-width`/`max-width` queries into that range form, which paged.js then
+// mishandles and renders as blank pages. Target pre-range-syntax browsers so
+// the legacy `min-width`/`max-width` form is preserved.
+const TARGETS = {
+  safari: 13 << 16,
+  chrome: 80 << 16,
+  firefox: 78 << 16,
+};
+
 const bundle_one = async (file, resolver) => {
   const { code } = await bundleAsync({
     filename: path.resolve(file),
     minify: !DEBUG,
     sourceMap: false,
     resolver: resolver || DEFAULT_RESOLVER,
+    targets: TARGETS,
   });
   const outName = path.basename(file);
   fs.mkdirSync("./dist/css", { recursive: true });
