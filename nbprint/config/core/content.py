@@ -6,7 +6,7 @@ from nbprint.config.base import BaseModel
 from nbprint.config.common import Style
 from nbprint.config.content import Content, ContentTableOfContents
 
-__all__ = ("SECTION_GROUPS", "SECTION_ORDER", "ContentMarshall", "Section")
+__all__ = ("SECTION_GROUPS", "SECTION_ORDER", "SEPARATOR_TITLE_PAGE_CSS", "ContentMarshall", "Section")
 
 
 """
@@ -88,6 +88,13 @@ SECTION_GROUPS: dict[str, str] = {
 }
 
 
+# CSS that turns a middlematter separator into a standalone chapter title
+# page: it always starts on a fresh page and the following chapter body
+# starts on the next page. Scoped to ``:scope`` so the ``@scope(...)``
+# wrapper emitted by the template targets the separator cell.
+SEPARATOR_TITLE_PAGE_CSS = ":scope {\n  break-before: page;\n  break-after: page;\n}"
+
+
 class ContentMarshall(BaseModel):
     # Prematter
     prematter: list[Content] = Field(
@@ -155,6 +162,15 @@ class ContentMarshall(BaseModel):
         description=("Per-chapter item counts for middlematter when supplied as a list-of-lists. Populated automatically; rarely set by hand."),
     )
 
+    # When True, every entry in ``middlematter_separators`` is rendered as a
+    # standalone chapter title page (a hard page break before and after the
+    # separator cell). Disable to keep separators inline with their chapter
+    # body, or to supply your own break CSS per separator.
+    separator_title_pages: bool = Field(
+        default=True,
+        description="Render each middlematter separator as a standalone chapter title page (break-before/break-after page).",
+    )
+
     _all: list[Content] = PrivateAttr(default_factory=list)
     _prematter: list[Content] = PrivateAttr(default_factory=list)
     _covermatter: list[Content] = PrivateAttr(default_factory=list)
@@ -205,6 +221,11 @@ class ContentMarshall(BaseModel):
         if self.auto_table_of_contents and not self.table_of_contents:
             self.table_of_contents = [ContentTableOfContents()]
 
+        # Render chapter separators as standalone title pages when requested.
+        if self.separator_title_pages:
+            for sep in self.middlematter_separators:
+                self._apply_title_page_css(sep)
+
         # Populate per-group aggregations
         self._prematter = self.prematter
         self._covermatter = self.covermatter
@@ -216,6 +237,21 @@ class ContentMarshall(BaseModel):
         # Full document order
         self._all = self._prematter + self._covermatter + self._frontmatter + self._middlematter + self._endmatter + self._rearmatter
         return self
+
+    @staticmethod
+    def _apply_title_page_css(separator: Content) -> None:
+        """Merge the standalone title-page break CSS into a separator's ``css``.
+
+        Idempotent: the break rule is only appended when it is not already
+        present, so repeated validation never duplicates it. Any CSS the
+        separator already carries is preserved.
+        """
+        if not isinstance(separator, Content):
+            return
+        existing = separator.css if isinstance(separator.css, str) else ""
+        if "break-before: page" in existing:
+            return
+        separator.css = f"{existing}\n{SEPARATOR_TITLE_PAGE_CSS}" if existing else SEPARATOR_TITLE_PAGE_CSS
 
     def _compose_middlematter(self) -> list[Content]:
         """Build middlematter in render order.

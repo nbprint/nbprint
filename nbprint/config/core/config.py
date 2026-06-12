@@ -111,19 +111,36 @@ class Configuration(CallableModel, BaseModel):
         return BaseModel._to_type(v, Context)
 
     @staticmethod
-    def _convert_content_from_list(v) -> ContentMarshall:
+    def _coerce_content_list(v: list) -> list:
+        """Coerce the elements of a content list into :class:`Content` objects.
+
+        Strings become ``Content`` placeholders and ``_target_`` dicts are
+        instantiated. Nested lists (list-of-lists ``middlematter``, where each
+        sublist is a chapter whose first element becomes a separator) are
+        coerced recursively so the chapter structure survives long enough for
+        :class:`ContentMarshall` to extract the separators.
+        """
         for i, element in enumerate(v):
             if isinstance(element, str):
                 v[i] = Content(type_=element)
             elif isinstance(element, dict):
                 v[i] = BaseModel._to_type(element)
-        return ContentMarshall(middlematter=v)
+            elif isinstance(element, list):
+                v[i] = Configuration._coerce_content_list(element)
+        return v
+
+    @staticmethod
+    def _convert_content_from_list(v) -> ContentMarshall:
+        return ContentMarshall(middlematter=Configuration._coerce_content_list(v))
 
     @staticmethod
     def _convert_content_from_dict(v) -> ContentMarshall:
         for key in ContentMarshall.model_fields:
             if key in v and isinstance(v[key], list):
-                v[key] = Configuration._convert_content_from_list(v[key]).all
+                # Preserve a list-of-lists ``middlematter`` (chapter structure)
+                # so ContentMarshall can promote each sublist's first item to a
+                # separator. Flat lists are coerced element-wise as before.
+                v[key] = Configuration._coerce_content_list(v[key])
         return ContentMarshall(**v)
 
     @field_validator("content", mode="before")
