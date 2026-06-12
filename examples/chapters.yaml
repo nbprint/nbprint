@@ -1,0 +1,77 @@
+---
+# Chapters example — demonstrates list-of-lists ``middlematter``.
+#
+# Each sublist under ``middlematter`` is a chapter. Its FIRST element is
+# promoted to a chapter separator and rendered as a standalone title page
+# (a hard page break before and after it); the remaining elements are the
+# chapter body. nbprint interleaves them as:
+#
+#   [chap1-title, *chap1-body, chap2-title, *chap2-body, ...]
+#
+# Set ``content.separator_title_pages: false`` to keep separators inline
+# instead of giving them their own page.
+debug: false
+outputs:
+  _target_: nbprint.NBConvertOutputs
+  naming: "{{name}}"
+  root: ./outputs
+  target: "html"
+
+page:
+  _target_: nbprint.PageGlobal
+  bottom_right:
+    _target_: nbprint.PageRegion
+    content:
+      _target_: nbprint.PageNumber
+
+content:
+  covermatter:
+    - _target_: nbprint.ContentMarkdown
+      content: |
+        # The nbprint Chronicles
+        ## A multi-chapter report
+      css: ":scope { text-align: center; }"
+
+  table_of_contents:
+    - _target_: nbprint.ContentTableOfContents
+
+  # List-of-lists: each sublist is a chapter. The first item of each
+  # sublist becomes a title page; the rest is the chapter body.
+  middlematter:
+    - # ── Chapter One ──────────────────────────────────────────────
+      - _target_: nbprint.ContentMarkdown
+        content: |
+          # Chapter One
+          ## Beginnings
+        css: ":scope { text-align: center; padding-top: 35%; }"
+      - _target_: nbprint.ContentMarkdown
+        content: |
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+          ## A Subsection
+          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+          nisi ut aliquip ex ea commodo consequat.
+
+    - # ── Chapter Two ──────────────────────────────────────────────
+      - _target_: nbprint.ContentMarkdown
+        content: |
+          # Chapter Two
+          ## Developments
+        css: ":scope { text-align: center; padding-top: 35%; }"
+      - _target_: nbprint.ContentMarkdown
+        content: |
+          Duis aute irure dolor in reprehenderit in voluptate velit esse
+          cillum dolore eu fugiat nulla pariatur.
+
+          ## Another Subsection
+          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+          officia deserunt mollit anim id est laborum.
+
+  endmatter:
+    - _target_: nbprint.ContentPageBreak
+    - _target_: nbprint.ContentMarkdown
+      content: |
+        # Bibliography
+        1. Author A. "Title of Work." Publisher, 2024.
+        2. Author B. "Another Work." Publisher, 2025.

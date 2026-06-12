@@ -24,6 +24,7 @@ _integration_templates = (
     "customsize",
     "nonpagedjs",
     "greattables",
+    "chapters",
 )
 _integration_notebooks = (
     "basic",

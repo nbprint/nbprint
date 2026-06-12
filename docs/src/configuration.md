@@ -195,6 +195,46 @@ content:
 
 Flat-list `content:` is still fully supported — it is treated as `middlematter`.
 
+### Chapters (list-of-lists middlematter)
+
+For multi-chapter documents, supply `middlematter` as a **list of lists**. Each
+sublist is a chapter: its **first element** is promoted to a chapter separator
+and the remaining elements form the chapter body. nbprint interleaves them in
+document order — `[chapter1-title, *chapter1-body, chapter2-title, *chapter2-body, …]`.
+
+```yaml
+content:
+  middlematter:
+    - # Chapter One — first item becomes the title page
+      - _target_: nbprint.ContentMarkdown
+        content: "# Chapter One"
+      - _target_: nbprint.ContentMarkdown
+        content: "Body of the first chapter…"
+
+    - # Chapter Two
+      - _target_: nbprint.ContentMarkdown
+        content: "# Chapter Two"
+      - _target_: nbprint.ContentMarkdown
+        content: "Body of the second chapter…"
+```
+
+By default each separator renders as a **standalone chapter title page** — a hard
+page break is inserted before and after it. To keep separators inline with their
+chapter body instead, disable the behavior:
+
+```yaml
+content:
+  separator_title_pages: false
+  middlematter:
+    - [...]
+```
+
+The promoted separators are also available directly under the
+`middlematter_separators` section if you prefer to populate them explicitly
+alongside a flat `middlematter` list.
+
+See `examples/chapters.yaml` for a full working example.
+
 ### Per-section page layout
 
 Each section can carry its own page layout via `PageGlobal.pages`. This generates CSS `@page <section> { ... }` rules and maps cells to them via `data-nbprint-section` attributes:
