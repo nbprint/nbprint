@@ -300,6 +300,12 @@
 <dd></dd></dl>
 
 <dl class="py attribute pydantic_field">
+<dt class="sig sig-object py" id="nbprint.config.outputs.NBConvertOutputs.nbconvert_config">
+<em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nbconvert_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">[Optional]</span></em><a class="headerlink" href="#nbprint.config.outputs.NBConvertOutputs.nbconvert_config" title="Link to this definition">¶</a></dt>
+<dd><p>Generic nbconvert/traitlets configuration for the conversion pass. Keys are traitlet paths (flat ‘Class.trait’ or nested) mapping onto nbconvert’s ‘–Class.trait=value’ CLI options.</p>
+</dd></dl>
+
+<dl class="py attribute pydantic_field">
 <dt class="sig sig-object py" id="nbprint.config.outputs.NBConvertOutputs.collect_outputs">
 <em class="property"><span class="pre">field</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">collect_outputs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#nbprint.config.outputs.NBConvertOutputs.collect_outputs" title="Link to this definition">¶</a></dt>
 <dd><p>Whether to collect cell outputs into the context. Cells with tag <cite>nbprint:output:&lt;key&gt;</cite> will be collected under <cite>&lt;key&gt;</cite>.</p>
@@ -392,6 +398,7 @@
 <li><a class="reference internal" href="#nbprint.config.outputs.NBConvertOutputs.execute"><code class="docutils literal notranslate"><span class="pre">NBConvertOutputs.execute</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.outputs.NBConvertOutputs.timeout"><code class="docutils literal notranslate"><span class="pre">NBConvertOutputs.timeout</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.outputs.NBConvertOutputs.template"><code class="docutils literal notranslate"><span class="pre">NBConvertOutputs.template</span></code></a></li>
+<li><a class="reference internal" href="#nbprint.config.outputs.NBConvertOutputs.nbconvert_config"><code class="docutils literal notranslate"><span class="pre">NBConvertOutputs.nbconvert_config</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.outputs.NBConvertOutputs.collect_outputs"><code class="docutils literal notranslate"><span class="pre">NBConvertOutputs.collect_outputs</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.outputs.NBConvertOutputs.execute_hook"><code class="docutils literal notranslate"><span class="pre">NBConvertOutputs.execute_hook</span></code></a></li>
 <li><a class="reference internal" href="#nbprint.config.outputs.NBConvertOutputs.nbconvert_hook"><code class="docutils literal notranslate"><span class="pre">NBConvertOutputs.nbconvert_hook</span></code></a></li>

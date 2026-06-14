@@ -267,9 +267,10 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for nbprint.config.outputs.nbconvert</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">ccflow</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyObjectPath</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbformat</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotebookNode</span>
@@ -278,6 +279,24 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Configuration</span><span class="p">,</span> <span class="n">Outputs</span><span class="p">,</span> <span class="n">OutputsProcessing</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;HTMLOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;NBConvertOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;NBConvertShortCircuitOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;NotebookOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;PDFOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;WebHTMLOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;short_circuit_hook&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># nbconvert/traitlets paths that nbprint already drives through its own fields.</span>
+<span class="c1"># Allowing these in ``nbconvert_config`` would silently shadow or fight nbprint&#39;s</span>
+<span class="c1"># own wiring (e.g. ``ExecutePreprocessor.enabled`` only reaches the convert pass</span>
+<span class="c1"># here, triggering a second execution). Maps each managed path — and its CLI</span>
+<span class="c1"># alias form — to the nbprint field that should be used instead.</span>
+<span class="n">_NBPRINT_MANAGED_TRAITS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;NbConvertApp.export_format&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;target&#39; field&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;target&#39; field&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;TemplateExporter.template_name&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;template&#39; field&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;template&#39; field&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NbConvertApp.output_base&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;naming&#39;/&#39;root&#39; fields&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;naming&#39;/&#39;root&#39; fields&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ExecutePreprocessor.timeout&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;timeout&#39; field&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ExecutePreprocessor.enabled&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;execute&#39; field&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;execute&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;execute&#39; field&quot;</span><span class="p">,</span>
+<span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_run_nbconvert</span><span class="p">(</span><span class="n">argv</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -302,6 +321,32 @@
     <span class="n">execute</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">600</span>
     <span class="n">template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;nbprint&quot;</span>
+
+    <span class="c1"># Generic passthrough for any nbconvert / traitlets configuration. Maps 1:1</span>
+    <span class="c1"># onto nbconvert&#39;s ``--Class.trait=value`` CLI options, so anything</span>
+    <span class="c1"># configurable on an exporter, preprocessor, or the app itself is reachable</span>
+    <span class="c1"># without nbprint needing a dedicated field per option. Accepts either flat</span>
+    <span class="c1"># dotted keys or nested namespaces (handled identically):</span>
+    <span class="c1">#</span>
+    <span class="c1">#   nbconvert_config:</span>
+    <span class="c1">#     WebPDFExporter.page_render_timeout: 5000   # ms to wait for JS before PDF</span>
+    <span class="c1">#     HTMLExporter:</span>
+    <span class="c1">#       embed_images: true</span>
+    <span class="c1">#     TemplateExporter.exclude_input: true</span>
+    <span class="c1">#</span>
+    <span class="c1"># The nested form maps cleanly onto a hydra/lerna CLI override:</span>
+    <span class="c1">#   ++nbprint.outputs.nbconvert_config.WebPDFExporter.page_render_timeout=5000</span>
+    <span class="c1">#</span>
+    <span class="c1"># Applied to the conversion (exporter) pass. Scalars pass through directly;</span>
+    <span class="c1"># bools render as ``True``/``False``; lists/tuples are JSON-encoded.</span>
+    <span class="n">nbconvert_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Generic nbconvert/traitlets configuration for the conversion pass. &quot;</span>
+            <span class="s2">&quot;Keys are traitlet paths (flat &#39;Class.trait&#39; or nested) mapping onto &quot;</span>
+            <span class="s2">&quot;nbconvert&#39;s &#39;--Class.trait=value&#39; CLI options.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
 
     <span class="c1"># TODO: maybe allow collecting by index</span>
     <span class="c1"># collect_cells: list[int] = Field(default=[], description=&quot;List of cell indices to collect outputs from.&quot;)</span>
@@ -372,6 +417,71 @@
                 <span class="k">return</span> <span class="n">tag</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;nbprint:output:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="kc">None</span>
 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_flatten_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Flatten nested traitlets namespaces into dotted-path keys.</span>
+
+<span class="sd">        ``{&quot;WebPDFExporter&quot;: {&quot;page_render_timeout&quot;: 5000}}`` becomes</span>
+<span class="sd">        ``{&quot;WebPDFExporter.page_render_timeout&quot;: 5000}``. Flat keys are passed</span>
+<span class="sd">        through unchanged, so flat and nested inputs normalize identically.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">flat</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">_walk</span><span class="p">(</span><span class="n">mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">_walk</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">flat</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="n">_walk</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">flat</span>
+
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;nbconvert_config&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reject_managed_traits</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reject traitlet paths that nbprint already manages via its own fields.</span>
+
+<span class="sd">        These would silently shadow nbprint&#39;s wiring (and the</span>
+<span class="sd">        ``ExecutePreprocessor.*`` ones only reach the convert pass here, so they</span>
+<span class="sd">        either no-op or trigger an unwanted second execution). Point the user at</span>
+<span class="sd">        the dedicated field instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_flatten_config</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+            <span class="n">hint</span> <span class="o">=</span> <span class="n">_NBPRINT_MANAGED_TRAITS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">hint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;nbconvert_config key </span><span class="si">{</span><span class="n">path</span><span class="si">!r}</span><span class="s2"> is managed by nbprint; set </span><span class="si">{</span><span class="n">hint</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_format_nbconvert_config_args</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Translate a traitlets config mapping into nbconvert CLI args.</span>
+
+<span class="sd">        Keys map onto nbconvert&#39;s ``--Class.trait=value`` CLI options. Both</span>
+<span class="sd">        shapes are accepted and treated identically, so the same option is</span>
+<span class="sd">        reachable from flat YAML, nested YAML, or a hydra/lerna CLI override:</span>
+
+<span class="sd">            {&quot;WebPDFExporter.page_render_timeout&quot;: 5000}          # flat dotted key</span>
+<span class="sd">            {&quot;WebPDFExporter&quot;: {&quot;page_render_timeout&quot;: 5000}}     # nested namespaces</span>
+
+<span class="sd">        Nested dicts are flattened into dotted paths (mirroring traitlets&#39; own</span>
+<span class="sd">        hierarchical ``Config`` model). Booleans render as ``True``/``False``;</span>
+<span class="sd">        ints/floats/strings pass through as-is; any other value (list, tuple)</span>
+<span class="sd">        is JSON-encoded so container traits round-trip through the CLI.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">args</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">NBConvertOutputs</span><span class="o">.</span><span class="n">_flatten_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="n">rendered</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s2">&quot;False&quot;</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+                <span class="n">rendered</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rendered</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">rendered</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">args</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_cell_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract outputs from selected cells into the context.&quot;&quot;&quot;</span>
         <span class="c1"># We&#39;re going to:</span>
@@ -428,6 +538,9 @@
             <span class="sa">f</span><span class="s2">&quot;--output=</span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="sa">f</span><span class="s2">&quot;--template=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="p">]</span>
+
+        <span class="c1"># Generic nbconvert/traitlets passthrough (e.g. WebPDFExporter.page_render_timeout)</span>
+        <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_format_nbconvert_config_args</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbconvert_config</span><span class="p">))</span>
 
         <span class="c1"># We have some cheats here because we have to</span>
         <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;_NBPRINT_IN_NBCONVERT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>

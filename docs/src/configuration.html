@@ -418,6 +418,75 @@
 </div>
 <p>Common content types include <code class="docutils literal notranslate"><span class="pre">ContentMarkdown</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentCode</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentPageBreak</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentTableOfContents</span></code>, and the layout containers <code class="docutils literal notranslate"><span class="pre">ContentFlexRowLayout</span></code> / <code class="docutils literal notranslate"><span class="pre">ContentFlexColumnLayout</span></code> / <code class="docutils literal notranslate"><span class="pre">ContentInlineLayout</span></code>.</p>
 </section>
+<section id="output-formats-nbconvert-configuration">
+<h2>Output formats &amp; nbconvert configuration<a class="headerlink" href="#output-formats-nbconvert-configuration" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">outputs</span></code> block (<code class="docutils literal notranslate"><span class="pre">NBConvertOutputs</span></code>) controls how the generated notebook is
+executed and converted. Common fields:</p>
+<div class="table-wrapper colwidths-auto docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">target</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">html</span></code></p></td>
+<td><p>Output format: <code class="docutils literal notranslate"><span class="pre">ipynb</span></code>, <code class="docutils literal notranslate"><span class="pre">html</span></code>, <code class="docutils literal notranslate"><span class="pre">webhtml</span></code>, <code class="docutils literal notranslate"><span class="pre">webpdf</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">execute</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p>Execute the notebook before converting</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">timeout</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">600</span></code></p></td>
+<td><p>Per-cell execution timeout (seconds)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">template</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code></p></td>
+<td><p>nbconvert template name</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="passing-arbitrary-nbconvert-traitlets-options">
+<h3>Passing arbitrary nbconvert / traitlets options<a class="headerlink" href="#passing-arbitrary-nbconvert-traitlets-options" title="Link to this heading">¶</a></h3>
+<p>Anything configurable on an nbconvert exporter, preprocessor, or the app itself
+is reachable generically through <code class="docutils literal notranslate"><span class="pre">nbconvert_config</span></code> — no nbprint field is needed
+per option. Entries map 1:1 onto nbconvert’s <code class="docutils literal notranslate"><span class="pre">--Class.trait=value</span></code> CLI options
+and are applied to the conversion (exporter) pass.</p>
+<p>For example, <a class="reference external" href="https://github.com/jupyter/nbconvert/pull/2250"><code class="docutils literal notranslate"><span class="pre">WebPDFExporter.page_render_timeout</span></code></a>
+controls how long (in ms) the headless browser waits for JavaScript output to
+settle before capturing the PDF — useful for notebooks with heavy interactive
+charts:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">outputs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.NBConvertOutputs</span>
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webpdf</span>
+<span class="w">  </span><span class="nt">nbconvert_config</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># flat dotted keys ...</span>
+<span class="w">    </span><span class="nt">WebPDFExporter.page_render_timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
+<span class="w">    </span><span class="c1"># ... or nested namespaces — both are equivalent</span>
+<span class="w">    </span><span class="nt">TemplateExporter</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">exclude_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>The nested form maps directly onto a hydra/lerna CLI override:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>++outputs.target<span class="o">=</span>webpdf<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>++outputs.nbconvert_config.WebPDFExporter.page_render_timeout<span class="o">=</span><span class="m">5000</span>
+</pre></div>
+</div>
+<p>Scalars pass through as-is, booleans render as <code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>, and lists are
+JSON-encoded so container traits round-trip through the CLI.</p>
+<p>Traits that nbprint already manages — <code class="docutils literal notranslate"><span class="pre">NbConvertApp.export_format</span></code> (<code class="docutils literal notranslate"><span class="pre">to</span></code>),
+<code class="docutils literal notranslate"><span class="pre">TemplateExporter.template_name</span></code> (<code class="docutils literal notranslate"><span class="pre">template</span></code>), <code class="docutils literal notranslate"><span class="pre">NbConvertApp.output_base</span></code>
+(<code class="docutils literal notranslate"><span class="pre">output</span></code>), <code class="docutils literal notranslate"><span class="pre">ExecutePreprocessor.enabled</span></code> (<code class="docutils literal notranslate"><span class="pre">execute</span></code>), and
+<code class="docutils literal notranslate"><span class="pre">ExecutePreprocessor.timeout</span></code> — are rejected in <code class="docutils literal notranslate"><span class="pre">nbconvert_config</span></code> with an error
+pointing at the dedicated field (<code class="docutils literal notranslate"><span class="pre">target</span></code>, <code class="docutils literal notranslate"><span class="pre">template</span></code>, <code class="docutils literal notranslate"><span class="pre">naming</span></code>/<code class="docutils literal notranslate"><span class="pre">root</span></code>,
+<code class="docutils literal notranslate"><span class="pre">execute</span></code>, <code class="docutils literal notranslate"><span class="pre">timeout</span></code>). Set those via their own fields instead.</p>
+</section>
+</section>
 <section id="structured-sections">
 <h2>Structured Sections<a class="headerlink" href="#structured-sections" title="Link to this heading">¶</a></h2>
 <p>For book-style documents, <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> supports 13 ordered sections grouped into 6 logical groups:</p>
@@ -836,6 +905,10 @@ nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="n
 </ul>
 </li>
 <li><a class="reference internal" href="#yaml-first-workflow">YAML-First Workflow</a></li>
+<li><a class="reference internal" href="#output-formats-nbconvert-configuration">Output formats &amp; nbconvert configuration</a><ul>
+<li><a class="reference internal" href="#passing-arbitrary-nbconvert-traitlets-options">Passing arbitrary nbconvert / traitlets options</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#structured-sections">Structured Sections</a><ul>
 <li><a class="reference internal" href="#chapters-list-of-lists-middlematter">Chapters (list-of-lists middlematter)</a></li>
 <li><a class="reference internal" href="#per-section-page-layout">Per-section page layout</a></li>
