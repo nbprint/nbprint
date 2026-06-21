@@ -146,9 +146,7 @@ emsdk
 # Mac
 .DS_Store
 
-# Hydra (anchored to repo root so they don't shadow tracked nbprint/config/outputs
-# or nbprint/config/hydra/**/outputs/ packages, which would otherwise be excluded
-# from VCS-driven sdist builds).
+# Hydra
 /outputs/
 /multirun/
 
