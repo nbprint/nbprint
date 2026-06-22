@@ -1,0 +1,7 @@
+allowBuilds:
+  core-js: true
+  es5-ext: true
+  esbuild: true
+
+patchedDependencies:
+  pagedjs@0.4.3: patches/pagedjs@0.4.3.patch

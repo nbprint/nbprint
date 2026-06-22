@@ -1,6 +1,6 @@
 {
   "name": "nbprint",
-  "version": "0.11.2",
+  "version": "0.12.0",
   "description": "A framework for customizing NBConvert templates and building reports",
   "repository": "git@github.com:nbprint/nbprint.git",
   "author": "Tim Paine <3105306+timkpaine@users.noreply.github.com>",
@@ -31,19 +31,14 @@
     "pagedjs": "^0.4.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.59.1",
-    "cpy": "^13.2.1",
-    "esbuild": "^0.27.4",
+    "@playwright/test": "^1.60.0",
+    "cpy": "^13.2.2",
+    "esbuild": "^0.28.0",
     "lightningcss": "^1.29.3",
     "http-server": "^14.1.1",
     "nodemon": "^3.1.11",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.8.1",
     "typescript": "^6.0.2"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "pagedjs@0.4.3": "patches/pagedjs@0.4.3.patch"
-    }
   }
 }

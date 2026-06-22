@@ -159,6 +159,60 @@ nbprint examples/basic.yaml
 
 Common content types include `ContentMarkdown`, `ContentCode`, `ContentPageBreak`, `ContentTableOfContents`, and the layout containers `ContentFlexRowLayout` / `ContentFlexColumnLayout` / `ContentInlineLayout`.
 
+## Output formats & nbconvert configuration
+
+The `outputs` block (`NBConvertOutputs`) controls how the generated notebook is
+executed and converted. Common fields:
+
+| Field      | Default   | Description                                         |
+| ---------- | --------- | --------------------------------------------------- |
+| `target`   | `html`    | Output format: `ipynb`, `html`, `webhtml`, `webpdf` |
+| `execute`  | `true`    | Execute the notebook before converting              |
+| `timeout`  | `600`     | Per-cell execution timeout (seconds)                |
+| `template` | `nbprint` | nbconvert template name                             |
+
+### Passing arbitrary nbconvert / traitlets options
+
+Anything configurable on an nbconvert exporter, preprocessor, or the app itself
+is reachable generically through `nbconvert_config` — no nbprint field is needed
+per option. Entries map 1:1 onto nbconvert's `--Class.trait=value` CLI options
+and are applied to the conversion (exporter) pass.
+
+For example, [`WebPDFExporter.page_render_timeout`](https://github.com/jupyter/nbconvert/pull/2250)
+controls how long (in ms) the headless browser waits for JavaScript output to
+settle before capturing the PDF — useful for notebooks with heavy interactive
+charts:
+
+```yaml
+outputs:
+  _target_: nbprint.NBConvertOutputs
+  target: webpdf
+  nbconvert_config:
+    # flat dotted keys ...
+    WebPDFExporter.page_render_timeout: 5000
+    # ... or nested namespaces — both are equivalent
+    TemplateExporter:
+      exclude_input: true
+```
+
+The nested form maps directly onto a hydra/lerna CLI override:
+
+```bash
+nbprint examples/basic.yaml \
+  ++outputs.target=webpdf \
+  ++outputs.nbconvert_config.WebPDFExporter.page_render_timeout=5000
+```
+
+Scalars pass through as-is, booleans render as `True`/`False`, and lists are
+JSON-encoded so container traits round-trip through the CLI.
+
+Traits that nbprint already manages — `NbConvertApp.export_format` (`to`),
+`TemplateExporter.template_name` (`template`), `NbConvertApp.output_base`
+(`output`), `ExecutePreprocessor.enabled` (`execute`), and
+`ExecutePreprocessor.timeout` — are rejected in `nbconvert_config` with an error
+pointing at the dedicated field (`target`, `template`, `naming`/`root`,
+`execute`, `timeout`). Set those via their own fields instead.
+
 ## Structured Sections
 
 For book-style documents, `nbprint` supports 13 ordered sections grouped into 6 logical groups:
@@ -194,6 +248,46 @@ content:
 ```
 
 Flat-list `content:` is still fully supported — it is treated as `middlematter`.
+
+### Chapters (list-of-lists middlematter)
+
+For multi-chapter documents, supply `middlematter` as a **list of lists**. Each
+sublist is a chapter: its **first element** is promoted to a chapter separator
+and the remaining elements form the chapter body. nbprint interleaves them in
+document order — `[chapter1-title, *chapter1-body, chapter2-title, *chapter2-body, …]`.
+
+```yaml
+content:
+  middlematter:
+    - # Chapter One — first item becomes the title page
+      - _target_: nbprint.ContentMarkdown
+        content: "# Chapter One"
+      - _target_: nbprint.ContentMarkdown
+        content: "Body of the first chapter…"
+
+    - # Chapter Two
+      - _target_: nbprint.ContentMarkdown
+        content: "# Chapter Two"
+      - _target_: nbprint.ContentMarkdown
+        content: "Body of the second chapter…"
+```
+
+By default each separator renders as a **standalone chapter title page** — a hard
+page break is inserted before and after it. To keep separators inline with their
+chapter body instead, disable the behavior:
+
+```yaml
+content:
+  separator_title_pages: false
+  middlematter:
+    - [...]
+```
+
+The promoted separators are also available directly under the
+`middlematter_separators` section if you prefer to populate them explicitly
+alongside a flat `middlematter` list.
+
+See `examples/chapters.yaml` for a full working example.
 
 ### Per-section page layout
 

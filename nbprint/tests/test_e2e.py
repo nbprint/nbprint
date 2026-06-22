@@ -24,6 +24,7 @@ _integration_templates = (
     "customsize",
     "nonpagedjs",
     "greattables",
+    "chapters",
 )
 _integration_notebooks = (
     "basic",
@@ -143,7 +144,7 @@ def test_run_notebook_ccflow_with_notebook(parameters):
 
 
 def test_multirun():
-    with patch("nbconvert.nbconvertapp.main") as mock_nbconvert_main:
+    with patch("nbprint.config.outputs.nbconvert._run_nbconvert") as mock_nbconvert_main:
         ret = run(
             "examples/parameters.ipynb",
             [
@@ -166,7 +167,10 @@ def test_multirun():
 
 
 def test_email_combine_multirun():
-    with patch("nbconvert.nbconvertapp.main") as mock_nbconvert_main, patch("emails.backend.smtp.backend.SMTPBackend.connection_cls") as mock_smtp_backend:
+    with (
+        patch("nbprint.config.outputs.nbconvert._run_nbconvert") as mock_nbconvert_main,
+        patch("emails.backend.smtp.backend.SMTPBackend.connection_cls") as mock_smtp_backend,
+    ):
         # test inline
         # nbprint examples/basic.ipynb \
         # ++callable=/nbprintx \

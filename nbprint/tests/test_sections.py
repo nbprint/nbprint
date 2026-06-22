@@ -155,6 +155,96 @@ class TestContentMarshall:
         cm = ContentMarshall(middlematter=[a, b], middlematter_separators=[sep])
         assert [c.content for c in cm._middlematter] == ["a", "b", "sep"]
 
+    def test_separator_title_page_css_applied_by_default(self):
+        """Separators render as standalone title pages (break-before/after) by default."""
+        c1_sep = ContentMarkdown(content="chap1-title")
+        c1_a = ContentMarkdown(content="chap1-a")
+        cm = ContentMarshall(middlematter=[[c1_sep, c1_a]])
+        sep_css = cm.middlematter_separators[0].css
+        assert "break-before: page" in sep_css
+        assert "break-after: page" in sep_css
+        # chapter body must not get the title-page break
+        assert "break-before: page" not in (cm.middlematter[0].css or "")
+
+    def test_separator_title_page_css_disabled(self):
+        """separator_title_pages=False leaves separator css untouched."""
+        c1_sep = ContentMarkdown(content="chap1-title")
+        c1_a = ContentMarkdown(content="chap1-a")
+        cm = ContentMarshall(middlematter=[[c1_sep, c1_a]], separator_title_pages=False)
+        assert "break-before: page" not in (cm.middlematter_separators[0].css or "")
+
+    def test_separator_title_page_css_preserves_existing(self):
+        """Existing separator css is preserved when the break rule is appended."""
+        sep = ContentMarkdown(content="chap1-title", css=":scope { color: red; }")
+        body = ContentMarkdown(content="chap1-a")
+        cm = ContentMarshall(middlematter=[[sep, body]])
+        sep_css = cm.middlematter_separators[0].css
+        assert "color: red" in sep_css
+        assert "break-before: page" in sep_css
+
+    def test_separator_title_page_css_idempotent(self):
+        """Re-validating an already-configured marshall does not duplicate the break rule."""
+        c1_sep = ContentMarkdown(content="chap1-title")
+        c1_a = ContentMarkdown(content="chap1-a")
+        cm = ContentMarshall(middlematter=[[c1_sep, c1_a]])
+        # Re-run the after-validator by constructing from a dump
+        cm2 = ContentMarshall.model_validate(cm)
+        sep_css = cm2.middlematter_separators[0].css
+        assert sep_css.count("break-before: page") == 1
+
+    def test_middlematter_list_of_lists_via_dict_loader(self):
+        """Configuration loader preserves list-of-lists chapters from a content dict (YAML path)."""
+        from nbprint.config.core.config import Configuration
+
+        cm = Configuration._convert_content_from_dict(
+            {
+                "middlematter": [
+                    [
+                        {"_target_": "nbprint.ContentMarkdown", "content": "# Chapter 1"},
+                        {"_target_": "nbprint.ContentMarkdown", "content": "c1 body"},
+                    ],
+                    [
+                        {"_target_": "nbprint.ContentMarkdown", "content": "# Chapter 2"},
+                        {"_target_": "nbprint.ContentMarkdown", "content": "c2 body"},
+                    ],
+                ]
+            }
+        )
+        assert [c.content for c in cm.middlematter_separators] == ["# Chapter 1", "# Chapter 2"]
+        assert [c.content for c in cm.middlematter] == ["c1 body", "c2 body"]
+        assert cm.middlematter_chapter_sizes == [1, 1]
+        assert [c.content for c in cm._middlematter] == ["# Chapter 1", "c1 body", "# Chapter 2", "c2 body"]
+
+    def test_middlematter_list_of_lists_via_list_loader(self):
+        """Bare-list content loader also preserves list-of-lists chapters."""
+        from nbprint.config.core.config import Configuration
+
+        cm = Configuration._convert_content_from_list(
+            [
+                [
+                    {"_target_": "nbprint.ContentMarkdown", "content": "# Chapter 1"},
+                    {"_target_": "nbprint.ContentMarkdown", "content": "c1 body"},
+                ],
+                [
+                    {"_target_": "nbprint.ContentMarkdown", "content": "# Chapter 2"},
+                ],
+            ]
+        )
+        assert [c.content for c in cm._middlematter] == ["# Chapter 1", "c1 body", "# Chapter 2"]
+
+    def test_flat_list_loader_backward_compat(self):
+        """Flat content list still lands entirely in middlematter."""
+        from nbprint.config.core.config import Configuration
+
+        cm = Configuration._convert_content_from_list(
+            [
+                {"_target_": "nbprint.ContentMarkdown", "content": "a"},
+                {"_target_": "nbprint.ContentMarkdown", "content": "b"},
+            ]
+        )
+        assert [c.content for c in cm._middlematter] == ["a", "b"]
+        assert cm.middlematter_chapter_sizes is None
+
     def test_auto_table_of_contents_injects_when_empty(self):
         """auto_table_of_contents=True injects a ContentTableOfContents when section is empty."""
         from nbprint.config.content import ContentTableOfContents
@@ -271,6 +361,7 @@ class TestSectionConstants:
             "section_styles",
             "auto_table_of_contents",
             "middlematter_chapter_sizes",
+            "separator_title_pages",
         }
 
     def test_section_groups_keys_match_order(self):

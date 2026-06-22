@@ -1,6 +1,7 @@
+import json
 import os
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 from ccflow import PyObjectPath
 from nbformat import NotebookNode
@@ -11,11 +12,70 @@ from nbprint.config import Configuration, Outputs, OutputsProcessing
 __all__ = ("HTMLOutputs", "NBConvertOutputs", "NBConvertShortCircuitOutputs", "NotebookOutputs", "PDFOutputs", "WebHTMLOutputs", "short_circuit_hook")
 
 
+# nbconvert/traitlets paths that nbprint already drives through its own fields.
+# Allowing these in ``nbconvert_config`` would silently shadow or fight nbprint's
+# own wiring (e.g. ``ExecutePreprocessor.enabled`` only reaches the convert pass
+# here, triggering a second execution). Maps each managed path — and its CLI
+# alias form — to the nbprint field that should be used instead.
+_NBPRINT_MANAGED_TRAITS: dict[str, str] = {
+    "NbConvertApp.export_format": "the 'target' field",
+    "to": "the 'target' field",
+    "TemplateExporter.template_name": "the 'template' field",
+    "template": "the 'template' field",
+    "NbConvertApp.output_base": "the 'naming'/'root' fields",
+    "output": "the 'naming'/'root' fields",
+    "ExecutePreprocessor.timeout": "the 'timeout' field",
+    "ExecutePreprocessor.enabled": "the 'execute' field",
+    "execute": "the 'execute' field",
+}
+
+
+def _run_nbconvert(argv: list[str]) -> None:
+    """Run nbconvert in-process without reusing the global NbConvertApp singleton.
+
+    nbconvert's ``main()`` goes through ``NbConvertApp.launch_instance``, which caches
+    one app on the class. Reusing it across conversions in a single process leaks config
+    (notably ``ExecutePreprocessor.enabled``), so a later plain convert pass re-executes
+    the notebook. A fresh instance per call avoids that.
+    """
+    from nbconvert.nbconvertapp import NbConvertApp
+
+    app = NbConvertApp()
+    app.initialize(argv)
+    app.start()  # ty: ignore[missing-argument]
+
+
 class NBConvertOutputs(Outputs):
     target: Literal["ipynb", "notebook", "html", "webhtml", "pdf", "webpdf"] | None = "html"  # TODO: nbconvert types
     execute: bool | None = True
     timeout: int | None = 600
     template: str | None = "nbprint"
+
+    # Generic passthrough for any nbconvert / traitlets configuration. Maps 1:1
+    # onto nbconvert's ``--Class.trait=value`` CLI options, so anything
+    # configurable on an exporter, preprocessor, or the app itself is reachable
+    # without nbprint needing a dedicated field per option. Accepts either flat
+    # dotted keys or nested namespaces (handled identically):
+    #
+    #   nbconvert_config:
+    #     WebPDFExporter.page_render_timeout: 5000   # ms to wait for JS before PDF
+    #     HTMLExporter:
+    #       embed_images: true
+    #     TemplateExporter.exclude_input: true
+    #
+    # The nested form maps cleanly onto a hydra/lerna CLI override:
+    #   ++nbprint.outputs.nbconvert_config.WebPDFExporter.page_render_timeout=5000
+    #
+    # Applied to the conversion (exporter) pass. Scalars pass through directly;
+    # bools render as ``True``/``False``; lists/tuples are JSON-encoded.
+    nbconvert_config: dict[str, Any] = Field(
+        default_factory=dict,
+        description=(
+            "Generic nbconvert/traitlets configuration for the conversion pass. "
+            "Keys are traitlet paths (flat 'Class.trait' or nested) mapping onto "
+            "nbconvert's '--Class.trait=value' CLI options."
+        ),
+    )
 
     # TODO: maybe allow collecting by index
     # collect_cells: list[int] = Field(default=[], description="List of cell indices to collect outputs from.")
@@ -86,6 +146,71 @@ class NBConvertOutputs(Outputs):
                 return tag.split("nbprint:output:")[1]
         return None
 
+    @staticmethod
+    def _flatten_config(config: dict[str, Any]) -> dict[str, Any]:
+        """Flatten nested traitlets namespaces into dotted-path keys.
+
+        ``{"WebPDFExporter": {"page_render_timeout": 5000}}`` becomes
+        ``{"WebPDFExporter.page_render_timeout": 5000}``. Flat keys are passed
+        through unchanged, so flat and nested inputs normalize identically.
+        """
+        flat: dict[str, Any] = {}
+
+        def _walk(mapping: dict[str, Any], prefix: str) -> None:
+            for key, value in mapping.items():
+                path = f"{prefix}{key}"
+                if isinstance(value, dict):
+                    _walk(value, prefix=f"{path}.")
+                else:
+                    flat[path] = value
+
+        _walk(config, prefix="")
+        return flat
+
+    @field_validator("nbconvert_config", mode="after")
+    @classmethod
+    def _reject_managed_traits(cls, v: dict[str, Any]) -> dict[str, Any]:
+        """Reject traitlet paths that nbprint already manages via its own fields.
+
+        These would silently shadow nbprint's wiring (and the
+        ``ExecutePreprocessor.*`` ones only reach the convert pass here, so they
+        either no-op or trigger an unwanted second execution). Point the user at
+        the dedicated field instead.
+        """
+        for path in cls._flatten_config(v):
+            hint = _NBPRINT_MANAGED_TRAITS.get(path)
+            if hint is not None:
+                msg = f"nbconvert_config key {path!r} is managed by nbprint; set {hint} instead."
+                raise ValueError(msg)
+        return v
+
+    @staticmethod
+    def _format_nbconvert_config_args(config: dict[str, Any]) -> list[str]:
+        """Translate a traitlets config mapping into nbconvert CLI args.
+
+        Keys map onto nbconvert's ``--Class.trait=value`` CLI options. Both
+        shapes are accepted and treated identically, so the same option is
+        reachable from flat YAML, nested YAML, or a hydra/lerna CLI override:
+
+            {"WebPDFExporter.page_render_timeout": 5000}          # flat dotted key
+            {"WebPDFExporter": {"page_render_timeout": 5000}}     # nested namespaces
+
+        Nested dicts are flattened into dotted paths (mirroring traitlets' own
+        hierarchical ``Config`` model). Booleans render as ``True``/``False``;
+        ints/floats/strings pass through as-is; any other value (list, tuple)
+        is JSON-encoded so container traits round-trip through the CLI.
+        """
+        args: list[str] = []
+        for path, value in NBConvertOutputs._flatten_config(config).items():
+            if isinstance(value, bool):
+                rendered = "True" if value else "False"
+            elif isinstance(value, (str, int, float)):
+                rendered = str(value)
+            else:
+                rendered = json.dumps(value)
+            args.append(f"--{path}={rendered}")
+        return args
+
     def _extract_cell_outputs(self) -> None:
         """Extract outputs from selected cells into the context."""
         # We're going to:
@@ -124,8 +249,6 @@ class NBConvertOutputs(Outputs):
             self._collected_cells[output_key].extend(outputs)
 
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
-        from nbconvert.nbconvertapp import main as execute_nbconvert
-
         # Run parent to create notebook
         notebook = super().run(config=config, gen=gen)
 
@@ -142,6 +265,9 @@ class NBConvertOutputs(Outputs):
             f"--output={output}",
             f"--template={self.template}",
         ]
+
+        # Generic nbconvert/traitlets passthrough (e.g. WebPDFExporter.page_render_timeout)
+        cmd.extend(self._format_nbconvert_config_args(self.nbconvert_config))
 
         # We have some cheats here because we have to
         os.environ["_NBPRINT_IN_NBCONVERT"] = "1"
@@ -160,7 +286,7 @@ class NBConvertOutputs(Outputs):
             cmd[0] = str(self.executed_notebook)
 
             # Execute nbconvert
-            execute_nbconvert(nbex_cmd)
+            _run_nbconvert(nbex_cmd)
 
             # Extract cells by tags
             self._extract_cell_outputs()
@@ -170,7 +296,7 @@ class NBConvertOutputs(Outputs):
 
         if not (self.execute and self.target == "ipynb"):
             # If target is notebook, we already did it above
-            execute_nbconvert(cmd)
+            _run_nbconvert(cmd)
 
         if self.nbconvert_hook and self.nbconvert_hook.object(config) in (OutputsProcessing.STOP, None):
             return OutputsProcessing.STOP
