@@ -209,4 +209,5 @@ def test_email_combine_multirun():
         msg = mock_smtp_backend.return_value.sendmail.call_args[1]
         assert msg["from_addr"] == "test"
         assert msg["to_addrs"] == ["test"]
-        assert "Subject: basic-*" in msg["msg"]
+        message = msg["msg"].decode() if isinstance(msg["msg"], bytes) else msg["msg"]
+        assert "Subject: basic-*" in message
