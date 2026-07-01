@@ -441,7 +441,7 @@ playwright-cli<span class="w"> </span>click<span class="w"> </span>e7
 <span class="c1">// seed: tests/seed.spec.ts</span>
 <span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">test</span><span class="p">,</span><span class="w"> </span><span class="nx">expect</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">&#39;./fixtures&#39;</span><span class="p">;</span><span class="w">   </span><span class="c1">// or &#39;@playwright/test&#39; if no fixtures file</span>
 
-<span class="nx">test</span><span class="p">.</span><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;Singing in and out&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="nx">test</span><span class="p">.</span><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;Signing in and out&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;should sign in&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="nx">page</span><span class="w"> </span><span class="p">})</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// 1. Navigate to the application</span>
 <span class="w">    </span><span class="c1">// (handled by the seed fixture)</span>
@@ -504,7 +504,7 @@ playwright-cli<span class="w"> </span>attach<span class="w"> </span>tw-XXXX
 <p>The test is paused at the start. Step forward or run to until just before the failing action or assertion, then diagnose:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>playwright-cli<span class="w"> </span>snapshot<span class="w">                </span><span class="c1"># did the element change / move / rename?</span>
 playwright-cli<span class="w"> </span>console<span class="w">                 </span><span class="c1"># app-side errors?</span>
-playwright-cli<span class="w"> </span>network<span class="w">                 </span><span class="c1"># failed request? wrong payload?</span>
+playwright-cli<span class="w"> </span>requests<span class="w">                </span><span class="c1"># failed request? wrong payload?</span>
 playwright-cli<span class="w"> </span>show<span class="w"> </span>--annotate<span class="w">         </span><span class="c1"># ask the user to point somewhere</span>
 </pre></div>
 </div>

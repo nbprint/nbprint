@@ -431,6 +431,10 @@ playwright-cli<span class="w"> </span>video-start<span class="w"> </span>video.w
 playwright-cli<span class="w"> </span>video-chapter<span class="w"> </span><span class="s2">&quot;Chapter Title&quot;</span><span class="w"> </span>--description<span class="o">=</span><span class="s2">&quot;Details&quot;</span><span class="w"> </span>--duration<span class="o">=</span><span class="m">2000</span>
 playwright-cli<span class="w"> </span>video-stop
 
+<span class="c1"># annotate each subsequent action (click, type, ...) with a callout naming the action and highlighting the target</span>
+playwright-cli<span class="w"> </span>video-show-actions<span class="w"> </span>--duration<span class="o">=</span><span class="m">600</span><span class="w"> </span>--position<span class="o">=</span>top-right
+playwright-cli<span class="w"> </span>video-hide-actions
+
 <span class="c1"># launch the dashboard for UI review / design feedback — user annotates the page, you receive the annotated screenshot, snapshot, and notes</span>
 playwright-cli<span class="w"> </span>show<span class="w"> </span>--annotate
 
@@ -497,6 +501,16 @@ playwright-cli<span class="w"> </span>close
 playwright-cli<span class="w"> </span>-s<span class="o">=</span>msedge<span class="w"> </span>detach
 <span class="c1"># Delete user data for the default session</span>
 playwright-cli<span class="w"> </span>delete-data
+</pre></div>
+</div>
+</section>
+<section id="urls-with-on-windows">
+<h2>URLs with <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> on Windows<a class="headerlink" href="#urls-with-on-windows" title="Link to this heading">¶</a></h2>
+<p>On Windows, <code class="docutils literal notranslate"><span class="pre">cmd.exe</span></code> and PowerShell treat <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> as a command separator, so URLs with multiple query parameters get truncated before <code class="docutils literal notranslate"><span class="pre">playwright-cli</span></code> runs. Escape <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> with <code class="docutils literal notranslate"><span class="pre">^&amp;</span></code> in <code class="docutils literal notranslate"><span class="pre">cmd.exe</span></code>, or use <code class="docutils literal notranslate"><span class="pre">--%</span></code> in PowerShell:</p>
+<div class="highlight-batch notranslate"><div class="highlight"><pre><span></span>playwright-cli goto <span class="s2">&quot;https://example.com/?a=1^&amp;b=2&quot;</span>
+</pre></div>
+</div>
+<div class="highlight-powershell notranslate"><div class="highlight"><pre><span></span><span class="n">playwright-cli</span> <span class="p">--%</span> <span class="n">goto</span> <span class="s2">&quot;https://example.com/?a=1&amp;b=2&quot;</span>
 </pre></div>
 </div>
 </section>
@@ -702,6 +716,7 @@ playwright-cli<span class="w"> </span>show<span class="w"> </span>--annotate
 </li>
 <li><a class="reference internal" href="#raw-output">Raw output</a></li>
 <li><a class="reference internal" href="#open-parameters">Open parameters</a></li>
+<li><a class="reference internal" href="#urls-with-on-windows">URLs with <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> on Windows</a></li>
 <li><a class="reference internal" href="#snapshots">Snapshots</a></li>
 <li><a class="reference internal" href="#targeting-elements">Targeting elements</a></li>
 <li><a class="reference internal" href="#browser-sessions">Browser Sessions</a></li>
