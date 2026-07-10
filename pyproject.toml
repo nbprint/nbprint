@@ -14,7 +14,6 @@ authors = [
 description = "A framework for customizing NBConvert templates and building reports"
 readme = "README.md"
 license = { text = "Apache-2.0" }
-<<<<<<< before updating
 requires-python = ">=3.10"
 keywords = [
     "Jupyter",
@@ -25,11 +24,6 @@ keywords = [
     "Reports",
     "Reporting",
 ]
-=======
-version = "0.1.0"
-requires-python = ">=3.11"
-keywords = []
->>>>>>> after updating
 
 classifiers = [
     "Development Status :: 4 - Beta",
