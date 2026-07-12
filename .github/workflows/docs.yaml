@@ -40,7 +40,8 @@ jobs:
 
       - name: Install from wheel
         run: |
-          uv pip install dist/*.whl --target .
+          uv pip install dist/*.whl
+          uv pip install dist/*.whl --target . --no-deps
           uv pip install .[develop]
           uv pip install yardang
         if: github.event_name == 'workflow_run'
@@ -50,7 +51,6 @@ jobs:
           uv pip install .[develop]
           uv pip install yardang
         if: github.event_name == 'workflow_dispatch'
-
 
       - name: Run tests to generate HTML outputs
         run: |
