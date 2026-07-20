@@ -35,11 +35,8 @@ jobs:
     steps:
     - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
-<<<<<<< before updating
         lfs: true
-=======
         persist-credentials: false
->>>>>>> after updating
 
     - uses: actions-ext/python/setup@5f78fa2cadf4dad2a7cded3c72655bcdd3dda735
       with:
