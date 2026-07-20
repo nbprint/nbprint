@@ -35,13 +35,17 @@ jobs:
     steps:
     - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
+<<<<<<< before updating
         lfs: true
+=======
+        persist-credentials: false
+>>>>>>> after updating
 
-    - uses: actions-ext/python/setup@main
+    - uses: actions-ext/python/setup@5f78fa2cadf4dad2a7cded3c72655bcdd3dda735
       with:
         version: ${{ matrix.python-version }}
 
-    - uses: actions-ext/node/setup@main
+    - uses: actions-ext/node/setup@3478453a763ed3c8c6eba05a092ab81a265c5492
       with:
         version: ${{ matrix.node-version }}
 
@@ -94,7 +98,7 @@ jobs:
       if: ${{ failure() && matrix.os == 'ubuntu-latest' }}
 
     - name: Upload test results
-      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: test-results-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.node-version }}
         path: '**/junit.xml'
@@ -156,17 +160,17 @@ jobs:
       run: make dist
       if: matrix.os == 'ubuntu-latest'
 
-    - uses: actions-ext/python/test-wheel@main
+    - uses: actions-ext/python/test-wheel@5f78fa2cadf4dad2a7cded3c72655bcdd3dda735
       with:
         module: nbprint
       if: matrix.os == 'ubuntu-latest'
 
-    - uses: actions-ext/python/test-sdist@main
+    - uses: actions-ext/python/test-sdist@5f78fa2cadf4dad2a7cded3c72655bcdd3dda735
       with:
         module: nbprint
       if: matrix.os == 'ubuntu-latest'
 
-    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: dist-${{matrix.os}}
         path: dist

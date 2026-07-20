@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     steps:
+<<<<<<< before updating
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: actions-ext/python/setup@main
 
@@ -75,3 +76,42 @@ jobs:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/html
+=======
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      with:
+        persist-credentials: false
+
+    - uses: actions-ext/python/setup@5f78fa2cadf4dad2a7cded3c72655bcdd3dda735
+
+    - name: Download dist from build
+      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+      with:
+        pattern: dist-ubuntu-latest*
+        merge-multiple: true
+        path: dist
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+      if: github.event_name == 'workflow_run'
+
+    - name: Install from wheel
+      run: |
+        uv pip install dist/*.whl
+        uv pip install dist/*.whl --target . --no-deps
+        uv pip install yardang
+      if: github.event_name == 'workflow_run'
+
+    - name: Install from source (manual trigger)
+      run: |
+        uv pip install .[develop]
+        uv pip install yardang
+      if: github.event_name == 'workflow_dispatch'
+
+    - run: yardang build
+
+    - uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+      with:
+        publish_branch: gh-pages
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/html
+>>>>>>> after updating
