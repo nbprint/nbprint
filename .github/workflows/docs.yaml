@@ -16,11 +16,11 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     steps:
-    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         persist-credentials: false
 
-    - uses: actions-ext/python/setup@5f78fa2cadf4dad2a7cded3c72655bcdd3dda735
+    - uses: actions-ext/python/setup@6e1b91a408ea89f49bc8aff8724f83826f7b5446
 
     - uses: actions-ext/node/setup@main
 
