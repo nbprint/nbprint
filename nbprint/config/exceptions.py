@@ -1,8 +1,6 @@
 __all__ = (
     "NBPrintBadScopeError",
     "NBPrintConfigurationError",
-    "NBPrintConfigurationError",
-    "NBPrintGenerationError",
     "NBPrintGenerationError",
     "NBPrintNullCellError",
     "NBPrintPathIsYamlError",
