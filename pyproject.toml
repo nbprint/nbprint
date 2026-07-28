@@ -82,7 +82,7 @@ develop = [
     "matplotlib",
     "nbprint-example-plugin",
     "pandas",
-    "perspective-python>=3",
+    "perspective-python>=3,<5",
     "plotly",
     "pyarrow",
     "seaborn",
