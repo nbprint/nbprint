@@ -16,54 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     steps:
-<<<<<<< before updating
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      with:
-        persist-credentials: false
-
-    - uses: actions-ext/python/setup@6e1b91a408ea89f49bc8aff8724f83826f7b5446
-
-    - uses: actions-ext/node/setup@main
-
-    - name: Install dependencies
-      run: |
-        sudo apt install pandoc
-        uv pip install playwright
-        playwright install chromium
-
-    - name: Download dist from build
-      uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
-      with:
-        pattern: dist-ubuntu-latest*
-        merge-multiple: true
-        path: dist
-        run-id: ${{ github.event.workflow_run.id }}
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        repository: ${{ github.repository }}
-      if: github.event_name == 'workflow_run'
-
-    - name: Install from wheel
-      run: |
-        uv pip install dist/*.whl
-        uv pip install dist/*.whl --target . --no-deps
-        uv pip install .[develop]
-        uv pip install yardang
-      if: github.event_name == 'workflow_run'
-
-    - name: Install from source (manual trigger)
-      run: |
-        uv pip install .[develop]
-        uv pip install yardang
-      if: github.event_name == 'workflow_dispatch'
-
-    - run: yardang build
-
-    - uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
-      with:
-        publish_branch: gh-pages
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs/html
-=======
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
@@ -71,6 +23,15 @@ jobs:
 
       - name: Setup Python
         uses: actions-ext/python/setup@6e1b91a408ea89f49bc8aff8724f83826f7b5446
+
+      - name: Setup Node.JS
+        uses: actions-ext/node/setup@main
+
+      - name: Install dependencies
+        run: |
+          sudo apt install pandoc
+          uv pip install playwright
+          playwright install chromium
 
       - name: Download distributions
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8
@@ -87,6 +48,7 @@ jobs:
         run: |
           uv pip install dist/*.whl
           uv pip install dist/*.whl --target . --no-deps
+          uv pip install .[develop]
           uv pip install yardang
         if: github.event_name == 'workflow_run'
 
@@ -105,4 +67,3 @@ jobs:
           publish_branch: gh-pages
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/html
->>>>>>> after updating
