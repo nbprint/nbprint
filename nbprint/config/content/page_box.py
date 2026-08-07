@@ -94,8 +94,8 @@ class ContentPageBox(Content):
         ),
     )
 
-    # Per-page overrides. These serialize and round-trip, but nothing yet
-    # emits the named @page rule that would route this box to them.
+    # Per-page overrides. ``PageGlobal.render`` turns these into a named ``@page`` rule and routes the box
+    # to it; a box cannot emit that itself, since cell CSS is wrapped in ``@scope``.
     page_size: PageSize | None = Field(
         default=None,
         description="Per-box override for the document page size. Falls back to the global Page.size.",

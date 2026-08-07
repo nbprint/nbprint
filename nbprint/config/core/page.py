@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Iterator, Tuple
 
 from nbformat import NotebookNode
 from pydantic import Field, field_validator
@@ -8,6 +8,26 @@ from nbprint.config.common import PageOrientation, PageSize, Style
 from nbprint.config.exceptions import NBPrintNullCellError
 
 from .content import Section
+
+
+def _iter_page_boxes(content) -> "Iterator":
+    """Yield every ``ContentPageBox`` in a ``ContentMarshall``, including nested ones."""
+    from nbprint.config.content.page_box import ContentPageBox
+
+    from .content import SECTION_ORDER
+
+    def walk(node) -> "Iterator":
+        if isinstance(node, ContentPageBox):
+            yield node
+        children = getattr(node, "content", None)
+        if isinstance(children, list):
+            for child in children:
+                yield from walk(child)
+
+    for section in SECTION_ORDER:
+        for item in getattr(content, section, None) or []:
+            yield from walk(item)
+
 
 PAGE_REGION_ATTRS = (
     "top",
@@ -232,7 +252,7 @@ class PageGlobal(Page):
 
     css: str = ""
 
-    def render(self, **_) -> None:
+    def render(self, config: "Configuration" = None, **_) -> None:
         if "@page { size:" not in self.css:
             if isinstance(self.size, tuple):
                 self.css += f"\n@page {{ size: {self.size[0]}in {self.size[1]}in; }}"
@@ -258,6 +278,33 @@ class PageGlobal(Page):
             if inner_rules:
                 self.css += f"\n@page {section_name} {{ {' '.join(inner_rules)} }}"
             self.css += f'\n[data-nbprint-section="{section_name}"] {{ page: {section_name}; }}'
+
+        self._render_page_box_rules(config)
+
+    def _render_page_box_rules(self, config: "Configuration" = None) -> None:
+        """Emit a named ``@page`` rule for every page-box carrying per-page overrides.
+
+        A page-box cannot emit this itself: cell CSS is wrapped in ``@scope`` by the template, and an
+        ``@page`` rule inside a scope does nothing. The page model is the one place that emits unscoped
+        CSS, and it renders before content, so it reaches into the already-built content tree the same way
+        the per-section rules above work off ``pages``.
+        """
+        content = getattr(config, "content", None) if config is not None else None
+        if content is None:
+            return
+        for box in _iter_page_boxes(content):
+            if not (box.page_size or box.page_orientation or box.page_margins):
+                continue
+            name = f"nbprint-page-box-{box._id}"
+            if f"@page {name}" in self.css:
+                continue
+            size = box.page_size or self.size
+            orientation = box.page_orientation or self.orientation
+            rules = [f"size: {size[0]}in {size[1]}in;" if isinstance(size, tuple) else f"size: {size.value} {orientation.value};"]
+            if box.page_margins:
+                rules.append(f"margin: {box.page_margins};")
+            self.css += f"\n@page {name} {{ {' '.join(rules)} }}"
+            self.css += f'\n[data-nbprint-page-box="{box._id}"] {{ page: {name}; }}'
 
     @field_validator("pages", mode="before")
     @classmethod
