@@ -97,7 +97,7 @@ class Configuration(CallableModel, BaseModel):
 
     @field_validator("layout_overlays", mode="before")
     @classmethod
-    def _dispatch_layout_overlays(cls, v):
+    def _dispatch_layout_overlays(cls, v) -> list[LayoutOverlay]:
         """Route each spec to its overlay subclass before the field validates it.
 
         A pydantic discriminated union would be the obvious tool, but it requires

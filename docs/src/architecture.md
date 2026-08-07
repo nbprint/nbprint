@@ -273,7 +273,7 @@ there is one source of truth for "what does `display: flex` mean."
 | `grid-2x2`    | `display: grid; grid-template-columns: repeat(2, 1fr)`                          | 4-cell dashboards                    |
 | `grid-3x2`    | `display: grid; grid-template-columns: repeat(3, 1fr)`                          | 6-cell dashboards                    |
 | `grid-3x3`    | `display: grid; grid-template-columns: repeat(3, 1fr)`                          | 9-cell mosaics                       |
-| `grid`        | bare `display: grid` for named-area templates                                 | custom grids with `grid_template`    |
+| `grid`        | bare `display: grid` for named-area templates                                   | custom grids with `grid_template`    |
 | `flex-row`    | `display: flex; flex-direction: row` (shared with `ContentFlexRowLayout`)       | side-by-side panels                  |
 | `flex-column` | `display: flex; flex-direction: column` (shared with `ContentFlexColumnLayout`) | stacked panels with gap              |
 | `inline`      | `display: block` + per-sibling `margin-left` for `gap`                          | header/badge rows                    |
