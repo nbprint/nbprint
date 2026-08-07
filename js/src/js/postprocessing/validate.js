@@ -23,6 +23,10 @@ function removeBlankPages() {
     // Intentional blank pages are preserved
     if (blankAttr === "intentional") continue;
 
+    // A page-box guarantees at least one page even when it is empty, so a page
+    // it occupies is never an accidental blank.
+    if (page.querySelector("[data-nbprint-page-box]")) continue;
+
     // Remove pages explicitly marked as accidental blanks by the
     // pagedjs afterPageLayout handler.
     if (blankAttr === "true") {
@@ -129,6 +133,29 @@ function describeElement(el) {
 }
 
 /**
+ * Report page-boxes that produced fewer pages than they asked for.
+ *
+ * Padding a box up to its minimum would mean fabricating pagedjs page chrome, so this reports the
+ * shortfall rather than inventing pages: a wrong page count is at least visible.
+ *
+ * @returns {Array<{id: string, want: number, got: number}>}
+ */
+function checkMinPages() {
+  const shortfalls = [];
+  for (const box of document.querySelectorAll("[data-nbprint-min-pages]")) {
+    const want = parseInt(box.getAttribute("data-nbprint-min-pages"), 10);
+    const id = box.getAttribute("data-nbprint-page-box");
+    if (!Number.isFinite(want) || !id) continue;
+    let got = 0;
+    for (const page of document.querySelectorAll(".pagedjs_page")) {
+      if (page.querySelector(`[data-nbprint-page-box="${id}"]`)) got += 1;
+    }
+    if (got < want) shortfalls.push({ id, want, got });
+  }
+  return shortfalls;
+}
+
+/**
  * Run post-pagination validation and repair.
  *
  * @param {object} configuration  The _nbprint_configuration object.
@@ -149,6 +176,12 @@ export function postvalidate(configuration) {
   let blankPagesRemoved = 0;
   if (pageConfig.blank_page_removal !== false) {
     blankPagesRemoved = removeBlankPages();
+  }
+
+  for (const { id, want, got } of checkMinPages()) {
+    console.warn(
+      `[nbprint] postprocessing: page-box ${id} asked for ${want} page(s) but produced ${got}`,
+    );
   }
 
   // 4.3: Detect residual overflow
