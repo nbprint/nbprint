@@ -6,7 +6,7 @@ import pytest
 from pydantic import ValidationError
 
 from nbprint.cli import run
-from nbprint.config.outputs.nbconvert import NBConvertOutputs
+from nbprint.config.outputs.nbconvert import _PAGEDJS_RENDER_TIMEOUT_MS, NBConvertOutputs
 
 
 def test_outputs():
@@ -26,6 +26,24 @@ class TestNbconvertConfigPassthrough:
     def test_default_is_empty(self):
         out = NBConvertOutputs(naming="{{name}}", root=".pytest_cache/cfg")
         assert out.nbconvert_config == {}
+
+    def test_webpdf_gets_a_pagedjs_render_timeout(self):
+        """Without it nbconvert captures the PDF 100ms after network idle, mid-pagination, and truncates silently."""
+        out = NBConvertOutputs(target="webpdf", naming="{{name}}", root=".pytest_cache/cfg")
+        assert out._resolved_nbconvert_config() == {"WebPDFExporter.page_render_timeout": _PAGEDJS_RENDER_TIMEOUT_MS}
+
+    def test_non_webpdf_targets_are_untouched(self):
+        out = NBConvertOutputs(target="html", naming="{{name}}", root=".pytest_cache/cfg")
+        assert out._resolved_nbconvert_config() == {}
+
+    @pytest.mark.parametrize(
+        "override",
+        [{"WebPDFExporter": {"page_render_timeout": 500}}, {"WebPDFExporter.page_render_timeout": 500}],
+        ids=["nested", "flat"],
+    )
+    def test_caller_render_timeout_wins(self, override):
+        out = NBConvertOutputs(target="webpdf", naming="{{name}}", root=".pytest_cache/cfg", nbconvert_config=override)
+        assert out._resolved_nbconvert_config() == override
 
     def test_format_scalar_args(self):
         args = NBConvertOutputs._format_nbconvert_config_args(
