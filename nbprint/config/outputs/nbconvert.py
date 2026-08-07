@@ -29,14 +29,11 @@ _NBPRINT_MANAGED_TRAITS: dict[str, str] = {
     "execute": "the 'execute' field",
 }
 
-# nbconvert's WebPDFExporter captures the PDF ``page_render_timeout`` ms after the network goes idle, and
-# defaults that to 100ms. paged.js paginates well after the network is quiet — it is pure DOM work — so on
-# any document long enough to take a moment to chunk, the capture lands mid-pagination and the PDF is
-# silently short. nbprint ships paged.js in its own template, so it owns a default that suits it.
-# Note this is an unconditional sleep, not a ceiling: every webpdf render pays it in full. Waiting on a
-# pagination-complete signal instead would make it a ceiling and give short documents their time back.
-_PAGEDJS_RENDER_TIMEOUT_MS = 30_000
-_PAGEDJS_RENDER_TIMEOUT_TRAIT = "WebPDFExporter.page_render_timeout"
+# nbconvert's stock webpdf exporter captures the PDF a fixed delay after the network goes idle, which
+# races paged.js and silently truncates long documents. nbprint's exporter waits for the template's
+# pagination-complete signal instead, so the webpdf target is routed to it rather than to upstream's.
+# Registered under its own entry-point name so it never shadows nbconvert's builtin "webpdf".
+_EXPORTER_FOR_TARGET = {"webpdf": "nbprintwebpdf"}
 
 
 def _run_nbconvert(argv: list[str]) -> None:
@@ -193,16 +190,6 @@ class NBConvertOutputs(Outputs):
                 raise ValueError(msg)
         return v
 
-    def _resolved_nbconvert_config(self) -> dict[str, Any]:
-        """``nbconvert_config`` with nbprint's own defaults filled in, leaving anything the caller set untouched.
-
-        Currently just the paged.js render timeout for webpdf targets; see :data:`_PAGEDJS_RENDER_TIMEOUT_MS`.
-        """
-        config = dict(self.nbconvert_config)
-        if self.target == "webpdf" and _PAGEDJS_RENDER_TIMEOUT_TRAIT not in self._flatten_config(config):
-            config[_PAGEDJS_RENDER_TIMEOUT_TRAIT] = _PAGEDJS_RENDER_TIMEOUT_MS
-        return config
-
     @staticmethod
     def _format_nbconvert_config_args(config: dict[str, Any]) -> list[str]:
         """Translate a traitlets config mapping into nbconvert CLI args.
@@ -280,13 +267,13 @@ class NBConvertOutputs(Outputs):
 
         cmd = [
             str(notebook),
-            f"--to={self.target}",
+            f"--to={_EXPORTER_FOR_TARGET.get(self.target, self.target)}",
             f"--output={output}",
             f"--template={self.template}",
         ]
 
         # Generic nbconvert/traitlets passthrough (e.g. WebPDFExporter.page_render_timeout)
-        cmd.extend(self._format_nbconvert_config_args(self._resolved_nbconvert_config()))
+        cmd.extend(self._format_nbconvert_config_args(self.nbconvert_config))
 
         # We have some cheats here because we have to
         os.environ["_NBPRINT_IN_NBCONVERT"] = "1"

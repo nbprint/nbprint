@@ -153,9 +153,9 @@ class LayoutOverlay(BaseModel):
     # match (in addition to any constraints in ``match``).
     index_range: tuple[int, int] | None = None
 
-    # Discriminates which container ``build_wrapper`` produces. Dispatched on
-    # during ingestion, so dict-shaped specs reach the right subclass.
-    wrapper: Literal["flex", "page-box"] = "flex"
+    # Discriminates which container ``build_wrapper`` produces, for both the
+    # pydantic union below and the dict dispatch during ingestion.
+    wrapper: Literal["flex"] = "flex"
 
     layout: Literal["row", "column", "inline"] = "row"
     sizes: list[float] | None = None

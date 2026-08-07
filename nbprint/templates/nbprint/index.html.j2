@@ -13,6 +13,9 @@ var _nbprint_notebook_info = new Map();
 window.FontAwesomeConfig = {
     searchPseudoElements: true
   }
+// Marks this as an nbprint document before any async work starts, so a PDF
+// capture can tell "pagination pending" from "not an nbprint page at all".
+document.documentElement.dataset.nbprintPaged = "pending";
 </script>
 
 {{ resources.include_js("static/embedded.js", True) }}

@@ -6,7 +6,7 @@ import pytest
 from pydantic import ValidationError
 
 from nbprint.cli import run
-from nbprint.config.outputs.nbconvert import _PAGEDJS_RENDER_TIMEOUT_MS, NBConvertOutputs
+from nbprint.config.outputs.nbconvert import _EXPORTER_FOR_TARGET, NBConvertOutputs
 
 
 def test_outputs():
@@ -27,23 +27,17 @@ class TestNbconvertConfigPassthrough:
         out = NBConvertOutputs(naming="{{name}}", root=".pytest_cache/cfg")
         assert out.nbconvert_config == {}
 
-    def test_webpdf_gets_a_pagedjs_render_timeout(self):
-        """Without it nbconvert captures the PDF 100ms after network idle, mid-pagination, and truncates silently."""
-        out = NBConvertOutputs(target="webpdf", naming="{{name}}", root=".pytest_cache/cfg")
-        assert out._resolved_nbconvert_config() == {"WebPDFExporter.page_render_timeout": _PAGEDJS_RENDER_TIMEOUT_MS}
+    def test_webpdf_routes_to_the_nbprint_exporter(self):
+        """Upstream's webpdf exporter captures on a timer and races paged.js; ours waits for the signal."""
+        assert _EXPORTER_FOR_TARGET["webpdf"] == "nbprintwebpdf"
 
-    def test_non_webpdf_targets_are_untouched(self):
-        out = NBConvertOutputs(target="html", naming="{{name}}", root=".pytest_cache/cfg")
-        assert out._resolved_nbconvert_config() == {}
+    def test_other_targets_are_not_rerouted(self):
+        for target in ("html", "webhtml", "ipynb"):
+            assert target not in _EXPORTER_FOR_TARGET
 
-    @pytest.mark.parametrize(
-        "override",
-        [{"WebPDFExporter": {"page_render_timeout": 500}}, {"WebPDFExporter.page_render_timeout": 500}],
-        ids=["nested", "flat"],
-    )
-    def test_caller_render_timeout_wins(self, override):
-        out = NBConvertOutputs(target="webpdf", naming="{{name}}", root=".pytest_cache/cfg", nbconvert_config=override)
-        assert out._resolved_nbconvert_config() == override
+    def test_nbprint_exporter_name_does_not_shadow_nbconvert(self):
+        """Reusing the name 'webpdf' would make entry-point resolution order-dependent."""
+        assert _EXPORTER_FOR_TARGET["webpdf"] != "webpdf"
 
     def test_format_scalar_args(self):
         args = NBConvertOutputs._format_nbconvert_config_args(

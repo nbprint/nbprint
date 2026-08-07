@@ -191,7 +191,7 @@ Phases, in order:
 1. **Barrier: `nbp.waitForRenders()`** — awaits every tracked promise. If a render schedules further renders, the barrier loops until a tick passes with no new registrations, so cascading async work (e.g. dynamic imports, sub-renders) all settles. A rejection in one cell is logged and isolated; it does not block other cells.
 1. **`nbprint-esm-complete` event dispatched** — signals "DOM is stable, pagination starts now". Use this instead of `nbprint-ready` for any code that wants to run after user-land renders are done (diagnostics, measure-phase tweaks, future overflow detection).
 1. **`nbprint.build()`** — hands off to Paged.js. By this point the DOM is final.
-1. **`nbprint.postprocess()`** — dispatches `nbprint-done`.
+1. **`nbprint.postprocess()`** — dispatches `nbprint-done`, then sets `data-nbprint-paged="done"` on `<html>`. The nbprint template seeds that attribute with `"pending"` before any async work starts, so a PDF capture can distinguish "pagination still running" from "not an nbprint document". `NBPrintWebPDFExporter` waits for `"done"` instead of sleeping a fixed interval — nbconvert's stock webpdf exporter captures a fixed delay after the network goes idle, which races paged.js and silently truncates long documents. The attribute is set from a `finally`, so a failed render releases the capture rather than stalling it.
 
 **Writing a cell `render()` function.** The template handles registration automatically; author your ESM as if it were stand-alone:
 

@@ -94,6 +94,7 @@ nbprint = "pkg:nbprint.config.hydra"
 
 [project.entry-points."nbconvert.exporters"]
 webhtml = "nbprint.nbconvert.webhtml:WebHTMLExporter"
+nbprintwebpdf = "nbprint.nbconvert.webpdf:NBPrintWebPDFExporter"
 
 [project.scripts]
 nbprint = "nbprint.cli:main"
