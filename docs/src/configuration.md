@@ -333,7 +333,7 @@ content:
 
 ## Formatting Overlays
 
-Overlays are rules that apply formatting to ingested notebook cells without modifying the notebook itself. There are two kinds.
+Overlays are rules that apply formatting to ingested notebook cells without modifying the notebook itself. There are three kinds.
 
 ### `Overlay` — merge formatting onto matching cells
 
@@ -398,6 +398,42 @@ layout_overlays:
 ```
 
 Non-contiguous matches produce multiple wrappers. Both kinds of overlay can be combined: formatting overlays apply to the individual cells, and a layout overlay then wraps them.
+
+### `PageBoxOverlay` — wrap contiguous cells in a page box
+
+Same matching rules, but the wrapper is a [`ContentPageBox`](architecture.md): the matched run becomes one logical page, arranged by a named layout preset and followed by a page break. Select it with `wrapper: page-box`:
+
+```yaml
+layout_overlays:
+  # Every run of "pair"-tagged cells becomes a two-column page
+  - match: {tag: "pair"}
+    wrapper: page-box
+    layout: columns-2
+    gap: 1rem
+
+  # A four-up dashboard page, in landscape
+  - match: {tag: "dashboard"}
+    wrapper: page-box
+    layout: grid-2x2
+    page_orientation: landscape
+```
+
+This is the multi-cell counterpart to [`NBPrintPage`](architecture.md), which turns a *single* cell into a page box from inside the notebook. Reach for the overlay when a page is assembled from several cells.
+
+Available fields mirror `ContentPageBox`: `layout` (any [layout preset](architecture.md)), `fit`, `min_pages`, `gap`, `padding`, `align`, `justify`, `grid_template`, `page_size`, `page_orientation`, `page_margins` — plus the wrapper formatting (`css`, `classname`, `attrs`, `style`) shared with `LayoutOverlay`. Overlay `css` is appended to the preset's CSS rather than replacing it.
+
+`sizes` is flex-only and is rejected on a page-box overlay; use a columns/grid preset, or `grid_template` for explicit tracks.
+
+As with every overlay, these can live in notebook metadata instead of YAML:
+
+```jsonc
+// notebook.metadata.nbprint
+{
+  "layout_overlays": [
+    {"match": {"tag": "pair"}, "wrapper": "page-box", "layout": "columns-2", "gap": "1rem"}
+  ]
+}
+```
 
 ## Lerna Config Composition
 

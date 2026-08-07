@@ -2,7 +2,7 @@
 and merge formatting into (or wrap) the ``Content`` objects created from
 them.
 
-Two overlay kinds are supported:
+Three overlay kinds are supported:
 
 * :class:`Overlay` — matches individual cells and *merges* formatting fields
   (``css``, ``classname``, ``attrs``, ``style``, ``ignore``) into the
@@ -10,19 +10,24 @@ Two overlay kinds are supported:
 
 * :class:`LayoutOverlay` — matches a contiguous range of cells and *wraps*
   them in a flex layout container (``row`` / ``column`` / ``inline``).
+
+* :class:`PageBoxOverlay` — matches a contiguous range of cells and wraps
+  them in a :class:`ContentPageBox`, so a run of cells becomes one logical
+  page with a named layout preset.
 """
 
 from __future__ import annotations
 
 from typing import Iterable, Literal
 
-from pydantic import Field
+from pydantic import Field, model_validator
 
 from nbprint.config.base import BaseModel
-from nbprint.config.common import Style
+from nbprint.config.common import PageOrientation, PageSize, Style
+from nbprint.config.content.page_box import ContentPageBox, PageBoxFit, PageBoxLayout
 from nbprint.config.core.content import SECTION_ORDER, Section
 
-__all__ = ("CellMatcher", "LayoutOverlay", "Overlay")
+__all__ = ("CellMatcher", "LayoutOverlay", "Overlay", "PageBoxOverlay")
 
 
 class CellMatcher(BaseModel):
@@ -148,6 +153,10 @@ class LayoutOverlay(BaseModel):
     # match (in addition to any constraints in ``match``).
     index_range: tuple[int, int] | None = None
 
+    # Discriminates which container ``build_wrapper`` produces. Dispatched on
+    # during ingestion, so dict-shaped specs reach the right subclass.
+    wrapper: Literal["flex", "page-box"] = "flex"
+
     layout: Literal["row", "column", "inline"] = "row"
     sizes: list[float] | None = None
 
@@ -194,6 +203,98 @@ class LayoutOverlay(BaseModel):
             ignore=None,
         )
         return wrapper
+
+
+# Page-box fields copied onto the ``ContentPageBox`` when set. Listed rather
+# than derived so adding a field to the box is a deliberate choice here too.
+_PAGE_BOX_PASSTHROUGH = (
+    "gap",
+    "padding",
+    "align",
+    "justify",
+    "grid_template",
+    "page_size",
+    "page_orientation",
+    "page_margins",
+)
+
+
+class PageBoxOverlay(LayoutOverlay):
+    """Structural overlay that wraps a contiguous range of cells in a page box.
+
+    Matching works exactly as for :class:`LayoutOverlay`, but the wrapper is a
+    :class:`ContentPageBox`: the matched run becomes one logical page, laid out
+    by a named preset and followed by a page break.
+
+    Authored from notebook metadata alongside plain layout overlays, keyed by
+    ``wrapper``::
+
+        "layout_overlays": [
+            {"match": {"tag": "pair-ic"}, "wrapper": "page-box",
+             "layout": "columns-2", "gap": "1rem"}
+        ]
+    """
+
+    wrapper: Literal["page-box"] = "page-box"
+    layout: PageBoxLayout = "flow"
+
+    fit: PageBoxFit = "scale"
+    min_pages: int = Field(default=1, ge=1)
+    gap: str | None = None
+    padding: str | None = None
+    align: str | None = None
+    justify: str | None = None
+    grid_template: str | None = None
+    page_size: PageSize | None = None
+    page_orientation: PageOrientation | None = None
+    page_margins: str | None = None
+
+    @model_validator(mode="after")
+    def _reject_flex_sizes(self) -> PageBoxOverlay:
+        """``sizes`` is a flex-container concept with no page-box equivalent.
+
+        Rejecting beats silently dropping it, which would leave an author
+        wondering why their column ratios did nothing.
+        """
+        if self.sizes is not None:
+            msg = "PageBoxOverlay does not support 'sizes'; use 'layout' with a columns/grid preset, or 'grid_template' for explicit tracks."
+            raise ValueError(msg)
+        return self
+
+    def build_wrapper(self, children: Iterable) -> BaseModel:
+        """Instantiate a :class:`ContentPageBox` wrapping ``children``."""
+        kwargs: dict = {
+            "content": list(children),
+            "layout": self.layout,
+            "fit": self.fit,
+            "min_pages": self.min_pages,
+        }
+        kwargs.update({name: value for name in _PAGE_BOX_PASSTHROUGH if (value := getattr(self, name)) is not None})
+
+        wrapper = ContentPageBox(**kwargs)
+        _merge_formatting(
+            wrapper,
+            css=self.css,
+            classname=self.classname,
+            attrs=self.attrs,
+            style=self.style,
+            ignore=None,
+        )
+        return wrapper
+
+
+def build_layout_overlay(spec: LayoutOverlay | dict) -> LayoutOverlay:
+    """Coerce a layout-overlay spec to the subclass named by ``wrapper``.
+
+    Dict-shaped specs (YAML, notebook metadata) need dispatching before
+    validation: ``BaseModel`` ignores extra keys, so validating a page-box
+    spec as a plain :class:`LayoutOverlay` would silently drop every page-box
+    field.
+    """
+    if isinstance(spec, LayoutOverlay):
+        return spec
+    cls = PageBoxOverlay if spec.get("wrapper") == "page-box" else LayoutOverlay
+    return cls.model_validate(spec)
 
 
 def apply_layout_overlays(

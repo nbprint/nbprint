@@ -1,9 +1,11 @@
 """Tests for cell-addressing overlays, layout-wrapping overlays, and
 section-level default styles."""
 
+import pytest
 from nbformat.v4 import new_code_cell, new_markdown_cell, new_notebook
+from pydantic import ValidationError
 
-from nbprint import CellMatcher, LayoutOverlay, Overlay, Style
+from nbprint import CellMatcher, LayoutOverlay, Overlay, PageBoxOverlay, Style
 from nbprint.config.common import Font
 from nbprint.config.content import ContentMarkdown
 from nbprint.config.core.config import Configuration
@@ -509,3 +511,116 @@ class TestLayoutOverlay:
         # Children were first tagged with classname "child" by the formatting overlay
         for child in wrapper.content:
             assert child.classname == "child" or "child" in (child.classname or [])
+
+
+class TestPageBoxOverlay:
+    """PageBoxOverlay wraps contiguous runs of matched cells in a ContentPageBox."""
+
+    @staticmethod
+    def _two_tagged_cells(tag: str):
+        nb = new_notebook()
+        nb.cells = [
+            new_markdown_cell(source="Left", metadata={"tags": [tag]}),
+            new_markdown_cell(source="Right", metadata={"tags": [tag]}),
+        ]
+        return nb
+
+    def test_wraps_run_in_a_page_box(self):
+        from nbprint.config.content.page_box import ContentPageBox
+
+        nb = self._two_tagged_cells("pair")
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [PageBoxOverlay(match=CellMatcher(tag="pair"), layout="columns-2", gap="1rem")],
+        }
+        Configuration._process_cells(values, nb)
+        wrapper = values["content"].middlematter[0]
+        assert isinstance(wrapper, ContentPageBox)
+        assert wrapper.layout == "columns-2"
+        assert len(wrapper.content) == 2
+
+    def test_children_are_wrapped_in_page_blocks(self):
+        """The page box normalizes children so every direct child is a block."""
+        from nbprint.config.content.page_block import ContentPageBlock
+
+        nb = self._two_tagged_cells("pair")
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [PageBoxOverlay(match=CellMatcher(tag="pair"))],
+        }
+        Configuration._process_cells(values, nb)
+        wrapper = values["content"].middlematter[0]
+        assert all(isinstance(child, ContentPageBlock) for child in wrapper.content)
+
+    def test_preset_css_is_emitted(self):
+        nb = self._two_tagged_cells("pair")
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [PageBoxOverlay(match=CellMatcher(tag="pair"), layout="grid-2x2", gap="0.5in")],
+        }
+        Configuration._process_cells(values, nb)
+        css = values["content"].middlematter[0].css
+        assert "display: grid;" in css
+        assert "gap: 0.5in;" in css
+        # The base rule survives alongside the preset.
+        assert "break-before: page;" in css
+
+    def test_dict_spec_dispatches_on_wrapper(self):
+        """Page-box fields survive a dict spec; without dispatch they'd be dropped."""
+        from nbprint.config.content.page_box import ContentPageBox
+
+        nb = self._two_tagged_cells("pair")
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [{"match": {"tag": "pair"}, "wrapper": "page-box", "layout": "columns-3", "fit": "strict"}],
+        }
+        Configuration._process_cells(values, nb)
+        wrapper = values["content"].middlematter[0]
+        assert isinstance(wrapper, ContentPageBox)
+        assert wrapper.layout == "columns-3"
+        assert wrapper.attrs["data-nbprint-fit"] == "strict"
+
+    def test_dict_spec_without_wrapper_is_still_a_flex_layout(self):
+        from nbprint.config.content.page import ContentFlexRowLayout
+
+        nb = self._two_tagged_cells("pair")
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [{"match": {"tag": "pair"}, "layout": "row"}],
+        }
+        Configuration._process_cells(values, nb)
+        assert isinstance(values["content"].middlematter[0], ContentFlexRowLayout)
+
+    def test_overlay_css_appends_to_preset_css(self):
+        nb = self._two_tagged_cells("pair")
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [PageBoxOverlay(match=CellMatcher(tag="pair"), layout="columns-2", css=":scope { background: red; }")],
+        }
+        Configuration._process_cells(values, nb)
+        css = values["content"].middlematter[0].css
+        assert "column-count: 2;" in css
+        assert "background: red;" in css
+
+    def test_per_page_overrides_round_trip(self):
+        nb = self._two_tagged_cells("pair")
+        values = {
+            "content": ContentMarshall(),
+            "layout_overlays": [PageBoxOverlay(match=CellMatcher(tag="pair"), page_orientation="landscape")],
+        }
+        Configuration._process_cells(values, nb)
+        assert values["content"].middlematter[0].page_orientation == "landscape"
+
+    def test_sizes_is_rejected(self):
+        """'sizes' is flex-only; silently dropping it would hide a real mistake."""
+        with pytest.raises(ValidationError, match="does not support 'sizes'"):
+            PageBoxOverlay(match=CellMatcher(tag="pair"), sizes=[1, 1])
+
+    def test_configuration_accepts_a_page_box_overlay(self):
+        config = Configuration(
+            name="test-page-box-overlay-field",
+            outputs={"_target_": "nbprint.NBConvertOutputs", "naming": "{{name}}", "root": ".pytest_cache/test_page_box_overlay_field"},
+            layout_overlays=[PageBoxOverlay(match=CellMatcher(tag="x"), layout="grid-2x2")],
+        )
+        assert isinstance(config.layout_overlays[0], PageBoxOverlay)
+        assert config.layout_overlays[0].layout == "grid-2x2"

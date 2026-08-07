@@ -21,7 +21,7 @@ from nbprint.config.common import Style
 from nbprint.config.content import Content, ContentCode, ContentMarkdown
 from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
 from nbprint.config.magic import _parse_magic_line
-from nbprint.config.overlay import LayoutOverlay, Overlay, apply_layout_overlays, apply_overlays
+from nbprint.config.overlay import LayoutOverlay, Overlay, apply_layout_overlays, apply_overlays, build_layout_overlay
 from nbprint.config.page_runtime import NBPRINT_PAGE_MIME
 
 from .content import SECTION_ORDER, ContentMarshall
@@ -58,7 +58,7 @@ class Configuration(CallableModel, BaseModel):
     )
     layout_overlays: list[LayoutOverlay] = Field(
         default_factory=list,
-        description="Layout overlays that wrap contiguous ranges of ingested cells in a flex container.",
+        description="Layout overlays that wrap contiguous ranges of ingested cells in a flex container or a page box.",
     )
 
     # basic metadata
@@ -389,12 +389,7 @@ class Configuration(CallableModel, BaseModel):
                 overlays.append(Overlay.model_validate(spec))
 
         raw_layouts = values.get("layout_overlays") or []
-        layout_overlays: list[LayoutOverlay] = []
-        for spec in raw_layouts:
-            if isinstance(spec, LayoutOverlay):
-                layout_overlays.append(spec)
-            elif isinstance(spec, dict):
-                layout_overlays.append(LayoutOverlay.model_validate(spec))
+        layout_overlays: list[LayoutOverlay] = [build_layout_overlay(spec) for spec in raw_layouts if isinstance(spec, (LayoutOverlay, dict))]
 
         placements: list = [None] * len(cells_to_process)
 
