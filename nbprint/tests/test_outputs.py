@@ -6,7 +6,7 @@ import pytest
 from pydantic import ValidationError
 
 from nbprint.cli import run
-from nbprint.config.outputs.nbconvert import NBConvertOutputs
+from nbprint.config.outputs.nbconvert import _EXPORTER_FOR_TARGET, NBConvertOutputs
 
 
 def test_outputs():
@@ -26,6 +26,18 @@ class TestNbconvertConfigPassthrough:
     def test_default_is_empty(self):
         out = NBConvertOutputs(naming="{{name}}", root=".pytest_cache/cfg")
         assert out.nbconvert_config == {}
+
+    def test_webpdf_routes_to_the_nbprint_exporter(self):
+        """Upstream's webpdf exporter captures on a timer and races paged.js; ours waits for the signal."""
+        assert _EXPORTER_FOR_TARGET["webpdf"] == "nbprintwebpdf"
+
+    def test_other_targets_are_not_rerouted(self):
+        for target in ("html", "webhtml", "ipynb"):
+            assert target not in _EXPORTER_FOR_TARGET
+
+    def test_nbprint_exporter_name_does_not_shadow_nbconvert(self):
+        """Reusing the name 'webpdf' would make entry-point resolution order-dependent."""
+        assert _EXPORTER_FOR_TARGET["webpdf"] != "webpdf"
 
     def test_format_scalar_args(self):
         args = NBConvertOutputs._format_nbconvert_config_args(

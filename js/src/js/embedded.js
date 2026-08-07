@@ -33,24 +33,35 @@ async function waitForImages() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Ensure all <img> elements have valid natural dimensions before we
-  // measure them or run pagedjs. Otherwise pagedjs sees zero-height
-  // images and paginates around them incorrectly.
-  await waitForImages();
+  try {
+    // Ensure all <img> elements have valid natural dimensions before we
+    // measure them or run pagedjs. Otherwise pagedjs sees zero-height
+    // images and paginates around them incorrectly.
+    await waitForImages();
 
-  // Process with NBPrint
-  await nbprint.process();
+    // Process with NBPrint
+    await nbprint.process();
 
-  if (nbprint.buildPagedJS()) {
-    // Build pagedjs
-    await nbprint.build();
-  } else {
-    createToc({
-      content: document.querySelector("body.jp-Notebook").querySelector("main"),
-      tocElement: "#toc",
-      titleElements: ["h1", "h2", "h3", "h4"],
-    });
+    if (nbprint.buildPagedJS()) {
+      // Build pagedjs
+      await nbprint.build();
+    } else {
+      createToc({
+        content: document
+          .querySelector("body.jp-Notebook")
+          .querySelector("main"),
+        tocElement: "#toc",
+        titleElements: ["h1", "h2", "h3", "h4"],
+      });
+    }
+
+    await nbprint.postprocess();
+  } finally {
+    // Tells a PDF capture that the DOM has stopped moving. pagedjs chunks well
+    // after the network goes idle, so a capture keyed on network activity alone
+    // lands mid-pagination and silently truncates the document. Set in a
+    // `finally` so a failed render still releases the capture rather than
+    // stalling it until the ceiling.
+    document.documentElement.dataset.nbprintPaged = "done";
   }
-
-  await nbprint.postprocess();
 });

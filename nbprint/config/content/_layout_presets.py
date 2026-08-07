@@ -111,7 +111,7 @@ def _grid_areas_builder() -> _Builder:
     """Bare ``display: grid`` for named-area / custom grid templates.
 
     The actual ``grid-template`` value is supplied separately by the
-    page-box (Phase 9.5 will set ``grid_template`` on the box).
+    page-box's ``grid_template`` field.
     """
 
     def build(*, gap: str | None, padding: str | None, align: str | None, justify: str | None) -> str:
@@ -163,7 +163,7 @@ def _inline_builder() -> _Builder:
 def _masonry_builder() -> _Builder:
     def build(*, gap: str | None, padding: str | None, **_) -> str:
         # Native CSS masonry where supported; the JS polyfill in
-        # measure.js (Phase 9.17) handles browsers without support.
+        # measure.js handles browsers without support.
         rules = [
             "display: grid;",
             "grid-template-rows: masonry;",

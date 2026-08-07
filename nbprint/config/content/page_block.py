@@ -3,13 +3,13 @@
 A page-block is the unit a layout-aware page-box arranges. It is *not*
 a layout container itself — that role is filled by
 :class:`ContentFlexRowLayout`, :class:`ContentFlexColumnLayout`,
-:class:`ContentInlineLayout`, and (forthcoming in Phase 9.4) the
-``layout`` field on :class:`ContentPageBox`.
+:class:`ContentInlineLayout`, and the ``layout`` field on
+:class:`ContentPageBox`.
 
 Use cases:
 
 * Inside an ``NBPrintPage``: the page-box auto-wraps bare children in
-  blocks (Phase 9.4) so every direct child of a page-box is a block.
+  blocks so every direct child of a page-box is a block.
   Authors who want to escape the auto-placement (e.g. "this hero spans
   both columns") instantiate a block explicitly with ``span=2``.
 * Standalone (outside a page-box): the block's default
@@ -96,7 +96,7 @@ class ContentPageBlock(Content):
     )
     area: str | None = Field(
         default=None,
-        description=("Named grid area for use with ``ContentPageBox.layout='grid'`` and ``grid_template`` (Phase 9.5). Maps to CSS `grid-area`."),
+        description=("Named grid area for use with ``ContentPageBox.layout='grid'`` and ``grid_template``. Maps to CSS `grid-area`."),
     )
 
     # ── Sizing constraints ───────────────────────────────────────────

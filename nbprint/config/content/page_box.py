@@ -94,9 +94,8 @@ class ContentPageBox(Content):
         ),
     )
 
-    # Per-page overrides. When set, Phase 9.9 will emit a named @page
-    # rule and route this box to it. Until that lands these fields
-    # serialize through normally; downstream passes can read them.
+    # Per-page overrides. These serialize and round-trip, but nothing yet
+    # emits the named @page rule that would route this box to them.
     page_size: PageSize | None = Field(
         default=None,
         description="Per-box override for the document page size. Falls back to the global Page.size.",
@@ -126,10 +125,10 @@ class ContentPageBox(Content):
             "Built-in layout for child blocks. 'flow' (default): "
             "native block-flow. 'columns-2'/'columns-3': CSS multi-column. "
             "'grid-2x2'/'grid-3x2'/'grid-3x3': fixed grids. 'grid': bare "
-            "`display: grid` — pair with `grid_template` (Phase 9.5) for "
+            "`display: grid` — pair with `grid_template` for "
             "named areas. 'flex-row'/'flex-column'/'inline': reuse the "
             "existing flex/inline layout containers' CSS. 'masonry': "
-            "native CSS masonry with a JS polyfill (Phase 9.17). "
+            "native CSS masonry with a JS polyfill. "
             "'custom': suppress preset CSS — the user owns `:scope`."
         ),
     )

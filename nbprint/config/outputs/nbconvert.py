@@ -29,6 +29,12 @@ _NBPRINT_MANAGED_TRAITS: dict[str, str] = {
     "execute": "the 'execute' field",
 }
 
+# nbconvert's stock webpdf exporter captures the PDF a fixed delay after the network goes idle, which
+# races paged.js and silently truncates long documents. nbprint's exporter waits for the template's
+# pagination-complete signal instead, so the webpdf target is routed to it rather than to upstream's.
+# Registered under its own entry-point name so it never shadows nbconvert's builtin "webpdf".
+_EXPORTER_FOR_TARGET = {"webpdf": "nbprintwebpdf"}
+
 
 def _run_nbconvert(argv: list[str]) -> None:
     """Run nbconvert in-process without reusing the global NbConvertApp singleton.
@@ -261,7 +267,7 @@ class NBConvertOutputs(Outputs):
 
         cmd = [
             str(notebook),
-            f"--to={self.target}",
+            f"--to={_EXPORTER_FOR_TARGET.get(self.target, self.target)}",
             f"--output={output}",
             f"--template={self.template}",
         ]
