@@ -624,3 +624,24 @@ class TestPageBoxOverlay:
         )
         assert isinstance(config.layout_overlays[0], PageBoxOverlay)
         assert config.layout_overlays[0].layout == "grid-2x2"
+
+    def test_configuration_accepts_a_page_box_dict(self):
+        """The field itself must discriminate; a plain LayoutOverlay rejects preset names."""
+        config = Configuration(
+            name="test-page-box-overlay-dict",
+            outputs={"_target_": "nbprint.NBConvertOutputs", "naming": "{{name}}", "root": ".pytest_cache/test_page_box_overlay_dict"},
+            layout_overlays=[{"match": {"tag": "x"}, "wrapper": "page-box", "layout": "columns-2", "gap": "0.25in"}],
+        )
+        overlay = config.layout_overlays[0]
+        assert isinstance(overlay, PageBoxOverlay)
+        assert (overlay.layout, overlay.gap) == ("columns-2", "0.25in")
+
+    def test_configuration_still_accepts_a_flex_dict(self):
+        config = Configuration(
+            name="test-flex-overlay-dict",
+            outputs={"_target_": "nbprint.NBConvertOutputs", "naming": "{{name}}", "root": ".pytest_cache/test_flex_overlay_dict"},
+            layout_overlays=[{"match": {"tag": "x"}, "layout": "row", "sizes": [1, 1]}],
+        )
+        overlay = config.layout_overlays[0]
+        assert type(overlay) is LayoutOverlay
+        assert overlay.sizes == [1, 1]

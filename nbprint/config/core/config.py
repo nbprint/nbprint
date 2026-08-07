@@ -95,6 +95,19 @@ class Configuration(CallableModel, BaseModel):
     def _convert_outputs_from_obj(cls, v) -> Outputs:
         return BaseModel._to_type(v, Outputs)
 
+    @field_validator("layout_overlays", mode="before")
+    @classmethod
+    def _dispatch_layout_overlays(cls, v):
+        """Route each spec to its overlay subclass before the field validates it.
+
+        A pydantic discriminated union would be the obvious tool, but it requires
+        the discriminator to be present, and ``wrapper`` is optional so that every
+        existing flex overlay keeps working untouched.
+        """
+        if not isinstance(v, list):
+            return v
+        return [build_layout_overlay(spec) if isinstance(spec, (LayoutOverlay, dict)) else spec for spec in v]
+
     @field_validator("parameters", mode="before")
     @classmethod
     def _convert_parameters_from_obj(cls, v) -> Parameters:
