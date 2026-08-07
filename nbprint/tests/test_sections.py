@@ -1137,7 +1137,7 @@ class TestNBPrintMagicParsing:
 
 
 class TestContentPageBox:
-    """Phase 9.1 — ContentPageBox model."""
+    """ContentPageBox model."""
 
     def test_defaults(self):
         from nbprint.config.content import ContentPageBox
@@ -1229,7 +1229,7 @@ class TestContentPageBox:
 
 
 class TestNBPrintPage:
-    """Phase 9.2 — NBPrintPage runtime API."""
+    """NBPrintPage runtime API."""
 
     def test_top_level_export(self):
         import nbprint
@@ -1351,7 +1351,7 @@ class TestNBPrintPage:
 
 
 class TestContentPageBlock:
-    """Phase 9.3 — ContentPageBlock primitive."""
+    """ContentPageBlock primitive."""
 
     def test_defaults(self):
         from nbprint.config.content import ContentPageBlock
@@ -1498,7 +1498,7 @@ class TestContentPageBlock:
 
 
 class TestPageBoxLayout:
-    """Phase 9.4 — layout presets on ContentPageBox + auto-wrap."""
+    """Layout presets on ContentPageBox + auto-wrap."""
 
     def test_layout_default_is_flow(self):
         from nbprint.config.content import ContentPageBox
@@ -1684,7 +1684,7 @@ class TestPageBoxLayout:
 
 
 class TestPageBoxGridTemplate:
-    """Phase 9.5 — named-area grids on ContentPageBox."""
+    """Named-area grids on ContentPageBox."""
 
     def test_grid_template_emitted_in_css(self):
         from nbprint.config.content import ContentPageBox
@@ -1797,7 +1797,7 @@ class TestPageBoxGridTemplate:
 
 
 class TestNBPrintBlock:
-    """Phase 9.6 — NBPrintBlock runtime API."""
+    """NBPrintBlock runtime API."""
 
     def test_top_level_export(self):
         import nbprint
@@ -1936,7 +1936,7 @@ class TestNBPrintBlock:
         assert block.content == "display(chart)"
 
     def test_nbprint_page_runtime_passes_grid_template(self):
-        """Phase 9.5 + runtime: NBPrintPage carries grid_template through."""
+        """NBPrintPage carries grid_template through."""
         from nbprint import NBPrintPage
 
         tmpl = "'a a' 'b c' / 1fr 1fr"

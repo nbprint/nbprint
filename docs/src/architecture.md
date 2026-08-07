@@ -212,7 +212,7 @@ export async function render(meta, elem) {
 Key guarantees:
 
 - **Isolation.** One cell's failure never blocks pagination of the rest of the document; the error is logged to the console with `[nbprint] cell render failed:` and the rejected promise resolves.
-- **Order independence.** `render()` calls run concurrently; do not rely on cell execution order. If you need cross-cell coordination, use the Phase 7 `Context` mechanism (typed, ordered, Python-side) rather than ad-hoc JS globals.
+- **Order independence.** `render()` calls run concurrently; do not rely on cell execution order. If you need cross-cell coordination, use the `Context` mechanism (typed, ordered, Python-side) rather than ad-hoc JS globals.
 - **Late registration is legal but not useful.** Calling `trackRender()` after `nbprint-esm-complete` has already fired produces a console warning and returns the promise ungated; pagedjs will not wait for it.
 - **Standalone fallback.** When the template is rendered outside the normal embedded pipeline (stand-alone fixtures, structural tests), the cell script falls back to fire-and-forget invocation — `trackRender` is optional.
 
@@ -238,7 +238,7 @@ Content that is executed as a Markdown cell.
 
 #### Page-box primitives
 
-The page-box primitives (Phase 9.1 / 9.3) are first-class `Content`
+The page-box primitives are first-class `Content`
 models for WYSIWYG, page-level authoring. Both are plain pydantic
 classes so every field is reachable from a hydra/lerna CLI override
 such as `+nbprint.content.middlematter[3].fit=strict`.
@@ -273,11 +273,11 @@ there is one source of truth for "what does `display: flex` mean."
 | `grid-2x2`    | `display: grid; grid-template-columns: repeat(2, 1fr)`                          | 4-cell dashboards                    |
 | `grid-3x2`    | `display: grid; grid-template-columns: repeat(3, 1fr)`                          | 6-cell dashboards                    |
 | `grid-3x3`    | `display: grid; grid-template-columns: repeat(3, 1fr)`                          | 9-cell mosaics                       |
-| `grid`        | bare `display: grid` for named-area templates (Phase 9.5)                       | custom grids with `grid_template`    |
+| `grid`        | bare `display: grid` for named-area templates                                 | custom grids with `grid_template`    |
 | `flex-row`    | `display: flex; flex-direction: row` (shared with `ContentFlexRowLayout`)       | side-by-side panels                  |
 | `flex-column` | `display: flex; flex-direction: column` (shared with `ContentFlexColumnLayout`) | stacked panels with gap              |
 | `inline`      | `display: block` + per-sibling `margin-left` for `gap`                          | header/badge rows                    |
-| `masonry`     | `display: grid; grid-template-rows: masonry` (+ JS polyfill, Phase 9.17)        | tile galleries                       |
+| `masonry`     | `display: grid; grid-template-rows: masonry` (+ JS polyfill)                    | tile galleries                       |
 | `custom`      | suppresses preset CSS — user owns `:scope` via `css`                            | full manual control                  |
 
 `gap`, `padding`, `align`, `justify` are passed to whichever preset

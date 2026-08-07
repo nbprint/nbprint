@@ -13,7 +13,7 @@ function renderedBlock(page, id) {
   return page.locator(`.pagedjs_pages [data-nbprint-block="${id}"]`).first();
 }
 
-test.describe("ContentPageBox layout presets — Phase 9.4", () => {
+test.describe("ContentPageBox layout presets", () => {
   test.describe("layout=columns-2", () => {
     test.beforeEach(async ({ page }) => {
       await page.goto("/js/tests/fixtures/page_box/columns-2.html");

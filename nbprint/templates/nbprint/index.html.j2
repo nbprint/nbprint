@@ -123,7 +123,7 @@ a.anchor-link {
     <script type="module">
 
         document.addEventListener("nbprint-ready", (ev) => {
-            // Phase 8.5 — register this cell's render() with the nbprint
+            // Register this cell's render() with the nbprint
             // lifecycle so pagedjs waits for every cell to finish
             // rendering before paginating. trackRender accepts an async
             // thunk; rejections are logged but do not block other cells.

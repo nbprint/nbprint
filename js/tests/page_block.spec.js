@@ -10,7 +10,7 @@ async function getPages(page) {
   return page.locator(".pagedjs_page").all();
 }
 
-test.describe("ContentPageBlock — Phase 9.3", () => {
+test.describe("ContentPageBlock", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/js/tests/fixtures/page_block/basic.html");
     await waitForPagedJS(page);
