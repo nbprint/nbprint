@@ -48,12 +48,8 @@ jobs:
         run: |
           uv pip install dist/*.whl
           uv pip install dist/*.whl --target . --no-deps
-<<<<<<< before updating
           uv pip install .[develop]
-          uv pip install yardang
-=======
           uv pip install "yardang[themes]"
->>>>>>> after updating
         if: github.event_name == 'workflow_run'
 
       - name: Install from source (manual trigger)
