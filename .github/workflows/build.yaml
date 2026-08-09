@@ -62,7 +62,7 @@ jobs:
   
       - name: Install chromium
         run: playwright install chromium
-  
+
       - name: Build
         run: make build
   
@@ -70,7 +70,7 @@ jobs:
         run: make lint
   
       - name: Test
-        run: make tests
+        run: make coverage
         env:
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
@@ -96,7 +96,7 @@ jobs:
             js/tests/**/*-snapshots/
             js/test-results/
         if: ${{ failure() && matrix.os == 'ubuntu-latest' }}
-  
+
       - name: Upload test results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -109,7 +109,7 @@ jobs:
         with:
           files: '**/junit.xml'
         if: matrix.os == 'ubuntu-latest'
-  
+
       - name: Upload coverage
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
@@ -159,22 +159,21 @@ jobs:
       - name: Make dist
         run: make dist
         if: matrix.os == 'ubuntu-latest'
-  
+
       - name: Test wheel
         uses: actions-ext/python/test-wheel@6e1b91a408ea89f49bc8aff8724f83826f7b5446
         with:
           module: nbprint
         if: matrix.os == 'ubuntu-latest'
-  
+
       - name: Test source distribution
         uses: actions-ext/python/test-sdist@6e1b91a408ea89f49bc8aff8724f83826f7b5446
         with:
           module: nbprint
         if: matrix.os == 'ubuntu-latest'
-  
+
       - name: Upload distributions
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: dist-${{matrix.os}}
+          name: dist
           path: dist
-        if: matrix.os == 'ubuntu-latest'
