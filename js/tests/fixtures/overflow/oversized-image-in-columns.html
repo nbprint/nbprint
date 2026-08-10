@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fixture: Oversized Image In Columns</title>
+    <script>
+      var _nbprint_configuration = {
+        pagedjs: true,
+        debug: false,
+        page: '{"orientation": null, "size": null}',
+      };
+      var _nbprint_notebook_info = new Map();
+      window.FontAwesomeConfig = { searchPseudoElements: true };
+    </script>
+    <script type="module" src="/js/dist/embedded.js"></script>
+    <link rel="stylesheet" href="/js/dist/css/embedded.css" />
+    <link rel="stylesheet" href="/js/dist/css/index.css" />
+    <style>
+      body.jp-Notebook {
+        margin: 0;
+        padding: 0 !important;
+      }
+      @page {
+        margin: 0.5in;
+      }
+      /* Mimic the CSS that ContentPageBox(layout="columns-2", gap="0.5in")
+   emits via build_page_box_css(). Letter minus 0.5in margins gives a
+   720px content area, so each of the two columns is (720 - 48) / 2 = 336px. */
+      [data-nbprint-page-box="box-cols"] {
+        break-before: page;
+        break-after: page;
+        break-inside: auto;
+        display: block;
+        min-height: 100%;
+        column-count: 2;
+        column-fill: balance;
+        column-gap: 0.5in;
+      }
+      [data-nbprint-page-box="box-cols"] > [data-nbprint-block] {
+        display: flow-root;
+      }
+      [data-nbprint-block] {
+        break-inside: avoid;
+        min-width: 0;
+        min-height: 0;
+      }
+    </style>
+  </head>
+  <body
+    class="jp-Notebook"
+    data-jp-theme-light="true"
+    data-jp-theme-name="JupyterLab Light"
+  >
+    <main>
+      <div
+        class="jp-Cell"
+        data-nbprint-page-box="box-cols"
+        data-nbprint-fit="scale"
+        data-nbprint-layout="columns-2"
+      >
+        <div
+          class="jp-Cell"
+          data-nbprint-block="b1"
+          data-nbprint-break-inside="avoid"
+        >
+          <div class="jp-Cell-outputWrapper">
+            <div class="jp-OutputArea jp-Cell-outputArea">
+              <div class="jp-OutputArea-output jp-RenderedImage">
+                <!-- 1500x1000 chart, wider than the 720px page content area, so preprocessing scales it -->
+                <img
+                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1500' height='1000'%3E%3Crect width='1500' height='1000' fill='%234a90d9'/%3E%3Ctext x='750' y='500' text-anchor='middle' fill='white' font-size='80'%3EChart A (1500x1000)%3C/text%3E%3C/svg%3E"
+                  alt="chart a"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="jp-Cell"
+          data-nbprint-block="b2"
+          data-nbprint-break-inside="avoid"
+        >
+          <div class="jp-Cell-outputWrapper">
+            <div class="jp-OutputArea jp-Cell-outputArea">
+              <div class="jp-OutputArea-output jp-RenderedImage">
+                <img
+                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1500' height='1000'%3E%3Crect width='1500' height='1000' fill='%23d94a90'/%3E%3Ctext x='750' y='500' text-anchor='middle' fill='white' font-size='80'%3EChart B (1500x1000)%3C/text%3E%3C/svg%3E"
+                  alt="chart b"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
