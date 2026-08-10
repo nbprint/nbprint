@@ -347,6 +347,29 @@ test.describe("Pre-pagination preprocessing", () => {
     }
   });
 
+  test("oversized image is capped by its column, not the page", async ({
+    page,
+  }) => {
+    // Scaling wrote the page content width as an inline max-width, which outranks every stylesheet
+    // rule, so an image in a two-column page box grew to full page width and overlapped its
+    // neighbour. Each column here is (720 - 48) / 2 = 336px.
+    await page.goto(
+      "/js/tests/fixtures/overflow/oversized-image-in-columns.html",
+    );
+    await waitForPagedJS(page);
+    const result = await page.evaluate(() => {
+      return [...document.querySelectorAll("img")].map((img) => ({
+        rendered: Math.round(img.getBoundingClientRect().width),
+        container: Math.round(img.parentElement.getBoundingClientRect().width),
+      }));
+    });
+    expect(result.length).toBeGreaterThan(0);
+    for (const { rendered, container } of result) {
+      expect(rendered).toBeLessThanOrEqual(container + 1);
+      expect(rendered).toBeLessThan(500);
+    }
+  });
+
   test("tall table gets annotated and split into chunks", async ({ page }) => {
     await page.goto("/js/tests/fixtures/overflow/long-table.html");
     await waitForPagedJS(page);

@@ -138,7 +138,12 @@ function scaleOversizedImages(contentRoot, contentArea) {
     const h = img.naturalHeight || attrH || 0;
 
     if (w > contentArea.width || h > contentArea.height) {
-      img.style.maxWidth = contentArea.width + "px";
+      // Cap by the container as well as the page. An inline pixel width beats every stylesheet rule,
+      // so setting the page content width alone lets an image inside a narrower container - a page-box
+      // column, a grid cell, a flex row - grow past that container and overlap its neighbour. The
+      // percentage resolves against whatever box the image actually sits in, and the pixel term keeps
+      // a full-width image within the page. Matches the SVG and .jp-RenderedImage branches below.
+      img.style.maxWidth = `min(100%, ${contentArea.width}px)`;
       img.style.maxHeight = contentArea.height + "px";
       img.style.objectFit = "contain";
 
