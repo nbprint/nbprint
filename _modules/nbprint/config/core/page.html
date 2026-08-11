@@ -267,7 +267,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for nbprint.config.core.page</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Tuple</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbformat</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotebookNode</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">field_validator</span>
@@ -277,6 +277,26 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NBPrintNullCellError</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.content</span><span class="w"> </span><span class="kn">import</span> <span class="n">Section</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_iter_page_boxes</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Iterator&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield every ``ContentPageBox`` in a ``ContentMarshall``, including nested ones.&quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.content.page_box</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContentPageBox</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.content</span><span class="w"> </span><span class="kn">import</span> <span class="n">SECTION_ORDER</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">walk</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Iterator&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ContentPageBox</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">node</span>
+        <span class="n">children</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+                <span class="k">yield from</span> <span class="n">walk</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">SECTION_ORDER</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]:</span>
+            <span class="k">yield from</span> <span class="n">walk</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
 
 <span class="n">PAGE_REGION_ATTRS</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">&quot;top&quot;</span><span class="p">,</span>
@@ -510,7 +530,7 @@
 
     <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="s2">&quot;@page { size:&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">@page </span><span class="se">{{</span><span class="s2"> size: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">in; </span><span class="se">}}</span><span class="s2">&quot;</span>
@@ -536,6 +556,33 @@
             <span class="k">if</span> <span class="n">inner_rules</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">@page </span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">inner_rules</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">&quot;</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">[data-nbprint-section=&quot;</span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s1">&quot;] </span><span class="se">{{</span><span class="s1"> page: </span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s1">; </span><span class="se">}}</span><span class="s1">&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_render_page_box_rules</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_render_page_box_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Emit a named ``@page`` rule for every page-box carrying per-page overrides.</span>
+
+<span class="sd">        A page-box cannot emit this itself: cell CSS is wrapped in ``@scope`` by the template, and an</span>
+<span class="sd">        ``@page`` rule inside a scope does nothing. The page model is the one place that emits unscoped</span>
+<span class="sd">        CSS, and it renders before content, so it reaches into the already-built content tree the same way</span>
+<span class="sd">        the per-section rules above work off ``pages``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="n">_iter_page_boxes</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">page_size</span> <span class="ow">or</span> <span class="n">box</span><span class="o">.</span><span class="n">page_orientation</span> <span class="ow">or</span> <span class="n">box</span><span class="o">.</span><span class="n">page_margins</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;nbprint-page-box-</span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">_id</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;@page </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">page_size</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">orientation</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">page_orientation</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span>
+            <span class="n">rules</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;size: </span><span class="si">{</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">in </span><span class="si">{</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">in;&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;size: </span><span class="si">{</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">orientation</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">;&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">box</span><span class="o">.</span><span class="n">page_margins</span><span class="p">:</span>
+                <span class="n">rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;margin: </span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">page_margins</span><span class="si">}</span><span class="s2">;&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">@page </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rules</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">[data-nbprint-page-box=&quot;</span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">_id</span><span class="si">}</span><span class="s1">&quot;] </span><span class="se">{{</span><span class="s1"> page: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">; </span><span class="se">}}</span><span class="s1">&#39;</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;pages&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
