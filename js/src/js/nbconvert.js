@@ -347,6 +347,19 @@ export const build = async (configuration) => {
   // their styles before chunking or previewing
   document.body.classList.add("pagedjs");
 
+  // Page-level CSS is emitted as a per-cell <style> in the body, but Paged.js
+  // collects the stylesheets it will act on before it starts chunking. A rule
+  // left in the body is honoured for ordinary painting yet arrives too late for
+  // anything Paged.js has to register up front - `position: running()` most of
+  // all, whose element is silently left in the flow instead of being lifted
+  // into its margin box. Hoisting is enough; these rules are unscoped by the
+  // template already, so moving them cannot change what they match.
+  for (const style of document.querySelectorAll(
+    'style[data-nbprint-role="page"]',
+  )) {
+    document.head.appendChild(style);
+  }
+
   // Attach orientation class to body
   if (configuration.page.orientation) {
     document.body.setAttribute(

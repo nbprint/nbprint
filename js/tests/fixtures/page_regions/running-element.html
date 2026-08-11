@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fixture: Page Regions</title>
+    <script>
+      var _nbprint_configuration = {
+        pagedjs: true,
+        debug: false,
+        page: '{"orientation": null, "size": null}',
+      };
+      var _nbprint_notebook_info = new Map();
+      window.FontAwesomeConfig = { searchPseudoElements: true };
+    </script>
+    <script type="module" src="/js/dist/embedded.js"></script>
+    <link rel="stylesheet" href="/js/dist/css/embedded.css" />
+    <link rel="stylesheet" href="/js/dist/css/index.css" />
+    <style>
+      body.jp-Notebook {
+        margin: 0;
+        padding: 0 !important;
+      }
+      @page {
+        margin: 0.5in;
+      }
+      /* Mimic exactly what PageGlobal emits for
+         bottom_left=PageRegion(content=RunningElement(name="footerLogo",
+         selector=".footer-logo")), bottom=PageRegion() and
+         suppress_first_page_regions=True. */
+      @page {
+        @bottom-left {
+          content: element(footerLogo);
+        }
+      }
+      @page {
+        @bottom-center {
+          content: counter(page);
+        }
+      }
+      .footer-logo {
+        position: running(footerLogo);
+      }
+      body:not(.pagedjs) .footer-logo {
+        display: none !important;
+      }
+      .pagedjs_first_page .pagedjs_margin-top,
+      .pagedjs_first_page .pagedjs_margin-bottom,
+      .pagedjs_first_page .pagedjs_margin-left,
+      .pagedjs_first_page .pagedjs_margin-right {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body
+    class="jp-Notebook"
+    data-jp-theme-light="true"
+    data-jp-theme-name="JupyterLab Light"
+  >
+    <main>
+      <!-- The running element. Lives in the body, gets lifted into the
+           bottom-left margin box of every page. -->
+      <div class="footer-logo" id="footer-logo">LOGO</div>
+
+      <div class="jp-Cell">
+        <div class="jp-Cell-outputWrapper">
+          <div class="jp-OutputArea jp-Cell-outputArea">
+            <div
+              class="jp-OutputArea-output jp-RenderedHTMLCommon"
+              id="content"
+            ></div>
+            <script>
+              // Enough prose to run past a single page, so first-page and
+              // later-page margin boxes can be compared.
+              const content = document.getElementById("content");
+              let html = "";
+              for (let i = 0; i < 60; i++) {
+                html +=
+                  "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                  "Sed do eiusmod tempor incididunt ut labore et dolore magna " +
+                  "aliqua. Ut enim ad minim veniam.</p>";
+              }
+              content.innerHTML = html;
+            </script>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
