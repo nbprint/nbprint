@@ -156,6 +156,48 @@ function checkMinPages() {
 }
 
 /**
+ * Drop the leading-heading spacing on whichever heading starts a page.
+ *
+ * `--nbprint-heading-spacing` keeps a section heading clear of the cell above
+ * it, but that space is wrong at the top of a page, where it indents the
+ * heading below the page margin. CSS cannot express "first rendered thing on
+ * the page": `:first-child` sees the zero-height and non-rendered siblings
+ * Paged.js leaves behind, and the depth of the wrapper chain varies with the
+ * document. Walking the laid-out pages is exact, and it runs after pagination
+ * so it cannot perturb the layout it is measuring.
+ *
+ * @returns {number} how many headings were trimmed.
+ */
+function trimLeadingHeadingMargins() {
+  const HEADINGS = new Set(["H1", "H2", "H3", "H4", "H5", "H6"]);
+  let trimmed = 0;
+
+  for (const page of document.querySelectorAll(".pagedjs_page")) {
+    const area = page.querySelector(".pagedjs_page_content");
+    if (!area) continue;
+
+    // Descend through the wrapper chain to the first element that actually
+    // occupies space, then take its leading heading, if it has one.
+    let node = area;
+    while (node) {
+      const next = [...node.children].find((child) => {
+        const box = child.getBoundingClientRect();
+        return box.width > 0 && box.height > 0;
+      });
+      if (!next) break;
+      if (HEADINGS.has(next.tagName)) {
+        next.style.setProperty("margin-top", "0", "important");
+        trimmed += 1;
+        break;
+      }
+      node = next;
+    }
+  }
+
+  return trimmed;
+}
+
+/**
  * Run post-pagination validation and repair.
  *
  * @param {object} configuration  The _nbprint_configuration object.
@@ -181,6 +223,13 @@ export function postvalidate(configuration) {
   for (const { id, want, got } of checkMinPages()) {
     console.warn(
       `[nbprint] postprocessing: page-box ${id} asked for ${want} page(s) but produced ${got}`,
+    );
+  }
+
+  const headingsTrimmed = trimLeadingHeadingMargins();
+  if (headingsTrimmed > 0) {
+    console.debug(
+      `[nbprint] postprocessing: trimmed leading margin on ${headingsTrimmed} page-leading heading(s)`,
     );
   }
 

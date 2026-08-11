@@ -75,13 +75,27 @@
   /* padding-left: 0px !important; */
   /* padding-right: 0px !important; */
 }
+/* Leading headings in a cell.
+
+   A section heading is almost always the only content of its own cell, so the
+   heading is the first child of its rendered-markdown container and this rule
+   matches it. Zeroing the margin outright is wrong: it welds the heading to
+   whatever cell precedes it, which for a report is usually a chart. Spacing the
+   heading itself is the only reliable handle, because nbprint emits a per-cell
+   <script> and <style> between cell wrappers and Paged.js strips the scripts
+   while paginating, so no sibling selector reaches the preceding cell.
+
+   The default of 0 preserves the historical behaviour. Set
+   --nbprint-heading-spacing to give section headings room to breathe; the
+   postprocessing pass then zeroes it again on whichever heading leads a page,
+   so an opted-in document does not indent its headings below the top margin. */
 .pagedjs_page .jp-RenderedHTMLCommon h1:first-child,
 .pagedjs_page .jp-RenderedHTMLCommon h2:first-child,
 .pagedjs_page .jp-RenderedHTMLCommon h3:first-child,
 .pagedjs_page .jp-RenderedHTMLCommon h4:first-child,
 .pagedjs_page .jp-RenderedHTMLCommon h5:first-child,
 .pagedjs_page .jp-RenderedHTMLCommon h6:first-child {
-  margin-top: 0px !important;
+  margin-top: var(--nbprint-heading-spacing, 0px) !important;
 }
 .pagedjs_page .jp-RenderedHTMLCommon h1:last-child,
 .pagedjs_page .jp-RenderedHTMLCommon h2:last-child,
