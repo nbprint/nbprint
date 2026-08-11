@@ -20,6 +20,7 @@ from __future__ import annotations
 
 from typing import Iterable, Literal
 
+from pkn import getSimpleLogger
 from pydantic import Field, model_validator
 
 from nbprint.config.base import BaseModel
@@ -28,6 +29,23 @@ from nbprint.config.content.page_box import ContentPageBox, PageBoxFit, PageBoxL
 from nbprint.config.core.content import SECTION_ORDER, Section
 
 __all__ = ("CellMatcher", "LayoutOverlay", "Overlay", "PageBoxOverlay")
+
+_log = getSimpleLogger("nbprint.config.overlay")
+
+
+def describe_matcher(matcher: CellMatcher) -> str:
+    """Render a matcher's set criteria for a diagnostic message."""
+    criteria = {
+        name: value
+        for name, value in (
+            ("index", matcher.index),
+            ("tag", matcher.tag),
+            ("cell_type", matcher.cell_type),
+            ("section", matcher.section),
+        )
+        if value is not None
+    }
+    return ", ".join(f"{k}={v!r}" for k, v in criteria.items()) or "<matches every cell>"
 
 
 class CellMatcher(BaseModel):
@@ -124,17 +142,21 @@ class Overlay(BaseModel):
         )
 
 
-def apply_overlays(overlays: list[Overlay], cell, content, index: int, section: str | None) -> None:
+def apply_overlays(overlays: list[Overlay], cell, content, index: int, section: str | None) -> list[Overlay]:
     """Apply all matching overlays from ``overlays`` to ``content``.
 
     Overlays are applied in list order; later overlays layer on top of earlier
-    ones.
+    ones.  Returns the overlays that matched, so the caller can tell which of
+    them never matched anything across the whole notebook.
     """
     if not overlays:
-        return
+        return []
+    matched = []
     for overlay in overlays:
         if overlay.match.matches(cell=cell, index=index, section=section):
             overlay.apply(content)
+            matched.append(overlay)
+    return matched
 
 
 class LayoutOverlay(BaseModel):
@@ -330,6 +352,7 @@ def apply_layout_overlays(
                 matched.append(i)
 
         if not matched:
+            _log.warning(f"layout overlay ({describe_matcher(lo.match)}) matched no cells; the cells it was meant to wrap will render unlaid-out")
             continue
 
         # Group into contiguous runs (consecutive notebook indices, same section)

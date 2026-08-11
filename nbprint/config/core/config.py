@@ -21,7 +21,14 @@ from nbprint.config.common import Style
 from nbprint.config.content import Content, ContentCode, ContentMarkdown
 from nbprint.config.exceptions import NBPrintPathIsYamlError, NBPrintPathOrModelMalformedError
 from nbprint.config.magic import _parse_magic_line
-from nbprint.config.overlay import LayoutOverlay, Overlay, apply_layout_overlays, apply_overlays, build_layout_overlay
+from nbprint.config.overlay import (
+    LayoutOverlay,
+    Overlay,
+    apply_layout_overlays,
+    apply_overlays,
+    build_layout_overlay,
+    describe_matcher,
+)
 from nbprint.config.page_runtime import NBPRINT_PAGE_MIME
 
 from .content import SECTION_ORDER, ContentMarshall
@@ -39,6 +46,28 @@ _log = getSimpleLogger("nbprint.config.core.config")
 
 
 _SECTION_TAG_PREFIX = "nbprint:section:"
+
+# Tags nbprint reserves for itself. Anything under the namespace that is not one
+# of these is inert, and almost always a typo. Split in two because a bare
+# prefix test would accept "nbprint:pagebox" as the reserved tag "nbprint:page".
+_RESERVED_TAG_NAMESPACE = "nbprint:"
+_RESERVED_TAGS = frozenset(
+    {
+        "nbprint:config",
+        "nbprint:content",
+        "nbprint:context",
+        "nbprint:outputs",
+        "nbprint:page",
+        "nbprint:parameters",
+    }
+)
+_RESERVED_TAG_PREFIXES = (
+    "nbprint:content:",
+    "nbprint:output:",
+    "nbprint:page:",
+    "nbprint:section:",
+    "nbprint:section-group:",
+)
 
 
 class Configuration(CallableModel, BaseModel):
@@ -405,8 +434,10 @@ class Configuration(CallableModel, BaseModel):
         layout_overlays: list[LayoutOverlay] = [build_layout_overlay(spec) for spec in raw_layouts if isinstance(spec, (LayoutOverlay, dict))]
 
         placements: list = [None] * len(cells_to_process)
+        matched_overlays: set[int] = set()
 
         for i, cell in enumerate(cells_to_process):
+            Configuration._warn_on_unconsumed_tags(cell, index=i)
             cell_instance = Configuration._cell_to_content(cell)
             if cell_instance is not None:
                 # Route cell to the appropriate section based on tags/metadata.
@@ -422,10 +453,14 @@ class Configuration(CallableModel, BaseModel):
                 target_section = section or "middlematter"
 
                 # Apply formatting overlays
-                apply_overlays(overlays, cell=cell, content=cell_instance, index=i, section=target_section)
+                matched_overlays.update(id(o) for o in apply_overlays(overlays, cell=cell, content=cell_instance, index=i, section=target_section))
 
                 getattr(values["content"], target_section).append(cell_instance)
                 placements[i] = (target_section, cell_instance)
+
+        for overlay in overlays:
+            if id(overlay) not in matched_overlays:
+                _log.warning(f"overlay ({describe_matcher(overlay.match)}) matched no cells; its formatting was not applied anywhere")
 
         # Apply layout-wrapping overlays after all cells are placed.
         if layout_overlays:
@@ -436,6 +471,32 @@ class Configuration(CallableModel, BaseModel):
                 setattr(values["parameters"], k, v)
             elif isinstance(values["parameters"], PapermillParameters) and (k not in values["parameters"].vars or values["parameters"].vars[k] is None):
                 values["parameters"].vars[k] = v
+
+    @staticmethod
+    def _warn_on_unconsumed_tags(cell, index: int) -> None:
+        """Flag reserved-namespace cell tags that nbprint will not act on.
+
+        A tag in the ``nbprint:`` namespace looks authoritative, so a typo in
+        one is silently inert: the cell simply renders as though the tag were
+        never there.  Both cases here are unambiguous authoring mistakes, and
+        both used to cost the author a render cycle to notice.
+        """
+        tags = cell.get("metadata", {}).get("tags", []) if hasattr(cell, "get") else []
+        for tag in tags:
+            if not tag.startswith(_RESERVED_TAG_NAMESPACE):
+                continue
+            if tag.startswith(_SECTION_TAG_PREFIX):
+                name = tag[len(_SECTION_TAG_PREFIX) :]
+                if name not in SECTION_ORDER:
+                    _log.warning(
+                        f"cell {index} is tagged {tag!r} but {name!r} is not a section; "
+                        f"it will fall back to middlematter. Known sections: {', '.join(SECTION_ORDER)}"
+                    )
+                continue
+            if tag in _RESERVED_TAGS:
+                continue
+            if not any(tag.startswith(prefix) for prefix in _RESERVED_TAG_PREFIXES):
+                _log.warning(f"cell {index} carries reserved tag {tag!r}, which nbprint does not consume")
 
     @model_validator(mode="before")
     @classmethod
