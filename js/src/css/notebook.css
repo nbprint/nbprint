@@ -6272,10 +6272,8 @@ body.lm-mod-override-cursor .jp-OutputArea-output.jp-mod-isolated::before {
   );
   width: calc(
     100% -
-      (
-        var(--jp-cell-prompt-width) + var(--jp-cell-collapser-width) +
-          var(--jp-cell-padding) + var(--jp-cell-padding)
-      )
+      (var(--jp-cell-prompt-width) + var(--jp-cell-collapser-width) +
+        var(--jp-cell-padding) + var(--jp-cell-padding))
   );
   border: var(--jp-border-width) solid var(--jp-cell-editor-border-color);
   color: var(--jp-ui-font-color3);
