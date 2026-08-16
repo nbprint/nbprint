@@ -51,7 +51,10 @@ const bundle_one = async (file, resolver) => {
   fs.writeFileSync(path.join("./dist/css", outName), code);
 };
 
-export const bundle_css = async (root = "src/css/index.css", resolver = null) => {
+export const bundle_css = async (
+  root = "src/css/index.css",
+  resolver = null,
+) => {
   const resolved = path.resolve(root);
   if (fs.statSync(resolved).isDirectory()) {
     const files = fs.readdirSync(resolved).filter((f) => f.endsWith(".css"));
@@ -61,4 +64,4 @@ export const bundle_css = async (root = "src/css/index.css", resolver = null) =>
   } else {
     await bundle_one(root, resolver);
   }
-}
+};

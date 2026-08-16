@@ -110,6 +110,10 @@ current_version = "0.12.2"
 commit = true
 tag = false
 commit_args = "-s"
+pre_commit_hooks = [
+    "pnpm --dir js install --lockfile-only --no-frozen-lockfile --ignore-scripts",
+    "git add js/pnpm-lock.yaml",
+]
 
 [[tool.bumpversion.files]]
 filename = "nbprint/__init__.py"
