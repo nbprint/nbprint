@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Iterator, Tuple
 
 from nbformat import NotebookNode
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 
 from nbprint.config.base import BaseModel, Role, _append_or_extend
 from nbprint.config.common import PageOrientation, PageSize, Style
@@ -48,8 +48,23 @@ PAGE_REGION_ATTRS = (
     "right_bottom",
 )
 
+# The four edge regions whose CSS name is not their attribute name.
+_REGION_CSS_NAMES = {
+    "top": "top-center",
+    "bottom": "bottom-center",
+    "left": "left-center",
+    "right": "right-center",
+}
+
+
+def _region_css_name(attr: str) -> str:
+    return _REGION_CSS_NAMES.get(attr, attr.replace("_", "-"))
+
+
 if TYPE_CHECKING:
     from .config import Configuration
+
+_FIRST_PAGE_SUPPRESSION_MARKER = ".pagedjs_first_page .pagedjs_margin-"
 
 __all__ = (
     "Page",
@@ -57,6 +72,7 @@ __all__ = (
     "PageNumber",
     "PageRegion",
     "PageRegionContent",
+    "RunningElement",
 )
 
 
@@ -80,9 +96,56 @@ class PageRegionContent(BaseModel):
             v.append("nbprint:page")
         return v
 
+    def region_css(self) -> str:
+        """CSS this content needs *outside* its ``@page`` block.
+
+        Most region content is self-contained: a string, a counter. Content
+        sourced from the document body is not, because the source element has
+        to be styled where it lives.
+        """
+        return ""
+
 
 class PageNumber(PageRegionContent):
     content: str | None = "counter(page)"
+
+
+class RunningElement(PageRegionContent):
+    """Region content taken from an element that lives in the document body.
+
+    Paged.js lifts an element out of the flow when it carries
+    ``position: running(<name>)``, and a margin box pulls it back in with
+    ``content: element(<name>)``. Nothing here was expressible before, so every
+    consumer hand-rolled the pair -- and each one also had to rediscover that
+    the source element must be hidden when the document is *not* paginated,
+    since ``position: running()`` means nothing outside Paged.js and the element
+    would otherwise render inline in the body.
+
+    ``selector`` addresses the source element, e.g. ``.footer-logo``.
+    """
+
+    name: str
+    selector: str
+
+    @model_validator(mode="after")
+    def _default_content_to_the_element(self) -> "RunningElement":
+        if not self.content:
+            self.content = f"element({self.name})"
+        return self
+
+    def region_css(self) -> str:
+        # The `position: running()` rule has to be matchable against the parsed
+        # content fragment, because that is where Paged.js hides the source
+        # element (it sets an inline `display: none` on everything the rule
+        # selects). The fragment holds the body's *children*, so any selector
+        # rooted at `body` matches nothing there, the element is never hidden,
+        # and it paints in the normal flow while its clone appears in the margin
+        # box. For the same reason the rule must not force the element visible:
+        # a `display: block !important` here would outrank the inline
+        # `display: none` Paged.js relies on. Hiding for the unpaginated case is
+        # left to a `body`-rooted rule, which is only ever matched against the
+        # live document.
+        return f"\n{self.selector} {{ position: running({self.name}); }}\nbody:not(.pagedjs) {self.selector} {{ display: none !important; }}"
 
 
 class PageRegion(BaseModel):
@@ -131,10 +194,54 @@ class Page(BaseModel):
     counter_reset: bool = False
     counter_style: str | None = None
 
+    # The first page of a report is nearly always a cover, and a running footer
+    # or header across a cover looks like a mistake. Suppressing it is otherwise
+    # a hand-written rule against Paged.js' internal margin-box class names.
+    suppress_first_page_regions: bool = False
+
     size: PageSize | Tuple[float, float] | None = Field(default=PageSize.letter)
     orientation: PageOrientation | None = Field(default=PageOrientation.portrait)
 
     css: str = ""
+
+    @model_validator(mode="after")
+    def _assemble_page_css(self) -> "Page":
+        """Collect the CSS that has to sit outside any ``@page`` block or ``@scope``.
+
+        Two things land here rather than on the region itself. A region's CSS is
+        emitted as *cell* CSS, which the template wraps in ``@scope``, so a rule
+        addressing ``body`` or an element elsewhere in the document can never
+        match from there. And ``Configuration.page`` is typed as ``Page``, so a
+        consumer subclassing ``Page`` never reaches ``PageGlobal.render`` --
+        anything emitted only from there would silently do nothing for them.
+        """
+        for attr in PAGE_REGION_ATTRS:
+            region = getattr(self, attr, None)
+            if region is None or region.content is None:
+                continue
+
+            # A region handed over as a field default -- `bottom_left: PageRegion
+            # = Field(default=Footer())` on a Page subclass -- never passes
+            # through the `mode="before"` validator that names it and attaches
+            # its margin-box rule, because Pydantic does not validate defaults.
+            # Without that rule the box is never declared, so nothing consumes
+            # the region's content: a running element in particular is then left
+            # in the flow with no margin box to be lifted into. This validator
+            # does run for defaults, so it is the one place that can repair them.
+            region_name = _region_css_name(attr)
+            if not region._region:
+                region._region = region_name
+            if f"@{region_name} {{" not in region.css:
+                region.css += f"@page {{ @{region_name} {{ {region.content} }} }}"
+
+            extra = region.content.region_css()
+            if extra and extra not in self.css:
+                self.css += extra
+
+        if self.suppress_first_page_regions and _FIRST_PAGE_SUPPRESSION_MARKER not in self.css:
+            selectors = ", ".join(f".pagedjs_first_page .pagedjs_margin-{edge}" for edge in ("top", "bottom", "left", "right"))
+            self.css += f"\n{selectors} {{ display: none !important; }}"
+        return self
 
     @classmethod
     def convert_region_from_obj(cls, v, region) -> PageRegion:

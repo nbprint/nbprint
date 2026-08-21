@@ -108,7 +108,7 @@ a.anchor-link {
         {% endif %}
     </script>
     {% if cell.metadata["nbprint"].get("css", None) %}
-    <style>
+    <style data-nbprint-role="{{ cell.metadata["nbprint"].get("role", "") }}">
         /* TODO should we make this like `ignore` as a first-order attribute? */
         {% if cell.metadata["nbprint"].get("role", "") not in ("configuration", "page") %}
         @scope (.{{ cell.metadata["nbprint"]["element_selector"] }}) {
