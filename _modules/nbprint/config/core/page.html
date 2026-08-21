@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>nbprint.config.core.page - nbprint v0.12.2</title>
+        <title>nbprint.config.core.page - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -187,7 +187,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -279,16 +279,16 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.content</span><span class="w"> </span><span class="kn">import</span> <span class="n">Section</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_iter_page_boxes</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Iterator&quot;</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Yield every ``ContentPageBox`` in a ``ContentMarshall``, including nested ones.&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_iter_page_boxes</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Iterator"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Yield every ``ContentPageBox`` in a ``ContentMarshall``, including nested ones."""</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.content.page_box</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContentPageBox</span>
 
     <span class="kn">from</span><span class="w"> </span><span class="nn">.content</span><span class="w"> </span><span class="kn">import</span> <span class="n">SECTION_ORDER</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">walk</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Iterator&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">walk</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Iterator"</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">ContentPageBox</span><span class="p">):</span>
             <span class="k">yield</span> <span class="n">node</span>
-        <span class="n">children</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">children</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">children</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
                 <span class="k">yield from</span> <span class="n">walk</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
@@ -299,38 +299,38 @@
 
 
 <span class="n">PAGE_REGION_ATTRS</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;top&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;top_left&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;top_left_corner&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;top_right&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;top_right_corner&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;bottom_left&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;bottom_left_corner&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;bottom_right&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;bottom_right_corner&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;left&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;left_top&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;left_bottom&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;right&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;right_top&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;right_bottom&quot;</span><span class="p">,</span>
+    <span class="s2">"top"</span><span class="p">,</span>
+    <span class="s2">"top_left"</span><span class="p">,</span>
+    <span class="s2">"top_left_corner"</span><span class="p">,</span>
+    <span class="s2">"top_right"</span><span class="p">,</span>
+    <span class="s2">"top_right_corner"</span><span class="p">,</span>
+    <span class="s2">"bottom"</span><span class="p">,</span>
+    <span class="s2">"bottom_left"</span><span class="p">,</span>
+    <span class="s2">"bottom_left_corner"</span><span class="p">,</span>
+    <span class="s2">"bottom_right"</span><span class="p">,</span>
+    <span class="s2">"bottom_right_corner"</span><span class="p">,</span>
+    <span class="s2">"left"</span><span class="p">,</span>
+    <span class="s2">"left_top"</span><span class="p">,</span>
+    <span class="s2">"left_bottom"</span><span class="p">,</span>
+    <span class="s2">"right"</span><span class="p">,</span>
+    <span class="s2">"right_top"</span><span class="p">,</span>
+    <span class="s2">"right_bottom"</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Configuration</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;Page&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PageGlobal&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PageNumber&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PageRegion&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PageRegionContent&quot;</span><span class="p">,</span>
+    <span class="s2">"Page"</span><span class="p">,</span>
+    <span class="s2">"PageGlobal"</span><span class="p">,</span>
+    <span class="s2">"PageNumber"</span><span class="p">,</span>
+    <span class="s2">"PageRegion"</span><span class="p">,</span>
+    <span class="s2">"PageRegionContent"</span><span class="p">,</span>
 <span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">PageRegionContent</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">""</span>
 
     <span class="c1"># common</span>
     <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
@@ -339,43 +339,43 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
-            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;content: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">"content: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">;"</span>
+        <span class="k">return</span> <span class="s2">""</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"after"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_tags</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="s2">&quot;nbprint:page&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
-            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;nbprint:page&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"nbprint:page"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"nbprint:page"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">PageNumber</span><span class="p">(</span><span class="n">PageRegionContent</span><span class="p">):</span>
-    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;counter(page)&quot;</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">"counter(page)"</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">PageRegion</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">_region</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">_region</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="n">content</span><span class="p">:</span> <span class="n">PageRegionContent</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">PageNumber</span><span class="p">)</span>
     <span class="n">style</span><span class="p">:</span> <span class="n">Style</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
 
     <span class="c1"># common</span>
     <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">role</span><span class="p">:</span> <span class="n">Role</span> <span class="o">=</span> <span class="n">Role</span><span class="o">.</span><span class="n">PAGE</span>
     <span class="n">ignore</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"after"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_tags</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="s2">&quot;nbprint:page&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
-            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;nbprint:page&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"nbprint:page"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"nbprint:page"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="s2">&quot;BaseModel&quot;</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NotebookNode</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="s2">"BaseModel"</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NotebookNode</span><span class="p">:</span>
         <span class="n">cell</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="n">attr</span><span class="p">)</span>
-        <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;nbprint:page:</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"nbprint:page:</span><span class="si">{</span><span class="n">attr</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">cell</span>
 
 
@@ -405,7 +405,7 @@
     <span class="n">size</span><span class="p">:</span> <span class="n">PageSize</span> <span class="o">|</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">PageSize</span><span class="o">.</span><span class="n">letter</span><span class="p">)</span>
     <span class="n">orientation</span><span class="p">:</span> <span class="n">PageOrientation</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">PageOrientation</span><span class="o">.</span><span class="n">portrait</span><span class="p">)</span>
 
-    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
 
 <div class="viewcode-block" id="Page.convert_region_from_obj">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.convert_region_from_obj">[docs]</a>
@@ -413,102 +413,102 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_region_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">region</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">PageRegion</span><span class="p">)</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">_region</span> <span class="o">=</span> <span class="n">region</span>
-        <span class="n">base_css_scope</span> <span class="o">=</span> <span class="s2">&quot;@page {{ @</span><span class="si">{region}</span><span class="s2"> {{ </span><span class="si">{content}</span><span class="s2"> }} }}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">content</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="n">base_css_scope</span> <span class="o">=</span> <span class="s2">"@page {{ @</span><span class="si">{region}</span><span class="s2"> {{ </span><span class="si">{content}</span><span class="s2"> }} }}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">region</span><span class="o">=</span><span class="n">region</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">ret</span><span class="o">.</span><span class="n">content</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">))</span>
         <span class="n">ret</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="n">base_css_scope</span>
         <span class="k">return</span> <span class="n">ret</span></div>
 
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;top&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"top"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_top_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;top-center&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"top-center"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;top_left&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"top_left"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_top_left_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;top-left&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"top-left"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;top_left_corner&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"top_left_corner"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_top_left_corner_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;top-left-corner&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"top-left-corner"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;top_right&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"top_right"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_top_right_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;top-right&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"top-right"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;top_right_corner&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"top_right_corner"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_top_right_corner_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;top-right-corner&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"top-right-corner"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"bottom"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_bottom_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;bottom-center&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"bottom-center"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;bottom_left&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"bottom_left"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_bottom_left_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;bottom-left&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"bottom-left"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;bottom_left_corner&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"bottom_left_corner"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_bottom_left_corner_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;bottom-left-corner&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"bottom-left-corner"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;bottom_right&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"bottom_right"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_bottom_right_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;bottom-right&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"bottom-right"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;bottom_right_corner&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"bottom_right_corner"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_bottom_right_corner_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;bottom-right-corner&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"bottom-right-corner"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"left"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_left_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;left-center&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"left-center"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;left_top&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"left_top"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_left_top_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;left-top&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"left-top"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;left_bottom&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"left_bottom"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_left_bottom_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;left-bottom&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"left-bottom"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"right"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_right_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;right-center&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"right-center"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;right_top&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"right_top"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_right_top_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;right-top&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"right-top"</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;right_bottom&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"right_bottom"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_right_bottom_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageRegion</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">&quot;right-bottom&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Page</span><span class="o">.</span><span class="n">convert_region_from_obj</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s2">"right-bottom"</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Page.generate">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.generate">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="s2">&quot;BaseModel&quot;</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;page&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NotebookNode</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">NotebookNode</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="s2">"BaseModel"</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"page"</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NotebookNode</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="n">NotebookNode</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">cells</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># parent and config should be equal for the global page layout</span>
         <span class="k">assert</span> <span class="n">parent</span> <span class="o">==</span> <span class="n">config</span>
 
-        <span class="n">main_cell</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_base_generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="n">attr</span> <span class="ow">or</span> <span class="s2">&quot;page&quot;</span><span class="p">)</span>
-        <span class="n">main_cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;nbprint:page&quot;</span><span class="p">)</span>
-        <span class="n">main_cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">role</span> <span class="o">=</span> <span class="s2">&quot;page&quot;</span>
+        <span class="n">main_cell</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_base_generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="n">attr</span> <span class="ow">or</span> <span class="s2">"page"</span><span class="p">)</span>
+        <span class="n">main_cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"nbprint:page"</span><span class="p">)</span>
+        <span class="n">main_cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">role</span> <span class="o">=</span> <span class="s2">"page"</span>
         <span class="n">main_cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">ignore</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">cells</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">main_cell</span><span class="p">)</span>
 
@@ -526,67 +526,67 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">PageGlobal</span><span class="p">(</span><span class="n">Page</span><span class="p">):</span>
-    <span class="n">pages</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Section</span><span class="p">,</span> <span class="s2">&quot;Page&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">pages</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Section</span><span class="p">,</span> <span class="s2">"Page"</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
-    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;@page { size:&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"@page { size:"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">@page </span><span class="se">{{</span><span class="s2"> size: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">in; </span><span class="se">}}</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">@page </span><span class="se">{{</span><span class="s2"> size: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">in; </span><span class="se">}}</span><span class="s2">"</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">@page </span><span class="se">{{</span><span class="s2"> size: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">; </span><span class="se">}}</span><span class="s2">&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">@page </span><span class="se">{{</span><span class="s2"> size: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">orientation</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">; </span><span class="se">}}</span><span class="s2">"</span>
 
         <span class="c1"># Generate per-section named page CSS</span>
         <span class="k">for</span> <span class="n">section_name</span><span class="p">,</span> <span class="n">section_page</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pages</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">marker</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;@page </span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">marker</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"@page </span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s2">"</span>
             <span class="k">if</span> <span class="n">marker</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">inner_rules</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">region_attr</span> <span class="ow">in</span> <span class="n">PAGE_REGION_ATTRS</span><span class="p">:</span>
                 <span class="n">region</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">section_page</span><span class="p">,</span> <span class="n">region_attr</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">region</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">region</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
-                    <span class="n">inner_rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@</span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">_region</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">inner_rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"@</span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">_region</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">"</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">section_page</span><span class="o">.</span><span class="n">counter_reset</span><span class="p">:</span>
-                <span class="n">inner_rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;counter-reset: page 1;&quot;</span><span class="p">)</span>
+                <span class="n">inner_rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"counter-reset: page 1;"</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">section_page</span><span class="o">.</span><span class="n">counter_style</span><span class="p">:</span>
-                <span class="n">inner_rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;@bottom-center </span><span class="se">{{</span><span class="s2"> content: counter(page, </span><span class="si">{</span><span class="n">section_page</span><span class="o">.</span><span class="n">counter_style</span><span class="si">}</span><span class="s2">); </span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">inner_rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"@bottom-center </span><span class="se">{{</span><span class="s2"> content: counter(page, </span><span class="si">{</span><span class="n">section_page</span><span class="o">.</span><span class="n">counter_style</span><span class="si">}</span><span class="s2">); </span><span class="se">}}</span><span class="s2">"</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">section_page</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
                 <span class="n">inner_rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">section_page</span><span class="o">.</span><span class="n">css</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">inner_rules</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">@page </span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">inner_rules</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">&quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">[data-nbprint-section=&quot;</span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s1">&quot;] </span><span class="se">{{</span><span class="s1"> page: </span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s1">; </span><span class="se">}}</span><span class="s1">&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">@page </span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">inner_rules</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">"</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">[data-nbprint-section="</span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s1">"] </span><span class="se">{{</span><span class="s1"> page: </span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s1">; </span><span class="se">}}</span><span class="s1">'</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_render_page_box_rules</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_render_page_box_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Emit a named ``@page`` rule for every page-box carrying per-page overrides.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_render_page_box_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Emit a named ``@page`` rule for every page-box carrying per-page overrides.</span>
 
 <span class="sd">        A page-box cannot emit this itself: cell CSS is wrapped in ``@scope`` by the template, and an</span>
 <span class="sd">        ``@page`` rule inside a scope does nothing. The page model is the one place that emits unscoped</span>
 <span class="sd">        CSS, and it renders before content, so it reaches into the already-built content tree the same way</span>
 <span class="sd">        the per-section rules above work off ``pages``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">content</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+<span class="sd">        """</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="n">_iter_page_boxes</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">page_size</span> <span class="ow">or</span> <span class="n">box</span><span class="o">.</span><span class="n">page_orientation</span> <span class="ow">or</span> <span class="n">box</span><span class="o">.</span><span class="n">page_margins</span><span class="p">):</span>
                 <span class="k">continue</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;nbprint-page-box-</span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">_id</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;@page </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"nbprint-page-box-</span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">_id</span><span class="si">}</span><span class="s2">"</span>
+            <span class="k">if</span> <span class="sa">f</span><span class="s2">"@page </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">size</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">page_size</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span>
             <span class="n">orientation</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">page_orientation</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span>
-            <span class="n">rules</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;size: </span><span class="si">{</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">in </span><span class="si">{</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">in;&quot;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;size: </span><span class="si">{</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">orientation</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">;&quot;</span><span class="p">]</span>
+            <span class="n">rules</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"size: </span><span class="si">{</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">in </span><span class="si">{</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">in;"</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"size: </span><span class="si">{</span><span class="n">size</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">orientation</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">;"</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">box</span><span class="o">.</span><span class="n">page_margins</span><span class="p">:</span>
-                <span class="n">rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;margin: </span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">page_margins</span><span class="si">}</span><span class="s2">;&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">@page </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rules</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">&quot;</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">[data-nbprint-page-box=&quot;</span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">_id</span><span class="si">}</span><span class="s1">&quot;] </span><span class="se">{{</span><span class="s1"> page: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">; </span><span class="se">}}</span><span class="s1">&#39;</span>
+                <span class="n">rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"margin: </span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">page_margins</span><span class="si">}</span><span class="s2">;"</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">@page </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="s1">' '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rules</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">"</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">[data-nbprint-page-box="</span><span class="si">{</span><span class="n">box</span><span class="o">.</span><span class="n">_id</span><span class="si">}</span><span class="s1">"] </span><span class="se">{{</span><span class="s1"> page: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s1">; </span><span class="se">}}</span><span class="s1">'</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;pages&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"pages"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">convert_pages_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Page&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_pages_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Page"</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
@@ -630,7 +630,7 @@
       
     </aside>
   </div>
-</div><script src="../../../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>

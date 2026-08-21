@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>nbprint.cli - nbprint v0.12.2</title>
+        <title>nbprint.cli - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -187,7 +187,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -279,7 +279,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Configuration</span><span class="p">,</span> <span class="n">Executor</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.config.hydra</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_config</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;hydra&quot;</span><span class="p">,</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span> <span class="s2">&quot;run&quot;</span><span class="p">)</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"hydra"</span><span class="p">,</span> <span class="s2">"main"</span><span class="p">,</span> <span class="s2">"run"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="run">
@@ -292,12 +292,12 @@
     <span class="n">dry_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Configuration</span> <span class="o">|</span> <span class="n">Executor</span><span class="p">:</span>
     <span class="n">registry</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">)</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">registry</span><span class="p">[</span><span class="s2">&quot;callable&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;callable&quot;</span> <span class="ow">in</span> <span class="n">registry</span> <span class="k">else</span> <span class="n">registry</span><span class="p">[</span><span class="s2">&quot;nbprint&quot;</span><span class="p">]</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">registry</span><span class="p">[</span><span class="s2">"callable"</span><span class="p">]</span> <span class="k">if</span> <span class="s2">"callable"</span> <span class="ow">in</span> <span class="n">registry</span> <span class="k">else</span> <span class="n">registry</span><span class="p">[</span><span class="s2">"nbprint"</span><span class="p">]</span>
     <span class="n">model</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">debug</span> <span class="k">else</span> <span class="n">model</span><span class="o">.</span><span class="n">debug</span>
-    <span class="n">global_options</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/cli/global&quot;</span><span class="p">,</span> <span class="n">FlowOptions</span><span class="p">())</span>
-    <span class="n">model_options</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/cli/model&quot;</span><span class="p">,</span> <span class="n">FlowOptions</span><span class="p">())</span>
+    <span class="n">global_options</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/cli/global"</span><span class="p">,</span> <span class="n">FlowOptions</span><span class="p">())</span>
+    <span class="n">model_options</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/cli/model"</span><span class="p">,</span> <span class="n">FlowOptions</span><span class="p">())</span>
     <span class="k">with</span> <span class="n">FlowOptionsOverride</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">global_options</span><span class="p">),</span> <span class="n">FlowOptionsOverride</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">model_options</span><span class="p">):</span>
-        <span class="n">pprint</span><span class="p">(</span><span class="n">OmegaConf</span><span class="o">.</span><span class="n">to_yaml</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">)))</span> <span class="k">if</span> <span class="n">cfg</span> <span class="k">else</span> <span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dry_run</span><span class="o">=</span><span class="n">dry_run</span><span class="p">)</span>
+        <span class="n">pprint</span><span class="p">(</span><span class="n">OmegaConf</span><span class="o">.</span><span class="n">to_yaml</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">"json"</span><span class="p">)))</span> <span class="k">if</span> <span class="n">cfg</span> <span class="k">else</span> <span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">dry_run</span><span class="o">=</span><span class="n">dry_run</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">model</span></div>
 
 
@@ -305,16 +305,16 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">run_cli</span><span class="p">(</span>
     <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">overrides</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Argument</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>
-    <span class="n">cfg</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--cfg&quot;</span><span class="p">,</span> <span class="n">is_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Print the config&quot;</span><span class="p">),</span>
-    <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--debug&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Run in debug mode&quot;</span><span class="p">),</span>
-    <span class="n">dry_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;--dry-run&quot;</span><span class="p">,</span> <span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Run dry run&quot;</span><span class="p">),</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">"--cfg"</span><span class="p">,</span> <span class="n">is_eager</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Print the config"</span><span class="p">),</span>
+    <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">"--debug"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Run in debug mode"</span><span class="p">),</span>
+    <span class="n">dry_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">"--dry-run"</span><span class="p">,</span> <span class="s2">"-d"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Run dry run"</span><span class="p">),</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">run</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="n">overrides</span><span class="p">,</span> <span class="n">cfg</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">,</span> <span class="n">dry_run</span><span class="o">=</span><span class="n">dry_run</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="hydra">
 <a class="viewcode-back" href="../../docs/src/_build/nbprint.cli.hydra.html#nbprint.cli.hydra">[docs]</a>
-<span class="nd">@hydra_main</span><span class="p">(</span><span class="n">config_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;config&quot;</span> <span class="o">/</span> <span class="s2">&quot;hydra&quot;</span><span class="p">),</span> <span class="n">config_name</span><span class="o">=</span><span class="s2">&quot;base&quot;</span><span class="p">,</span> <span class="n">version_base</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="nd">@hydra_main</span><span class="p">(</span><span class="n">config_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"config"</span> <span class="o">/</span> <span class="s2">"hydra"</span><span class="p">),</span> <span class="n">config_name</span><span class="o">=</span><span class="s2">"base"</span><span class="p">,</span> <span class="n">version_base</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">hydra</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResultBase</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">cfg_run</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span></div>
 
@@ -323,13 +323,13 @@
 <div class="viewcode-block" id="hydra_explain">
 <a class="viewcode-back" href="../../docs/src/_build/nbprint.cli.hydra_explain.html#nbprint.cli.hydra_explain">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">hydra_explain</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">cfg_explain_cli</span><span class="p">(</span><span class="n">config_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;config&quot;</span> <span class="o">/</span> <span class="s2">&quot;hydra&quot;</span><span class="p">),</span> <span class="n">config_name</span><span class="o">=</span><span class="s2">&quot;base&quot;</span><span class="p">,</span> <span class="n">hydra_main</span><span class="o">=</span><span class="n">hydra</span><span class="p">)</span></div>
+    <span class="n">cfg_explain_cli</span><span class="p">(</span><span class="n">config_path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">"config"</span> <span class="o">/</span> <span class="s2">"hydra"</span><span class="p">),</span> <span class="n">config_name</span><span class="o">=</span><span class="s2">"base"</span><span class="p">,</span> <span class="n">hydra_main</span><span class="o">=</span><span class="n">hydra</span><span class="p">)</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">app</span> <span class="o">=</span> <span class="n">Typer</span><span class="p">()</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">)(</span><span class="n">run_cli</span><span class="p">)</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="s2">"run"</span><span class="p">)(</span><span class="n">run_cli</span><span class="p">)</span>
     <span class="n">app</span><span class="p">()</span>
 </pre></div>
         </article>
@@ -363,7 +363,7 @@
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

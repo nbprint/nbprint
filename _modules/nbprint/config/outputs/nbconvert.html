@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>nbprint.config.outputs.nbconvert - nbprint v0.12.2</title>
+        <title>nbprint.config.outputs.nbconvert - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -187,7 +187,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -278,41 +278,41 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Configuration</span><span class="p">,</span> <span class="n">Outputs</span><span class="p">,</span> <span class="n">OutputsProcessing</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;HTMLOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;NBConvertOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;NBConvertShortCircuitOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;NotebookOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;PDFOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;WebHTMLOutputs&quot;</span><span class="p">,</span> <span class="s2">&quot;short_circuit_hook&quot;</span><span class="p">)</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"HTMLOutputs"</span><span class="p">,</span> <span class="s2">"NBConvertOutputs"</span><span class="p">,</span> <span class="s2">"NBConvertShortCircuitOutputs"</span><span class="p">,</span> <span class="s2">"NotebookOutputs"</span><span class="p">,</span> <span class="s2">"PDFOutputs"</span><span class="p">,</span> <span class="s2">"WebHTMLOutputs"</span><span class="p">,</span> <span class="s2">"short_circuit_hook"</span><span class="p">)</span>
 
 
 <span class="c1"># nbconvert/traitlets paths that nbprint already drives through its own fields.</span>
-<span class="c1"># Allowing these in ``nbconvert_config`` would silently shadow or fight nbprint&#39;s</span>
+<span class="c1"># Allowing these in ``nbconvert_config`` would silently shadow or fight nbprint's</span>
 <span class="c1"># own wiring (e.g. ``ExecutePreprocessor.enabled`` only reaches the convert pass</span>
 <span class="c1"># here, triggering a second execution). Maps each managed path — and its CLI</span>
 <span class="c1"># alias form — to the nbprint field that should be used instead.</span>
 <span class="n">_NBPRINT_MANAGED_TRAITS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;NbConvertApp.export_format&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;target&#39; field&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;target&#39; field&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;TemplateExporter.template_name&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;template&#39; field&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;template&#39; field&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;NbConvertApp.output_base&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;naming&#39;/&#39;root&#39; fields&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;naming&#39;/&#39;root&#39; fields&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ExecutePreprocessor.timeout&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;timeout&#39; field&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ExecutePreprocessor.enabled&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;execute&#39; field&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;execute&quot;</span><span class="p">:</span> <span class="s2">&quot;the &#39;execute&#39; field&quot;</span><span class="p">,</span>
+    <span class="s2">"NbConvertApp.export_format"</span><span class="p">:</span> <span class="s2">"the 'target' field"</span><span class="p">,</span>
+    <span class="s2">"to"</span><span class="p">:</span> <span class="s2">"the 'target' field"</span><span class="p">,</span>
+    <span class="s2">"TemplateExporter.template_name"</span><span class="p">:</span> <span class="s2">"the 'template' field"</span><span class="p">,</span>
+    <span class="s2">"template"</span><span class="p">:</span> <span class="s2">"the 'template' field"</span><span class="p">,</span>
+    <span class="s2">"NbConvertApp.output_base"</span><span class="p">:</span> <span class="s2">"the 'naming'/'root' fields"</span><span class="p">,</span>
+    <span class="s2">"output"</span><span class="p">:</span> <span class="s2">"the 'naming'/'root' fields"</span><span class="p">,</span>
+    <span class="s2">"ExecutePreprocessor.timeout"</span><span class="p">:</span> <span class="s2">"the 'timeout' field"</span><span class="p">,</span>
+    <span class="s2">"ExecutePreprocessor.enabled"</span><span class="p">:</span> <span class="s2">"the 'execute' field"</span><span class="p">,</span>
+    <span class="s2">"execute"</span><span class="p">:</span> <span class="s2">"the 'execute' field"</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="c1"># nbconvert&#39;s stock webpdf exporter captures the PDF a fixed delay after the network goes idle, which</span>
-<span class="c1"># races paged.js and silently truncates long documents. nbprint&#39;s exporter waits for the template&#39;s</span>
-<span class="c1"># pagination-complete signal instead, so the webpdf target is routed to it rather than to upstream&#39;s.</span>
-<span class="c1"># Registered under its own entry-point name so it never shadows nbconvert&#39;s builtin &quot;webpdf&quot;.</span>
-<span class="n">_EXPORTER_FOR_TARGET</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;webpdf&quot;</span><span class="p">:</span> <span class="s2">&quot;nbprintwebpdf&quot;</span><span class="p">}</span>
+<span class="c1"># nbconvert's stock webpdf exporter captures the PDF a fixed delay after the network goes idle, which</span>
+<span class="c1"># races paged.js and silently truncates long documents. nbprint's exporter waits for the template's</span>
+<span class="c1"># pagination-complete signal instead, so the webpdf target is routed to it rather than to upstream's.</span>
+<span class="c1"># Registered under its own entry-point name so it never shadows nbconvert's builtin "webpdf".</span>
+<span class="n">_EXPORTER_FOR_TARGET</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"webpdf"</span><span class="p">:</span> <span class="s2">"nbprintwebpdf"</span><span class="p">}</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_run_nbconvert</span><span class="p">(</span><span class="n">argv</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run nbconvert in-process without reusing the global NbConvertApp singleton.</span>
+<span class="w">    </span><span class="sd">"""Run nbconvert in-process without reusing the global NbConvertApp singleton.</span>
 
-<span class="sd">    nbconvert&#39;s ``main()`` goes through ``NbConvertApp.launch_instance``, which caches</span>
+<span class="sd">    nbconvert's ``main()`` goes through ``NbConvertApp.launch_instance``, which caches</span>
 <span class="sd">    one app on the class. Reusing it across conversions in a single process leaks config</span>
 <span class="sd">    (notably ``ExecutePreprocessor.enabled``), so a later plain convert pass re-executes</span>
 <span class="sd">    the notebook. A fresh instance per call avoids that.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">nbconvert.nbconvertapp</span><span class="w"> </span><span class="kn">import</span> <span class="n">NbConvertApp</span>
 
     <span class="n">app</span> <span class="o">=</span> <span class="n">NbConvertApp</span><span class="p">()</span>
@@ -323,13 +323,13 @@
 <div class="viewcode-block" id="NBConvertOutputs">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html#nbprint.config.outputs.NBConvertOutputs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NBConvertOutputs</span><span class="p">(</span><span class="n">Outputs</span><span class="p">):</span>
-    <span class="n">target</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ipynb&quot;</span><span class="p">,</span> <span class="s2">&quot;notebook&quot;</span><span class="p">,</span> <span class="s2">&quot;html&quot;</span><span class="p">,</span> <span class="s2">&quot;webhtml&quot;</span><span class="p">,</span> <span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;webpdf&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;html&quot;</span>  <span class="c1"># TODO: nbconvert types</span>
+    <span class="n">target</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"ipynb"</span><span class="p">,</span> <span class="s2">"notebook"</span><span class="p">,</span> <span class="s2">"html"</span><span class="p">,</span> <span class="s2">"webhtml"</span><span class="p">,</span> <span class="s2">"pdf"</span><span class="p">,</span> <span class="s2">"webpdf"</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">"html"</span>  <span class="c1"># TODO: nbconvert types</span>
     <span class="n">execute</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="mi">600</span>
-    <span class="n">template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">&quot;nbprint&quot;</span>
+    <span class="n">template</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">"nbprint"</span>
 
     <span class="c1"># Generic passthrough for any nbconvert / traitlets configuration. Maps 1:1</span>
-    <span class="c1"># onto nbconvert&#39;s ``--Class.trait=value`` CLI options, so anything</span>
+    <span class="c1"># onto nbconvert's ``--Class.trait=value`` CLI options, so anything</span>
     <span class="c1"># configurable on an exporter, preprocessor, or the app itself is reachable</span>
     <span class="c1"># without nbprint needing a dedicated field per option. Accepts either flat</span>
     <span class="c1"># dotted keys or nested namespaces (handled identically):</span>
@@ -348,33 +348,33 @@
     <span class="n">nbconvert_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Generic nbconvert/traitlets configuration for the conversion pass. &quot;</span>
-            <span class="s2">&quot;Keys are traitlet paths (flat &#39;Class.trait&#39; or nested) mapping onto &quot;</span>
-            <span class="s2">&quot;nbconvert&#39;s &#39;--Class.trait=value&#39; CLI options.&quot;</span>
+            <span class="s2">"Generic nbconvert/traitlets configuration for the conversion pass. "</span>
+            <span class="s2">"Keys are traitlet paths (flat 'Class.trait' or nested) mapping onto "</span>
+            <span class="s2">"nbconvert's '--Class.trait=value' CLI options."</span>
         <span class="p">),</span>
     <span class="p">)</span>
 
     <span class="c1"># TODO: maybe allow collecting by index</span>
-    <span class="c1"># collect_cells: list[int] = Field(default=[], description=&quot;List of cell indices to collect outputs from.&quot;)</span>
+    <span class="c1"># collect_cells: list[int] = Field(default=[], description="List of cell indices to collect outputs from.")</span>
     <span class="n">collect_outputs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Whether to collect cell outputs into the context. Cells with tag `nbprint:output:&lt;key&gt;` will be collected under `&lt;key&gt;`.&quot;</span><span class="p">)</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="p">(</span><span class="s2">"Whether to collect cell outputs into the context. Cells with tag `nbprint:output:&lt;key&gt;` will be collected under `&lt;key&gt;`."</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="n">execute_hook</span><span class="p">:</span> <span class="n">PyObjectPath</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;A callable hook that is called after nbconvert execution of the notebook. &quot;</span>
-            <span class="s2">&quot;It is passed the config instance. &quot;</span>
-            <span class="s2">&quot;If it returns something non-None, that value is returned by `run` instead of the output path.&quot;</span>
-            <span class="s2">&quot;NOTE: Parent/child class hooks may also be called.&quot;</span>
+            <span class="s2">"A callable hook that is called after nbconvert execution of the notebook. "</span>
+            <span class="s2">"It is passed the config instance. "</span>
+            <span class="s2">"If it returns something non-None, that value is returned by `run` instead of the output path."</span>
+            <span class="s2">"NOTE: Parent/child class hooks may also be called."</span>
         <span class="p">),</span>
     <span class="p">)</span>
     <span class="n">nbconvert_hook</span><span class="p">:</span> <span class="n">PyObjectPath</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;A callable hook that is called after nbconvert of the previously executed notebook. &quot;</span>
-            <span class="s2">&quot;It is passed the config instance. &quot;</span>
-            <span class="s2">&quot;If it returns something non-None, that value is returned by `run` instead of the output path.&quot;</span>
-            <span class="s2">&quot;NOTE: Parent/child class hooks may also be called.&quot;</span>
+            <span class="s2">"A callable hook that is called after nbconvert of the previously executed notebook. "</span>
+            <span class="s2">"It is passed the config instance. "</span>
+            <span class="s2">"If it returns something non-None, that value is returned by `run` instead of the output path."</span>
+            <span class="s2">"NOTE: Parent/child class hooks may also be called."</span>
         <span class="p">),</span>
     <span class="p">)</span>
 
@@ -385,112 +385,112 @@
         <span class="c1"># NOTE: parent class has `output`</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collected_cells</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"target"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">validate_target</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s2">&quot;html&quot;</span>
-        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;pdf&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s2">&quot;webpdf&quot;</span>
-        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">&quot;notebook&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s2">&quot;ipynb&quot;</span>
+            <span class="k">return</span> <span class="s2">"html"</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">"pdf"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"webpdf"</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="s2">"notebook"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">"ipynb"</span>
         <span class="k">return</span> <span class="n">v</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_compute_outputs</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
         <span class="c1"># Update executed path if needed</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_nb_executed_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">.executed.ipynb&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nb_executed_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">.executed.ipynb"</span>
         <span class="c1"># Update output path</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;webpdf&quot;</span><span class="p">:</span>
-            <span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;pdf&quot;</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;webhtml&quot;</span><span class="p">:</span>
-            <span class="n">target</span> <span class="o">=</span> <span class="s2">&quot;html&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">"webpdf"</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="s2">"pdf"</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">"webhtml"</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="s2">"html"</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;ipynb&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.ipynb&quot;</span><span class="p">,</span> <span class="s2">&quot;.executed.ipynb&quot;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">"ipynb"</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">".ipynb"</span><span class="p">,</span> <span class="s2">".executed.ipynb"</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.ipynb&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;.</span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">".ipynb"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">".</span><span class="si">{</span><span class="n">target</span><span class="si">}</span><span class="s2">"</span><span class="p">))</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_output_key</span><span class="p">(</span><span class="n">cell</span><span class="p">:</span> <span class="n">NotebookNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the output key from cell metadata or tags.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s2">&quot;nbprint&quot;</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">and</span> <span class="s2">&quot;output&quot;</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Get the output key from cell metadata or tags."""</span>
+        <span class="k">if</span> <span class="s2">"nbprint"</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">and</span> <span class="s2">"output"</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">output</span>
-        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[]):</span>
-            <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;nbprint:output:&quot;</span><span class="p">):</span>
-                <span class="k">return</span> <span class="n">tag</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;nbprint:output:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"nbprint:output:"</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">tag</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"nbprint:output:"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_flatten_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Flatten nested traitlets namespaces into dotted-path keys.</span>
+<span class="w">        </span><span class="sd">"""Flatten nested traitlets namespaces into dotted-path keys.</span>
 
-<span class="sd">        ``{&quot;WebPDFExporter&quot;: {&quot;page_render_timeout&quot;: 5000}}`` becomes</span>
-<span class="sd">        ``{&quot;WebPDFExporter.page_render_timeout&quot;: 5000}``. Flat keys are passed</span>
+<span class="sd">        ``{"WebPDFExporter": {"page_render_timeout": 5000}}`` becomes</span>
+<span class="sd">        ``{"WebPDFExporter.page_render_timeout": 5000}``. Flat keys are passed</span>
 <span class="sd">        through unchanged, so flat and nested inputs normalize identically.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">flat</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_walk</span><span class="p">(</span><span class="n">mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">prefix</span><span class="si">}{</span><span class="n">key</span><span class="si">}</span><span class="s2">"</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-                    <span class="n">_walk</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+                    <span class="n">_walk</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">flat</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-        <span class="n">_walk</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">_walk</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">""</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">flat</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;nbconvert_config&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"nbconvert_config"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"after"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_reject_managed_traits</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reject traitlet paths that nbprint already manages via its own fields.</span>
+<span class="w">        </span><span class="sd">"""Reject traitlet paths that nbprint already manages via its own fields.</span>
 
-<span class="sd">        These would silently shadow nbprint&#39;s wiring (and the</span>
+<span class="sd">        These would silently shadow nbprint's wiring (and the</span>
 <span class="sd">        ``ExecutePreprocessor.*`` ones only reach the convert pass here, so they</span>
 <span class="sd">        either no-op or trigger an unwanted second execution). Point the user at</span>
 <span class="sd">        the dedicated field instead.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_flatten_config</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
             <span class="n">hint</span> <span class="o">=</span> <span class="n">_NBPRINT_MANAGED_TRAITS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">hint</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;nbconvert_config key </span><span class="si">{</span><span class="n">path</span><span class="si">!r}</span><span class="s2"> is managed by nbprint; set </span><span class="si">{</span><span class="n">hint</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"nbconvert_config key </span><span class="si">{</span><span class="n">path</span><span class="si">!r}</span><span class="s2"> is managed by nbprint; set </span><span class="si">{</span><span class="n">hint</span><span class="si">}</span><span class="s2"> instead."</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_format_nbconvert_config_args</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Translate a traitlets config mapping into nbconvert CLI args.</span>
+<span class="w">        </span><span class="sd">"""Translate a traitlets config mapping into nbconvert CLI args.</span>
 
-<span class="sd">        Keys map onto nbconvert&#39;s ``--Class.trait=value`` CLI options. Both</span>
+<span class="sd">        Keys map onto nbconvert's ``--Class.trait=value`` CLI options. Both</span>
 <span class="sd">        shapes are accepted and treated identically, so the same option is</span>
 <span class="sd">        reachable from flat YAML, nested YAML, or a hydra/lerna CLI override:</span>
 
-<span class="sd">            {&quot;WebPDFExporter.page_render_timeout&quot;: 5000}          # flat dotted key</span>
-<span class="sd">            {&quot;WebPDFExporter&quot;: {&quot;page_render_timeout&quot;: 5000}}     # nested namespaces</span>
+<span class="sd">            {"WebPDFExporter.page_render_timeout": 5000}          # flat dotted key</span>
+<span class="sd">            {"WebPDFExporter": {"page_render_timeout": 5000}}     # nested namespaces</span>
 
-<span class="sd">        Nested dicts are flattened into dotted paths (mirroring traitlets&#39; own</span>
+<span class="sd">        Nested dicts are flattened into dotted paths (mirroring traitlets' own</span>
 <span class="sd">        hierarchical ``Config`` model). Booleans render as ``True``/``False``;</span>
 <span class="sd">        ints/floats/strings pass through as-is; any other value (list, tuple)</span>
 <span class="sd">        is JSON-encoded so container traits round-trip through the CLI.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">args</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">NBConvertOutputs</span><span class="o">.</span><span class="n">_flatten_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
-                <span class="n">rendered</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s2">&quot;False&quot;</span>
+                <span class="n">rendered</span> <span class="o">=</span> <span class="s2">"True"</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s2">"False"</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
                 <span class="n">rendered</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">rendered</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;--</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">rendered</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">rendered</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">args</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_cell_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract outputs from selected cells into the context.&quot;&quot;&quot;</span>
-        <span class="c1"># We&#39;re going to:</span>
+<span class="w">        </span><span class="sd">"""Extract outputs from selected cells into the context."""</span>
+        <span class="c1"># We're going to:</span>
         <span class="c1"># - read the notebook</span>
         <span class="c1"># - go through each cell and look for nbprint metadata</span>
         <span class="c1">#   - either `nbprint:output:&lt;key&gt;` tag or</span>
@@ -506,7 +506,7 @@
         <span class="n">nb</span> <span class="o">=</span> <span class="n">reads</span><span class="p">(</span><span class="n">notebook_content</span><span class="p">,</span> <span class="n">as_version</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;nbprint&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;nbprint:output:&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[])):</span>
+            <span class="k">if</span> <span class="s2">"nbprint"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"nbprint:output:"</span><span class="p">)</span> <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="p">[])):</span>
                 <span class="k">continue</span>
 
             <span class="n">output_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_output_key</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
@@ -514,12 +514,12 @@
                 <span class="k">continue</span>
 
             <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;outputs&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"outputs"</span><span class="p">,</span> <span class="p">[]):</span>
                 <span class="n">output_data</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="k">if</span> <span class="s2">&quot;data&quot;</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
-                    <span class="n">output_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-                <span class="k">elif</span> <span class="s2">&quot;text&quot;</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
-                    <span class="n">output_data</span><span class="p">[</span><span class="s2">&quot;text/plain&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s2">"data"</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+                    <span class="n">output_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">output</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+                <span class="k">elif</span> <span class="s2">"text"</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+                    <span class="n">output_data</span><span class="p">[</span><span class="s2">"text/plain"</span><span class="p">]</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="s2">"text"</span><span class="p">]</span>
                 <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output_data</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">output_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collected_cells</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_collected_cells</span><span class="p">[</span><span class="n">output_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -527,7 +527,7 @@
 
 <div class="viewcode-block" id="NBConvertOutputs.run">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html#nbprint.config.outputs.NBConvertOutputs.run">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">,</span> <span class="n">gen</span><span class="p">:</span> <span class="n">NotebookNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">,</span> <span class="n">gen</span><span class="p">:</span> <span class="n">NotebookNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="c1"># Run parent to create notebook</span>
         <span class="n">notebook</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">gen</span><span class="o">=</span><span class="n">gen</span><span class="p">)</span>
 
@@ -536,29 +536,29 @@
             <span class="k">return</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span>
 
         <span class="c1"># TODO: fix in nbconvert</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.webpdf&quot;</span><span class="p">,</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;webpdf&quot;</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">".webpdf"</span><span class="p">,</span> <span class="s2">".pdf"</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">".pdf"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">"webpdf"</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
 
         <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
             <span class="nb">str</span><span class="p">(</span><span class="n">notebook</span><span class="p">),</span>
-            <span class="sa">f</span><span class="s2">&quot;--to=</span><span class="si">{</span><span class="n">_EXPORTER_FOR_TARGET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">&quot;--output=</span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">&quot;--template=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"--to=</span><span class="si">{</span><span class="n">_EXPORTER_FOR_TARGET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"--output=</span><span class="si">{</span><span class="n">output</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"--template=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">template</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
         <span class="p">]</span>
 
         <span class="c1"># Generic nbconvert/traitlets passthrough (e.g. WebPDFExporter.page_render_timeout)</span>
         <span class="n">cmd</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_format_nbconvert_config_args</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nbconvert_config</span><span class="p">))</span>
 
         <span class="c1"># We have some cheats here because we have to</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;_NBPRINT_IN_NBCONVERT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;PSP_JUPYTER_HTML_EXPORT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"_NBPRINT_IN_NBCONVERT"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"1"</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"PSP_JUPYTER_HTML_EXPORT"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"1"</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">:</span>
             <span class="n">nbex_cmd</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="nb">str</span><span class="p">(</span><span class="n">notebook</span><span class="p">),</span>
-                <span class="s2">&quot;--to=notebook&quot;</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;--output=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">executed_notebook</span><span class="si">!s}</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;--execute&quot;</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">&quot;--ExecutePreprocessor.timeout=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="s2">"--to=notebook"</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"--output=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">executed_notebook</span><span class="si">!s}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="s2">"--execute"</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"--ExecutePreprocessor.timeout=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="p">]</span>
 
             <span class="c1"># Update cmd to use executed notebook</span>
@@ -573,7 +573,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute_hook</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute_hook</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">execute</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">&quot;ipynb&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">execute</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">"ipynb"</span><span class="p">):</span>
             <span class="c1"># If target is notebook, we already did it above</span>
             <span class="n">_run_nbconvert</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
 
@@ -587,38 +587,38 @@
 <div class="viewcode-block" id="NotebookOutputs">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.NotebookOutputs.html#nbprint.config.outputs.NotebookOutputs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NotebookOutputs</span><span class="p">(</span><span class="n">NBConvertOutputs</span><span class="p">):</span>
-    <span class="n">target</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;ipynb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ipynb&quot;</span></div>
+    <span class="n">target</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"ipynb"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"ipynb"</span></div>
 
 
 
 <div class="viewcode-block" id="HTMLOutputs">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.HTMLOutputs.html#nbprint.config.outputs.HTMLOutputs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">HTMLOutputs</span><span class="p">(</span><span class="n">NBConvertOutputs</span><span class="p">):</span>
-    <span class="n">target</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;html&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;html&quot;</span></div>
+    <span class="n">target</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"html"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"html"</span></div>
 
 
 
 <div class="viewcode-block" id="WebHTMLOutputs">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.WebHTMLOutputs.html#nbprint.config.outputs.WebHTMLOutputs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">WebHTMLOutputs</span><span class="p">(</span><span class="n">NBConvertOutputs</span><span class="p">):</span>
-    <span class="n">target</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;webhtml&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;webhtml&quot;</span></div>
+    <span class="n">target</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"webhtml"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"webhtml"</span></div>
 
 
 
 <div class="viewcode-block" id="PDFOutputs">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.PDFOutputs.html#nbprint.config.outputs.PDFOutputs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PDFOutputs</span><span class="p">(</span><span class="n">NBConvertOutputs</span><span class="p">):</span>
-    <span class="n">target</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;webpdf&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;webpdf&quot;</span></div>
+    <span class="n">target</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"webpdf"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"webpdf"</span></div>
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">short_circuit_hook</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OutputsProcessing</span> <span class="o">|</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A hook that short-circuits processing if a certain cell returns True.&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">short_circuit_hook</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OutputsProcessing</span> <span class="o">|</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""A hook that short-circuits processing if a certain cell returns True."""</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span>
         <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">outputs</span>
-        <span class="ow">and</span> <span class="s2">&quot;stop&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">outputs</span>
-        <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">outcome</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;text/plain&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span> <span class="k">for</span> <span class="n">outcome</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;stop&quot;</span><span class="p">])</span>
+        <span class="ow">and</span> <span class="s2">"stop"</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">outputs</span>
+        <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">outcome</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"text/plain"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">"true"</span> <span class="k">for</span> <span class="n">outcome</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">"stop"</span><span class="p">])</span>
         <span class="k">else</span> <span class="kc">True</span>
     <span class="p">)</span>
 
@@ -626,13 +626,13 @@
 <div class="viewcode-block" id="NBConvertShortCircuitOutputs">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertShortCircuitOutputs.html#nbprint.config.outputs.NBConvertShortCircuitOutputs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">NBConvertShortCircuitOutputs</span><span class="p">(</span><span class="n">NBConvertOutputs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A specialized NBConvertOutputs that installs a default hook to stop processing if a certain cell</span>
+<span class="w">    </span><span class="sd">"""A specialized NBConvertOutputs that installs a default hook to stop processing if a certain cell</span>
 <span class="sd">    with tag nbprint:output:stop returns True.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">execute_hook</span><span class="p">:</span> <span class="n">PyObjectPath</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=</span><span class="n">PyObjectPath</span><span class="p">(</span><span class="s2">&quot;nbprint.config.outputs.nbconvert.short_circuit_hook&quot;</span><span class="p">),</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A hook that short-circuits processing if a certain cell with tag nbprint:output:stop returns True.&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">PyObjectPath</span><span class="p">(</span><span class="s2">"nbprint.config.outputs.nbconvert.short_circuit_hook"</span><span class="p">),</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"A hook that short-circuits processing if a certain cell with tag nbprint:output:stop returns True."</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 </pre></div>
@@ -667,7 +667,7 @@
       
     </aside>
   </div>
-</div><script src="../../../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>

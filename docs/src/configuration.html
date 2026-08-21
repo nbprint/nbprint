@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="API Reference" href="api.html"><link rel="prev" title="Architecture" href="architecture.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>Configuration - nbprint v0.12.2</title>
+        <title>Configuration - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -320,7 +320,7 @@
 <p>By default every ingested cell lands in <code class="docutils literal notranslate"><span class="pre">middlematter</span></code>. To route cells to named sections, tag them:</p>
 <div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// cell.metadata
 {
-  &quot;tags&quot;: [&quot;nbprint:section:covermatter&quot;]
+  "tags": ["nbprint:section:covermatter"]
 }
 </pre></div>
 </div>
@@ -331,7 +331,7 @@
 <p>Equivalent to a tag, but takes priority:</p>
 <div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// cell.metadata.nbprint
 {
-  &quot;section&quot;: &quot;frontmatter&quot;
+  "section": "frontmatter"
 }
 </pre></div>
 </div>
@@ -341,14 +341,14 @@
 <p>Embed a full page/output spec directly in the notebook — no YAML required:</p>
 <div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// notebook.metadata.nbprint
 {
-  &quot;page&quot;: {
-    &quot;_target_&quot;: &quot;nbprint.PageGlobal&quot;,
-    &quot;size&quot;: &quot;Letter&quot;,
-    &quot;orientation&quot;: &quot;portrait&quot;
+  "page": {
+    "_target_": "nbprint.PageGlobal",
+    "size": "Letter",
+    "orientation": "portrait"
   },
-  &quot;outputs&quot;: {
-    &quot;_target_&quot;: &quot;nbprint.NBConvertOutputs&quot;,
-    &quot;target&quot;: &quot;pdf&quot;
+  "outputs": {
+    "_target_": "nbprint.NBConvertOutputs",
+    "target": "pdf"
   }
 }
 </pre></div>
@@ -360,18 +360,18 @@
 <p>Inside a running notebook you can express cell-level intent through a Python object. Metadata is persisted via a hidden <code class="docutils literal notranslate"><span class="pre">display()</span></code> output with a custom MIME type; nbprint picks it up at ingestion time.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">NBPrintCell</span><span class="p">,</span> <span class="n">Style</span><span class="p">,</span> <span class="n">Font</span>
 
-<span class="n">NBPrintCell</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s2">&quot;covermatter&quot;</span><span class="p">,</span> <span class="n">css</span><span class="o">=</span><span class="s2">&quot;:scope { text-align: center; }&quot;</span><span class="p">)</span>
+<span class="n">NBPrintCell</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s2">"covermatter"</span><span class="p">,</span> <span class="n">css</span><span class="o">=</span><span class="s2">":scope { text-align: center; }"</span><span class="p">)</span>
 
 <span class="k">with</span> <span class="n">NBPrintCell</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="n">Style</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="n">Font</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">24</span><span class="p">))):</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;# Cover Page&quot;</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"# Cover Page"</span><span class="p">))</span>
 </pre></div>
 </div>
 </section>
 <section id="nbprint-cell-magic">
 <h3><code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> cell magic<a class="headerlink" href="#nbprint-cell-magic" title="Link to this heading">¶</a></h3>
 <p>A lighter alternative for quick one-liners:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">nbprint</span> <span class="n">section</span><span class="o">=</span><span class="n">frontmatter</span> <span class="n">css</span><span class="o">=</span><span class="s2">&quot;:scope { font-size: 18px; }&quot;</span>
-<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;# Introduction&quot;</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">nbprint</span> <span class="n">section</span><span class="o">=</span><span class="n">frontmatter</span> <span class="n">css</span><span class="o">=</span><span class="s2">":scope { font-size: 18px; }"</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"# Introduction"</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Explicit cell metadata beats runtime metadata beats magic — so a hand-edited value in <code class="docutils literal notranslate"><span class="pre">cell.metadata.nbprint</span></code> always wins.</p>
@@ -393,7 +393,7 @@
 <span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <span class="w">      </span><span class="no"># A Generic Report</span>
 <span class="w">      </span><span class="no">## A Subtitle</span>
-<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}&quot;</span>
+<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}"</span>
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBreak</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentTableOfContents</span>
@@ -405,11 +405,11 @@
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentFlexColumnLayout</span>
 <span class="w">        </span><span class="nt">content</span><span class="p">:</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">            </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#</span><span class="nv"> </span><span class="s">Left</span><span class="nv"> </span><span class="s">column&quot;</span>
+<span class="w">            </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Left</span><span class="nv"> </span><span class="s">column"</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentFlexColumnLayout</span>
 <span class="w">        </span><span class="nt">content</span><span class="p">:</span>
 <span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">            </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#</span><span class="nv"> </span><span class="s">Right</span><span class="nv"> </span><span class="s">column&quot;</span>
+<span class="w">            </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Right</span><span class="nv"> </span><span class="s">column"</span>
 </pre></div>
 </div>
 <p>Run it:</p>
@@ -530,19 +530,19 @@ pointing at the dedicated field (<code class="docutils literal notranslate"><spa
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">covermatter</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#</span><span class="nv"> </span><span class="s">My</span><span class="nv"> </span><span class="s">Report&quot;</span>
-<span class="w">      </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}&quot;</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">My</span><span class="nv"> </span><span class="s">Report"</span>
+<span class="w">      </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}"</span>
 
 <span class="w">  </span><span class="nt">table_of_contents</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentTableOfContents</span>
 
 <span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#</span><span class="nv"> </span><span class="s">Section</span><span class="nv"> </span><span class="s">One&quot;</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Section</span><span class="nv"> </span><span class="s">One"</span>
 
 <span class="w">  </span><span class="nt">endmatter</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#</span><span class="nv"> </span><span class="s">Bibliography&quot;</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Bibliography"</span>
 </pre></div>
 </div>
 <p>Flat-list <code class="docutils literal notranslate"><span class="pre">content:</span></code> is still fully supported — it is treated as <code class="docutils literal notranslate"><span class="pre">middlematter</span></code>.</p>
@@ -556,15 +556,15 @@ document order — <code class="docutils literal notranslate"><span class="pre">
 <span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="c1"># Chapter One — first item becomes the title page</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#</span><span class="nv"> </span><span class="s">Chapter</span><span class="nv"> </span><span class="s">One&quot;</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Chapter</span><span class="nv"> </span><span class="s">One"</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Body</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">first</span><span class="nv"> </span><span class="s">chapter…&quot;</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"Body</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">first</span><span class="nv"> </span><span class="s">chapter…"</span>
 
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="c1"># Chapter Two</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#</span><span class="nv"> </span><span class="s">Chapter</span><span class="nv"> </span><span class="s">Two&quot;</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Chapter</span><span class="nv"> </span><span class="s">Two"</span>
 <span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Body</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">second</span><span class="nv"> </span><span class="s">chapter…&quot;</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"Body</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">second</span><span class="nv"> </span><span class="s">chapter…"</span>
 </pre></div>
 </div>
 <p>By default each separator renders as a <strong>standalone chapter title page</strong> — a hard
@@ -612,11 +612,11 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 <span class="w">      </span><span class="nt">font</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="nv">28</span><span class="p p-Indicator">}</span>
 <span class="w">      </span><span class="nt">horizontal_alignment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">center</span>
 <span class="w">    </span><span class="nt">frontmatter</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">font</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">family</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Georgia,</span><span class="nv"> </span><span class="s">serif&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">font</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">family</span><span class="p">:</span><span class="w"> </span><span class="s">"Georgia,</span><span class="nv"> </span><span class="s">serif"</span><span class="p p-Indicator">}</span>
 
 <span class="w">  </span><span class="nt">covermatter</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#</span><span class="nv"> </span><span class="s">My</span><span class="nv"> </span><span class="s">Report&quot;</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">My</span><span class="nv"> </span><span class="s">Report"</span>
 </pre></div>
 </div>
 </section>
@@ -629,14 +629,14 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 <p>Matches cells by index, tag, cell type, or target section, and merges <code class="docutils literal notranslate"><span class="pre">css</span></code> / <code class="docutils literal notranslate"><span class="pre">classname</span></code> / <code class="docutils literal notranslate"><span class="pre">attrs</span></code> / <code class="docutils literal notranslate"><span class="pre">style</span></code> / <code class="docutils literal notranslate"><span class="pre">ignore</span></code> into the resulting <code class="docutils literal notranslate"><span class="pre">Content</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">overlays</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">index</span><span class="p">:</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">}</span>
-<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}&quot;</span>
+<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}"</span>
 
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;chart&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"chart"</span><span class="p p-Indicator">}</span>
 <span class="w">    </span><span class="nt">style</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">border</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">bottom</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">width</span><span class="p">:</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nt"> style</span><span class="p">:</span><span class="w"> </span><span class="nv">solid</span><span class="p p-Indicator">,</span><span class="nt"> color</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;#333&quot;</span><span class="p p-Indicator">}}</span>
+<span class="w">      </span><span class="nt">border</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">bottom</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">width</span><span class="p">:</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nt"> style</span><span class="p">:</span><span class="w"> </span><span class="nv">solid</span><span class="p p-Indicator">,</span><span class="nt"> color</span><span class="p">:</span><span class="w"> </span><span class="s">"#333"</span><span class="p p-Indicator">}}</span>
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">cell_type</span><span class="p">:</span><span class="w"> </span><span class="nv">markdown</span><span class="p p-Indicator">}</span>
-<span class="w">    </span><span class="nt">classname</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;prose-body&quot;</span>
+<span class="w">    </span><span class="nt">classname</span><span class="p">:</span><span class="w"> </span><span class="s">"prose-body"</span>
 
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="nv">covermatter</span><span class="p p-Indicator">}</span>
 <span class="w">    </span><span class="nt">style</span><span class="p">:</span>
@@ -654,8 +654,8 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 <p>Overlays can also come from notebook metadata. YAML-declared overlays and notebook-declared overlays compose:</p>
 <div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// notebook.metadata.nbprint
 {
-  &quot;overlays&quot;: [
-    {&quot;match&quot;: {&quot;tag&quot;: &quot;emphasis&quot;}, &quot;css&quot;: &quot;:scope { font-style: italic; }&quot;}
+  "overlays": [
+    {"match": {"tag": "emphasis"}, "css": ":scope { font-style: italic; }"}
   ]
 }
 </pre></div>
@@ -665,8 +665,8 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 <h3><code class="docutils literal notranslate"><span class="pre">LayoutOverlay</span></code> — wrap contiguous cells in a flex container<a class="headerlink" href="#layoutoverlay-wrap-contiguous-cells-in-a-flex-container" title="Link to this heading">¶</a></h3>
 <p>A layout overlay matches the same way but <em>wraps</em> contiguous runs of matched cells (same section, consecutive notebook indices) in a <code class="docutils literal notranslate"><span class="pre">ContentFlexRowLayout</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentFlexColumnLayout</span></code>, or <code class="docutils literal notranslate"><span class="pre">ContentInlineLayout</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">layout_overlays</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># Any two adjacent &quot;sidebyside&quot;-tagged cells become a row</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sidebyside&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="c1"># Any two adjacent "sidebyside"-tagged cells become a row</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"sidebyside"</span><span class="p p-Indicator">}</span>
 <span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">row</span>
 <span class="w">    </span><span class="nt">sizes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">]</span>
 
@@ -675,9 +675,9 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 <span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">column</span>
 
 <span class="w">  </span><span class="c1"># Wrapper itself can carry CSS / classname / style</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;gallery&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"gallery"</span><span class="p p-Indicator">}</span>
 <span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inline</span>
-<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">gap:</span><span class="nv"> </span><span class="s">8px;</span><span class="nv"> </span><span class="s">}&quot;</span>
+<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">gap:</span><span class="nv"> </span><span class="s">8px;</span><span class="nv"> </span><span class="s">}"</span>
 <span class="w">    </span><span class="nt">classname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gallery-wrap</span>
 </pre></div>
 </div>
@@ -687,14 +687,14 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 <h3><code class="docutils literal notranslate"><span class="pre">PageBoxOverlay</span></code> — wrap contiguous cells in a page box<a class="headerlink" href="#pageboxoverlay-wrap-contiguous-cells-in-a-page-box" title="Link to this heading">¶</a></h3>
 <p>Same matching rules, but the wrapper is a <a class="reference internal" href="architecture.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code></span></a>: the matched run becomes one logical page, arranged by a named layout preset and followed by a page break. Select it with <code class="docutils literal notranslate"><span class="pre">wrapper:</span> <span class="pre">page-box</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">layout_overlays</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># Every run of &quot;pair&quot;-tagged cells becomes a two-column page</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;pair&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="c1"># Every run of "pair"-tagged cells becomes a two-column page</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"pair"</span><span class="p p-Indicator">}</span>
 <span class="w">    </span><span class="nt">wrapper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">page-box</span>
 <span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">columns-2</span>
 <span class="w">    </span><span class="nt">gap</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1rem</span>
 
 <span class="w">  </span><span class="c1"># A four-up dashboard page, in landscape</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;dashboard&quot;</span><span class="p p-Indicator">}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"dashboard"</span><span class="p p-Indicator">}</span>
 <span class="w">    </span><span class="nt">wrapper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">page-box</span>
 <span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grid-2x2</span>
 <span class="w">    </span><span class="nt">page_orientation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">landscape</span>
@@ -706,8 +706,8 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 <p>As with every overlay, these can live in notebook metadata instead of YAML:</p>
 <div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// notebook.metadata.nbprint
 {
-  &quot;layout_overlays&quot;: [
-    {&quot;match&quot;: {&quot;tag&quot;: &quot;pair&quot;}, &quot;wrapper&quot;: &quot;page-box&quot;, &quot;layout&quot;: &quot;columns-2&quot;, &quot;gap&quot;: &quot;1rem&quot;}
+  "layout_overlays": [
+    {"match": {"tag": "pair"}, "wrapper": "page-box", "layout": "columns-2", "gap": "1rem"}
   ]
 }
 </pre></div>
@@ -728,7 +728,7 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
 
 <span class="nt">outputs</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">naming</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{name}}&quot;</span>
+<span class="w">  </span><span class="nt">naming</span><span class="p">:</span><span class="w"> </span><span class="s">"{{name}}"</span>
 <span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./outputs</span>
 </pre></div>
 </div>
@@ -739,18 +739,18 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 <p>lerna supports list operations directly from the CLI — useful for adding a single chart or section to an existing report without editing the YAML:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Append a content item</span>
 nbprint<span class="w"> </span>examples/basic.yaml<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="s1">&#39;content=append({_target_: nbprint.ContentMarkdown, content: &quot;# Added&quot;})&#39;</span>
+<span class="w">  </span><span class="s1">'content=append({_target_: nbprint.ContentMarkdown, content: "# Added"})'</span>
 
 <span class="c1"># Prepend</span>
-nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">&#39;content=prepend({_target_: nbprint.ContentPageBreak})&#39;</span>
+nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'content=prepend({_target_: nbprint.ContentPageBreak})'</span>
 
 <span class="c1"># Insert at a specific index</span>
-nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">&#39;content=insert(0, {_target_: nbprint.ContentMarkdown, content: &quot;Intro&quot;})&#39;</span>
+nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'content=insert(0, {_target_: nbprint.ContentMarkdown, content: "Intro"})'</span>
 
 <span class="c1"># Remove by index / value / clear</span>
-nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">&#39;content=remove_at(-1)&#39;</span>
-nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">&#39;tags=remove_value(draft)&#39;</span>
-nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">&#39;overlays=list_clear()&#39;</span>
+nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'content=remove_at(-1)'</span>
+nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'tags=remove_value(draft)'</span>
+nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'overlays=list_clear()'</span>
 </pre></div>
 </div>
 <div class="table-wrapper colwidths-auto docutils container">
@@ -813,7 +813,7 @@ nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s
 <p>nbprint’s CLI accepts default overrides without editing YAML:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>++callable<span class="o">=</span>/nbprintx<span class="w"> </span><span class="se">\ </span><span class="w">                            </span><span class="c1"># switch to the multirun model</span>
-<span class="w">  </span>+nbprint.outputs.naming<span class="o">=</span><span class="s1">&#39;{{name}}-{{date}}-{{a}}&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>+nbprint.outputs.naming<span class="o">=</span><span class="s1">'{{name}}-{{date}}-{{a}}'</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>+nbprintx.parameters<span class="o">=[{</span>a:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">2</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">3</span><span class="o">}]</span><span class="w"> </span><span class="se">\ </span><span class="w">     </span><span class="c1"># inline JSON or file path</span>
 <span class="w">  </span>++nbprint.outputs.execute<span class="o">=</span>False<span class="w">                    </span><span class="c1"># disable execution</span>
 </pre></div>
@@ -843,7 +843,7 @@ nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="n
 <p>ccflow workflows are exposed as multi-run models:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>++callable<span class="o">=</span>/nbprintx<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>+nbprint.outputs.naming<span class="o">=</span><span class="s1">&#39;{{name}}-{{date}}-{{a}}&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>+nbprint.outputs.naming<span class="o">=</span><span class="s1">'{{name}}-{{date}}-{{a}}'</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>+nbprintx.parameters<span class="o">=[{</span>a:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">2</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">3</span><span class="o">}]</span><span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>++nbprint.outputs.execute<span class="o">=</span>False
 </pre></div>
@@ -973,7 +973,7 @@ nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="n
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

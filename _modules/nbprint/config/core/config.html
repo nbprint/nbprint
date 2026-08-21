@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>nbprint.config.core.config - nbprint v0.12.2</title>
+        <title>nbprint.config.core.config - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -187,7 +187,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -307,35 +307,35 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">PapermillParameters</span><span class="p">,</span> <span class="n">Parameters</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;Configuration&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;load&quot;</span><span class="p">,</span>
+    <span class="s2">"Configuration"</span><span class="p">,</span>
+    <span class="s2">"load"</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">_log</span> <span class="o">=</span> <span class="n">getSimpleLogger</span><span class="p">(</span><span class="s2">&quot;nbprint.config.core.config&quot;</span><span class="p">)</span>
+<span class="n">_log</span> <span class="o">=</span> <span class="n">getSimpleLogger</span><span class="p">(</span><span class="s2">"nbprint.config.core.config"</span><span class="p">)</span>
 
 
-<span class="n">_SECTION_TAG_PREFIX</span> <span class="o">=</span> <span class="s2">&quot;nbprint:section:&quot;</span>
+<span class="n">_SECTION_TAG_PREFIX</span> <span class="o">=</span> <span class="s2">"nbprint:section:"</span>
 
 <span class="c1"># Tags nbprint reserves for itself. Anything under the namespace that is not one</span>
 <span class="c1"># of these is inert, and almost always a typo. Split in two because a bare</span>
-<span class="c1"># prefix test would accept &quot;nbprint:pagebox&quot; as the reserved tag &quot;nbprint:page&quot;.</span>
-<span class="n">_RESERVED_TAG_NAMESPACE</span> <span class="o">=</span> <span class="s2">&quot;nbprint:&quot;</span>
+<span class="c1"># prefix test would accept "nbprint:pagebox" as the reserved tag "nbprint:page".</span>
+<span class="n">_RESERVED_TAG_NAMESPACE</span> <span class="o">=</span> <span class="s2">"nbprint:"</span>
 <span class="n">_RESERVED_TAGS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
     <span class="p">{</span>
-        <span class="s2">&quot;nbprint:config&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;nbprint:content&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;nbprint:context&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;nbprint:outputs&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;nbprint:page&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;nbprint:parameters&quot;</span><span class="p">,</span>
+        <span class="s2">"nbprint:config"</span><span class="p">,</span>
+        <span class="s2">"nbprint:content"</span><span class="p">,</span>
+        <span class="s2">"nbprint:context"</span><span class="p">,</span>
+        <span class="s2">"nbprint:outputs"</span><span class="p">,</span>
+        <span class="s2">"nbprint:page"</span><span class="p">,</span>
+        <span class="s2">"nbprint:parameters"</span><span class="p">,</span>
     <span class="p">}</span>
 <span class="p">)</span>
 <span class="n">_RESERVED_TAG_PREFIXES</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;nbprint:content:&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;nbprint:output:&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;nbprint:page:&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;nbprint:section:&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;nbprint:section-group:&quot;</span><span class="p">,</span>
+    <span class="s2">"nbprint:content:"</span><span class="p">,</span>
+    <span class="s2">"nbprint:output:"</span><span class="p">,</span>
+    <span class="s2">"nbprint:page:"</span><span class="p">,</span>
+    <span class="s2">"nbprint:section:"</span><span class="p">,</span>
+    <span class="s2">"nbprint:section-group:"</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -354,11 +354,11 @@
     <span class="c1"># Formatting overlays — applied during notebook ingestion only.</span>
     <span class="n">overlays</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Overlay</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Formatting overlays merged into ingested notebook cells.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Formatting overlays merged into ingested notebook cells."</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">layout_overlays</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">LayoutOverlay</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Layout overlays that wrap contiguous ranges of ingested cells in a flex container or a page box.&quot;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">"Layout overlays that wrap contiguous ranges of ingested cells in a flex container or a page box."</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># basic metadata</span>
@@ -370,17 +370,17 @@
 
     <span class="c1"># internals</span>
     <span class="n">_multi</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">_nb_var_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;nbprint_config&quot;</span><span class="p">)</span>
+    <span class="n">_nb_var_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"nbprint_config"</span><span class="p">)</span>
     <span class="n">_nb_vars</span><span class="p">:</span> <span class="nb">set</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">set</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"after"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_tags</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="s2">&quot;nbprint:config&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
-            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;nbprint:config&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"nbprint:config"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"nbprint:config"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;resources&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"resources"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_convert_resources_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -390,49 +390,49 @@
                 <span class="n">value</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">value</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;outputs&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"outputs"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_convert_outputs_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Outputs</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Outputs</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;layout_overlays&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"layout_overlays"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_dispatch_layout_overlays</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">LayoutOverlay</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Route each spec to its overlay subclass before the field validates it.</span>
+<span class="w">        </span><span class="sd">"""Route each spec to its overlay subclass before the field validates it.</span>
 
 <span class="sd">        A pydantic discriminated union would be the obvious tool, but it requires</span>
 <span class="sd">        the discriminator to be present, and ``wrapper`` is optional so that every</span>
 <span class="sd">        existing flex overlay keeps working untouched.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">v</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">build_layout_overlay</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="p">(</span><span class="n">LayoutOverlay</span><span class="p">,</span> <span class="nb">dict</span><span class="p">))</span> <span class="k">else</span> <span class="n">spec</span> <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">v</span><span class="p">]</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;parameters&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"parameters"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_convert_parameters_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Parameters</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;page&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"page"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_convert_page_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PageGlobal</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">PageGlobal</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;context&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"context"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_convert_context_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Context</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Context</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_coerce_content_list</span><span class="p">(</span><span class="n">v</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Coerce the elements of a content list into :class:`Content` objects.</span>
+<span class="w">        </span><span class="sd">"""Coerce the elements of a content list into :class:`Content` objects.</span>
 
 <span class="sd">        Strings become ``Content`` placeholders and ``_target_`` dicts are</span>
 <span class="sd">        instantiated. Nested lists (list-of-lists ``middlematter``, where each</span>
 <span class="sd">        sublist is a chapter whose first element becomes a separator) are</span>
 <span class="sd">        coerced recursively so the chapter structure survives long enough for</span>
 <span class="sd">        :class:`ContentMarshall` to extract the separators.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">Content</span><span class="p">(</span><span class="n">type_</span><span class="o">=</span><span class="n">element</span><span class="p">)</span>
@@ -451,12 +451,12 @@
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ContentMarshall</span><span class="o">.</span><span class="n">model_fields</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">v</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
                 <span class="c1"># Preserve a list-of-lists ``middlematter`` (chapter structure)</span>
-                <span class="c1"># so ContentMarshall can promote each sublist&#39;s first item to a</span>
+                <span class="c1"># so ContentMarshall can promote each sublist's first item to a</span>
                 <span class="c1"># separator. Flat lists are coerced element-wise as before.</span>
                 <span class="n">v</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_coerce_content_list</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">ContentMarshall</span><span class="p">(</span><span class="o">**</span><span class="n">v</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"content"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_content_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ContentMarshall</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -467,7 +467,7 @@
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_convert_content_from_dict</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span>
 
-    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
+    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">"after"</span><span class="p">)</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">_compute_outputs</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
@@ -476,14 +476,14 @@
     <span class="c1"># NOTE: this shouldve been possible via a wrap validator,</span>
     <span class="c1"># but alas i could not get it to work</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;parameters&quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;type_&quot;</span> <span class="ow">in</span> <span class="n">value</span> <span class="k">else</span> <span class="n">PapermillParameters</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">"parameters"</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"type_"</span> <span class="ow">in</span> <span class="n">value</span> <span class="k">else</span> <span class="n">PapermillParameters</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">):</span>
                 <span class="c1"># replace wholesale</span>
                 <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># Union new parameters with existing parameters</span>
-                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">,</span> <span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type_&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">)</span> <span class="k">else</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span> <span class="n">exclude_unset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">{</span><span class="s2">"type_"</span><span class="p">})</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">)</span> <span class="k">else</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_validate</span><span class="p">()</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -491,14 +491,14 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_init_content</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ContentMarshall</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;content&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-            <span class="n">values</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ContentMarshall</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">values</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ContentMarshall</span><span class="p">(</span><span class="n">middlematter</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">])</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="n">values</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ContentMarshall</span><span class="p">(</span><span class="o">**</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">"content"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+            <span class="n">values</span><span class="p">[</span><span class="s2">"content"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ContentMarshall</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">"content"</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">values</span><span class="p">[</span><span class="s2">"content"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ContentMarshall</span><span class="p">(</span><span class="n">middlematter</span><span class="o">=</span><span class="n">values</span><span class="p">[</span><span class="s2">"content"</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">"content"</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">values</span><span class="p">[</span><span class="s2">"content"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ContentMarshall</span><span class="p">(</span><span class="o">**</span><span class="n">values</span><span class="p">[</span><span class="s2">"content"</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">e</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Unexpected content format when loading from notebook: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s1">&#39;content&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Unexpected content format when loading from notebook: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s1">'content'</span><span class="p">])</span><span class="si">}</span><span class="s2">"</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
@@ -508,36 +508,36 @@
             <span class="c1"># skip empty cells</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="c1"># Cells may have nbprint metadata from the UI extension</span>
-        <span class="c1"># &quot;nbprint&quot;: {</span>
-        <span class="c1">#     &quot;attrs&quot;: &quot;&quot;,</span>
-        <span class="c1">#     &quot;class&quot;: &quot;&quot;,</span>
-        <span class="c1">#     &quot;class_selector&quot;: &quot;&quot;,</span>
-        <span class="c1">#     &quot;css&quot;: &quot;&quot;,</span>
-        <span class="c1">#     &quot;data&quot;: &quot;{}&quot;,</span>
-        <span class="c1">#     &quot;element_selector&quot;: &quot;&quot;,</span>
-        <span class="c1">#     &quot;esm&quot;: &quot;&quot;,</span>
-        <span class="c1">#     &quot;id&quot;: &quot;&quot;,</span>
-        <span class="c1">#     &quot;ignore&quot;: true,</span>
-        <span class="c1">#     &quot;role&quot;: &quot;parameters&quot;,</span>
-        <span class="c1">#     &quot;type_&quot;: &quot;nbprint.config.core.parameters.Parameters&quot;</span>
+        <span class="c1"># "nbprint": {</span>
+        <span class="c1">#     "attrs": "",</span>
+        <span class="c1">#     "class": "",</span>
+        <span class="c1">#     "class_selector": "",</span>
+        <span class="c1">#     "css": "",</span>
+        <span class="c1">#     "data": "{}",</span>
+        <span class="c1">#     "element_selector": "",</span>
+        <span class="c1">#     "esm": "",</span>
+        <span class="c1">#     "id": "",</span>
+        <span class="c1">#     "ignore": true,</span>
+        <span class="c1">#     "role": "parameters",</span>
+        <span class="c1">#     "type_": "nbprint.config.core.parameters.Parameters"</span>
         <span class="c1">#    },</span>
-        <span class="k">if</span> <span class="s2">&quot;metadata&quot;</span> <span class="ow">in</span> <span class="n">cell</span> <span class="ow">and</span> <span class="s2">&quot;nbprint&quot;</span> <span class="ow">in</span> <span class="n">cell</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]:</span>
-            <span class="n">nbprint_cell_meta</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;nbprint&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">"metadata"</span> <span class="ow">in</span> <span class="n">cell</span> <span class="ow">and</span> <span class="s2">"nbprint"</span> <span class="ow">in</span> <span class="n">cell</span><span class="p">[</span><span class="s2">"metadata"</span><span class="p">]:</span>
+            <span class="n">nbprint_cell_meta</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">cell</span><span class="p">[</span><span class="s2">"metadata"</span><span class="p">][</span><span class="s2">"nbprint"</span><span class="p">])</span>
 
             <span class="c1"># These fields are generated during output and are not</span>
             <span class="c1"># part of the input model — drop them to avoid validation errors.</span>
             <span class="c1"># `class` is re-derived from `classname` during generation.</span>
-            <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;class_selector&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;element_selector&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-            <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;parent-id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"class"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"class_selector"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"element_selector"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"parent-id"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-            <span class="c1"># Preserve `attrs` if it&#39;s a dict (the input format); drop if</span>
+            <span class="c1"># Preserve `attrs` if it's a dict (the input format); drop if</span>
             <span class="c1"># it was serialized as a string during generation.</span>
-            <span class="n">attrs_val</span> <span class="o">=</span> <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;attrs&quot;</span><span class="p">)</span>
+            <span class="n">attrs_val</span> <span class="o">=</span> <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"attrs"</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attrs_val</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;attrs&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"attrs"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">nbprint_cell_meta</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -556,52 +556,52 @@
                 <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
             <span class="c1"># Strip the magic line from the source so the Content</span>
             <span class="c1"># model stores the real code, not the directive.</span>
-            <span class="n">source</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>
 
         <span class="c1"># Attach cell tags in to content</span>
-        <span class="k">if</span> <span class="s2">&quot;tags&quot;</span> <span class="ow">in</span> <span class="n">cell</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]:</span>
-            <span class="n">nbprint_cell_meta</span><span class="p">[</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">][</span><span class="s2">&quot;tags&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"tags"</span> <span class="ow">in</span> <span class="n">cell</span><span class="p">[</span><span class="s2">"metadata"</span><span class="p">]:</span>
+            <span class="n">nbprint_cell_meta</span><span class="p">[</span><span class="s2">"tags"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cell</span><span class="p">[</span><span class="s2">"metadata"</span><span class="p">][</span><span class="s2">"tags"</span><span class="p">]</span>
 
         <span class="c1"># Ensure source is captured as the content payload. Models that</span>
         <span class="c1"># already declare ``content`` in metadata (e.g. YAML-authored</span>
         <span class="c1"># Content) are left untouched. For runtime-typed cells (e.g.</span>
         <span class="c1"># NBPrintPage emits ``type_=nbprint.ContentPageBox``) the source</span>
         <span class="c1"># becomes the cell body that re-runs on regeneration.</span>
-        <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
+        <span class="n">nbprint_cell_meta</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"content"</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span>
 
         <span class="c1"># If this is an nbprint defined type, use that</span>
-        <span class="k">if</span> <span class="s2">&quot;type_&quot;</span> <span class="ow">in</span> <span class="n">nbprint_cell_meta</span><span class="p">:</span>
-            <span class="n">content_type</span> <span class="o">=</span> <span class="n">nbprint_cell_meta</span><span class="p">[</span><span class="s2">&quot;type_&quot;</span><span class="p">]</span>
-            <span class="n">content_model</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">({</span><span class="s2">&quot;type_&quot;</span><span class="p">:</span> <span class="n">content_type</span><span class="p">},</span> <span class="n">Content</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"type_"</span> <span class="ow">in</span> <span class="n">nbprint_cell_meta</span><span class="p">:</span>
+            <span class="n">content_type</span> <span class="o">=</span> <span class="n">nbprint_cell_meta</span><span class="p">[</span><span class="s2">"type_"</span><span class="p">]</span>
+            <span class="n">content_model</span> <span class="o">=</span> <span class="n">BaseModel</span><span class="o">.</span><span class="n">_to_type</span><span class="p">({</span><span class="s2">"type_"</span><span class="p">:</span> <span class="n">content_type</span><span class="p">},</span> <span class="n">Content</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">content_model</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">nbprint_cell_meta</span><span class="p">)</span>
 
         <span class="c1"># Default handling: treat as code or markdown content</span>
-        <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s2">"code"</span><span class="p">:</span>
             <span class="n">content</span> <span class="o">=</span> <span class="n">ContentCode</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">nbprint_cell_meta</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s2">&quot;markdown&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s2">"markdown"</span><span class="p">:</span>
             <span class="n">content</span> <span class="o">=</span> <span class="n">ContentMarkdown</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">nbprint_cell_meta</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Skip, log warning</span>
-            <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported cell type when loading from notebook: </span><span class="si">{</span><span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unsupported cell type when loading from notebook: </span><span class="si">{</span><span class="n">cell</span><span class="o">.</span><span class="n">cell_type</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">content</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_nbprint_mime</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract nbprint metadata from a cell&#39;s outputs (MIME type output).</span>
+<span class="w">        </span><span class="sd">"""Extract nbprint metadata from a cell's outputs (MIME type output).</span>
 
 <span class="sd">        Looks for outputs containing any of the nbprint runtime MIME</span>
 <span class="sd">        types (``application/nbprint.cell+json``,</span>
 <span class="sd">        ``application/nbprint.page+json``,</span>
 <span class="sd">        ``application/nbprint.block+json``) and returns the parsed</span>
 <span class="sd">        metadata dict, or ``None``. All MIME types use the same merge</span>
-<span class="sd">        semantics into the cell&#39;s nbprint metadata; the kind of model</span>
+<span class="sd">        semantics into the cell's nbprint metadata; the kind of model</span>
 <span class="sd">        constructed is later driven by the embedded ``type_`` field.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">json</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">_json</span>
 
-        <span class="n">outputs</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;outputs&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"outputs"</span><span class="p">,</span> <span class="p">[])</span>
         <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="p">{})</span>
             <span class="k">for</span> <span class="n">mime</span> <span class="ow">in</span> <span class="p">(</span><span class="n">NBPRINT_MIME</span><span class="p">,</span> <span class="n">NBPRINT_PAGE_MIME</span><span class="p">,</span> <span class="n">NBPRINT_BLOCK_MIME</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">mime</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
                     <span class="n">raw</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">mime</span><span class="p">]</span>
@@ -613,16 +613,16 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_nbprint_magic</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse ``%%nbprint key=value ...`` from the first line of source.</span>
+<span class="w">        </span><span class="sd">"""Parse ``%%nbprint key=value ...`` from the first line of source.</span>
 
 <span class="sd">        Returns the parsed kwargs dict, or ``None`` if the cell does not</span>
 <span class="sd">        start with the magic.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">first_line</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">first_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%%</span><span class="s2">nbprint&quot;</span><span class="p">):</span>
+<span class="sd">        """</span>
+        <span class="n">first_line</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">first_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"</span><span class="si">%%</span><span class="s2">nbprint"</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">None</span>
         <span class="c1"># Strip the ``%%nbprint`` prefix and parse the rest</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">first_line</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%%</span><span class="s2">nbprint&quot;</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">first_line</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">"</span><span class="si">%%</span><span class="s2">nbprint"</span><span class="p">)</span> <span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{}</span>
         <span class="k">return</span> <span class="n">_parse_magic_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
@@ -632,8 +632,8 @@
         <span class="n">new_parameters</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">param_lines</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">param_lines</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;=&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
-                <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">"="</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"="</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="c1"># Attempt to eval the value to get correct type</span>
@@ -647,22 +647,22 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_extract_section_for_cell</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine the target section for a cell from tags or nbprint metadata.</span>
+<span class="w">        </span><span class="sd">"""Determine the target section for a cell from tags or nbprint metadata.</span>
 
 <span class="sd">        Checks (in priority order):</span>
 <span class="sd">        1. ``cell.metadata.nbprint.section`` — explicit section name.</span>
 <span class="sd">        2. Cell tags matching ``nbprint:section:&lt;name&gt;`` — tag-based routing.</span>
 
 <span class="sd">        Returns the section name or ``None`` (meaning default to ``middlematter``).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># 1. Check nbprint metadata</span>
-        <span class="n">nbprint_meta</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nbprint&quot;</span><span class="p">,</span> <span class="p">{})</span>
-        <span class="n">section</span> <span class="o">=</span> <span class="n">nbprint_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;section&quot;</span><span class="p">)</span>
+        <span class="n">nbprint_meta</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"metadata"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"nbprint"</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">section</span> <span class="o">=</span> <span class="n">nbprint_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"section"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">section</span> <span class="ow">and</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">SECTION_ORDER</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">section</span>
 
         <span class="c1"># 2. Check cell tags</span>
-        <span class="n">tags</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"metadata"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="p">[])</span>
         <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">tag</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">_SECTION_TAG_PREFIX</span><span class="p">):</span>
                 <span class="n">candidate</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">_SECTION_TAG_PREFIX</span><span class="p">)</span> <span class="p">:]</span>
@@ -676,15 +676,15 @@
         <span class="n">new_parameters</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">cells_to_process</span> <span class="o">=</span> <span class="n">nb_content</span><span class="o">.</span><span class="n">cells</span>
 
-        <span class="k">if</span> <span class="n">cells_to_process</span> <span class="ow">and</span> <span class="s2">&quot;metadata&quot;</span> <span class="ow">in</span> <span class="n">cells_to_process</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="s2">&quot;parameters&quot;</span> <span class="ow">in</span> <span class="n">cells_to_process</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="k">if</span> <span class="n">cells_to_process</span> <span class="ow">and</span> <span class="s2">"metadata"</span> <span class="ow">in</span> <span class="n">cells_to_process</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="s2">"parameters"</span> <span class="ow">in</span> <span class="n">cells_to_process</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"metadata"</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="p">[]):</span>
             <span class="c1"># Parse first cell for parameters</span>
             <span class="n">first_cell</span> <span class="o">=</span> <span class="n">cells_to_process</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="c1"># skip first cell</span>
             <span class="n">cells_to_process</span> <span class="o">=</span> <span class="n">cells_to_process</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 
             <span class="c1"># Pull out the parameters object and ensure everything is present</span>
-            <span class="k">if</span> <span class="s2">&quot;parameters&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-                <span class="n">values</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PapermillParameters</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">"parameters"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+                <span class="n">values</span><span class="p">[</span><span class="s2">"parameters"</span><span class="p">]</span> <span class="o">=</span> <span class="n">PapermillParameters</span><span class="p">()</span>
 
             <span class="c1"># Pull out the parameters object and ensure everything is present</span>
             <span class="n">new_parameters</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_parse_parameters_cell</span><span class="p">(</span><span class="n">first_cell</span><span class="p">)</span>
@@ -693,7 +693,7 @@
 
         <span class="c1"># Resolve overlays — accept either pre-built Overlay instances or</span>
         <span class="c1"># dict-shaped specs from YAML/notebook metadata.</span>
-        <span class="n">raw_overlays</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;overlays&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">raw_overlays</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"overlays"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">overlays</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Overlay</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">raw_overlays</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">Overlay</span><span class="p">):</span>
@@ -701,7 +701,7 @@
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="n">overlays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Overlay</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">spec</span><span class="p">))</span>
 
-        <span class="n">raw_layouts</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;layout_overlays&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="n">raw_layouts</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"layout_overlays"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
         <span class="n">layout_overlays</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">LayoutOverlay</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">build_layout_overlay</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span> <span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="n">raw_layouts</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="p">(</span><span class="n">LayoutOverlay</span><span class="p">,</span> <span class="nb">dict</span><span class="p">))]</span>
 
         <span class="n">placements</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cells_to_process</span><span class="p">)</span>
@@ -718,41 +718,41 @@
                 <span class="k">if</span> <span class="n">section</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">runtime_meta</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_extract_nbprint_mime</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
                     <span class="n">magic_meta</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">_extract_nbprint_magic</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="ow">or</span> <span class="p">{}</span>
-                    <span class="n">runtime_section</span> <span class="o">=</span> <span class="n">runtime_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;section&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">magic_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;section&quot;</span><span class="p">)</span>
+                    <span class="n">runtime_section</span> <span class="o">=</span> <span class="n">runtime_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"section"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">magic_meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"section"</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">runtime_section</span> <span class="ow">and</span> <span class="n">runtime_section</span> <span class="ow">in</span> <span class="n">SECTION_ORDER</span><span class="p">:</span>
                         <span class="n">section</span> <span class="o">=</span> <span class="n">runtime_section</span>
-                <span class="n">target_section</span> <span class="o">=</span> <span class="n">section</span> <span class="ow">or</span> <span class="s2">&quot;middlematter&quot;</span>
+                <span class="n">target_section</span> <span class="o">=</span> <span class="n">section</span> <span class="ow">or</span> <span class="s2">"middlematter"</span>
 
                 <span class="c1"># Apply formatting overlays</span>
                 <span class="n">matched_overlays</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">apply_overlays</span><span class="p">(</span><span class="n">overlays</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">cell_instance</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="n">target_section</span><span class="p">))</span>
 
-                <span class="nb">getattr</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">],</span> <span class="n">target_section</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell_instance</span><span class="p">)</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">"content"</span><span class="p">],</span> <span class="n">target_section</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cell_instance</span><span class="p">)</span>
                 <span class="n">placements</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">target_section</span><span class="p">,</span> <span class="n">cell_instance</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">overlay</span> <span class="ow">in</span> <span class="n">overlays</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">id</span><span class="p">(</span><span class="n">overlay</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">matched_overlays</span><span class="p">:</span>
-                <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;overlay (</span><span class="si">{</span><span class="n">describe_matcher</span><span class="p">(</span><span class="n">overlay</span><span class="o">.</span><span class="n">match</span><span class="p">)</span><span class="si">}</span><span class="s2">) matched no cells; its formatting was not applied anywhere&quot;</span><span class="p">)</span>
+                <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"overlay (</span><span class="si">{</span><span class="n">describe_matcher</span><span class="p">(</span><span class="n">overlay</span><span class="o">.</span><span class="n">match</span><span class="p">)</span><span class="si">}</span><span class="s2">) matched no cells; its formatting was not applied anywhere"</span><span class="p">)</span>
 
         <span class="c1"># Apply layout-wrapping overlays after all cells are placed.</span>
         <span class="k">if</span> <span class="n">layout_overlays</span><span class="p">:</span>
-            <span class="n">apply_layout_overlays</span><span class="p">(</span><span class="n">layout_overlays</span><span class="p">,</span> <span class="n">cells_to_process</span><span class="p">,</span> <span class="n">placements</span><span class="p">,</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">])</span>
+            <span class="n">apply_layout_overlays</span><span class="p">(</span><span class="n">layout_overlays</span><span class="p">,</span> <span class="n">cells_to_process</span><span class="p">,</span> <span class="n">placements</span><span class="p">,</span> <span class="n">values</span><span class="p">[</span><span class="s2">"content"</span><span class="p">])</span>
 
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">new_parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">model_fields</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span> <span class="n">k</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">],</span> <span class="n">PapermillParameters</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">vars</span> <span class="ow">or</span> <span class="n">values</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-                <span class="n">values</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">values</span><span class="p">[</span><span class="s2">"parameters"</span><span class="p">]</span><span class="o">.</span><span class="n">model_fields</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">"parameters"</span><span class="p">],</span> <span class="n">k</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">"parameters"</span><span class="p">],</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="s2">"parameters"</span><span class="p">],</span> <span class="n">PapermillParameters</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">[</span><span class="s2">"parameters"</span><span class="p">]</span><span class="o">.</span><span class="n">vars</span> <span class="ow">or</span> <span class="n">values</span><span class="p">[</span><span class="s2">"parameters"</span><span class="p">]</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">values</span><span class="p">[</span><span class="s2">"parameters"</span><span class="p">]</span><span class="o">.</span><span class="n">vars</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_warn_on_unconsumed_tags</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Flag reserved-namespace cell tags that nbprint will not act on.</span>
+<span class="w">        </span><span class="sd">"""Flag reserved-namespace cell tags that nbprint will not act on.</span>
 
 <span class="sd">        A tag in the ``nbprint:`` namespace looks authoritative, so a typo in</span>
 <span class="sd">        one is silently inert: the cell simply renders as though the tag were</span>
 <span class="sd">        never there.  Both cases here are unambiguous authoring mistakes, and</span>
 <span class="sd">        both used to cost the author a render cycle to notice.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tags</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="p">[])</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="s2">&quot;get&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
+<span class="sd">        """</span>
+        <span class="n">tags</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"metadata"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="p">[])</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="s2">"get"</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">tag</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">_RESERVED_TAG_NAMESPACE</span><span class="p">):</span>
                 <span class="k">continue</span>
@@ -760,53 +760,53 @@
                 <span class="n">name</span> <span class="o">=</span> <span class="n">tag</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">_SECTION_TAG_PREFIX</span><span class="p">)</span> <span class="p">:]</span>
                 <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SECTION_ORDER</span><span class="p">:</span>
                     <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;cell </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> is tagged </span><span class="si">{</span><span class="n">tag</span><span class="si">!r}</span><span class="s2"> but </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> is not a section; &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;it will fall back to middlematter. Known sections: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SECTION_ORDER</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="sa">f</span><span class="s2">"cell </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> is tagged </span><span class="si">{</span><span class="n">tag</span><span class="si">!r}</span><span class="s2"> but </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> is not a section; "</span>
+                        <span class="sa">f</span><span class="s2">"it will fall back to middlematter. Known sections: </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SECTION_ORDER</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
                     <span class="p">)</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">_RESERVED_TAGS</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">tag</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">_RESERVED_TAG_PREFIXES</span><span class="p">):</span>
-                <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cell </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> carries reserved tag </span><span class="si">{</span><span class="n">tag</span><span class="si">!r}</span><span class="s2">, which nbprint does not consume&quot;</span><span class="p">)</span>
+                <span class="n">_log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">"cell </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2"> carries reserved tag </span><span class="si">{</span><span class="n">tag</span><span class="si">!r}</span><span class="s2">, which nbprint does not consume"</span><span class="p">)</span>
 
-    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_append_notebook_content</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"notebook"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">values</span>
 
         <span class="bp">cls</span><span class="o">.</span><span class="n">_init_content</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
 
-        <span class="n">file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;notebook&quot;</span><span class="p">))</span>
-        <span class="k">with</span> <span class="n">file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">path_file</span><span class="p">:</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"notebook"</span><span class="p">))</span>
+        <span class="k">with</span> <span class="n">file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">path_file</span><span class="p">:</span>
             <span class="n">nb_content</span> <span class="o">=</span> <span class="n">nb_read</span><span class="p">(</span><span class="n">path_file</span><span class="p">,</span> <span class="n">as_version</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
         <span class="c1"># Extract notebook-level nbprint metadata for page and output config.</span>
         <span class="c1"># These are low-priority defaults: explicit values in ``values`` (from</span>
         <span class="c1"># YAML or CLI overrides) take precedence.</span>
-        <span class="n">nb_meta</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">nb_content</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="s2">&quot;nbprint&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">nb_content</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nbprint&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nb_content</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">nb_meta</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">nb_content</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="s2">"nbprint"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">nb_content</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"nbprint"</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nb_content</span><span class="o">.</span><span class="n">metadata</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">nb_meta</span><span class="p">:</span>
             <span class="n">nb_nbprint</span> <span class="o">=</span> <span class="n">nb_meta</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nb_meta</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="nb">dict</span><span class="p">(</span><span class="n">nb_meta</span><span class="p">)</span>
 
             <span class="c1"># Page config from notebook metadata</span>
-            <span class="k">if</span> <span class="s2">&quot;page&quot;</span> <span class="ow">in</span> <span class="n">nb_nbprint</span> <span class="ow">and</span> <span class="s2">&quot;page&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-                <span class="n">values</span><span class="p">[</span><span class="s2">&quot;page&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nb_nbprint</span><span class="p">[</span><span class="s2">&quot;page&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">"page"</span> <span class="ow">in</span> <span class="n">nb_nbprint</span> <span class="ow">and</span> <span class="s2">"page"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+                <span class="n">values</span><span class="p">[</span><span class="s2">"page"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nb_nbprint</span><span class="p">[</span><span class="s2">"page"</span><span class="p">]</span>
 
             <span class="c1"># Outputs config from notebook metadata</span>
-            <span class="k">if</span> <span class="s2">&quot;outputs&quot;</span> <span class="ow">in</span> <span class="n">nb_nbprint</span> <span class="ow">and</span> <span class="s2">&quot;outputs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-                <span class="n">values</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nb_nbprint</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">"outputs"</span> <span class="ow">in</span> <span class="n">nb_nbprint</span> <span class="ow">and</span> <span class="s2">"outputs"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+                <span class="n">values</span><span class="p">[</span><span class="s2">"outputs"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nb_nbprint</span><span class="p">[</span><span class="s2">"outputs"</span><span class="p">]</span>
 
             <span class="c1"># Overlays from notebook metadata (appended to any explicit</span>
             <span class="c1"># overlays so YAML-defined overlays still apply).</span>
-            <span class="k">if</span> <span class="s2">&quot;overlays&quot;</span> <span class="ow">in</span> <span class="n">nb_nbprint</span><span class="p">:</span>
-                <span class="n">nb_overlays</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nb_nbprint</span><span class="p">[</span><span class="s2">&quot;overlays&quot;</span><span class="p">])</span>
-                <span class="n">existing</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;overlays&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
-                <span class="n">values</span><span class="p">[</span><span class="s2">&quot;overlays&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">existing</span><span class="p">,</span> <span class="o">*</span><span class="n">nb_overlays</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">"overlays"</span> <span class="ow">in</span> <span class="n">nb_nbprint</span><span class="p">:</span>
+                <span class="n">nb_overlays</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nb_nbprint</span><span class="p">[</span><span class="s2">"overlays"</span><span class="p">])</span>
+                <span class="n">existing</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"overlays"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+                <span class="n">values</span><span class="p">[</span><span class="s2">"overlays"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">existing</span><span class="p">,</span> <span class="o">*</span><span class="n">nb_overlays</span><span class="p">]</span>
 
-            <span class="k">if</span> <span class="s2">&quot;layout_overlays&quot;</span> <span class="ow">in</span> <span class="n">nb_nbprint</span><span class="p">:</span>
-                <span class="n">nb_layouts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nb_nbprint</span><span class="p">[</span><span class="s2">&quot;layout_overlays&quot;</span><span class="p">])</span>
-                <span class="n">existing</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;layout_overlays&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
-                <span class="n">values</span><span class="p">[</span><span class="s2">&quot;layout_overlays&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">existing</span><span class="p">,</span> <span class="o">*</span><span class="n">nb_layouts</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s2">"layout_overlays"</span> <span class="ow">in</span> <span class="n">nb_nbprint</span><span class="p">:</span>
+                <span class="n">nb_layouts</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nb_nbprint</span><span class="p">[</span><span class="s2">"layout_overlays"</span><span class="p">])</span>
+                <span class="n">existing</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"layout_overlays"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+                <span class="n">values</span><span class="p">[</span><span class="s2">"layout_overlays"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">existing</span><span class="p">,</span> <span class="o">*</span><span class="n">nb_layouts</span><span class="p">]</span>
 
         <span class="bp">cls</span><span class="o">.</span><span class="n">_process_cells</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">nb_content</span><span class="p">)</span>
 
@@ -820,11 +820,11 @@
         <span class="n">nb</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">__version__</span>
         <span class="n">nb</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">nb</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">nbprint</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">nb</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;python</span><span class="si">{</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">version_info</span><span class="o">.</span><span class="n">minor</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">nb</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"python</span><span class="si">{</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">version_info</span><span class="o">.</span><span class="n">minor</span><span class="si">}</span><span class="s2">"</span>
 
         <span class="n">base_meta</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[],</span>
-            <span class="s2">&quot;nbprint&quot;</span><span class="p">:</span> <span class="p">{},</span>
+            <span class="s2">"tags"</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="s2">"nbprint"</span><span class="p">:</span> <span class="p">{},</span>
         <span class="p">}</span>
 
         <span class="n">nb</span><span class="o">.</span><span class="n">cells</span> <span class="o">=</span> <span class="p">[]</span>
@@ -839,7 +839,7 @@
 
         <span class="c1"># now do the context object</span>
         <span class="c1"># pass in parent=self, attr=context so we do config.context</span>
-        <span class="n">_append_or_extend</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">base_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;context&quot;</span><span class="p">))</span>
+        <span class="n">_append_or_extend</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">base_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">"context"</span><span class="p">))</span>
 
         <span class="c1"># resources: dict[str, SerializeAsAny[BaseModel]] = Field(default_factory=dict)</span>
         <span class="c1"># TODO: omitting resources, referenced directly in yaml</span>
@@ -850,7 +850,7 @@
 
         <span class="c1"># now setup the page layout</span>
         <span class="c1"># pass in parent=self, attr=page so we do config.page</span>
-        <span class="n">_append_or_extend</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">base_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;page&quot;</span><span class="p">))</span>
+        <span class="n">_append_or_extend</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">base_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">"page"</span><span class="p">))</span>
 
         <span class="c1"># now iterate through the content, section by section</span>
         <span class="n">content_counter</span> <span class="o">=</span> <span class="mi">0</span>
@@ -858,19 +858,19 @@
             <span class="n">section_default_style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">section_styles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section_name</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">section_contents</span><span class="p">:</span>
                 <span class="c1"># Apply section-level default style: section default is</span>
-                <span class="c1"># merged with the content&#39;s own style; content style fields</span>
+                <span class="c1"># merged with the content's own style; content style fields</span>
                 <span class="c1"># override the section default.</span>
                 <span class="k">if</span> <span class="n">section_default_style</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">Content</span><span class="p">):</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">style</span><span class="p">,</span> <span class="n">Style</span><span class="p">):</span>
                         <span class="n">content</span><span class="o">.</span><span class="n">style</span> <span class="o">=</span> <span class="n">section_default_style</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">style</span><span class="p">)</span>
                     <span class="k">elif</span> <span class="n">content</span><span class="o">.</span><span class="n">style</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="n">content</span><span class="o">.</span><span class="n">style</span> <span class="o">=</span> <span class="n">section_default_style</span>
-                <span class="n">cells</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">base_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="n">content_counter</span><span class="p">)</span>
+                <span class="n">cells</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">base_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">"content"</span><span class="p">,</span> <span class="n">counter</span><span class="o">=</span><span class="n">content_counter</span><span class="p">)</span>
                 <span class="c1"># Tag generated cells with section metadata</span>
                 <span class="n">tagged</span> <span class="o">=</span> <span class="n">cells</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cells</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">cells</span><span class="p">]</span> <span class="k">if</span> <span class="n">cells</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">tagged</span><span class="p">:</span>
-                    <span class="n">section_tag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;nbprint:section:</span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="n">group_tag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;nbprint:section-group:</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">section_tag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"nbprint:section:</span><span class="si">{</span><span class="n">section_name</span><span class="si">}</span><span class="s2">"</span>
+                    <span class="n">group_tag</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"nbprint:section-group:</span><span class="si">{</span><span class="n">group_name</span><span class="si">}</span><span class="s2">"</span>
                     <span class="k">if</span> <span class="n">section_tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
                         <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">tags</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">section_tag</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">group_tag</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
@@ -882,7 +882,7 @@
         <span class="c1"># NOTE: outputs cell doesnt usually actually do anything, unless</span>
         <span class="c1"># it is set to run in-context, in which case it will only</span>
         <span class="c1"># execute inside the notebook and note outside</span>
-        <span class="n">_append_or_extend</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">base_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;outputs&quot;</span><span class="p">))</span>
+        <span class="n">_append_or_extend</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">base_meta</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s2">"outputs"</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">nb</span></div>
 
@@ -891,7 +891,7 @@
         <span class="n">cell</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_base_generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="c1"># omit the data</span>
-        <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">""</span>
 
         <span class="c1"># add extras</span>
         <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
@@ -911,7 +911,7 @@
         <span class="n">cell</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_base_generate</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
         <span class="c1"># omit the data</span>
-        <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">cell</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s2">""</span>
 
         <span class="c1"># add resources</span>
         <span class="c1"># mod = ast.Module(body=[], type_ignores=[])</span>
@@ -922,14 +922,14 @@
 <div class="viewcode-block" id="Configuration.load">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.Configuration.html#nbprint.config.core.Configuration.load">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">path_or_model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">path_or_model</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="nb">dict</span><span class="p">,</span> <span class="s2">"Configuration"</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Configuration"</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path_or_model</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">path_or_model</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path_or_model</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">path_or_model</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.yml&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path_or_model</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">path_or_model</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".yml"</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">NBPrintPathIsYamlError</span><span class="p">(</span><span class="n">path_or_model</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path_or_model</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">path_or_model</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.yaml&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path_or_model</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">path_or_model</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".yaml"</span><span class="p">):</span>
             <span class="n">path_or_model</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path_or_model</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path_or_model</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
@@ -938,8 +938,8 @@
             <span class="n">file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">path_or_model</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
             <span class="k">with</span> <span class="n">initialize_config_dir</span><span class="p">(</span><span class="n">version_base</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">config_dir</span><span class="o">=</span><span class="n">folder</span><span class="p">,</span> <span class="n">job_name</span><span class="o">=</span><span class="n">name</span><span class="p">):</span>
-                <span class="n">cfg</span> <span class="o">=</span> <span class="n">compose</span><span class="p">(</span><span class="n">config_name</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;+name=</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">])</span>
-                <span class="n">config</span> <span class="o">=</span> <span class="n">instantiate</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">_convert_</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+                <span class="n">cfg</span> <span class="o">=</span> <span class="n">compose</span><span class="p">(</span><span class="n">config_name</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">"+name=</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">])</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">instantiate</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">_convert_</span><span class="o">=</span><span class="s2">"all"</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">Configuration</span><span class="p">):</span>
                     <span class="n">config</span> <span class="o">=</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">config</span>
@@ -965,7 +965,7 @@
             <span class="c1"># Run postprocessing</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">postprocess</span><span class="o">.</span><span class="n">object</span><span class="p">([</span><span class="bp">self</span><span class="p">])</span>
 
-            <span class="c1"># NOTE: as of this point, we&#39;re &quot;done&quot;</span>
+            <span class="c1"># NOTE: as of this point, we're "done"</span>
 
             <span class="c1"># reset in case we want to run again</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_reset</span><span class="p">()</span>
@@ -1030,7 +1030,7 @@
       
     </aside>
   </div>
-</div><script src="../../../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>nbprint.models.logging - nbprint v0.12.2</title>
+        <title>nbprint.models.logging - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -187,7 +187,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -274,17 +274,17 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">Content</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;LoggingBasicConfig&quot;</span><span class="p">,</span> <span class="s2">&quot;LoggingConfig&quot;</span><span class="p">)</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"LoggingBasicConfig"</span><span class="p">,</span> <span class="s2">"LoggingConfig"</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">LoggingBasicConfig</span><span class="p">(</span><span class="n">Content</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the basic logging configuration, to control which logs may show up in the report.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Set the basic logging configuration, to control which logs may show up in the report."""</span>
 
-    <span class="n">log_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;CRITICAL&quot;</span>
+    <span class="n">log_level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"CRITICAL"</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTML</span><span class="p">:</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">log_level</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="LoggingConfig">
@@ -294,36 +294,36 @@
     <span class="n">disable_existing_loggers</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">formatters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;simple&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">][</span><span class="si">%(threadName)s</span><span class="s2">][</span><span class="si">%(name)s</span><span class="s2">][</span><span class="si">%(levelname)s</span><span class="s2">]: </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">},</span>
-            <span class="s2">&quot;colorlog&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="s2">&quot;colorlog.ColoredFormatter&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;[</span><span class="si">%(cyan)s%(asctime)s%(reset)s</span><span class="s2">][</span><span class="si">%(threadName)s</span><span class="s2">][</span><span class="si">%(blue)s%(name)s%(reset)s</span><span class="s2">][</span><span class="si">%(log_color)s%(levelname)s%(reset)s</span><span class="s2">]: </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;log_colors&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;DEBUG&quot;</span><span class="p">:</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;INFO&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;WARNING&quot;</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;ERROR&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;CRITICAL&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+            <span class="s2">"simple"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"format"</span><span class="p">:</span> <span class="s2">"[</span><span class="si">%(asctime)s</span><span class="s2">][</span><span class="si">%(threadName)s</span><span class="s2">][</span><span class="si">%(name)s</span><span class="s2">][</span><span class="si">%(levelname)s</span><span class="s2">]: </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">},</span>
+            <span class="s2">"colorlog"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"()"</span><span class="p">:</span> <span class="s2">"colorlog.ColoredFormatter"</span><span class="p">,</span>
+                <span class="s2">"format"</span><span class="p">:</span> <span class="s2">"[</span><span class="si">%(cyan)s%(asctime)s%(reset)s</span><span class="s2">][</span><span class="si">%(threadName)s</span><span class="s2">][</span><span class="si">%(blue)s%(name)s%(reset)s</span><span class="s2">][</span><span class="si">%(log_color)s%(levelname)s%(reset)s</span><span class="s2">]: </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">,</span>
+                <span class="s2">"log_colors"</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">"DEBUG"</span><span class="p">:</span> <span class="s2">"white"</span><span class="p">,</span>
+                    <span class="s2">"INFO"</span><span class="p">:</span> <span class="s2">"green"</span><span class="p">,</span>
+                    <span class="s2">"WARNING"</span><span class="p">:</span> <span class="s2">"yellow"</span><span class="p">,</span>
+                    <span class="s2">"ERROR"</span><span class="p">:</span> <span class="s2">"red"</span><span class="p">,</span>
+                    <span class="s2">"CRITICAL"</span><span class="p">:</span> <span class="s2">"red"</span><span class="p">,</span>
                 <span class="p">},</span>
             <span class="p">},</span>
-            <span class="s2">&quot;whenAndWhere&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">][</span><span class="si">%(threadName)s</span><span class="s2">][</span><span class="si">%(name)s</span><span class="s2">][</span><span class="si">%(filename)s</span><span class="s2">:</span><span class="si">%(lineno)d</span><span class="s2">][</span><span class="si">%(levelname)s</span><span class="s2">]: </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">},</span>
+            <span class="s2">"whenAndWhere"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"format"</span><span class="p">:</span> <span class="s2">"[</span><span class="si">%(asctime)s</span><span class="s2">][</span><span class="si">%(threadName)s</span><span class="s2">][</span><span class="si">%(name)s</span><span class="s2">][</span><span class="si">%(filename)s</span><span class="s2">:</span><span class="si">%(lineno)d</span><span class="s2">][</span><span class="si">%(levelname)s</span><span class="s2">]: </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">},</span>
         <span class="p">}</span>
     <span class="p">)</span>
     <span class="n">handlers</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default</span><span class="o">=</span><span class="p">{</span>
-            <span class="s2">&quot;console&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;ccflow.utils.logging.StreamHandler&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;colorlog&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;stream&quot;</span><span class="p">:</span> <span class="s2">&quot;ext://sys.stdout&quot;</span><span class="p">,</span>
+            <span class="s2">"console"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"level"</span><span class="p">:</span> <span class="s2">"WARNING"</span><span class="p">,</span>
+                <span class="s2">"class"</span><span class="p">:</span> <span class="s2">"ccflow.utils.logging.StreamHandler"</span><span class="p">,</span>
+                <span class="s2">"formatter"</span><span class="p">:</span> <span class="s2">"colorlog"</span><span class="p">,</span>
+                <span class="s2">"stream"</span><span class="p">:</span> <span class="s2">"ext://sys.stdout"</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">)</span>
-    <span class="n">root</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">],</span> <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">})</span>
+    <span class="n">root</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="p">{</span><span class="s2">"handlers"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"console"</span><span class="p">],</span> <span class="s2">"level"</span><span class="p">:</span> <span class="s2">"DEBUG"</span><span class="p">})</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTML</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;type_&quot;</span><span class="p">]))</span>
-        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+        <span class="n">logging</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_dump</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="s2">"type_"</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span></div>
 
 </pre></div>
         </article>
@@ -357,7 +357,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>

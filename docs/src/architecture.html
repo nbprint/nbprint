@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Configuration" href="configuration.html"><link rel="prev" title="Background" href="background.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>Architecture - nbprint v0.12.2</title>
+        <title>Architecture - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -400,7 +400,7 @@ This allows us to represent notebook “state” as a typed <code class="docutil
 </pre></div>
 </div>
 <p>Would result in the following cell:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;abc&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="s2">"abc"</span>
 <span class="n">b</span> <span class="o">=</span> <span class="mf">1.2</span>
 <span class="n">c</span> <span class="o">=</span> <span class="kc">True</span>
 </pre></div>
@@ -459,7 +459,7 @@ It can also be convenient to reuse display configuration.</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// esm string on a Content model</span>
 <span class="k">export</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">render</span><span class="p">(</span><span class="nx">meta</span><span class="p">,</span><span class="w"> </span><span class="nx">elem</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// synchronous render</span>
-<span class="w">    </span><span class="nx">elem</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;.my-chart&quot;</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">opacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;1&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="nx">elem</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">".my-chart"</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">opacity</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"1"</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="c1">// async is fine — the lifecycle awaits the promise</span>
@@ -600,7 +600,7 @@ block explicitly.</p>
 <span class="w">      </span><span class="nt">content</span><span class="p">:</span>
 <span class="w">        </span><span class="c1"># auto-wrapped — no explicit ContentPageBlock needed</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">          </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;##</span><span class="nv"> </span><span class="s">Quarter</span><span class="nv"> </span><span class="s">highlights&quot;</span>
+<span class="w">          </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"##</span><span class="nv"> </span><span class="s">Quarter</span><span class="nv"> </span><span class="s">highlights"</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentImage</span>
 <span class="w">          </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">revenue.png</span>
 <span class="w">        </span><span class="c1"># explicit block to span both columns</span>
@@ -613,8 +613,8 @@ block explicitly.</p>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hydra CLI override switches a page-box from flow to a 3-column grid</span>
 nbprint<span class="w"> </span>examples/research.yaml<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="s1">&#39;+nbprint.content.middlematter[2].layout=grid-3x2&#39;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="s1">&#39;+nbprint.content.middlematter[2].gap=0.5in&#39;</span>
+<span class="w">    </span><span class="s1">'+nbprint.content.middlematter[2].layout=grid-3x2'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s1">'+nbprint.content.middlematter[2].gap=0.5in'</span>
 </pre></div>
 </div>
 </section>
@@ -628,7 +628,7 @@ areas are allowed — they just produce empty cells). The <code class="docutils 
 placeholder is treated as an empty cell, not an area name.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBox</span>
 <span class="w">  </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grid</span>
-<span class="w">  </span><span class="nt">grid_template</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&#39;hero</span><span class="nv"> </span><span class="s">hero&#39;</span><span class="nv"> </span><span class="s">&#39;chart</span><span class="nv"> </span><span class="s">table&#39;</span><span class="nv"> </span><span class="s">/</span><span class="nv"> </span><span class="s">1fr</span><span class="nv"> </span><span class="s">1fr&quot;</span>
+<span class="w">  </span><span class="nt">grid_template</span><span class="p">:</span><span class="w"> </span><span class="s">"'hero</span><span class="nv"> </span><span class="s">hero'</span><span class="nv"> </span><span class="s">'chart</span><span class="nv"> </span><span class="s">table'</span><span class="nv"> </span><span class="s">/</span><span class="nv"> </span><span class="s">1fr</span><span class="nv"> </span><span class="s">1fr"</span>
 <span class="w">  </span><span class="nt">gap</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.25in</span>
 <span class="w">  </span><span class="nt">content</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBlock</span>
@@ -665,7 +665,7 @@ preserved and appended after the generated rules.</p>
 <span class="w">      </span><span class="nt">content</span><span class="p">:</span>
 <span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBlock</span>
 <span class="w">          </span><span class="nt">span</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<span class="w">          </span><span class="nt">aspect</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;16:9&quot;</span>
+<span class="w">          </span><span class="nt">aspect</span><span class="p">:</span><span class="w"> </span><span class="s">"16:9"</span>
 <span class="w">          </span><span class="nt">content</span><span class="p">:</span>
 <span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentImage</span>
 <span class="w">              </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hero.png</span>
@@ -673,13 +673,13 @@ preserved and appended after the generated rules.</p>
 <span class="w">          </span><span class="nt">break_inside</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">auto</span><span class="w">       </span><span class="c1"># this one is allowed to flow</span>
 <span class="w">          </span><span class="nt">content</span><span class="p">:</span>
 <span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">              </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Long</span><span class="nv"> </span><span class="s">narrative</span><span class="nv"> </span><span class="s">text...&quot;</span>
+<span class="w">              </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"Long</span><span class="nv"> </span><span class="s">narrative</span><span class="nv"> </span><span class="s">text..."</span>
 </pre></div>
 </div>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hydra CLI override of a single block&#39;s span</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Hydra CLI override of a single block's span</span>
 nbprint<span class="w"> </span>examples/research.yaml<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="s1">&#39;+nbprint.content.middlematter[0].content[0].span=3&#39;</span><span class="w"> </span><span class="se">\</span>
-<span class="w">    </span><span class="s1">&#39;+nbprint.content.middlematter[0].content[0].aspect=1.7777&#39;</span>
+<span class="w">    </span><span class="s1">'+nbprint.content.middlematter[0].content[0].span=3'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s1">'+nbprint.content.middlematter[0].content[0].aspect=1.7777'</span>
 </pre></div>
 </div>
 </section>
@@ -697,19 +697,19 @@ runtime path.</p>
 
 <span class="c1"># A landscape dashboard page split into a hero + 2 mid + 1 footer.</span>
 <span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span>
-    <span class="n">layout</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
-    <span class="n">grid_template</span><span class="o">=</span><span class="s2">&quot;&#39;hero hero&#39; &#39;chart table&#39; &#39;footer footer&#39; / 1fr 1fr&quot;</span><span class="p">,</span>
-    <span class="n">page_orientation</span><span class="o">=</span><span class="s2">&quot;landscape&quot;</span><span class="p">,</span>
-    <span class="n">fit</span><span class="o">=</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span>
-    <span class="n">gap</span><span class="o">=</span><span class="s2">&quot;0.25in&quot;</span><span class="p">,</span>
+    <span class="n">layout</span><span class="o">=</span><span class="s2">"grid"</span><span class="p">,</span>
+    <span class="n">grid_template</span><span class="o">=</span><span class="s2">"'hero hero' 'chart table' 'footer footer' / 1fr 1fr"</span><span class="p">,</span>
+    <span class="n">page_orientation</span><span class="o">=</span><span class="s2">"landscape"</span><span class="p">,</span>
+    <span class="n">fit</span><span class="o">=</span><span class="s2">"scale"</span><span class="p">,</span>
+    <span class="n">gap</span><span class="o">=</span><span class="s2">"0.25in"</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">&quot;hero&quot;</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">"hero"</span><span class="p">):</span>
         <span class="n">display</span><span class="p">(</span><span class="n">banner_image</span><span class="p">)</span>
-    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">&quot;chart&quot;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;16:9&quot;</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">"chart"</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">"16:9"</span><span class="p">):</span>
         <span class="n">display</span><span class="p">(</span><span class="n">revenue_chart</span><span class="p">)</span>
-    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">&quot;table&quot;</span><span class="p">,</span> <span class="n">break_inside</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">"table"</span><span class="p">,</span> <span class="n">break_inside</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">):</span>
         <span class="n">display</span><span class="p">(</span><span class="n">deals_table</span><span class="p">)</span>  <span class="c1"># allowed to flow if it overflows</span>
-    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">&quot;footer&quot;</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">NBPrintBlock</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">"footer"</span><span class="p">):</span>
         <span class="n">display</span><span class="p">(</span><span class="n">disclaimer_md</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -858,7 +858,7 @@ This will inject the following first cell into our notebook:</p>
 nbprint<span class="w"> </span>examples/parameters.ipynb<span class="w"> </span>+nbprint.parameters.a<span class="o">=</span><span class="nb">test</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;test&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="s2">"test"</span>
 </pre></div>
 </div>
 <p>This allows us to integrate nicely with <a class="reference external" href="https://github.com/nteract/papermill">papermill</a> notebooks, and build parameterized reports to produce different outputs from the same skeleton notebook.</p>
@@ -872,7 +872,7 @@ nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span>nbpri
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
 <span class="w">  </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 <span class="w">    </span><span class="no"># ${nbprint.name}</span>
-<span class="w">  </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;:scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}&quot;</span>
+<span class="w">  </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}"</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBreak</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentTableOfContents</span>
 <span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBreak</span>
@@ -1009,7 +1009,7 @@ we can customize, tweak, and extend <code class="docutils literal notranslate"><
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>nbprint.models.pandas - nbprint v0.12.2</title>
+        <title>nbprint.models.pandas - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -187,7 +187,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -272,7 +272,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">Content</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;PandasDisplayConfiguration&quot;</span><span class="p">,)</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"PandasDisplayConfiguration"</span><span class="p">,)</span>
 
 
 <div class="viewcode-block" id="PandasDisplayConfiguration">
@@ -284,9 +284,9 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTML</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-        <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_columns&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_columns</span><span class="p">)</span>
-        <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">&quot;display.max_rows&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_rows</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+        <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">"display.max_columns"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_columns</span><span class="p">)</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s2">"display.max_rows"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_rows</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span></div>
 
 </pre></div>
         </article>
@@ -320,7 +320,7 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>

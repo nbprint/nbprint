@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>nbprint.config.core.context - nbprint v0.12.2</title>
+        <title>nbprint.config.core.context - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -187,7 +187,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -279,7 +279,7 @@
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Configuration</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Context&quot;</span><span class="p">,)</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"Context"</span><span class="p">,)</span>
 
 
 <div class="viewcode-block" id="Context">
@@ -291,25 +291,25 @@
     <span class="n">parameters</span><span class="p">:</span> <span class="n">Parameters</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># internals</span>
-    <span class="n">_nb_var_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;nbprint_ctx&quot;</span><span class="p">)</span>
+    <span class="n">_nb_var_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"nbprint_ctx"</span><span class="p">)</span>
     <span class="n">_context_generated</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">PrivateAttr</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
         <span class="n">validate_assignment</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;allow&quot;</span><span class="p">,</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s2">"allow"</span><span class="p">,</span>
         <span class="n">arbitrary_types_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"after"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_tags</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="s2">&quot;nbprint:context&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
-            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;nbprint:context&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"nbprint:context"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"nbprint:context"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span>
 
 <div class="viewcode-block" id="Context.generate">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.Context.html#nbprint.config.core.Context.generate">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NotebookNode</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">attr</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NotebookNode</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_context_generated</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="c1"># TODO: may need to attach parameters manually at some point</span>
         <span class="c1"># in the future once papermill integration is complete</span>
@@ -348,7 +348,7 @@
       
     </aside>
   </div>
-</div><script src="../../../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>

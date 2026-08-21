@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>nbprint.config.content.image - nbprint v0.12.2</title>
+        <title>nbprint.config.content.image - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -187,7 +187,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -279,28 +279,28 @@
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.content.ContentImage.html#nbprint.config.content.ContentImage">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ContentImage</span><span class="p">(</span><span class="n">Content</span><span class="p">):</span>
     <span class="n">path</span><span class="p">:</span> <span class="n">FilePath</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span>
     <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"path"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_path_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">v</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"after"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_tags</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="s2">&quot;nbprint:content:image&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
-            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;nbprint:content:image&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"nbprint:content:image"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"nbprint:content:image"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"content"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">convert_content_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
+            <span class="k">return</span> <span class="sa">b</span><span class="s2">""</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">v</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
@@ -315,10 +315,10 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTML</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;&lt;img src=&quot;data:image/png;base64,</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">as_base64</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;&gt;&quot;&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="sa">f</span><span class="s2">"""&lt;img src="data:image/png;base64,</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">as_base64</span><span class="p">()</span><span class="si">}</span><span class="s2">"&gt;"""</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Image(path=&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">&#39;, content=[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes])&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Image(path='</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">', content=[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes])"</span></div>
 
 </pre></div>
         </article>
@@ -352,7 +352,7 @@
       
     </aside>
   </div>
-</div><script src="../../../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>

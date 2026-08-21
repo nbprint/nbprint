@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>nbprint.config.core.outputs - nbprint v0.12.2</title>
+        <title>nbprint.config.core.outputs - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -187,7 +187,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -284,39 +284,39 @@
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Configuration</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Outputs&quot;</span><span class="p">,</span> <span class="s2">&quot;OutputsProcessing&quot;</span><span class="p">)</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"Outputs"</span><span class="p">,</span> <span class="s2">"OutputsProcessing"</span><span class="p">)</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">OutputsProcessing</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-    <span class="n">CONTINUE</span> <span class="o">=</span> <span class="s2">&quot;continue&quot;</span>
-    <span class="n">STOP</span> <span class="o">=</span> <span class="s2">&quot;stop&quot;</span>
+    <span class="n">CONTINUE</span> <span class="o">=</span> <span class="s2">"continue"</span>
+    <span class="n">STOP</span> <span class="o">=</span> <span class="s2">"stop"</span>
 
 
 <div class="viewcode-block" id="Outputs">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.Outputs.html#nbprint.config.core.Outputs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Outputs</span><span class="p">(</span><span class="n">ResultBase</span><span class="p">,</span> <span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">root</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;outputs&quot;</span><span class="p">)</span>
-    <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">&quot;{{name}}-{{date}}&quot;</span><span class="p">)</span>
+    <span class="n">root</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span> <span class="o">/</span> <span class="s2">"outputs"</span><span class="p">)</span>
+    <span class="n">naming</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="s2">"{{name}}-{{date}}"</span><span class="p">)</span>
 
     <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
     <span class="n">role</span><span class="p">:</span> <span class="n">Role</span> <span class="o">=</span> <span class="n">Role</span><span class="o">.</span><span class="n">OUTPUTS</span>
     <span class="n">ignore</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 
-    <span class="n">embedded</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Whether this output is expected to run from its embedding inside the notebook.&quot;</span><span class="p">)</span>
+    <span class="n">embedded</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Whether this output is expected to run from its embedding inside the notebook."</span><span class="p">)</span>
     <span class="n">hook</span><span class="p">:</span> <span class="n">PyObjectPath</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;A callable hook that is called after generation of the notebook. &quot;</span>
-            <span class="s2">&quot;It is passed the config instance. &quot;</span>
-            <span class="s2">&quot;If it returns something non-None, that value is returned by `run` instead of the output path.&quot;</span>
+            <span class="s2">"A callable hook that is called after generation of the notebook. "</span>
+            <span class="s2">"It is passed the config instance. "</span>
+            <span class="s2">"If it returns something non-None, that value is returned by `run` instead of the output path."</span>
         <span class="p">),</span>
     <span class="p">)</span>
     <span class="n">postprocess</span><span class="p">:</span> <span class="n">PyObjectPath</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;A callable hook that is called after all processing completes. &quot;</span>
-            <span class="s2">&quot;It is passed the config instance/s. &quot;</span>
-            <span class="s2">&quot;NOTE: It may receive multiple Configuration instances, if a parameterized run was performed.&quot;</span>
+            <span class="s2">"A callable hook that is called after all processing completes. "</span>
+            <span class="s2">"It is passed the config instance/s. "</span>
+            <span class="s2">"NOTE: It may receive multiple Configuration instances, if a parameterized run was performed."</span>
         <span class="p">),</span>
     <span class="p">)</span>
 
@@ -337,14 +337,14 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;tags&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"tags"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"after"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_tags</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="s2">&quot;nbprint:outputs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
-            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;nbprint:outputs&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"nbprint:outputs"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+            <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"nbprint:outputs"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span>
 
-    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;root&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"root"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_convert_str_to_path</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -353,14 +353,14 @@
             <span class="k">return</span> <span class="n">v</span>
         <span class="k">raise</span> <span class="ne">TypeError</span>
 
-    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_embedded_or_cells_not_both</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Outputs&quot;</span><span class="p">:</span>
+    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">"after"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_embedded_or_cells_not_both</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Outputs"</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedded</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
-            <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;Cannot set both &#39;embedded&#39; and &#39;cells&#39;. If `embedded`, set fields on context object. Otherwise, select cells.&quot;</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="s2">"Cannot set both 'embedded' and 'cells'. If `embedded`, set fields on context object. Otherwise, select cells."</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_compute_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">naming</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
             <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_name</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">),</span>
             <span class="n">date</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_date</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">),</span>
@@ -371,11 +371,11 @@
         <span class="p">)</span>
 
         <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_nb_executed_path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.ipynb&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_nb_path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.ipynb&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.ipynb&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nb_executed_path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.ipynb"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nb_path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.ipynb"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_output_path</span> <span class="o">=</span> <span class="n">root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.ipynb"</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">config</span><span class="o">.</span><span class="n">name</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -387,19 +387,19 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_uuid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">uuid4</span><span class="p">()</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_get_sha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_sha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
 
         <span class="k">return</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">(</span><span class="n">by_alias</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Outputs.run">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.Outputs.html#nbprint.config.core.Outputs.run">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">&quot;Configuration&quot;</span><span class="p">,</span> <span class="n">gen</span><span class="p">:</span> <span class="n">NotebookNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">,</span> <span class="n">gen</span><span class="p">:</span> <span class="n">NotebookNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
         <span class="c1"># Create file or folder path</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">writes</span><span class="p">(</span><span class="n">gen</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">writes</span><span class="p">(</span><span class="n">gen</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hook</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">hook</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span>
@@ -414,15 +414,15 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTML</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedded</span><span class="p">:</span>
-            <span class="c1"># If we&#39;re running this code, the notebook is already executing.</span>
+            <span class="c1"># If we're running this code, the notebook is already executing.</span>
             <span class="c1"># For child classes, this might mean saving ourselves (the notebook</span>
-            <span class="c1"># in which we&#39;re running), then running nbconvert on ourselves</span>
+            <span class="c1"># in which we're running), then running nbconvert on ourselves</span>
             <span class="c1"># with execute=False.</span>
             <span class="c1">#</span>
             <span class="c1"># For now, this is a TODO.</span>
-            <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;Outputs cell execution in context is not yet implemented.&quot;</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="s2">"Outputs cell execution in context is not yet implemented."</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span></div>
 
 </pre></div>
         </article>
@@ -456,7 +456,7 @@
       
     </aside>
   </div>
-</div><script src="../../../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>

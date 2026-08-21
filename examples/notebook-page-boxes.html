@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>Page-Box Layout Demo - nbprint v0.12.2</title>
+        <title>Page-Box Layout Demo - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -167,7 +167,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -188,7 +188,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -287,9 +287,9 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Flow layout (default stacking)</span>
-<span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">&quot;flow&quot;</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="s2">&quot;0.3in&quot;</span><span class="p">):</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;## Flow Block 1</span><span class="se">\n\n</span><span class="s2">First block in flow layout.&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;## Flow Block 2</span><span class="se">\n\n</span><span class="s2">Second block stacked below.&quot;</span><span class="p">))</span>
+<span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">"flow"</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="s2">"0.3in"</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"## Flow Block 1</span><span class="se">\n\n</span><span class="s2">First block in flow layout."</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"## Flow Block 2</span><span class="se">\n\n</span><span class="s2">Second block stacked below."</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -297,11 +297,11 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Two-column layout</span>
-<span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">&quot;columns-2&quot;</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="s2">&quot;0.25in&quot;</span><span class="p">):</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### Col A</span><span class="se">\n\n</span><span class="s2">Left column content.&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### Col B</span><span class="se">\n\n</span><span class="s2">Right column content.&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### Col C</span><span class="se">\n\n</span><span class="s2">Third block wraps.&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### Col D</span><span class="se">\n\n</span><span class="s2">Fourth block.&quot;</span><span class="p">))</span>
+<span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">"columns-2"</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="s2">"0.25in"</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### Col A</span><span class="se">\n\n</span><span class="s2">Left column content."</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### Col B</span><span class="se">\n\n</span><span class="s2">Right column content."</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### Col C</span><span class="se">\n\n</span><span class="s2">Third block wraps."</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### Col D</span><span class="se">\n\n</span><span class="s2">Fourth block."</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -309,11 +309,11 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Grid 2x2 layout</span>
-<span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">&quot;grid-2x2&quot;</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="s2">&quot;0.2in&quot;</span><span class="p">):</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### Top-Left</span><span class="se">\n\n</span><span class="s2">Quadrant 1.&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### Top-Right</span><span class="se">\n\n</span><span class="s2">Quadrant 2.&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### Bottom-Left</span><span class="se">\n\n</span><span class="s2">Quadrant 3.&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### Bottom-Right</span><span class="se">\n\n</span><span class="s2">Quadrant 4.&quot;</span><span class="p">))</span>
+<span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">"grid-2x2"</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="s2">"0.2in"</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### Top-Left</span><span class="se">\n\n</span><span class="s2">Quadrant 1."</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### Top-Right</span><span class="se">\n\n</span><span class="s2">Quadrant 2."</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### Bottom-Left</span><span class="se">\n\n</span><span class="s2">Quadrant 3."</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### Bottom-Right</span><span class="se">\n\n</span><span class="s2">Quadrant 4."</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -321,10 +321,10 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Flex-row layout</span>
-<span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">&quot;flex-row&quot;</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="s2">&quot;0.15in&quot;</span><span class="p">):</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;**A**&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;**B**&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;**C**&quot;</span><span class="p">))</span>
+<span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">"flex-row"</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="s2">"0.15in"</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"**A**"</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"**B**"</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"**C**"</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -332,11 +332,11 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Three-column layout</span>
-<span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">&quot;columns-3&quot;</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="s2">&quot;0.2in&quot;</span><span class="p">):</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### 1</span><span class="se">\n\n</span><span class="s2">Column one.&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### 2</span><span class="se">\n\n</span><span class="s2">Column two.&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### 3</span><span class="se">\n\n</span><span class="s2">Column three.&quot;</span><span class="p">))</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">&quot;### 4</span><span class="se">\n\n</span><span class="s2">Overflow block.&quot;</span><span class="p">))</span>
+<span class="k">with</span> <span class="n">NBPrintPage</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="s2">"columns-3"</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="s2">"0.2in"</span><span class="p">):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### 1</span><span class="se">\n\n</span><span class="s2">Column one."</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### 2</span><span class="se">\n\n</span><span class="s2">Column two."</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### 3</span><span class="se">\n\n</span><span class="s2">Column three."</span><span class="p">))</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"### 4</span><span class="se">\n\n</span><span class="s2">Overflow block."</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -397,7 +397,7 @@
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html"><link rel="search" title="Search" href="../../../../search.html">
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>nbprint.config.content.page - nbprint v0.12.2</title>
+        <title>nbprint.config.content.page - nbprint v0.12.3</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
@@ -166,7 +166,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></div></a>
+      <a href="../../../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -187,7 +187,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
   
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.2</code></span>
+  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.12.3</code></span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -276,10 +276,10 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Content</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;ContentFlexColumnLayout&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ContentFlexRowLayout&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ContentInlineLayout&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ContentLayout&quot;</span><span class="p">,</span>
+    <span class="s2">"ContentFlexColumnLayout"</span><span class="p">,</span>
+    <span class="s2">"ContentFlexRowLayout"</span><span class="p">,</span>
+    <span class="s2">"ContentInlineLayout"</span><span class="p">,</span>
+    <span class="s2">"ContentLayout"</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -291,8 +291,8 @@
     <span class="c1"># override role</span>
     <span class="n">role</span><span class="p">:</span> <span class="n">Role</span> <span class="o">=</span> <span class="n">Role</span><span class="o">.</span><span class="n">LAYOUT</span>
 
-    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;:scope { display: flex; }&quot;</span>
-    <span class="n">esm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">":scope { display: flex; }"</span>
+    <span class="n">esm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">function render(meta, elem) {</span>
 <span class="s2">    let data = JSON.parse(meta.data);</span>
 <span class="s2">    let size_index = 0;</span>
@@ -301,24 +301,24 @@
 <span class="s2">        let size = data.sizes !== undefined ? data.sizes[size_index] : 1;</span>
 <span class="s2">        // TODO:these are hacks to determine</span>
 <span class="s2">        // if it should be included</span>
-<span class="s2">        let output_children = (child.querySelector(&quot;.jp-OutputArea-output&quot;) || </span><span class="si">{}</span><span class="s2">).children || [];</span>
-<span class="s2">        if (Array.from(child.classList).includes(&quot;nbprint&quot;)) {</span>
+<span class="s2">        let output_children = (child.querySelector(".jp-OutputArea-output") || </span><span class="si">{}</span><span class="s2">).children || [];</span>
+<span class="s2">        if (Array.from(child.classList).includes("nbprint")) {</span>
 <span class="s2">            child.style.flex = `$</span><span class="si">{size}</span><span class="s2">`;</span>
 <span class="s2">            size_index += 1;</span>
 <span class="s2">        } else if (Array.from(output_children).length &gt; 0) {</span>
 <span class="s2">            child.style.flex = `$</span><span class="si">{size}</span><span class="s2">`;</span>
 <span class="s2">            size_index += 1;</span>
 <span class="s2">        } else {</span>
-<span class="s2">            child.style.flex = &quot;0&quot;;</span>
+<span class="s2">            child.style.flex = "0";</span>
 <span class="s2">        }</span>
 <span class="s2">    });</span>
 <span class="s2">}</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span>
     <span class="n">attrs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTML</span><span class="p">:</span>
         <span class="c1"># return empty html just for placeholder</span>
-        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ContentLayout">
@@ -329,7 +329,7 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTML</span><span class="p">:</span>
         <span class="c1"># return empty html just for placeholder</span>
-        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span></div>
 
 
 
@@ -339,44 +339,44 @@
     <span class="c1"># override role</span>
     <span class="n">role</span><span class="p">:</span> <span class="n">Role</span> <span class="o">=</span> <span class="n">Role</span><span class="o">.</span><span class="n">LAYOUT</span>
 
-    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;:scope </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">INLINE_CSS</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">&quot;</span>
-    <span class="n">esm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">":scope </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">INLINE_CSS</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">"</span>
+    <span class="n">esm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"""</span>
 <span class="s2">function render(meta, elem) {</span>
 <span class="s2">    let data = JSON.parse(meta.data);</span>
 
 <span class="s2">    Array.from(elem.children).forEach((child) =&gt; {</span>
 <span class="s2">        // TODO:these are hacks to determine</span>
 <span class="s2">        // if it should be included</span>
-<span class="s2">        let output_children = (child.querySelector(&quot;.jp-OutputArea-output&quot;) || </span><span class="si">{}</span><span class="s2">).children || [];</span>
-<span class="s2">        if (Array.from(child.classList).includes(&quot;nbprint&quot;)) {</span>
-<span class="s2">            child.style.display = &quot;inline-block&quot;;</span>
-<span class="s2">            child.style.float = &quot;left&quot;;</span>
+<span class="s2">        let output_children = (child.querySelector(".jp-OutputArea-output") || </span><span class="si">{}</span><span class="s2">).children || [];</span>
+<span class="s2">        if (Array.from(child.classList).includes("nbprint")) {</span>
+<span class="s2">            child.style.display = "inline-block";</span>
+<span class="s2">            child.style.float = "left";</span>
 <span class="s2">        } else if (Array.from(output_children).length &gt; 0) {</span>
-<span class="s2">            child.style.display = &quot;inline-block&quot;;</span>
-<span class="s2">            child.style.float = &quot;left&quot;;</span>
+<span class="s2">            child.style.display = "inline-block";</span>
+<span class="s2">            child.style.float = "left";</span>
 <span class="s2">        }</span>
 <span class="s2">    });</span>
 <span class="s2">}</span>
-<span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">"""</span>
     <span class="n">attrs</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">_</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">HTML</span><span class="p">:</span>
         <span class="c1"># return empty html just for placeholder</span>
-        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="ContentFlexColumnLayout">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.content.ContentFlexColumnLayout.html#nbprint.config.content.ContentFlexColumnLayout">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ContentFlexColumnLayout</span><span class="p">(</span><span class="n">_ContentFlexLayout</span><span class="p">):</span>
-    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;:scope </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">FLEX_COLUMN_CSS</span><span class="si">}</span><span class="s2"> </span><span class="se">}}\n</span><span class="s2">&quot;</span></div>
+    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">":scope </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">FLEX_COLUMN_CSS</span><span class="si">}</span><span class="s2"> </span><span class="se">}}\n</span><span class="s2">"</span></div>
 
 
 
 <div class="viewcode-block" id="ContentFlexRowLayout">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.content.ContentFlexRowLayout.html#nbprint.config.content.ContentFlexRowLayout">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ContentFlexRowLayout</span><span class="p">(</span><span class="n">_ContentFlexLayout</span><span class="p">):</span>
-    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;:scope </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">FLEX_ROW_CSS</span><span class="si">}</span><span class="s2"> </span><span class="se">}}\n</span><span class="s2">&quot;</span></div>
+    <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">":scope </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">FLEX_ROW_CSS</span><span class="si">}</span><span class="s2"> </span><span class="se">}}\n</span><span class="s2">"</span></div>
 
 </pre></div>
         </article>
@@ -410,7 +410,7 @@
       
     </aside>
   </div>
-</div><script src="../../../../_static/documentation_options.js?v=f24cbf82"></script>
+</div><script src="../../../../_static/documentation_options.js?v=56343b9b"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=46bd48cc"></script>
