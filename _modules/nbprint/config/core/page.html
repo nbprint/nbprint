@@ -270,7 +270,7 @@
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbformat</span><span class="w"> </span><span class="kn">import</span> <span class="n">NotebookNode</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">field_validator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">field_validator</span><span class="p">,</span> <span class="n">model_validator</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.base</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Role</span><span class="p">,</span> <span class="n">_append_or_extend</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">PageOrientation</span><span class="p">,</span> <span class="n">PageSize</span><span class="p">,</span> <span class="n">Style</span>
@@ -317,8 +317,23 @@
     <span class="s2">"right_bottom"</span><span class="p">,</span>
 <span class="p">)</span>
 
+<span class="c1"># The four edge regions whose CSS name is not their attribute name.</span>
+<span class="n">_REGION_CSS_NAMES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"top"</span><span class="p">:</span> <span class="s2">"top-center"</span><span class="p">,</span>
+    <span class="s2">"bottom"</span><span class="p">:</span> <span class="s2">"bottom-center"</span><span class="p">,</span>
+    <span class="s2">"left"</span><span class="p">:</span> <span class="s2">"left-center"</span><span class="p">,</span>
+    <span class="s2">"right"</span><span class="p">:</span> <span class="s2">"right-center"</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_region_css_name</span><span class="p">(</span><span class="n">attr</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">_REGION_CSS_NAMES</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">attr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"_"</span><span class="p">,</span> <span class="s2">"-"</span><span class="p">))</span>
+
+
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Configuration</span>
+
+<span class="n">_FIRST_PAGE_SUPPRESSION_MARKER</span> <span class="o">=</span> <span class="s2">".pagedjs_first_page .pagedjs_margin-"</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">"Page"</span><span class="p">,</span>
@@ -326,6 +341,7 @@
     <span class="s2">"PageNumber"</span><span class="p">,</span>
     <span class="s2">"PageRegion"</span><span class="p">,</span>
     <span class="s2">"PageRegionContent"</span><span class="p">,</span>
+    <span class="s2">"RunningElement"</span><span class="p">,</span>
 <span class="p">)</span>
 
 
@@ -349,9 +365,56 @@
             <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"nbprint:page"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">region_css</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""CSS this content needs *outside* its ``@page`` block.</span>
+
+<span class="sd">        Most region content is self-contained: a string, a counter. Content</span>
+<span class="sd">        sourced from the document body is not, because the source element has</span>
+<span class="sd">        to be styled where it lives.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="s2">""</span>
+
 
 <span class="k">class</span><span class="w"> </span><span class="nc">PageNumber</span><span class="p">(</span><span class="n">PageRegionContent</span><span class="p">):</span>
     <span class="n">content</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="s2">"counter(page)"</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RunningElement</span><span class="p">(</span><span class="n">PageRegionContent</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Region content taken from an element that lives in the document body.</span>
+
+<span class="sd">    Paged.js lifts an element out of the flow when it carries</span>
+<span class="sd">    ``position: running(&lt;name&gt;)``, and a margin box pulls it back in with</span>
+<span class="sd">    ``content: element(&lt;name&gt;)``. Nothing here was expressible before, so every</span>
+<span class="sd">    consumer hand-rolled the pair -- and each one also had to rediscover that</span>
+<span class="sd">    the source element must be hidden when the document is *not* paginated,</span>
+<span class="sd">    since ``position: running()`` means nothing outside Paged.js and the element</span>
+<span class="sd">    would otherwise render inline in the body.</span>
+
+<span class="sd">    ``selector`` addresses the source element, e.g. ``.footer-logo``.</span>
+<span class="sd">    """</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">"after"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_default_content_to_the_element</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"RunningElement"</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"element(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">)"</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">region_css</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># The `position: running()` rule has to be matchable against the parsed</span>
+        <span class="c1"># content fragment, because that is where Paged.js hides the source</span>
+        <span class="c1"># element (it sets an inline `display: none` on everything the rule</span>
+        <span class="c1"># selects). The fragment holds the body's *children*, so any selector</span>
+        <span class="c1"># rooted at `body` matches nothing there, the element is never hidden,</span>
+        <span class="c1"># and it paints in the normal flow while its clone appears in the margin</span>
+        <span class="c1"># box. For the same reason the rule must not force the element visible:</span>
+        <span class="c1"># a `display: block !important` here would outrank the inline</span>
+        <span class="c1"># `display: none` Paged.js relies on. Hiding for the unpaginated case is</span>
+        <span class="c1"># left to a `body`-rooted rule, which is only ever matched against the</span>
+        <span class="c1"># live document.</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> position: running(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">); </span><span class="se">}}\n</span><span class="s2">body:not(.pagedjs) </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">selector</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> display: none !important; </span><span class="se">}}</span><span class="s2">"</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">PageRegion</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
@@ -402,10 +465,54 @@
     <span class="n">counter_reset</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">counter_style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
+    <span class="c1"># The first page of a report is nearly always a cover, and a running footer</span>
+    <span class="c1"># or header across a cover looks like a mistake. Suppressing it is otherwise</span>
+    <span class="c1"># a hand-written rule against Paged.js' internal margin-box class names.</span>
+    <span class="n">suppress_first_page_regions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
     <span class="n">size</span><span class="p">:</span> <span class="n">PageSize</span> <span class="o">|</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">PageSize</span><span class="o">.</span><span class="n">letter</span><span class="p">)</span>
     <span class="n">orientation</span><span class="p">:</span> <span class="n">PageOrientation</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">PageOrientation</span><span class="o">.</span><span class="n">portrait</span><span class="p">)</span>
 
     <span class="n">css</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+
+    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">"after"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_assemble_page_css</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Page"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Collect the CSS that has to sit outside any ``@page`` block or ``@scope``.</span>
+
+<span class="sd">        Two things land here rather than on the region itself. A region's CSS is</span>
+<span class="sd">        emitted as *cell* CSS, which the template wraps in ``@scope``, so a rule</span>
+<span class="sd">        addressing ``body`` or an element elsewhere in the document can never</span>
+<span class="sd">        match from there. And ``Configuration.page`` is typed as ``Page``, so a</span>
+<span class="sd">        consumer subclassing ``Page`` never reaches ``PageGlobal.render`` --</span>
+<span class="sd">        anything emitted only from there would silently do nothing for them.</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="n">PAGE_REGION_ATTRS</span><span class="p">:</span>
+            <span class="n">region</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">region</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">region</span><span class="o">.</span><span class="n">content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># A region handed over as a field default -- `bottom_left: PageRegion</span>
+            <span class="c1"># = Field(default=Footer())` on a Page subclass -- never passes</span>
+            <span class="c1"># through the `mode="before"` validator that names it and attaches</span>
+            <span class="c1"># its margin-box rule, because Pydantic does not validate defaults.</span>
+            <span class="c1"># Without that rule the box is never declared, so nothing consumes</span>
+            <span class="c1"># the region's content: a running element in particular is then left</span>
+            <span class="c1"># in the flow with no margin box to be lifted into. This validator</span>
+            <span class="c1"># does run for defaults, so it is the one place that can repair them.</span>
+            <span class="n">region_name</span> <span class="o">=</span> <span class="n">_region_css_name</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">region</span><span class="o">.</span><span class="n">_region</span><span class="p">:</span>
+                <span class="n">region</span><span class="o">.</span><span class="n">_region</span> <span class="o">=</span> <span class="n">region_name</span>
+            <span class="k">if</span> <span class="sa">f</span><span class="s2">"@</span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2">"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">region</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
+                <span class="n">region</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"@page </span><span class="se">{{</span><span class="s2"> @</span><span class="si">{</span><span class="n">region_name</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> </span><span class="si">{</span><span class="n">region</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2"> </span><span class="se">}}</span><span class="s2"> </span><span class="se">}}</span><span class="s2">"</span>
+
+            <span class="n">extra</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="n">region_css</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">extra</span> <span class="ow">and</span> <span class="n">extra</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="n">extra</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">suppress_first_page_regions</span> <span class="ow">and</span> <span class="n">_FIRST_PAGE_SUPPRESSION_MARKER</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">css</span><span class="p">:</span>
+            <span class="n">selectors</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">".pagedjs_first_page .pagedjs_margin-</span><span class="si">{</span><span class="n">edge</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"top"</span><span class="p">,</span> <span class="s2">"bottom"</span><span class="p">,</span> <span class="s2">"left"</span><span class="p">,</span> <span class="s2">"right"</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">css</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="si">{</span><span class="n">selectors</span><span class="si">}</span><span class="s2"> </span><span class="se">{{</span><span class="s2"> display: none !important; </span><span class="se">}}</span><span class="s2">"</span>
+        <span class="k">return</span> <span class="bp">self</span>
 
 <div class="viewcode-block" id="Page.convert_region_from_obj">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.core.Page.html#nbprint.config.core.Page.convert_region_from_obj">[docs]</a>
