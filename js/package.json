@@ -10,14 +10,9 @@
   ],
   "types": "index.d.ts",
   "scripts": {
-<<<<<<< before updating
-    "build": "node build.mjs",
-=======
     "build:debug": "node build.mjs --debug",
     "build:prod": "node build.mjs",
-    "build:types": "tsc",
-    "build": "npm-run-all build:prod build:types",
->>>>>>> after updating
+    "build": "node build.mjs",
     "clean": "rm -rf dist playwright-report ../nbprint/extension",
     "lint": "oxlint . && oxfmt --check \"src/**/*.{js,ts,jsx,tsx,css}\" \"tests/**/*.{js,ts,jsx,tsx}\" \"*.mjs\" \"*.json\"",
     "fix": "oxlint --fix . && oxfmt --write \"src/**/*.{js,ts,jsx,tsx,css}\" \"tests/**/*.{js,ts,jsx,tsx}\" \"*.mjs\" \"*.json\"",

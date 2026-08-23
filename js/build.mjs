@@ -17,7 +17,6 @@ const BUNDLES = [
   },
 ];
 
-<<<<<<< before updating
 const BUILD_TARGETS = [
   "../nbprint/extension",
   "../nbprint/templates/nbprint/static",
@@ -31,47 +30,23 @@ async function copy_to_targets(pattern, options = { flat: true }) {
 }
 
 async function build() {
-  fs.mkdirSync("dist", { recursive: true });
-  BUILD_TARGETS.forEach((target) => fs.mkdirSync(target, { recursive: true }));
-=======
-async function build() {
   fs.rmSync("dist", { recursive: true, force: true });
-  fs.rmSync("../nbprint/extension", {
-    recursive: true,
-    force: true,
-  });
+  BUILD_TARGETS.forEach((target) =>
+    fs.rmSync(target, { recursive: true, force: true }),
+  );
 
   // Bundle css
-  await bundle_css();
-
-  // Copy HTML
-  await cpy("src/html/*", "dist/");
-
-  // Copy images
-  if (fs.existsSync("src/img")) {
-    fs.mkdirSync("dist/img", { recursive: true });
-    await cpy("src/img/*", "dist/img");
-  }
->>>>>>> after updating
-
   await bundle_css("src/css");
+
   await Promise.all(BUNDLES.map(bundle)).catch(() => process.exit(1));
 
-<<<<<<< before updating
+  // Copy servable assets to python extension
+  BUILD_TARGETS.forEach((target) => fs.mkdirSync(target, { recursive: true }));
   await copy_to_targets("dist/*.js");
   await copy_to_targets("dist/css/*");
   await copy_to_targets(
     "node_modules/@fortawesome/fontawesome-free/css/fontawesome.min.css",
   );
-=======
-  // Copy servable assets to python extension (exclude esm/)
-  fs.mkdirSync("../nbprint/extension", { recursive: true });
-  await cpy("dist/**/*", "../nbprint/extension", {
-    filter: (file) =>
-      !file.relativePath.startsWith("esm/") &&
-      !file.relativePath.startsWith("dist/esm/"),
-  });
->>>>>>> after updating
 }
 
 await build();
