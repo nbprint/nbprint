@@ -6,11 +6,12 @@
   "author": "Tim Paine <3105306+timkpaine@users.noreply.github.com>",
   "license": "Apache-2.0",
   "files": [
-    "dist/**/*",
-    "index.d.ts"
+    "dist/**/*"
   ],
   "types": "index.d.ts",
   "scripts": {
+    "build:debug": "node build.mjs --debug",
+    "build:prod": "node build.mjs",
     "build": "node build.mjs",
     "clean": "rm -rf dist playwright-report ../nbprint/extension",
     "lint": "oxlint . && oxfmt --check \"src/**/*.{js,ts,jsx,tsx,css}\" \"tests/**/*.{js,ts,jsx,tsx}\" \"*.mjs\" \"*.json\"",

@@ -30,12 +30,18 @@ async function copy_to_targets(pattern, options = { flat: true }) {
 }
 
 async function build() {
-  fs.mkdirSync("dist", { recursive: true });
-  BUILD_TARGETS.forEach((target) => fs.mkdirSync(target, { recursive: true }));
+  fs.rmSync("dist", { recursive: true, force: true });
+  BUILD_TARGETS.forEach((target) =>
+    fs.rmSync(target, { recursive: true, force: true }),
+  );
 
+  // Bundle css
   await bundle_css("src/css");
+
   await Promise.all(BUNDLES.map(bundle)).catch(() => process.exit(1));
 
+  // Copy servable assets to python extension
+  BUILD_TARGETS.forEach((target) => fs.mkdirSync(target, { recursive: true }));
   await copy_to_targets("dist/*.js");
   await copy_to_targets("dist/css/*");
   await copy_to_targets(
@@ -43,4 +49,4 @@ async function build() {
   );
 }
 
-build();
+await build();

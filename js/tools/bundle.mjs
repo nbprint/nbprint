@@ -23,7 +23,7 @@ const DEFAULT_BUILD = {
   target: ["es2022"],
   bundle: true,
   format: "esm",
-  minify: DEBUG,
+  minify: !DEBUG,
   sourcemap: true,
   metafile: true,
   entryNames: "[name]",
