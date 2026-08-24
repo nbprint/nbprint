@@ -267,8 +267,13 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for nbprint.config.outputs.nbconvert</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">binascii</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Literal</span>
 
@@ -278,7 +283,17 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Configuration</span><span class="p">,</span> <span class="n">Outputs</span><span class="p">,</span> <span class="n">OutputsProcessing</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"HTMLOutputs"</span><span class="p">,</span> <span class="s2">"NBConvertOutputs"</span><span class="p">,</span> <span class="s2">"NBConvertShortCircuitOutputs"</span><span class="p">,</span> <span class="s2">"NotebookOutputs"</span><span class="p">,</span> <span class="s2">"PDFOutputs"</span><span class="p">,</span> <span class="s2">"WebHTMLOutputs"</span><span class="p">,</span> <span class="s2">"short_circuit_hook"</span><span class="p">)</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"HTMLOutputs"</span><span class="p">,</span>
+    <span class="s2">"NBConvertOutputs"</span><span class="p">,</span>
+    <span class="s2">"NBConvertShortCircuitOutputs"</span><span class="p">,</span>
+    <span class="s2">"NotebookOutputs"</span><span class="p">,</span>
+    <span class="s2">"PDFOutputs"</span><span class="p">,</span>
+    <span class="s2">"RenderCompletenessError"</span><span class="p">,</span>
+    <span class="s2">"RenderCompletenessWarning"</span><span class="p">,</span>
+    <span class="s2">"WebHTMLOutputs"</span><span class="p">,</span>
+    <span class="s2">"short_circuit_hook"</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <span class="c1"># nbconvert/traitlets paths that nbprint already drives through its own fields.</span>
@@ -303,6 +318,33 @@
 <span class="c1"># pagination-complete signal instead, so the webpdf target is routed to it rather than to upstream's.</span>
 <span class="c1"># Registered under its own entry-point name so it never shadows nbconvert's builtin "webpdf".</span>
 <span class="n">_EXPORTER_FOR_TARGET</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"webpdf"</span><span class="p">:</span> <span class="s2">"nbprintwebpdf"</span><span class="p">}</span>
+
+<span class="n">_PNG_SIGNATURE</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">"</span><span class="se">\x89</span><span class="s2">PNG</span><span class="se">\r\n\x1a\n</span><span class="s2">"</span>
+<span class="c1"># Byte offsets of the width/height pair inside a PNG's IHDR chunk: 8-byte</span>
+<span class="c1"># signature + 4-byte length + 4-byte chunk type.</span>
+<span class="n">_PNG_IHDR_DIMENSIONS</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RenderCompletenessWarning</span><span class="p">(</span><span class="ne">UserWarning</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Emitted when a rendered PDF holds fewer figures than its source notebook."""</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RenderCompletenessError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Raised instead of :class:`RenderCompletenessWarning` under ``validate_figures='strict'``."""</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_png_dimensions</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Read ``(width, height)`` in pixels straight out of a PNG header.</span>
+
+<span class="sd">    Avoids taking an image-decoding dependency: the dimensions live in the</span>
+<span class="sd">    fixed-position IHDR chunk that every PNG opens with. Returns ``None`` for</span>
+<span class="sd">    anything that isn't a PNG or is truncated before the header ends, so</span>
+<span class="sd">    callers can drop unattributable outputs rather than guess at them.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">_PNG_SIGNATURE</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">_PNG_IHDR_DIMENSIONS</span><span class="o">.</span><span class="n">stop</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">"&gt;II"</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">_PNG_IHDR_DIMENSIONS</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_run_nbconvert</span><span class="p">(</span><span class="n">argv</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -375,6 +417,16 @@
             <span class="s2">"It is passed the config instance. "</span>
             <span class="s2">"If it returns something non-None, that value is returned by `run` instead of the output path."</span>
             <span class="s2">"NOTE: Parent/child class hooks may also be called."</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">validate_figures</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"off"</span><span class="p">,</span> <span class="s2">"warn"</span><span class="p">,</span> <span class="s2">"strict"</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="s2">"off"</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">"Post-render check that every figure in the executed notebook survived into the PDF. "</span>
+            <span class="s2">"'off' (default): no check. 'warn': emit a RenderCompletenessWarning listing what is "</span>
+            <span class="s2">"missing. 'strict': raise RenderCompletenessError instead. Only runs for PDF targets, "</span>
+            <span class="s2">"and silently does nothing when no PDF reader is installed."</span>
         <span class="p">),</span>
     <span class="p">)</span>
 
@@ -525,6 +577,124 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_collected_cells</span><span class="p">[</span><span class="n">output_key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_collected_cells</span><span class="p">[</span><span class="n">output_key</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">outputs</span><span class="p">)</span>
 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_notebook_figure_sizes</span><span class="p">(</span><span class="n">nb</span><span class="p">:</span> <span class="n">NotebookNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Counter</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">"""Tally the pixel dimensions of every ``image/png`` output in a notebook.</span>
+
+<span class="sd">        Outputs whose payload will not decode, or that are not PNG after all,</span>
+<span class="sd">        are dropped rather than bucketed together: an unattributable figure</span>
+<span class="sd">        would otherwise be permanently unmatchable and warn on every render.</span>
+<span class="sd">        """</span>
+        <span class="n">sizes</span><span class="p">:</span> <span class="n">Counter</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"outputs"</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="n">payload</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"image/png"</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">payload</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">payload</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="p">(</span><span class="n">binascii</span><span class="o">.</span><span class="n">Error</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+                        <span class="k">continue</span>
+                <span class="n">dimensions</span> <span class="o">=</span> <span class="n">_png_dimensions</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">dimensions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">sizes</span><span class="p">[</span><span class="n">dimensions</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">sizes</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_pdf_image_sizes</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Counter</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Tally the pixel dimensions of every image embedded in a PDF.</span>
+
+<span class="sd">        Returns ``None`` — meaning "no opinion", not "no images" — when no PDF</span>
+<span class="sd">        reader is installed or the file cannot be parsed, so a missing optional</span>
+<span class="sd">        dependency or a half-written file can never fail a render.</span>
+
+<span class="sd">        Images are counted once per page they appear on. A PDF writer is free</span>
+<span class="sd">        to store one image object and reference it from several pages (a</span>
+<span class="sd">        repeated header logo, say), and per-page counting keeps that in step</span>
+<span class="sd">        with how many figures a reader actually sees.</span>
+<span class="sd">        """</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">pymupdf</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">fitz</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pymupdf</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">sizes</span><span class="p">:</span> <span class="n">Counter</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">pymupdf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">doc</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">page</span><span class="o">.</span><span class="n">get_images</span><span class="p">(</span><span class="n">full</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                        <span class="c1"># (xref, smask, width, height, bpc, colorspace, ...)</span>
+                        <span class="n">sizes</span><span class="p">[(</span><span class="n">image</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">image</span><span class="p">[</span><span class="mi">3</span><span class="p">])]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>  <span class="c1"># noqa: BLE001 - a render must not fail on an unreadable PDF</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">sizes</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_figure_shortfall</span><span class="p">(</span><span class="n">notebook_sizes</span><span class="p">:</span> <span class="n">Counter</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">pdf_sizes</span><span class="p">:</span> <span class="n">Counter</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Figures the PDF is short of, bucketed by pixel dimensions.</span>
+
+<span class="sd">        Matching per size bucket rather than on bare totals is what makes the</span>
+<span class="sd">        check trustworthy on real reports. A cover page contributes images that</span>
+<span class="sd">        no notebook cell produced — a logo, a masthead — and against a total</span>
+<span class="sd">        those extras read as credit, so a document that dropped two charts</span>
+<span class="sd">        still totals up as complete. Because credit is only ever granted</span>
+<span class="sd">        within a bucket, an unrelated image can never stand in for a lost</span>
+<span class="sd">        figure; it lands in its own bucket and is ignored as surplus.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">size</span><span class="p">:</span> <span class="n">count</span> <span class="o">-</span> <span class="n">pdf_sizes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">size</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">notebook_sizes</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="n">pdf_sizes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">0</span><span class="p">)}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_figure_source_notebook</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NotebookNode</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Parse whichever notebook on disk holds the outputs that were rendered."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">nbformat</span><span class="w"> </span><span class="kn">import</span> <span class="n">reads</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">executed_notebook</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">reads</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">),</span> <span class="n">as_version</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate_render_completeness</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check that the figures in the executed notebook survived into the PDF.</span>
+
+<span class="sd">        A PDF render can silently lose content — a chart that paged.js chunked</span>
+<span class="sd">        off the end of the document, an output that never got a chance to</span>
+<span class="sd">        decode — and the resulting file is perfectly valid, just short. This</span>
+<span class="sd">        compares the figures the notebook produced against the images the PDF</span>
+<span class="sd">        actually embeds and reports the difference.</span>
+
+<span class="sd">        No-ops unless ``validate_figures`` is enabled and the target is a PDF.</span>
+<span class="sd">        A shortfall warns by default and raises under ``'strict'``; a surplus</span>
+<span class="sd">        is always silent, since a report legitimately carries artwork that no</span>
+<span class="sd">        cell produced.</span>
+
+<span class="sd">        The comparison keys on pixel dimensions, which assumes the PDF writer</span>
+<span class="sd">        embeds figures at their source resolution. A writer that resamples</span>
+<span class="sd">        would make this over-report; that possibility, not any doubt about the</span>
+<span class="sd">        underlying loss, is why the check is off by default.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_figures</span> <span class="o">==</span> <span class="s2">"off"</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">!=</span> <span class="s2">"webpdf"</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">pdf</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pdf</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span>
+        <span class="n">pdf_sizes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pdf_image_sizes</span><span class="p">(</span><span class="n">pdf</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pdf_sizes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">nb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_figure_source_notebook</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">nb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">shortfall</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_figure_shortfall</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_notebook_figure_sizes</span><span class="p">(</span><span class="n">nb</span><span class="p">),</span> <span class="n">pdf_sizes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">shortfall</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">detail</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2"> (x</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">)"</span> <span class="k">for</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">shortfall</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">pdf</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">shortfall</span><span class="o">.</span><span class="n">values</span><span class="p">())</span><span class="si">}</span><span class="s2"> notebook figure(s) missing from the rendered PDF: </span><span class="si">{</span><span class="n">detail</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_figures</span> <span class="o">==</span> <span class="s2">"strict"</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">RenderCompletenessError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">RenderCompletenessWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
 <div class="viewcode-block" id="NBConvertOutputs.run">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html#nbprint.config.outputs.NBConvertOutputs.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">,</span> <span class="n">gen</span><span class="p">:</span> <span class="n">NotebookNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
@@ -576,6 +746,8 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">execute</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">"ipynb"</span><span class="p">):</span>
             <span class="c1"># If target is notebook, we already did it above</span>
             <span class="n">_run_nbconvert</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_render_completeness</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbconvert_hook</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbconvert_hook</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span>
