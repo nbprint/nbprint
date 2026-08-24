@@ -69,6 +69,7 @@ develop = [
     "hatchling",
     "mdformat",
     "mdformat-tables>=1",
+    "pymupdf",
     "pytest",
     "pytest-cov",
     "ruff",

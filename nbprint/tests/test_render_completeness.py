@@ -16,7 +16,15 @@ from nbprint.config.outputs.nbconvert import (
     _png_dimensions,
 )
 
-pymupdf = pytest.importorskip("fitz", reason="PDF image counting needs PyMuPDF")
+# PyMuPDF is a develop dependency, so this should not skip in CI. Both import
+# names are tried for the same reason the code under test tries both: the
+# package was renamed from ``fitz`` to ``pymupdf``, and pinning to one name
+# would silently skip this entire file rather than fail, hiding every test in
+# it behind a green run.
+try:
+    import pymupdf
+except ImportError:
+    pymupdf = pytest.importorskip("fitz", reason="PDF image counting needs PyMuPDF")
 
 
 def make_png(width: int, height: int) -> bytes:
