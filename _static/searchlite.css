@@ -1,0 +1,134 @@
+/*!
+ * sphinx-searchlite — styling for the bundled dialog.
+ *
+ * The dialog adopts the host page's own colours at runtime (see searchlite-ui.js),
+ * so it follows whatever light/dark mechanism the theme uses rather than relying
+ * on `prefers-color-scheme`, which themes with their own toggle do not track.
+ * The values below are only the fallback for when that lookup fails.
+ *
+ * Every colour derives from `--searchlite-background` and
+ * `--searchlite-foreground`, so overriding those two restyles the whole dialog.
+ */
+
+:root {
+  --searchlite-background: #fff;
+  --searchlite-foreground: #18181b;
+  --searchlite-radius: 0.75rem;
+}
+
+#searchlite-dialog {
+  --searchlite-muted: color-mix(in srgb, var(--searchlite-foreground) 60%, transparent);
+  --searchlite-border: color-mix(in srgb, var(--searchlite-foreground) 20%, transparent);
+  --searchlite-accent: color-mix(in srgb, var(--searchlite-foreground) 10%, transparent);
+}
+
+#searchlite-dialog {
+  width: min(40rem, calc(100vw - 2rem));
+  max-height: min(28rem, calc(100vh - 6rem));
+  /* Stated rather than left to the user-agent default, which resets in themes
+     that zero out `dialog` margins and would pin the dialog to the left edge. */
+  margin-top: 4rem;
+  margin-inline: auto;
+  padding: 0;
+  border: 1px solid var(--searchlite-border);
+  border-radius: var(--searchlite-radius);
+  background: var(--searchlite-background);
+  color: var(--searchlite-foreground);
+  overflow: hidden;
+  box-shadow: 0 16px 48px rgb(0 0 0 / 0.18);
+}
+
+#searchlite-dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+}
+
+/* Sits above the theme's own search field once that field has been adopted. */
+.searchlite-adopted {
+  cursor: pointer;
+}
+
+.searchlite-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+
+.searchlite-field {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--searchlite-border);
+}
+
+#searchlite-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: inherit;
+}
+
+#searchlite-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.searchlite-kbd {
+  padding: 0.1875rem 0.375rem;
+  border: 1px solid var(--searchlite-border);
+  border-radius: 0.25rem;
+  font-family: inherit;
+  font-size: 0.6875rem;
+  color: var(--searchlite-muted);
+}
+
+#searchlite-results {
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.searchlite-result {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.searchlite-result[aria-selected="true"],
+.searchlite-result:hover {
+  background: var(--searchlite-accent);
+}
+
+.searchlite-result-title {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.searchlite-result-context {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--searchlite-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.searchlite-result mark {
+  background: transparent;
+  color: inherit;
+  font-weight: 700;
+}
+
+.searchlite-empty {
+  margin: 0;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--searchlite-muted);
+}
