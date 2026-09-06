@@ -22,8 +22,7 @@ jobs:
           persist-credentials: false
 
       - name: Setup Python
-<<<<<<< before updating
-        uses: actions-ext/python/setup@a3f3953ef26a519ab7b6a56b94d06fa1b31ab3f3
+        uses: actions-ext/python/setup@ec67f82b3bd863948308a41ecb9e70547cbb19c7
 
       - name: Setup Node.JS
         uses: actions-ext/node/setup@main
@@ -33,9 +32,6 @@ jobs:
           sudo apt install pandoc
           uv pip install playwright
           playwright install chromium
-=======
-        uses: actions-ext/python/setup@ec67f82b3bd863948308a41ecb9e70547cbb19c7
->>>>>>> after updating
 
       - name: Download distributions
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8
