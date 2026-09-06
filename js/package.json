@@ -28,19 +28,19 @@
     "access": "public"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^7.1.0",
+    "@fortawesome/fontawesome-free": "^7.3.1",
     "pagedjs": "^0.4.3"
   },
   "devDependencies": {
-    "@playwright/test": "^1.62.0",
-    "cpy": "^13.2.2",
-    "esbuild": "^0.28.1",
-    "lightningcss": "^1.33.0",
+    "@playwright/test": "^1.63.0",
+    "cpy": "^13.2.3",
+    "esbuild": "^0.28.2",
     "http-server": "^14.1.1",
-    "nodemon": "^3.1.11",
+    "lightningcss": "^1.33.0",
+    "nodemon": "^3.1.14",
     "npm-run-all": "^4.1.5",
-    "oxfmt": "^0.63.0",
-    "oxlint": "^1.78.0",
+    "oxfmt": "^0.66.0",
+    "oxlint": "^1.81.0",
     "typescript": "^7.0.2"
   }
 }
