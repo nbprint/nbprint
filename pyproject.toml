@@ -79,11 +79,12 @@ develop = [
     "wheel",
     "yardang",
     # notebook deps
+    "anywidget",
     "great_tables",
     "matplotlib",
     "nbprint-example-plugin",
     "pandas",
-    "perspective-python>=3,<5",
+    "perspective-python>=3,<6",
     "plotly",
     "pyarrow",
     "seaborn",
