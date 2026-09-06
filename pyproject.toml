@@ -79,7 +79,7 @@ develop = [
     "wheel",
     "yardang",
     # notebook deps
-    "anywidgets",
+    "anywidget",
     "great_tables",
     "matplotlib",
     "nbprint-example-plugin",
