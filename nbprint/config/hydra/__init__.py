@@ -1,22 +1,30 @@
 from ast import literal_eval
 from logging import getLogger
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, List, Optional
 
-from ccflow import ModelRegistry
+from ccflow import LazyRegistry
 from lerna import compose, initialize_config_dir
 from nbformat import read as nb_read
 from omegaconf import DictConfig, OmegaConf, open_dict
+from typing_extensions import Self
 
 __all__ = ("load_config",)
 
 _logger = getLogger(__name__)
 
 
+class _SharedLazyRegistry(LazyRegistry):
+    def __deepcopy__(self, memo: dict[int, Any] | None = None) -> Self:
+        if memo is not None:
+            memo[id(self)] = self
+        return self
+
+
 def load_config(
     path: str,
     overrides: List[str] | None = None,
-) -> dict:
+) -> LazyRegistry:
     # convert to Path
     path = Path(path)
 
@@ -75,14 +83,15 @@ def load_config(
         if isinstance(cfg, DictConfig):
             cfg = OmegaConf.to_container(cfg, resolve=True)
 
-        registry = ModelRegistry.root()
+        registry = _SharedLazyRegistry()
         registry.load_config(cfg=cfg, overwrite=True)
 
         if "callable" in cfg:
-            registry.add("callable", registry[cfg["callable"]], overwrite=True)
+            callable_path = cfg["callable"]
         elif "callable" in cfg.get("nbprint", {}):
-            registry.add("callable", registry[cfg["nbprint"]["callable"]], overwrite=True)
+            callable_path = cfg["nbprint"]["callable"]
         else:
-            registry.add("callable", registry["nbprint"], overwrite=True)
+            callable_path = "nbprint"
+        registry.add("callable", registry[callable_path.removeprefix("/")], overwrite=True)
 
     return registry

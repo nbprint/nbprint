@@ -23,8 +23,8 @@ def run(
     registry = load_config(path, overrides=overrides)
     model = registry["callable"] if "callable" in registry else registry["nbprint"]
     model.debug = True if debug else model.debug
-    global_options = registry.get("/cli/global", FlowOptions())
-    model_options = registry.get("/cli/model", FlowOptions())
+    global_options = registry.get("cli/global", FlowOptions())
+    model_options = registry.get("cli/model", FlowOptions())
     with FlowOptionsOverride(options=global_options), FlowOptionsOverride(options=model_options):
         pprint(OmegaConf.to_yaml(model.model_dump(mode="json"))) if cfg else model.run(dry_run=dry_run)
     return model
