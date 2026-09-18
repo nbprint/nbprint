@@ -196,6 +196,12 @@
               return [];
             })
             .then(function (records) {
+              // Record urls are relative to the documentation root, but a page
+              // nested below it would resolve them against its own directory.
+              var root = new URL("../", new URL(url, document.baseURI));
+              records.forEach(function (record) {
+                record.u = new URL(record.u, root).href;
+              });
               index = build(records);
               return index;
             });

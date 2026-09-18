@@ -142,8 +142,15 @@
         seen.add(field);
         field.classList.add("searchlite-adopted");
         field.readOnly = true;
-        field.addEventListener("focus", open);
         field.addEventListener("click", open);
+        // Opening on `focus` traps the user: closing the dialog restores focus
+        // to the field that opened it, which would immediately reopen it.
+        field.addEventListener("keydown", function (event) {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            open();
+          }
+        });
         var form = field.closest("form");
         if (form) {
           form.addEventListener("submit", function (event) {
@@ -174,6 +181,11 @@
         event.preventDefault();
         window.location.href = active.href;
       }
+    } else if (event.key === "Escape") {
+      // `<input type=search>` swallows the first Escape to clear itself, which
+      // would leave the dialog needing two presses despite the `Esc` hint.
+      event.preventDefault();
+      dialog.close();
     }
   });
 
