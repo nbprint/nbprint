@@ -1,5 +1,10 @@
+import base64
+import binascii
 import json
 import os
+import struct
+import warnings
+from collections import Counter
 from pathlib import Path
 from typing import Any, Literal
 
@@ -9,7 +14,17 @@ from pydantic import Field, PrivateAttr, field_validator
 
 from nbprint.config import Configuration, Outputs, OutputsProcessing
 
-__all__ = ("HTMLOutputs", "NBConvertOutputs", "NBConvertShortCircuitOutputs", "NotebookOutputs", "PDFOutputs", "WebHTMLOutputs", "short_circuit_hook")
+__all__ = (
+    "HTMLOutputs",
+    "NBConvertOutputs",
+    "NBConvertShortCircuitOutputs",
+    "NotebookOutputs",
+    "PDFOutputs",
+    "RenderCompletenessError",
+    "RenderCompletenessWarning",
+    "WebHTMLOutputs",
+    "short_circuit_hook",
+)
 
 
 # nbconvert/traitlets paths that nbprint already drives through its own fields.
@@ -34,6 +49,33 @@ _NBPRINT_MANAGED_TRAITS: dict[str, str] = {
 # pagination-complete signal instead, so the webpdf target is routed to it rather than to upstream's.
 # Registered under its own entry-point name so it never shadows nbconvert's builtin "webpdf".
 _EXPORTER_FOR_TARGET = {"webpdf": "nbprintwebpdf"}
+
+_PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+# Byte offsets of the width/height pair inside a PNG's IHDR chunk: 8-byte
+# signature + 4-byte length + 4-byte chunk type.
+_PNG_IHDR_DIMENSIONS = slice(16, 24)
+
+
+class RenderCompletenessWarning(UserWarning):
+    """Emitted when a rendered PDF holds fewer figures than its source notebook."""
+
+
+class RenderCompletenessError(RuntimeError):
+    """Raised instead of :class:`RenderCompletenessWarning` under ``validate_figures='strict'``."""
+
+
+def _png_dimensions(data: bytes) -> tuple[int, int] | None:
+    """Read ``(width, height)`` in pixels straight out of a PNG header.
+
+    Avoids taking an image-decoding dependency: the dimensions live in the
+    fixed-position IHDR chunk that every PNG opens with. Returns ``None`` for
+    anything that isn't a PNG or is truncated before the header ends, so
+    callers can drop unattributable outputs rather than guess at them.
+    """
+    if not data.startswith(_PNG_SIGNATURE) or len(data) < _PNG_IHDR_DIMENSIONS.stop:
+        return None
+    width, height = struct.unpack(">II", data[_PNG_IHDR_DIMENSIONS])
+    return width, height
 
 
 def _run_nbconvert(argv: list[str]) -> None:
@@ -104,6 +146,16 @@ class NBConvertOutputs(Outputs):
             "It is passed the config instance. "
             "If it returns something non-None, that value is returned by `run` instead of the output path."
             "NOTE: Parent/child class hooks may also be called."
+        ),
+    )
+
+    validate_figures: Literal["off", "warn", "strict"] = Field(
+        default="off",
+        description=(
+            "Post-render check that every figure in the executed notebook survived into the PDF. "
+            "'off' (default): no check. 'warn': emit a RenderCompletenessWarning listing what is "
+            "missing. 'strict': raise RenderCompletenessError instead. Only runs for PDF targets, "
+            "and silently does nothing when no PDF reader is installed."
         ),
     )
 
@@ -254,6 +306,124 @@ class NBConvertOutputs(Outputs):
                 self._collected_cells[output_key] = []
             self._collected_cells[output_key].extend(outputs)
 
+    @staticmethod
+    def _notebook_figure_sizes(nb: NotebookNode) -> Counter[tuple[int, int]]:
+        """Tally the pixel dimensions of every ``image/png`` output in a notebook.
+
+        Outputs whose payload will not decode, or that are not PNG after all,
+        are dropped rather than bucketed together: an unattributable figure
+        would otherwise be permanently unmatchable and warn on every render.
+        """
+        sizes: Counter[tuple[int, int]] = Counter()
+        for cell in nb.cells:
+            for output in cell.get("outputs", []):
+                payload = output.get("data", {}).get("image/png")
+                if payload is None:
+                    continue
+                if isinstance(payload, str):
+                    try:
+                        payload = base64.b64decode(payload)
+                    except (binascii.Error, ValueError):
+                        continue
+                dimensions = _png_dimensions(payload)
+                if dimensions is not None:
+                    sizes[dimensions] += 1
+        return sizes
+
+    @staticmethod
+    def _pdf_image_sizes(path: Path) -> Counter[tuple[int, int]] | None:
+        """Tally the pixel dimensions of every image embedded in a PDF.
+
+        Returns ``None`` — meaning "no opinion", not "no images" — when no PDF
+        reader is installed or the file cannot be parsed, so a missing optional
+        dependency or a half-written file can never fail a render.
+
+        Images are counted once per page they appear on. A PDF writer is free
+        to store one image object and reference it from several pages (a
+        repeated header logo, say), and per-page counting keeps that in step
+        with how many figures a reader actually sees.
+        """
+        try:
+            import pymupdf
+        except ImportError:
+            try:
+                import fitz as pymupdf
+            except ImportError:
+                return None
+        sizes: Counter[tuple[int, int]] = Counter()
+        try:
+            with pymupdf.open(path) as doc:
+                for page in doc:
+                    for image in page.get_images(full=True):
+                        # (xref, smask, width, height, bpc, colorspace, ...)
+                        sizes[(image[2], image[3])] += 1
+        except Exception:  # noqa: BLE001 - a render must not fail on an unreadable PDF
+            return None
+        return sizes
+
+    @staticmethod
+    def _figure_shortfall(notebook_sizes: Counter[tuple[int, int]], pdf_sizes: Counter[tuple[int, int]]) -> dict[tuple[int, int], int]:
+        """Figures the PDF is short of, bucketed by pixel dimensions.
+
+        Matching per size bucket rather than on bare totals is what makes the
+        check trustworthy on real reports. A cover page contributes images that
+        no notebook cell produced — a logo, a masthead — and against a total
+        those extras read as credit, so a document that dropped two charts
+        still totals up as complete. Because credit is only ever granted
+        within a bucket, an unrelated image can never stand in for a lost
+        figure; it lands in its own bucket and is ignored as surplus.
+        """
+        return {size: count - pdf_sizes.get(size, 0) for size, count in notebook_sizes.items() if count > pdf_sizes.get(size, 0)}
+
+    def _figure_source_notebook(self) -> NotebookNode | None:
+        """Parse whichever notebook on disk holds the outputs that were rendered."""
+        from nbformat import reads
+
+        path = self.executed_notebook if self.execute else self.notebook
+        if path is None or not Path(path).exists():
+            return None
+        return reads(Path(path).read_text(encoding="utf-8"), as_version=4)
+
+    def _validate_render_completeness(self) -> None:
+        """Check that the figures in the executed notebook survived into the PDF.
+
+        A PDF render can silently lose content — a chart that paged.js chunked
+        off the end of the document, an output that never got a chance to
+        decode — and the resulting file is perfectly valid, just short. This
+        compares the figures the notebook produced against the images the PDF
+        actually embeds and reports the difference.
+
+        No-ops unless ``validate_figures`` is enabled and the target is a PDF.
+        A shortfall warns by default and raises under ``'strict'``; a surplus
+        is always silent, since a report legitimately carries artwork that no
+        cell produced.
+
+        The comparison keys on pixel dimensions, which assumes the PDF writer
+        embeds figures at their source resolution. A writer that resamples
+        would make this over-report; that possibility, not any doubt about the
+        underlying loss, is why the check is off by default.
+        """
+        if self.validate_figures == "off" or self.target != "webpdf":
+            return
+        pdf = Path(self.output)
+        if not pdf.exists():
+            return
+        pdf_sizes = self._pdf_image_sizes(pdf)
+        if pdf_sizes is None:
+            return
+        nb = self._figure_source_notebook()
+        if nb is None:
+            return
+
+        shortfall = self._figure_shortfall(self._notebook_figure_sizes(nb), pdf_sizes)
+        if not shortfall:
+            return
+        detail = ", ".join(f"{width}x{height} (x{count})" for (width, height), count in sorted(shortfall.items()))
+        msg = f"{pdf}: {sum(shortfall.values())} notebook figure(s) missing from the rendered PDF: {detail}"
+        if self.validate_figures == "strict":
+            raise RenderCompletenessError(msg)
+        warnings.warn(msg, RenderCompletenessWarning, stacklevel=2)
+
     def run(self, config: "Configuration", gen: NotebookNode) -> Path:
         # Run parent to create notebook
         notebook = super().run(config=config, gen=gen)
@@ -303,6 +473,8 @@ class NBConvertOutputs(Outputs):
         if not (self.execute and self.target == "ipynb"):
             # If target is notebook, we already did it above
             _run_nbconvert(cmd)
+
+        self._validate_render_completeness()
 
         if self.nbconvert_hook and self.nbconvert_hook.object(config) in (OutputsProcessing.STOP, None):
             return OutputsProcessing.STOP

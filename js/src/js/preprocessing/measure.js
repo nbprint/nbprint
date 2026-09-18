@@ -607,6 +607,128 @@ function shrinkCellFigures(cell, scale) {
 }
 
 /**
+ * How far each `ContentPageBox.fit` mode is willing to shrink content.
+ * `scale` keeps the conservative floor used elsewhere in this module
+ * for mixed content; `shrink` is the tighter budget, matching the
+ * figures-only allowance in `fitCellsToPage`.
+ */
+const PAGE_BOX_FIT_FLOOR = { scale: 0.75, shrink: 0.5 };
+
+/**
+ * Measure a page box's children as one composite block.
+ *
+ * The union of the child bounding boxes, not the sum of their heights:
+ * under the `columns-*`, `grid-*` and `flex-row` presets children sit
+ * beside one another, so summing heights over-reports the footprint
+ * several-fold and would shrink a box that fits perfectly well.
+ *
+ * Measurement is taken with the box temporarily constrained to the page
+ * content width. Preprocessing runs at the full viewport width, which is
+ * wider than the printed page, so reflowable children measure too short
+ * and fixed-size children measure fine — the constraint gets both right
+ * instead of correcting one with a heuristic. The inline width is
+ * restored afterwards, so this leaves no trace in the DOM.
+ *
+ * Returns null for a box with no rendered children (an empty box cannot
+ * overflow).
+ */
+function measurePageBoxChildren(box, contentArea) {
+  const previousWidth = box.style.width;
+  const previousMaxWidth = box.style.maxWidth;
+  box.style.width = contentArea.width + "px";
+  box.style.maxWidth = contentArea.width + "px";
+
+  let top = Infinity;
+  let bottom = -Infinity;
+  let left = Infinity;
+  let right = -Infinity;
+  for (const child of box.children) {
+    const rect = child.getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) continue;
+    top = Math.min(top, rect.top);
+    bottom = Math.max(bottom, rect.bottom);
+    left = Math.min(left, rect.left);
+    right = Math.max(right, rect.right);
+  }
+
+  box.style.width = previousWidth;
+  box.style.maxWidth = previousMaxWidth;
+
+  if (bottom === -Infinity) return null;
+  return { width: right - left, height: bottom - top };
+}
+
+/** Flag an overflowing page box and warn at render time. */
+function warnPageBoxOverflow(box, mode, composite, contentArea) {
+  box.setAttribute("data-nbprint-fit-overflow", "true");
+  console.warn(
+    `[nbprint] page-box "${box.getAttribute("data-nbprint-page-box")}" ` +
+      `(fit="${mode}") overflows its page: content measures ` +
+      `${Math.round(composite.width)}\u00d7${Math.round(composite.height)}px, ` +
+      `page is ${Math.round(contentArea.width)}\u00d7${Math.round(contentArea.height)}px`,
+  );
+}
+
+/**
+ * Honour `ContentPageBox.fit`.
+ *
+ * A page box is authored as exactly one logical page, so its children
+ * have to be judged together rather than one at a time — the per-cell
+ * passes above cannot see that three individually-fitting blocks
+ * collectively run onto a second page.
+ *
+ * Modes, matching the `fit` field on `ContentPageBox`:
+ *
+ *   scale   — zoom the children down uniformly until the composite fits,
+ *             no further than PAGE_BOX_FIT_FLOOR.scale.
+ *   shrink  — the same, with the tighter floor: it will trade more
+ *             legibility for staying on one page.
+ *   strict  — measure but never resize; warn on overflow.
+ *   none    — skip the box entirely.
+ *
+ * The zoom is applied to the box's direct children rather than to the
+ * box itself, because the box carries `min-height: 100%` and zooming it
+ * would scale that guarantee along with the content. `zoom` (rather than
+ * `transform: scale`) for the same reason the per-cell passes use it:
+ * it keeps children in flow, so pagedjs measures the shrunken height.
+ *
+ * A box that still overflows at the floor is scaled as far as the floor
+ * allows and then flagged — partial relief plus a warning beats leaving
+ * an obviously oversized box untouched.
+ */
+function fitPageBoxes(contentRoot, contentArea) {
+  for (const box of contentRoot.querySelectorAll("[data-nbprint-page-box]")) {
+    const mode = box.getAttribute("data-nbprint-fit");
+    if (mode !== "scale" && mode !== "shrink" && mode !== "strict") continue;
+
+    const composite = measurePageBoxChildren(box, contentArea);
+    if (!composite) continue;
+
+    const required = Math.min(
+      1,
+      contentArea.height / composite.height,
+      contentArea.width / composite.width,
+    );
+    if (required >= 1) continue;
+
+    if (mode === "strict") {
+      warnPageBoxOverflow(box, mode, composite, contentArea);
+      continue;
+    }
+
+    const scale = Math.max(required, PAGE_BOX_FIT_FLOOR[mode]);
+    for (const child of box.children) {
+      const prev = child.style.zoom ? parseFloat(child.style.zoom) : 1;
+      child.style.zoom = String(prev * scale);
+    }
+    box.setAttribute("data-nbprint-fit-scale", scale.toFixed(3));
+    if (required < PAGE_BOX_FIT_FLOOR[mode]) {
+      warnPageBoxOverflow(box, mode, composite, contentArea);
+    }
+  }
+}
+
+/**
  * For each heading-only cell, check whether it would fit on a single
  * page alongside the cell that follows it. If the next cell is just
  * slightly too tall, shrink its figures so heading + content ride on
@@ -761,6 +883,7 @@ export function preprocess(contentRoot, configuration) {
   splitTallTables(contentRoot, contentArea, configuration);
   allowTallContentToBreak(contentRoot, contentArea);
   fitCellsToPage(contentRoot, contentArea);
+  fitPageBoxes(contentRoot, contentArea);
   tagHeadingOnlyCells(contentRoot);
   forcePageBreakBeforeSections(contentRoot);
   shrinkCellAfterHeading(contentRoot, contentArea);

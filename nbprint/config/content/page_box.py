@@ -19,8 +19,11 @@ Key guarantees (enforced by CSS + later JS preprocessing passes):
   sweeps it away — see :mod:`postprocessing/validate.js`).
 * A page-box ends with a hard page break; following content always
   starts on a fresh page.
-* Overflowing content flows to additional pages — children are never
-  silently dropped.
+* Children are never silently dropped. Whether they all land on *one*
+  page depends on ``fit``: the box's children are measured together
+  before pagination and scaled down to fit where the mode allows, and
+  anything still too tall flows onto further pages with a render-time
+  warning (see ``fitPageBoxes`` in :mod:`preprocessing/measure.js`).
 """
 
 from __future__ import annotations
@@ -84,13 +87,17 @@ class ContentPageBox(Content):
     fit: PageBoxFit = Field(
         default="scale",
         description=(
-            "How to handle content that doesn't fit on one page. "
-            "'scale' (default): shrink scalable children — images, SVGs, "
-            "Plotly charts, tables — to fit; text is never shrunk. "
-            "'shrink': same as 'scale' but with a tighter budget. "
-            "'strict': no scaling; emit a render-time warning on overflow. "
-            "'none': no composite measurement; children flow normally "
-            "but the box still produces break-before/after page."
+            "How to handle content that doesn't fit on one page. The box's "
+            "children are measured together, not one at a time, so blocks "
+            "that each fit but collectively overflow are caught. "
+            "'scale' (default): zoom the children down uniformly — figures "
+            "and text alike, so proportions are preserved — as far as a 0.75 "
+            "floor. 'shrink': the same, with a 0.5 floor; it trades more "
+            "legibility for staying on one page. 'strict': never resize, warn "
+            "at render time on overflow. 'none': no composite measurement; "
+            "children flow normally but the box still produces "
+            "break-before/after page. A box that still overflows once its "
+            "floor is reached is warned about and spills onto a further page."
         ),
     )
 

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fixture: ContentPageBox fit=none</title>
+    <script>
+      var _nbprint_configuration = {
+        pagedjs: true,
+        debug: false,
+        page: '{"orientation": null, "size": null}',
+      };
+      var _nbprint_notebook_info = new Map();
+      window.FontAwesomeConfig = { searchPseudoElements: true };
+    </script>
+    <script type="module" src="/js/dist/embedded.js"></script>
+    <link rel="stylesheet" href="/js/dist/css/embedded.css" />
+    <link rel="stylesheet" href="/js/dist/css/index.css" />
+    <style>
+      body.jp-Notebook {
+        margin: 0;
+        padding: 0 !important;
+      }
+      @page {
+        margin: 0.5in;
+      }
+      /* Mimic ContentPageBox(layout="flow", fit="none"). Letter minus 0.5in
+   margins gives a 720x960px page content area. */
+      [data-nbprint-page-box="box-fit-none"] {
+        break-before: page;
+        break-after: page;
+        break-inside: auto;
+        display: block;
+        min-height: 100%;
+      }
+      [data-nbprint-block] {
+        break-inside: avoid;
+        min-width: 0;
+        min-height: 0;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        height: 400px;
+        background: #faf6ee;
+        border: 0;
+      }
+    </style>
+  </head>
+  <body
+    class="jp-Notebook"
+    data-jp-theme-light="true"
+    data-jp-theme-name="JupyterLab Light"
+  >
+    <main>
+      <!-- Same 4 x 400px = 1600px content as fit-strict.html. fit="none" opts
+       out of composite measurement entirely: no resize, no warning. -->
+      <div
+        class="jp-Cell"
+        data-nbprint-page-box="box-fit-none"
+        data-nbprint-fit="none"
+        data-nbprint-layout="flow"
+      >
+        <div class="jp-Cell" data-nbprint-block="n1">Block 1</div>
+        <div class="jp-Cell" data-nbprint-block="n2">Block 2</div>
+        <div class="jp-Cell" data-nbprint-block="n3">Block 3</div>
+        <div class="jp-Cell" data-nbprint-block="n4">Block 4</div>
+      </div>
+    </main>
+  </body>
+</html>

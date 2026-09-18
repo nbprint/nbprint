@@ -40,12 +40,12 @@ jobs:
           persist-credentials: false
   
       - name: Setup Python
-        uses: actions-ext/python/setup@6e1b91a408ea89f49bc8aff8724f83826f7b5446
+        uses: actions-ext/python/setup@ec67f82b3bd863948308a41ecb9e70547cbb19c7
         with:
           version: ${{ matrix.python-version }}
 
       - name: Setup Node.js
-        uses: actions-ext/node/setup@0ea5bdcd24d2488b28e16bf611b446a2f8e1e12f
+        uses: actions-ext/node/setup@34d0fdbdca883e4d0a2da0bcd0fa460fd40b80e7
         with:
           version: ${{ matrix.node-version }}
   
@@ -161,13 +161,13 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
 
       - name: Test wheel
-        uses: actions-ext/python/test-wheel@6e1b91a408ea89f49bc8aff8724f83826f7b5446
+        uses: actions-ext/python/test-wheel@ec67f82b3bd863948308a41ecb9e70547cbb19c7
         with:
           module: nbprint
         if: matrix.os == 'ubuntu-latest'
 
       - name: Test source distribution
-        uses: actions-ext/python/test-sdist@6e1b91a408ea89f49bc8aff8724f83826f7b5446
+        uses: actions-ext/python/test-sdist@ec67f82b3bd863948308a41ecb9e70547cbb19c7
         with:
           module: nbprint
         if: matrix.os == 'ubuntu-latest'

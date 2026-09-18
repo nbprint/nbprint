@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fixture: ContentPageBox fit=scale</title>
+    <script>
+      var _nbprint_configuration = {
+        pagedjs: true,
+        debug: false,
+        page: '{"orientation": null, "size": null}',
+      };
+      var _nbprint_notebook_info = new Map();
+      window.FontAwesomeConfig = { searchPseudoElements: true };
+    </script>
+    <script type="module" src="/js/dist/embedded.js"></script>
+    <link rel="stylesheet" href="/js/dist/css/embedded.css" />
+    <link rel="stylesheet" href="/js/dist/css/index.css" />
+    <style>
+      body.jp-Notebook {
+        margin: 0;
+        padding: 0 !important;
+      }
+      @page {
+        margin: 0.5in;
+      }
+      /* Mimic ContentPageBox(layout="flow", fit="scale") — the CSS that
+   build_page_box_css() emits. Letter minus 0.5in margins gives a
+   720x960px page content area. */
+      [data-nbprint-page-box="box-fit-scale"] {
+        break-before: page;
+        break-after: page;
+        break-inside: auto;
+        display: block;
+        min-height: 100%;
+      }
+      [data-nbprint-block] {
+        break-inside: avoid;
+        min-width: 0;
+        min-height: 0;
+        /* Fixed heights keep the composite measurement deterministic and
+       independent of viewport width. */
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        height: 350px;
+        background: #eef3fa;
+        border: 0;
+      }
+    </style>
+  </head>
+  <body
+    class="jp-Notebook"
+    data-jp-theme-light="true"
+    data-jp-theme-name="JupyterLab Light"
+  >
+    <main>
+      <!-- 3 x 350px = 1050px of content against a 960px page: needs a 0.914
+       scale, comfortably inside the 0.75 floor for fit="scale". -->
+      <div
+        class="jp-Cell"
+        data-nbprint-page-box="box-fit-scale"
+        data-nbprint-fit="scale"
+        data-nbprint-layout="flow"
+      >
+        <div class="jp-Cell" data-nbprint-block="s1">Block 1</div>
+        <div class="jp-Cell" data-nbprint-block="s2">Block 2</div>
+        <div class="jp-Cell" data-nbprint-block="s3">Block 3</div>
+      </div>
+    </main>
+  </body>
+</html>
