@@ -28,7 +28,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-24.04, macos-26]
         python-version: ["3.11"]
         node-version: [22.x]
 
@@ -51,11 +51,11 @@ jobs:
   
       - name: Install pandoc via brew
         run: brew install pandoc
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'macos-26' }}
   
       - name: Install pandoc via apt
         run: sudo apt install pandoc
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
   
       - name: Install dependencies
         run: make develop
@@ -75,18 +75,18 @@ jobs:
           SMTP_HOST: ${{ secrets.SMTP_HOST }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
   
       - name: Integration tests
         run: make test-integration
-        if: ${{ matrix.os == 'ubuntu-latest' }}
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
   
       - name: Upload Playwright report
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: playwright-report-${{ matrix.os }}
           path: js/playwright-report/
-        if: ${{ always() && matrix.os == 'ubuntu-latest' }}
+        if: ${{ always() && matrix.os == 'ubuntu-24.04' }}
   
       - name: Upload Playwright test snapshots
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -95,7 +95,7 @@ jobs:
           path: |
             js/tests/**/*-snapshots/
             js/test-results/
-        if: ${{ failure() && matrix.os == 'ubuntu-latest' }}
+        if: ${{ failure() && matrix.os == 'ubuntu-24.04' }}
 
       - name: Upload test results
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -108,10 +108,10 @@ jobs:
         uses: EnricoMi/publish-unit-test-result-action@d0a4676d0e0b938bc201470d88276b7c74c712b3 # v2.24.0
         with:
           files: '**/junit.xml'
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-24.04'
 
       - name: Upload coverage
-        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        uses: codecov/codecov-action@0b35c9ecc4f0529d0eb674914510c22f85b196b4  # v7.1.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
   
@@ -123,7 +123,7 @@ jobs:
           path: 'outputs/*.html'
           if-no-files-found: error
           overwrite: true
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
+        if: matrix.os == 'ubuntu-24.04' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
   
       - name: Upload generated reports (pdf)
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
@@ -133,7 +133,7 @@ jobs:
           path: 'outputs/*.pdf'
           if-no-files-found: error
           overwrite: true
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
+        if: matrix.os == 'ubuntu-24.04' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
   
       - name: Find comment for generated reports
         uses: peter-evans/find-comment@b30e6a3c0ed37e7c023ccd3f1db5c6c0b0c23aad # v4.0.0
@@ -141,7 +141,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
+        if: matrix.os == 'ubuntu-24.04' && matrix.python-version == 3.11 && github.event_name == 'pull_request'
   
       - name: Update comment for generated reports
         uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9 # v5.0.0
@@ -154,23 +154,23 @@ jobs:
               | :------------------ | :---------------------------------------------------------------- |
               | Test Reports (HTML) | [download](${{ steps.upload-reports-html.outputs.artifact-url }}) |
               | Test Reports (PDF)  | [download](${{ steps.upload-reports-pdf.outputs.artifact-url }})  |
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == 3.11 && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'nbprint/nbprint'
+        if: matrix.os == 'ubuntu-24.04' && matrix.python-version == 3.11 && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == 'nbprint/nbprint'
   
       - name: Make dist
         run: make dist
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-24.04'
 
       - name: Test wheel
         uses: actions-ext/python/test-wheel@ec67f82b3bd863948308a41ecb9e70547cbb19c7
         with:
           module: nbprint
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-24.04'
 
       - name: Test source distribution
         uses: actions-ext/python/test-sdist@ec67f82b3bd863948308a41ecb9e70547cbb19c7
         with:
           module: nbprint
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'ubuntu-24.04'
 
       - name: Upload distributions
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
