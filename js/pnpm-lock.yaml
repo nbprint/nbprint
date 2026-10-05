@@ -43,7 +43,7 @@ importers:
         specifier: ^0.70.0
         version: 0.70.0
       oxlint:
-        specifier: ^1.81.0
+        specifier: ^1.85.0
         version: 1.85.0
       typescript:
         specifier: ^7.0.2
