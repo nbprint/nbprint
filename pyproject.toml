@@ -68,6 +68,7 @@ develop = [
     "hatch-js",
     "hatchling",
     "mdformat",
+    "mdformat-frontmatter",
     "mdformat-tables>=1",
     "pymupdf",
     "pytest",
@@ -135,7 +136,7 @@ replace = '"version": "{new_version}"'
 [tool.coverage.run]
 branch = true
 omit = [
-    "nbprint/tests/integration/",
+    "nbprint/tests/integration/*",
 ]
 
 [tool.coverage.report]
