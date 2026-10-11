@@ -26,7 +26,7 @@ from pydantic import Field, model_validator
 from nbprint.config.base import BaseModel
 from nbprint.config.common import PageOrientation, PageSize, Style
 from nbprint.config.content.page_box import ContentPageBox, PageBoxFit, PageBoxLayout
-from nbprint.config.core.content import SECTION_ORDER, Section
+from nbprint.config.sections import SECTION_ORDER, Section
 
 __all__ = ("CellMatcher", "LayoutOverlay", "Overlay", "PageBoxOverlay")
 

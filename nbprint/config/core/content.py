@@ -1,10 +1,11 @@
-from typing import Generator, Literal
+from typing import Generator
 
 from pydantic import Field, PrivateAttr, model_validator
 
 from nbprint.config.base import BaseModel
 from nbprint.config.common import Style
 from nbprint.config.content import Content, ContentTableOfContents
+from nbprint.config.sections import SECTION_ORDER, Section
 
 __all__ = ("SECTION_GROUPS", "SECTION_ORDER", "SEPARATOR_TITLE_PAGE_CSS", "ContentMarshall", "Section")
 
@@ -35,40 +36,6 @@ endmatter:
         glossary, colophon, etc.
 rearmatter: content that appears on the back cover. for physical books, this corresponds to the back cover.
 """
-
-Section = Literal[
-    "prematter",
-    "covermatter",
-    "frontmatter",
-    "title",
-    "copyright",
-    "dedication",
-    "table_of_contents",
-    "middlematter",
-    "middlematter_separators",
-    "endmatter",
-    "appendix",
-    "index",
-    "rearmatter",
-]
-
-
-# Document order for section iteration
-SECTION_ORDER: list[str] = [
-    "prematter",
-    "covermatter",
-    "title",
-    "copyright",
-    "dedication",
-    "table_of_contents",
-    "frontmatter",
-    "middlematter",
-    "middlematter_separators",
-    "appendix",
-    "index",
-    "endmatter",
-    "rearmatter",
-]
 
 # Map each section to its parent group
 SECTION_GROUPS: dict[str, str] = {
