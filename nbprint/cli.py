@@ -40,7 +40,7 @@ def run_cli(
     run(path=path, overrides=overrides, cfg=cfg, debug=debug, dry_run=dry_run)
 
 
-@hydra_main(config_path=str(Path(__file__).parent / "config" / "hydra"), config_name="base", version_base=None)
+@hydra_main(config_path=str(Path(__file__).parent / "config" / "hydra"), config_name="base")
 def hydra(cfg) -> ResultBase:
     return cfg_run(cfg)
 

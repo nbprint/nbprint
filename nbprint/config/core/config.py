@@ -661,7 +661,7 @@ class Configuration(CallableModel, BaseModel):
             folder = str(path_or_model.parent)
             file = str(path_or_model.name)
 
-            with initialize_config_dir(version_base=None, config_dir=folder, job_name=name):
+            with initialize_config_dir(config_dir=folder, job_name=name):
                 cfg = compose(config_name=file, overrides=[f"+name={name}"])
                 config = instantiate(cfg, _convert_="all")
                 if not isinstance(config, Configuration):

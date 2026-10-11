@@ -48,7 +48,7 @@ def load_config(
         config_name = "base.yaml"
         is_default = True
 
-    with initialize_config_dir(config_dir=config_dir, version_base=None):
+    with initialize_config_dir(config_dir=config_dir):
         if not is_default:
             cfg = compose(config_name=config_name, overrides=[], return_hydra_config=True)
             searchpaths = cfg["hydra"]["searchpath"]
