@@ -453,7 +453,9 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_compute_outputs</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
         <span class="c1"># Update executed path if needed</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_nb_executed_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">notebook</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">.executed.ipynb"</span>
+            <span class="n">notebook</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">notebook</span>
+            <span class="k">assert</span> <span class="n">notebook</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nb_executed_path</span> <span class="o">=</span> <span class="n">notebook</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">notebook</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">.executed.ipynb"</span>
         <span class="c1"># Update output path</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">==</span> <span class="s2">"webpdf"</span><span class="p">:</span>
             <span class="n">target</span> <span class="o">=</span> <span class="s2">"pdf"</span>
@@ -555,7 +557,9 @@
 
         <span class="kn">from</span><span class="w"> </span><span class="nn">nbformat</span><span class="w"> </span><span class="kn">import</span> <span class="n">reads</span>
 
-        <span class="n">notebook_content</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">executed_notebook</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+        <span class="n">executed_notebook</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">executed_notebook</span>
+        <span class="k">assert</span> <span class="n">executed_notebook</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">notebook_content</span> <span class="o">=</span> <span class="n">executed_notebook</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
         <span class="n">nb</span> <span class="o">=</span> <span class="n">reads</span><span class="p">(</span><span class="n">notebook_content</span><span class="p">,</span> <span class="n">as_version</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">nb</span><span class="o">.</span><span class="n">cells</span><span class="p">:</span>
@@ -677,6 +681,7 @@
 <span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_figures</span> <span class="o">==</span> <span class="s2">"off"</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">!=</span> <span class="s2">"webpdf"</span><span class="p">:</span>
             <span class="k">return</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="n">pdf</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">pdf</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="k">return</span>
@@ -698,12 +703,12 @@
 
 <div class="viewcode-block" id="NBConvertOutputs.run">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.outputs.NBConvertOutputs.html#nbprint.config.outputs.NBConvertOutputs.run">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">,</span> <span class="n">gen</span><span class="p">:</span> <span class="n">NotebookNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"Configuration"</span><span class="p">,</span> <span class="n">gen</span><span class="p">:</span> <span class="n">NotebookNode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span><span class="p">]:</span>
         <span class="c1"># Run parent to create notebook</span>
         <span class="n">notebook</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">gen</span><span class="o">=</span><span class="n">gen</span><span class="p">)</span>
 
         <span class="c1"># If notebook is None, we stop</span>
-        <span class="k">if</span> <span class="n">notebook</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">notebook</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">notebook</span> <span class="ow">is</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span>
 
         <span class="c1"># TODO: fix in nbconvert</span>
@@ -752,6 +757,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbconvert_hook</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">nbconvert_hook</span><span class="o">.</span><span class="n">object</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">OutputsProcessing</span><span class="o">.</span><span class="n">STOP</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span></div>
 </div>
 

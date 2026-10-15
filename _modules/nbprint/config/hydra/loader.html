@@ -270,11 +270,11 @@
           <h1>Source code for nbprint.config.hydra.loader</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">getLogger</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">ccflow</span><span class="w"> </span><span class="kn">import</span> <span class="n">LazyRegistry</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">lerna</span><span class="w"> </span><span class="kn">import</span> <span class="n">compose</span><span class="p">,</span> <span class="n">initialize_config_dir</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">omegaconf</span><span class="w"> </span><span class="kn">import</span> <span class="n">DictConfig</span><span class="p">,</span> <span class="n">OmegaConf</span><span class="p">,</span> <span class="n">open_dict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">omegaconf</span><span class="w"> </span><span class="kn">import</span> <span class="n">OmegaConf</span><span class="p">,</span> <span class="n">open_dict</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"load_config"</span><span class="p">,)</span>
@@ -292,7 +292,7 @@
 <div class="viewcode-block" id="load_config">
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.hydra.load_config.html#nbprint.config.hydra.load_config">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_config</span><span class="p">(</span>
-    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">overrides</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LazyRegistry</span><span class="p">:</span>
     <span class="c1"># convert to Path</span>
@@ -350,16 +350,16 @@
             <span class="k">with</span> <span class="n">open_dict</span><span class="p">(</span><span class="n">cfg</span><span class="p">):</span>
                 <span class="n">cfg</span><span class="o">.</span><span class="n">nbprint</span><span class="o">.</span><span class="n">notebook</span> <span class="o">=</span> <span class="n">path</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">DictConfig</span><span class="p">):</span>
-            <span class="n">cfg</span> <span class="o">=</span> <span class="n">OmegaConf</span><span class="o">.</span><span class="n">to_container</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">resolve</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">container</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="s2">"dict[str, Any]"</span><span class="p">,</span> <span class="n">OmegaConf</span><span class="o">.</span><span class="n">to_container</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">resolve</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
         <span class="n">registry</span> <span class="o">=</span> <span class="n">_SharedLazyRegistry</span><span class="p">()</span>
-        <span class="n">registry</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="n">cfg</span><span class="o">=</span><span class="n">cfg</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># ccflow annotates cfg as DictConfig but loads plain containers too</span>
+        <span class="n">registry</span><span class="o">.</span><span class="n">load_config</span><span class="p">(</span><span class="n">cfg</span><span class="o">=</span><span class="n">container</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># ty: ignore[invalid-argument-type]</span>
 
-        <span class="k">if</span> <span class="s2">"callable"</span> <span class="ow">in</span> <span class="n">cfg</span><span class="p">:</span>
-            <span class="n">callable_path</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">"callable"</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="s2">"callable"</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"nbprint"</span><span class="p">,</span> <span class="p">{}):</span>
-            <span class="n">callable_path</span> <span class="o">=</span> <span class="n">cfg</span><span class="p">[</span><span class="s2">"nbprint"</span><span class="p">][</span><span class="s2">"callable"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"callable"</span> <span class="ow">in</span> <span class="n">container</span><span class="p">:</span>
+            <span class="n">callable_path</span> <span class="o">=</span> <span class="n">container</span><span class="p">[</span><span class="s2">"callable"</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s2">"callable"</span> <span class="ow">in</span> <span class="n">container</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"nbprint"</span><span class="p">,</span> <span class="p">{}):</span>
+            <span class="n">callable_path</span> <span class="o">=</span> <span class="n">container</span><span class="p">[</span><span class="s2">"nbprint"</span><span class="p">][</span><span class="s2">"callable"</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">callable_path</span> <span class="o">=</span> <span class="s2">"nbprint"</span>
         <span class="n">registry</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"callable"</span><span class="p">,</span> <span class="n">registry</span><span class="p">[</span><span class="n">callable_path</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)],</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

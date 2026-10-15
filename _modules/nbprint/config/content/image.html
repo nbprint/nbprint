@@ -280,7 +280,7 @@
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.content.ContentImage.html#nbprint.config.content.ContentImage">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ContentImage</span><span class="p">(</span><span class="n">Content</span><span class="p">):</span>
     <span class="n">path</span><span class="p">:</span> <span class="n">FilePath</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span>  <span class="c1"># ty: ignore[invalid-attribute-override]</span>
     <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"path"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
@@ -299,7 +299,7 @@
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"content"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">convert_content_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convert_content_from_obj</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="sa">b</span><span class="s2">""</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -319,7 +319,7 @@
         <span class="k">return</span> <span class="n">HTML</span><span class="p">(</span><span class="sa">f</span><span class="s2">"""&lt;img src="data:image/png;base64,</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">as_base64</span><span class="p">()</span><span class="si">}</span><span class="s2">"&gt;"""</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Image(path='</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">', content=[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes])"</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Image(path='</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="si">}</span><span class="s2">', content=[</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="sa">b</span><span class="s1">''</span><span class="p">)</span><span class="si">}</span><span class="s2"> bytes])"</span></div>
 
 </pre></div>
         </article>
