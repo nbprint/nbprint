@@ -1,4 +1,5 @@
 import os.path
+from pathlib import Path
 
 from IPython.display import HTML
 from pydantic import FilePath
@@ -12,7 +13,7 @@ __all__ = (
 
 
 class ExampleNBPrintLogo(ContentImage):
-    path: FilePath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "docs", "img", "logo-light.png"))
+    path: FilePath = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "docs", "img", "logo-light.png")))
 
 
 class ExampleCoverPageContent(ContentCover):
@@ -21,6 +22,8 @@ class ExampleCoverPageContent(ContentCover):
     subtitle: str | None = ""
 
     def __call__(self, ctx=None, *args, **kwargs):
+        assert ctx is not None
+        assert self.logo is not None
         return HTML(f"""
             {self.logo()._repr_html_()}
             <h1>{self.title}</h1>

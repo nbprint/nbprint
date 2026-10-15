@@ -1,4 +1,5 @@
 import os.path
+from pathlib import Path
 
 from IPython.display import HTML, Image
 from pydantic import Field, FilePath
@@ -33,7 +34,7 @@ class ExampleLogoInFooter(PageRegion):
 
 
 class ExampleBookIcon(ContentImage):
-    path: FilePath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "examples", "assets", "book.png"))
+    path: FilePath = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "examples", "assets", "book.png")))
 
 
 class ExampleReportPage(Page):
@@ -61,9 +62,9 @@ class ExampleReportPage(Page):
 }}
 """
 
-    def render(self, config: Configuration) -> None:
-        super().render(config=config)
-        if config.page.orientation == PageOrientation.landscape:
+    def render(self, config: Configuration | None = None, **kwargs) -> None:
+        super().render(config=config, **kwargs)
+        if config is not None and config.page.orientation == PageOrientation.landscape:
             self.css += """
 .pagedjs_first_page {
     background-position-y: 85%;

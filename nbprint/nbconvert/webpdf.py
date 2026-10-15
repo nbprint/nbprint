@@ -7,6 +7,7 @@ import os
 import subprocess
 import sys
 import tempfile
+from typing import Any
 
 from nbconvert.exporters.webpdf import WebPDFExporter
 from traitlets import Int
@@ -112,7 +113,7 @@ class NBPrintWebPDFExporter(WebPDFExporter):
             await page.goto(f"file://{temp_file.name}", wait_until="networkidle")
             await self._wait_until_paginated(page)
 
-            pdf_params = {"print_background": True}
+            pdf_params: dict[str, Any] = {"print_background": True}
             if not self.paginate:
                 # Floating point precision errors cause the printed
                 # PDF from spilling over a new page by a pixel fraction.

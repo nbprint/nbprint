@@ -7,6 +7,7 @@ class ExampleCodeBlock(Content):
     def __call__(self, ctx=None, *args, **kwargs):
         from great_tables import GT
 
+        assert ctx is not None
         return (
             GT(ctx.df)
             .tab_header(title="Sample Table")
