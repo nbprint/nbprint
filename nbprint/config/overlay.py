@@ -128,7 +128,7 @@ class Overlay(BaseModel):
     classname: str | list[str] | None = None
     attrs: dict[str, str] | None = None
     style: Style | None = None
-    ignore: bool | None = None
+    ignore: bool | None = None  # ty: ignore[invalid-attribute-override]
 
     def apply(self, content) -> None:
         """Merge overlay overrides into the given ``Content`` instance."""
@@ -257,8 +257,8 @@ class PageBoxOverlay(LayoutOverlay):
         ]
     """
 
-    wrapper: Literal["page-box"] = "page-box"
-    layout: PageBoxLayout = "flow"
+    wrapper: Literal["page-box"] = "page-box"  # ty: ignore[invalid-attribute-override]
+    layout: PageBoxLayout = "flow"  # ty: ignore[invalid-attribute-override]
 
     fit: PageBoxFit = "scale"
     min_pages: int = Field(default=1, ge=1)

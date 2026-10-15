@@ -9,7 +9,7 @@ __all__ = ("SeabornDisplayConfiguration",)
 
 
 class SeabornDisplayConfiguration(Content):
-    style: Literal["white", "dark", "whitegrid", "darkgrid", "ticks"] = Field(default="whitegrid")
+    style: Literal["white", "dark", "whitegrid", "darkgrid", "ticks"] = Field(default="whitegrid")  # ty: ignore[invalid-attribute-override]
     context: Literal["paper", "notebook", "talk", "poster"] = Field(default="notebook")
     palette: str | list[str] = Field(default="tab10")
 

@@ -97,23 +97,26 @@ class EmailOutputs(NBConvertOutputs):
         return v
 
     def make_message(self, config: "Configuration") -> EmailMessage:
+        output = self.output
+        assert output is not None
         env = Environment(autoescape=True)
+        mail_to: list[str | tuple[str | None, str]] = list(self.to)
         msg = EmailMessage(
-            html=env.from_string(self.body or self.output.stem).render(config.parameters.model_dump(exclude_unset=True)),
-            subject=env.from_string(self.subject or self.output.stem).render(config.parameters.model_dump(exclude_unset=True)),
+            html=env.from_string(self.body or output.stem).render(config.parameters.model_dump(exclude_unset=True)),
+            subject=env.from_string(self.subject or output.stem).render(config.parameters.model_dump(exclude_unset=True)),
             mail_from=self.from_,
-            mail_to=self.to,
+            mail_to=mail_to,
             cc=self.cc,
             bcc=self.bcc,
         )
-        msg.attach(filename=self.output.name, content_disposition="attachment", data=self.output.read_bytes())
+        msg.attach(filename=output.name, content_disposition="attachment", data=output.read_bytes())
         return msg
 
-    def run(self, config: "Configuration", gen: NotebookNode) -> Path:
+    def run(self, config: "Configuration", gen: NotebookNode) -> Path | Literal[OutputsProcessing.STOP]:
         # generate the output file
         output_path = super().run(config=config, gen=gen)
 
-        if output_path in (None, OutputsProcessing.STOP):
+        if output_path is None or output_path is OutputsProcessing.STOP:
             return OutputsProcessing.STOP
         return output_path
 
@@ -134,7 +137,7 @@ def email_postprocess(configs: list[Configuration], comma_or_common: Literal["co
         if isinstance(config.outputs, EmailOutputs):
             msgs.append(config.outputs.make_message(config=config))
             if smtp is None:
-                smtp = config.outputs.smtp.model_dump(exclude_unset=True, exclude_none=True, exclude=["type_"])
+                smtp = config.outputs.smtp.model_dump(exclude_unset=True, exclude_none=True, exclude={"type_"})
                 smtp["fail_silently"] = False
     if not msgs:
         return
@@ -142,13 +145,13 @@ def email_postprocess(configs: list[Configuration], comma_or_common: Literal["co
     msg = msgs[0]
     if len(msgs) > 1:
         # Concatenate bodies
-        combined_body = "<br>".join([m.html for m in msgs])
+        combined_body = "<br>".join([m.html or "" for m in msgs])
         msg.html = combined_body + "<br>"
 
         # Subject may be paramterized,
         # so find the overlapping parts of the strings
         # and replace the non-overlapping parts with "*"
-        subjects = [m.subject for m in msgs]
+        subjects = [m.subject or "" for m in msgs]
 
         if comma_or_common == "comma":
             msg.subject = ", ".join(subjects)

@@ -1,7 +1,8 @@
-from typing import TYPE_CHECKING, Iterator, Tuple
+from typing import TYPE_CHECKING, Iterator, Optional, Tuple
 
 from nbformat import NotebookNode
 from pydantic import Field, field_validator, model_validator
+from typing_extensions import override
 
 from nbprint.config.base import BaseModel, Role, _append_or_extend
 from nbprint.config.common import PageOrientation, PageSize, Style
@@ -167,8 +168,17 @@ class PageRegion(BaseModel):
             v.append("nbprint:page")
         return v
 
-    def generate(self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str, **_) -> NotebookNode:
-        cell = super().generate(metadata=metadata, config=config, parent=parent, attr=attr)
+    @override
+    def generate(
+        self,
+        metadata: dict | None,
+        config: Optional["Configuration"],
+        parent: Optional["BaseModel"] = None,
+        attr: str = "",
+        counter: int | None = None,
+        **_,
+    ) -> NotebookNode:
+        cell = self._base_generate(metadata=metadata, config=config, parent=parent, attr=attr)
         cell.metadata.tags.append(f"nbprint:page:{attr}")
         return cell
 
@@ -331,8 +341,17 @@ class Page(BaseModel):
     def convert_right_bottom_from_obj(cls, v) -> PageRegion:
         return Page.convert_region_from_obj(v, "right-bottom")
 
-    def generate(self, metadata: dict, config: "Configuration", parent: "BaseModel", attr: str = "page", **_) -> NotebookNode | list[NotebookNode] | None:
-        cells = []
+    @override
+    def generate(
+        self,
+        metadata: dict | None,
+        config: Optional["Configuration"],
+        parent: Optional["BaseModel"] = None,
+        attr: str = "page",
+        counter: int | None = None,
+        **_,
+    ) -> NotebookNode | list[NotebookNode] | None:
+        cells: list[NotebookNode] = []
 
         # parent and config should be equal for the global page layout
         assert parent == config
@@ -359,12 +378,13 @@ class PageGlobal(Page):
 
     css: str = ""
 
-    def render(self, config: "Configuration" = None, **_) -> None:
+    def render(self, config: Optional["Configuration"] = None, **_) -> None:
         if "@page { size:" not in self.css:
             if isinstance(self.size, tuple):
                 self.css += f"\n@page {{ size: {self.size[0]}in {self.size[1]}in; }}"
-            else:
-                self.css += f"\n@page {{ size: {self.size.value} {self.orientation.value}; }}"
+            elif self.size is not None:
+                orientation = f" {self.orientation.value}" if self.orientation else ""
+                self.css += f"\n@page {{ size: {self.size.value}{orientation}; }}"
 
         # Generate per-section named page CSS
         for section_name, section_page in (self.pages or {}).items():
@@ -388,7 +408,7 @@ class PageGlobal(Page):
 
         self._render_page_box_rules(config)
 
-    def _render_page_box_rules(self, config: "Configuration" = None) -> None:
+    def _render_page_box_rules(self, config: Optional["Configuration"] = None) -> None:
         """Emit a named ``@page`` rule for every page-box carrying per-page overrides.
 
         A page-box cannot emit this itself: cell CSS is wrapped in ``@scope`` by the template, and an
@@ -407,7 +427,11 @@ class PageGlobal(Page):
                 continue
             size = box.page_size or self.size
             orientation = box.page_orientation or self.orientation
-            rules = [f"size: {size[0]}in {size[1]}in;" if isinstance(size, tuple) else f"size: {size.value} {orientation.value};"]
+            rules = []
+            if isinstance(size, tuple):
+                rules.append(f"size: {size[0]}in {size[1]}in;")
+            elif size is not None:
+                rules.append(f"size: {size.value}{f' {orientation.value}' if orientation else ''};")
             if box.page_margins:
                 rules.append(f"margin: {box.page_margins};")
             self.css += f"\n@page {name} {{ {' '.join(rules)} }}"
@@ -415,7 +439,7 @@ class PageGlobal(Page):
 
     @field_validator("pages", mode="before")
     @classmethod
-    def convert_pages_from_obj(cls, v) -> "Page":
+    def convert_pages_from_obj(cls, v) -> object:
         if v is None:
             return []
         if isinstance(v, dict):

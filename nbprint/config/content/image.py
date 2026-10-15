@@ -8,7 +8,7 @@ from .base import Content
 
 class ContentImage(Content):
     path: FilePath | None = None
-    content: bytes | None = b""
+    content: bytes | None = b""  # ty: ignore[invalid-attribute-override]
     tags: list[str] = Field(default_factory=list)
 
     @field_validator("path", mode="before")
@@ -27,7 +27,7 @@ class ContentImage(Content):
 
     @field_validator("content", mode="before")
     @classmethod
-    def convert_content_from_obj(cls, v) -> bytes:
+    def convert_content_from_obj(cls, v) -> object:
         if v is None:
             return b""
         if v and isinstance(v, str):
@@ -44,4 +44,4 @@ class ContentImage(Content):
         return HTML(f"""<img src="data:image/png;base64,{self.as_base64()}">""")
 
     def __repr__(self) -> str:
-        return f"Image(path='{self.path}', content=[{len(self.content)} bytes])"
+        return f"Image(path='{self.path}', content=[{len(self.content or b'')} bytes])"

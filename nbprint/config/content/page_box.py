@@ -28,7 +28,7 @@ Key guarantees (enforced by CSS + later JS preprocessing passes):
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Literal, cast
 
 from IPython.display import HTML
 from pydantic import Field, model_validator
@@ -186,7 +186,7 @@ class ContentPageBox(Content):
             self.tags.append("nbprint:content:page-box")
         if self.attrs is None:
             object.__setattr__(self, "attrs", {})
-        attrs = self.attrs  # type: ignore[assignment]
+        attrs = cast("dict[str, str]", self.attrs)
         attrs.setdefault("data-nbprint-page-box", self._id)
         attrs["data-nbprint-fit"] = str(self.fit)
         attrs["data-nbprint-layout"] = self.layout

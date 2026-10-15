@@ -8,6 +8,8 @@ from nbprint import (
     FontStyle,
     FontWeight,
     Padding,
+    PseudoClass,
+    PseudoElement,
     Scope,
     Spacing,
     Style,
@@ -16,6 +18,10 @@ from nbprint import (
 
 
 class TestStyles:
+    def test_scope_pseudo_selectors(self):
+        assert str(Scope(element="p", pseudoelement=PseudoElement.before)) == "p::before"
+        assert str(Scope(classname="note", pseudoclass=PseudoClass.hover, pseudoelement=PseudoElement.after)) == ".note:hover::after"
+
     def test_basic_style_scope(self):
         s = Style(
             scope=Scope(

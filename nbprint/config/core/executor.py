@@ -54,7 +54,7 @@ class Executor(CallableModel):
         return values
 
     @Flow.deps
-    def __deps__(self, context: ExecutorParameters) -> list[tuple[Configuration, PapermillParameters]]:
+    def __deps__(self, context: ExecutorParameters) -> list[tuple[Configuration, list[Parameters]]]:
         # TODO: Make sure outputs will not clobber
         # TODO: vars is ugly hack, need to fix in papermill parameters
         self._nbprints = [self.nbprint.model_copy(deep=True, update={"_multi": True}) for _ in context.parameters]

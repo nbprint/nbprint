@@ -49,6 +49,7 @@ class NBPrintMagics(Magics):
         kwargs = _parse_magic_line(line)
         NBPrintCell(**kwargs)
         # Execute the rest of the cell
+        assert self.shell is not None
         self.shell.run_cell(cell)
 
 

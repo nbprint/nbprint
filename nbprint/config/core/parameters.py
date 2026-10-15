@@ -1,12 +1,16 @@
 import ast
 from json import dumps
-from typing import Any
+from typing import TYPE_CHECKING, Any, Optional
 
 from ccflow import ContextBase
 from nbformat import NotebookNode
 from pydantic import Field, field_validator, model_serializer, model_validator
+from typing_extensions import override
 
 from nbprint.config.base import BaseModel, Role
+
+if TYPE_CHECKING:
+    from nbprint.config.core.config import Configuration
 
 __all__ = ("PapermillParameters", "Parameters")
 
@@ -25,7 +29,16 @@ class Parameters(ContextBase, BaseModel):
             v.append("parameters")
         return v
 
-    def generate(self, metadata: dict, **_) -> NotebookNode:
+    @override
+    def generate(
+        self,
+        metadata: dict | None,
+        config: Optional["Configuration"],
+        parent: Optional["BaseModel"] = None,
+        attr: str = "",
+        counter: int | None = None,
+        **_,
+    ) -> NotebookNode:
         cell = self._base_generate_meta(metadata=metadata)
         # if nb_vars:
         #     # add parameter variable
@@ -60,7 +73,16 @@ class PapermillParameters(Parameters):
 
     vars: dict[str, Any] = Field(default_factory=dict)
 
-    def generate(self, metadata: dict, **_) -> NotebookNode:
+    @override
+    def generate(
+        self,
+        metadata: dict | None,
+        config: Optional["Configuration"],
+        parent: Optional["BaseModel"] = None,
+        attr: str = "",
+        counter: int | None = None,
+        **_,
+    ) -> NotebookNode:
         cell = self._base_generate_meta(metadata=metadata)
         mod = ast.Module(body=[], type_ignores=[])
 

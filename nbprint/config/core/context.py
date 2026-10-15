@@ -1,7 +1,8 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from nbformat import NotebookNode
 from pydantic import ConfigDict, Field, PrivateAttr, field_validator
+from typing_extensions import override
 
 from nbprint.config.base import BaseModel, Role
 
@@ -36,8 +37,17 @@ class Context(BaseModel):
             v.append("nbprint:context")
         return v
 
-    def generate(self, metadata: dict, config: "Configuration", parent: BaseModel, attr: str = "", **kwargs) -> NotebookNode:
+    @override
+    def generate(
+        self,
+        metadata: dict | None,
+        config: Optional["Configuration"],
+        parent: Optional["BaseModel"] = None,
+        attr: str = "",
+        counter: int | None = None,
+        **kwargs,
+    ) -> NotebookNode:
         self._context_generated = True
         # TODO: may need to attach parameters manually at some point
         # in the future once papermill integration is complete
-        return super().generate(metadata=metadata, config=config, parent=parent, attr=attr, **kwargs)
+        return self._base_generate(metadata=metadata, config=config, parent=parent, attr=attr, counter=counter)

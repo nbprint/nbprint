@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Optional
 
-from IPython.display import HTML
+from IPython.display import HTML, DisplayObject
 from nbformat import NotebookNode
 from pydantic import Field, SerializeAsAny, field_validator
+from typing_extensions import override
 
 from nbprint.config.base import BaseModel, Role, _append_or_extend
 from nbprint.config.common import Style
@@ -69,6 +70,7 @@ class Content(BaseModel):
             # Add to nbprint meta
             cell.metadata.nbprint.output = self.output
 
+    @override
     def generate(
         self,
         metadata: dict | None = None,
@@ -76,9 +78,10 @@ class Content(BaseModel):
         parent: Optional["BaseModel"] = None,
         attr: str = "",
         counter: int | None = None,
+        **_,
     ) -> NotebookNode | list[NotebookNode] | None:
         # make a cell for yourself
-        self_cell = super().generate(
+        self_cell = self._base_generate(
             metadata=metadata,
             config=config,
             parent=parent,
@@ -86,7 +89,7 @@ class Content(BaseModel):
             counter=counter,
         )
         self._postprocess_cell(self_cell)
-        cells = [self_cell]
+        cells: list[NotebookNode] = [self_cell]
 
         if isinstance(self.content, list):
             for i, cell in enumerate(self.content):
@@ -107,7 +110,7 @@ class Content(BaseModel):
 
     @field_validator("content", mode="before")
     @classmethod
-    def convert_content_from_obj(cls, v) -> "Content":
+    def convert_content_from_obj(cls, v) -> object:
         if v is None:
             return []
         if isinstance(v, list):
@@ -118,18 +121,21 @@ class Content(BaseModel):
                     v[i] = BaseModel._to_type(element)
         return v
 
-    def __call__(self, **_) -> HTML:
+    def __call__(self, **_) -> DisplayObject | None:
         return HTML("")
 
 
 class ContentMarkdown(Content):
     content: str | None = ""
 
+    @override
     def generate(
         self,
         metadata: dict | None = None,
         config: Optional["Configuration"] = None,
         parent: Optional["BaseModel"] = None,
+        attr: str = "",
+        counter: int | None = None,
         **_,
     ) -> NotebookNode | list[NotebookNode] | None:
         cell = super()._base_generate_md(metadata=metadata, config=config, parent=parent)

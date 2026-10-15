@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pydantic import model_validator
 
 from nbprint.config.base import BaseModel
@@ -22,8 +24,8 @@ class Scope(BaseModel):
 
     selector: str | None = ""
 
-    pseudoclass: PseudoClass | None = ""
-    pseudoelement: PseudoElement | None = ""
+    pseudoclass: PseudoClass | Literal[""] | None = ""
+    pseudoelement: PseudoElement | Literal[""] | None = ""
 
     @model_validator(mode="after")
     def check_any_set(self) -> "Scope":
@@ -44,7 +46,7 @@ class Scope(BaseModel):
         if self.pseudoclass:
             ret = f"{ret}:{self.pseudoclass}"
         if self.pseudoelement:
-            ret = f"{ret}::{self.pseudoclass}"
+            ret = f"{ret}::{self.pseudoelement}"
         return ret
 
 

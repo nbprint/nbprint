@@ -1,10 +1,10 @@
 from logging import getLogger
 from pathlib import Path
-from typing import Any, List
+from typing import Any, List, cast
 
 from ccflow import LazyRegistry
 from lerna import compose, initialize_config_dir
-from omegaconf import DictConfig, OmegaConf, open_dict
+from omegaconf import OmegaConf, open_dict
 from typing_extensions import Self
 
 __all__ = ("load_config",)
@@ -20,7 +20,7 @@ class _SharedLazyRegistry(LazyRegistry):
 
 
 def load_config(
-    path: str,
+    path: str | Path,
     overrides: List[str] | None = None,
 ) -> LazyRegistry:
     # convert to Path
@@ -78,16 +78,16 @@ def load_config(
             with open_dict(cfg):
                 cfg.nbprint.notebook = path
 
-        if isinstance(cfg, DictConfig):
-            cfg = OmegaConf.to_container(cfg, resolve=True)
+        container = cast("dict[str, Any]", OmegaConf.to_container(cfg, resolve=True))
 
         registry = _SharedLazyRegistry()
-        registry.load_config(cfg=cfg, overwrite=True)
+        # ccflow annotates cfg as DictConfig but loads plain containers too
+        registry.load_config(cfg=container, overwrite=True)  # ty: ignore[invalid-argument-type]
 
-        if "callable" in cfg:
-            callable_path = cfg["callable"]
-        elif "callable" in cfg.get("nbprint", {}):
-            callable_path = cfg["nbprint"]["callable"]
+        if "callable" in container:
+            callable_path = container["callable"]
+        elif "callable" in container.get("nbprint", {}):
+            callable_path = container["nbprint"]["callable"]
         else:
             callable_path = "nbprint"
         registry.add("callable", registry[callable_path.removeprefix("/")], overwrite=True)

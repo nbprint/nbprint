@@ -181,7 +181,9 @@ class NBConvertOutputs(Outputs):
         super()._compute_outputs(config=config)
         # Update executed path if needed
         if self.execute:
-            self._nb_executed_path = self.notebook.parent / f"{self.notebook.stem}.executed.ipynb"
+            notebook = self.notebook
+            assert notebook is not None
+            self._nb_executed_path = notebook.parent / f"{notebook.stem}.executed.ipynb"
         # Update output path
         if self.target == "webpdf":
             target = "pdf"
@@ -283,7 +285,9 @@ class NBConvertOutputs(Outputs):
 
         from nbformat import reads
 
-        notebook_content = self.executed_notebook.read_text()
+        executed_notebook = self.executed_notebook
+        assert executed_notebook is not None
+        notebook_content = executed_notebook.read_text()
         nb = reads(notebook_content, as_version=4)
 
         for cell in nb.cells:
@@ -405,6 +409,7 @@ class NBConvertOutputs(Outputs):
         """
         if self.validate_figures == "off" or self.target != "webpdf":
             return
+        assert self.output is not None
         pdf = Path(self.output)
         if not pdf.exists():
             return
@@ -424,12 +429,12 @@ class NBConvertOutputs(Outputs):
             raise RenderCompletenessError(msg)
         warnings.warn(msg, RenderCompletenessWarning, stacklevel=2)
 
-    def run(self, config: "Configuration", gen: NotebookNode) -> Path:
+    def run(self, config: "Configuration", gen: NotebookNode) -> Path | Literal[OutputsProcessing.STOP]:
         # Run parent to create notebook
         notebook = super().run(config=config, gen=gen)
 
         # If notebook is None, we stop
-        if notebook in (None, OutputsProcessing.STOP):
+        if notebook is None or notebook is OutputsProcessing.STOP:
             return OutputsProcessing.STOP
 
         # TODO: fix in nbconvert
@@ -478,6 +483,7 @@ class NBConvertOutputs(Outputs):
 
         if self.nbconvert_hook and self.nbconvert_hook.object(config) in (OutputsProcessing.STOP, None):
             return OutputsProcessing.STOP
+        assert self.output is not None
         return self.output
 
 
