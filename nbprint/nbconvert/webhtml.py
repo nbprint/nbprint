@@ -15,11 +15,20 @@ from importlib import util as importlib_util
 from nbconvert.exporters.html import HTMLExporter
 from traitlets import Bool, List, Unicode, default
 
+from .webpdf import PaginationWaitMixin
+
 PLAYWRIGHT_INSTALLED = importlib_util.find_spec("playwright") is not None
 IS_WINDOWS = os.name == "nt"
 
+_SERIALIZE_CSSOM_ONLY_STYLES = """() => {
+  for (const style of document.querySelectorAll("style")) {
+    if (style.textContent.trim() || !style.sheet) continue;
+    style.textContent = [...style.sheet.cssRules].map((rule) => rule.cssText).join("\\n");
+  }
+}"""
 
-class WebHTMLExporter(HTMLExporter):
+
+class WebHTMLExporter(PaginationWaitMixin, HTMLExporter):
     """Writer designed to write to HTML files, as manipulated from a web browser.
 
     This inherits from :class:`HTMLExporter`. It creates the HTML using the
@@ -106,8 +115,15 @@ class WebHTMLExporter(HTMLExporter):
             await page.emulate_media(media="print")
             await page.wait_for_timeout(100)
             await page.goto(f"file://{temp_file.name}", wait_until="networkidle")
-            await page.wait_for_timeout(100)
+            await self._wait_until_paginated(page)
 
+            # The saved page keeps its scripts. Mark it so nbprint doesn't
+            # paginate the already-paginated DOM again when it's opened.
+            await page.evaluate("document.documentElement.dataset.nbprintSnapshot = 'true'")
+            # paged.js adds its counter rules (TOC numbers, page references)
+            # through the CSSOM into empty <style> elements, which page.content()
+            # doesn't serialize. Write them out as text so the snapshot keeps them.
+            await page.evaluate(_SERIALIZE_CSSOM_ONLY_STYLES)
             html_data = await page.content()
 
             await browser.close()

@@ -10,9 +10,9 @@ import tempfile
 from typing import Any
 
 from nbconvert.exporters.webpdf import WebPDFExporter
-from traitlets import Int
+from traitlets import HasTraits, Int
 
-__all__ = ("NBPrintWebPDFExporter",)
+__all__ = ("NBPrintWebPDFExporter", "PaginationWaitMixin")
 
 # Set to "pending" by the nbprint template before any async work starts, and
 # flipped to "done" by embedded.js once pagination and postprocessing settle.
@@ -20,7 +20,44 @@ _PAGED_MARKER = "html[data-nbprint-paged]"
 _PAGED_DONE = 'html[data-nbprint-paged="done"]'
 
 
-class NBPrintWebPDFExporter(WebPDFExporter):
+class PaginationWaitMixin(HasTraits):
+    """Wait for nbprint's pagination-complete signal before capturing a page."""
+
+    pagination_timeout = Int(
+        60_000,
+        help="""
+        Milliseconds to wait for nbprint's pagination-complete signal before
+        capturing anyway.
+
+        This is a ceiling, not a delay: the capture happens as soon as the
+        signal arrives. It elapses in full only when the document's JavaScript
+        never finishes, which is logged as a warning.
+        """,
+    ).tag(config=True)
+
+    async def _wait_until_paginated(self, page) -> None:
+        """Block until the document reports that its DOM has stopped moving."""
+        from playwright.async_api import Error as PlaywrightError
+
+        if await page.query_selector(_PAGED_MARKER) is None:
+            self.log.debug("No nbprint pagination marker found; falling back to page_render_timeout.")
+            await page.wait_for_timeout(self._unmarked_render_timeout())
+            return
+
+        try:
+            await page.wait_for_selector(_PAGED_DONE, state="attached", timeout=self.pagination_timeout)
+        except PlaywrightError:
+            self.log.warning(
+                "Timed out after %sms waiting for nbprint pagination to finish; the output may be truncated.",
+                self.pagination_timeout,
+            )
+
+    def _unmarked_render_timeout(self) -> int:
+        """Milliseconds to sleep for a document that carries no nbprint marker."""
+        return 100
+
+
+class NBPrintWebPDFExporter(PaginationWaitMixin, WebPDFExporter):
     """``WebPDFExporter`` that captures the PDF once paged.js reports it is done.
 
     Upstream navigates with ``wait_until="networkidle"`` and then sleeps
@@ -39,34 +76,8 @@ class NBPrintWebPDFExporter(WebPDFExporter):
 
     export_from_notebook = "PDF via nbprint"
 
-    pagination_timeout = Int(
-        60_000,
-        help="""
-        Milliseconds to wait for nbprint's pagination-complete signal before
-        capturing the PDF anyway.
-
-        This is a ceiling, not a delay: the capture happens as soon as the
-        signal arrives. It elapses in full only when the document's JavaScript
-        never finishes, which is logged as a warning.
-        """,
-    ).tag(config=True)
-
-    async def _wait_until_paginated(self, page) -> None:
-        """Block until the document reports that its DOM has stopped moving."""
-        from playwright.async_api import Error as PlaywrightError
-
-        if await page.query_selector(_PAGED_MARKER) is None:
-            self.log.debug("No nbprint pagination marker found; falling back to page_render_timeout.")
-            await page.wait_for_timeout(self.page_render_timeout)
-            return
-
-        try:
-            await page.wait_for_selector(_PAGED_DONE, state="attached", timeout=self.pagination_timeout)
-        except PlaywrightError:
-            self.log.warning(
-                "Timed out after %sms waiting for nbprint pagination to finish; the PDF may be truncated.",
-                self.pagination_timeout,
-            )
+    def _unmarked_render_timeout(self) -> int:
+        return self.page_render_timeout
 
     def run_playwright(self, html):
         """Run playwright.
