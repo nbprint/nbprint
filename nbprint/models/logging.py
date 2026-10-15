@@ -1,4 +1,5 @@
 import logging
+import logging.config
 
 from IPython.display import HTML
 from pydantic import Field
@@ -51,5 +52,5 @@ class LoggingConfig(Content):
     root: dict[str, str | list[str]] = Field(default={"handlers": ["console"], "level": "DEBUG"})
 
     def __call__(self, **_) -> HTML:
-        logging.dictConfig(self.model_dump(exclude=["type_"]))
+        logging.config.dictConfig(self.model_dump(exclude=["type_"]))
         return HTML("")
