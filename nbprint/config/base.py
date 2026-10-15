@@ -140,7 +140,7 @@ class BaseModel(FlowBaseModel):
 
     def generate(
         self,
-        metadata: dict,
+        metadata: dict | None,
         config: Optional["Configuration"],
         parent: Optional["BaseModel"] = None,
         attr: str = "",

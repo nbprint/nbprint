@@ -26,7 +26,7 @@ attribute so hydra/lerna CLI overrides compose naturally::
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Literal, cast
 
 from IPython.display import HTML
 from pydantic import Field, model_validator
@@ -156,7 +156,7 @@ class ContentPageBlock(Content):
 
         if self.attrs is None:
             object.__setattr__(self, "attrs", {})
-        attrs = self.attrs  # type: ignore[assignment]
+        attrs = cast("dict[str, str]", self.attrs)
 
         # Discoverable data attributes — used by JS measurement passes
         # (9.7 / 9.8) and visual regression tests, and stable for
