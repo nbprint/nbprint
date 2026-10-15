@@ -2,16 +2,16 @@ from ast import literal_eval
 from pathlib import Path
 from pprint import pprint
 from sys import version_info
-from typing import Type, Union
+from typing import Optional, Type, Union
 
-from ccflow import CallableModel, ContextType, Flow, ResultType
+from ccflow import CallableModel, Flow
 from lerna import compose, initialize_config_dir
 from lerna.utils import instantiate
 from nbformat import NotebookNode, read as nb_read
 from nbformat.v4 import new_notebook
 from pkn import getSimpleLogger
 from pydantic import Field, PrivateAttr, field_validator, model_validator
-from typing_extensions import Self
+from typing_extensions import Self, override
 
 from nbprint import __version__
 from nbprint.config.base import BaseModel, Role, _append_or_extend
@@ -214,12 +214,12 @@ class Configuration(CallableModel, BaseModel):
                 # Union new parameters with existing parameters
                 for k, v in value.model_dump(mode="json", exclude_unset=True, exclude={"type_"}).items() if isinstance(value, Parameters) else value.items():
                     setattr(self.parameters, k, v)
-            self._validate()
+            self._validate()  # ty: ignore[call-non-callable]
             return None
         return super().__setattr__(name, value)
 
     @staticmethod
-    def _init_content(values) -> ContentMarshall:
+    def _init_content(values) -> None:
         if "content" not in values:
             values["content"] = ContentMarshall()
         elif isinstance(values["content"], list):
@@ -231,7 +231,7 @@ class Configuration(CallableModel, BaseModel):
             raise RuntimeError(e)
 
     @staticmethod
-    def _cell_to_content(cell) -> Content:
+    def _cell_to_content(cell) -> Content | None:
         source = cell.source.strip()
         if not source:
             # skip empty cells
@@ -541,12 +541,21 @@ class Configuration(CallableModel, BaseModel):
 
         return values
 
-    def generate(self, **_) -> list[NotebookNode]:
+    @override
+    def generate(
+        self,
+        metadata: dict | None = None,
+        config: Optional["Configuration"] = None,
+        parent: BaseModel | None = None,
+        attr: str = "",
+        counter: int | None = None,
+        **_,
+    ) -> NotebookNode:
         nb = new_notebook()
-        nb.metadata.nbprint = {}
+        nb.metadata.nbprint = NotebookNode()
         nb.metadata.nbprint.version = __version__
         nb.metadata.nbprint.tags = []
-        nb.metadata.nbprint.nbprint = {}
+        nb.metadata.nbprint.nbprint = NotebookNode()
         nb.metadata.nbprint.language = f"python{version_info.major}.{version_info.minor}"
 
         base_meta = {
@@ -699,11 +708,11 @@ class Configuration(CallableModel, BaseModel):
 
     # ccflow integration
     @property
-    def context_type(self) -> Type[ContextType]:
+    def context_type(self) -> Type[Parameters]:
         return self.parameters.__class__
 
     @property
-    def result_type(self) -> Type[ResultType]:
+    def result_type(self) -> Type[Outputs]:
         return self.outputs.__class__
 
     @Flow.call

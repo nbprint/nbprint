@@ -2,11 +2,10 @@ import ast
 from collections.abc import Mapping
 from json import dumps, loads
 from pathlib import Path
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, TypeVar, cast
 from uuid import uuid4
 
 from ccflow import BaseModel as FlowBaseModel, PyObjectPath
-from IPython.display import DisplayObject
 from nbformat import NotebookNode
 from nbformat.v4 import new_code_cell, new_markdown_cell
 from pydantic import ConfigDict, Field, PrivateAttr, field_validator
@@ -31,6 +30,9 @@ class Role(StrEnum):
     CONTENT = "content"
     PAGE = "page"
     LAYOUT = "layout"
+
+
+_ModelT = TypeVar("_ModelT", bound="BaseModel")
 
 
 class BaseModel(FlowBaseModel):
@@ -104,18 +106,17 @@ class BaseModel(FlowBaseModel):
         nb_vars.add(self._nb_var_name)
 
     @staticmethod
-    def _to_type(value, model_type=None) -> "BaseModel":
+    def _to_type(value, model_type: type[_ModelT] | None = None) -> _ModelT:
         if value is None:
             value = {}
 
+        target: type = model_type or BaseModel
         if "_target_" in value:
             # derive type from instantiation
-            model_type = PyObjectPath(value["_target_"]).object
-        elif model_type is None:
-            model_type = BaseModel
+            target = PyObjectPath(value["_target_"]).object
 
         if isinstance(value, dict):
-            return model_type(**value)
+            return cast("_ModelT", target(**value))
 
         return value
 
@@ -124,7 +125,7 @@ class BaseModel(FlowBaseModel):
         data = loads(json)
         return cls(**data)
 
-    def __call__(self, **_) -> DisplayObject | None:
+    def __call__(self, **_) -> object:
         """Execute this model inside of a notebook
 
         Args:
@@ -189,7 +190,7 @@ class BaseModel(FlowBaseModel):
         )
         cell.metadata.nbprint.attrs = " ".join(f"{k}={dumps(v)}" for k, v in (self.attrs or {}).items())
 
-    def _base_generate_meta(self, metadata: dict | None = None) -> NotebookNode | None:
+    def _base_generate_meta(self, metadata: dict | None = None) -> NotebookNode:
         cell = new_code_cell(metadata=metadata)
         cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
 
@@ -198,7 +199,7 @@ class BaseModel(FlowBaseModel):
         cell.metadata.nbprint.data = self.model_dump_json(by_alias=True)
         return cell
 
-    def _base_generate_md_meta(self, metadata: dict | None = None) -> NotebookNode | None:
+    def _base_generate_md_meta(self, metadata: dict | None = None) -> NotebookNode:
         cell = new_markdown_cell(metadata=metadata)
         cell.metadata.tags = list(set(["nbprint"] + (self.tags or [])))
         self._base_set_nbprint_metadata(cell)
@@ -206,12 +207,12 @@ class BaseModel(FlowBaseModel):
 
     def _base_generate(
         self,
-        metadata: dict,
-        config: "Configuration",
+        metadata: dict | None,
+        config: Optional["Configuration"],
         parent: Optional["BaseModel"] = None,
         attr: str = "",
         counter: int | None = None,
-    ) -> NotebookNode | None:
+    ) -> NotebookNode:
         from nbprint.config import Configuration
 
         # trigger any pre-cell generation logic
@@ -292,7 +293,7 @@ class BaseModel(FlowBaseModel):
         cell.source = source
         return cell
 
-    def _base_generate_md(self, metadata: dict, config: "Configuration", parent: Optional["BaseModel"] = None) -> NotebookNode | None:
+    def _base_generate_md(self, metadata: dict | None, config: Optional["Configuration"], parent: Optional["BaseModel"] = None) -> NotebookNode:
         # trigger any pre-cell generation logic
         self.render(config=config)
 
@@ -308,7 +309,7 @@ class BaseModel(FlowBaseModel):
         return f"<{self.__class__.__name__}>"
 
 
-def _append_or_extend(cells: list, cell_or_cells: NotebookNode | list[NotebookNode]) -> None:
+def _append_or_extend(cells: list, cell_or_cells: NotebookNode | list[NotebookNode] | None) -> None:
     if isinstance(cell_or_cells, list):
         cells.extend(cell_or_cells)
     elif cell_or_cells:
