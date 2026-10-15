@@ -685,7 +685,7 @@ class Configuration(CallableModel, BaseModel):
             pprint(gen)
         if not dry_run:
             ret = self.outputs.run(self, gen)
-            if ret in (None, OutputsProcessing.STOP):
+            if ret is None or ret is OutputsProcessing.STOP:
                 # Either a handled problem or user requested stop
                 # Return None to indicate a problem
                 # TODO: revisit

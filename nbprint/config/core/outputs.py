@@ -1,7 +1,7 @@
 from datetime import date, datetime
 from enum import Enum
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal
 from uuid import uuid4
 
 from ccflow import PyObjectPath, ResultBase
@@ -55,15 +55,15 @@ class Outputs(ResultBase, BaseModel):
     _output_path: Path | None = PrivateAttr(default=None)
 
     @property
-    def notebook(self) -> Path:
+    def notebook(self) -> Path | None:
         return self._nb_path
 
     @property
-    def executed_notebook(self) -> Path:
+    def executed_notebook(self) -> Path | None:
         return self._nb_executed_path
 
     @property
-    def output(self) -> Path:
+    def output(self) -> Path | None:
         return self._output_path
 
     @field_validator("tags", mode="after")
@@ -114,26 +114,25 @@ class Outputs(ResultBase, BaseModel):
         return datetime.now().isoformat()
 
     def _get_uuid(self, **_) -> str:
-        return uuid4()
+        return str(uuid4())
 
     def _get_sha(self, config: "Configuration") -> str:
         import hashlib
 
         return hashlib.sha256(config.model_dump_json(by_alias=True).encode()).hexdigest()
 
-    def run(self, config: "Configuration", gen: NotebookNode) -> Path:
+    def run(self, config: "Configuration", gen: NotebookNode) -> Path | Literal[OutputsProcessing.STOP]:
+        notebook = self.notebook
+        assert notebook is not None, "output paths are computed before run"
         # Create file or folder path
-        if not self.notebook.parent.exists():
-            self.notebook.parent.mkdir(parents=True, exist_ok=True)
+        if not notebook.parent.exists():
+            notebook.parent.mkdir(parents=True, exist_ok=True)
 
-        self.notebook.write_text(writes(gen), encoding="utf-8")
+        notebook.write_text(writes(gen), encoding="utf-8")
 
         if self.hook and self.hook.object(config) in (OutputsProcessing.STOP, None):
             return OutputsProcessing.STOP
-        return self.notebook
-
-    def generate(self, metadata: dict, **kwargs) -> NotebookNode:
-        return super().generate(metadata=metadata, **kwargs)
+        return notebook
 
     def __call__(self, **_) -> HTML:
         if self.embedded:
