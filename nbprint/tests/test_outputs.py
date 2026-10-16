@@ -6,6 +6,7 @@ import pytest
 from pydantic import ValidationError
 
 from nbprint.cli import run
+from nbprint.config.outputs.email import _common_subject
 from nbprint.config.outputs.nbconvert import _EXPORTER_FOR_TARGET, NBConvertOutputs
 
 
@@ -154,3 +155,20 @@ class TestNbconvertConfigManagedTraitGuard:
             nbconvert_config={"WebPDFExporter.page_render_timeout": 5000},
         )
         assert out.nbconvert_config == {"WebPDFExporter.page_render_timeout": 5000}
+
+
+class TestCommonSubject:
+    def test_masks_the_differing_middle(self):
+        assert _common_subject(["Report a=1 daily", "Report a=2 daily"]) == "Report a=* daily"
+
+    def test_keeps_the_real_suffix(self):
+        assert _common_subject(["Report 2026-10-01 final", "Report 2026-10-02 final"]) == "Report 2026-10-0* final"
+
+    def test_compares_every_subject(self):
+        assert _common_subject(["Report a=1 daily", "Report a=1 daily", "Report a=3 daily"]) == "Report a=* daily"
+
+    def test_identical_subjects_are_unchanged(self):
+        assert _common_subject(["Daily report", "Daily report"]) == "Daily report"
+
+    def test_single_subject_is_unchanged(self):
+        assert _common_subject(["Daily report"]) == "Daily report"
