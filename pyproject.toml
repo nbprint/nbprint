@@ -224,6 +224,10 @@ invalid-return-type = "warn"
 not-subscriptable = "warn"
 unresolved-attribute = "warn"
 unsupported-operator = "warn"
+# Subclasses narrow inherited pydantic fields (e.g. `css: str` over
+# `str | Path | None`); each model validates its own declared type. Ignored
+# rather than warned because ty fails `make check-types` on warnings too.
+invalid-mutable-override = "ignore"
 
 [tool.ruff]
 line-length = 160
