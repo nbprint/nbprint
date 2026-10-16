@@ -715,6 +715,22 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 </div>
 </section>
 </section>
+<section id="footnotes">
+<h2>Footnotes<a class="headerlink" href="#footnotes" title="Link to this heading">¶</a></h2>
+<p>Wrap a note in <code class="docutils literal notranslate"><span class="pre">&lt;span</span> <span class="pre">class=&quot;nbprint-footnote&quot;&gt;</span></code> and paged.js moves it to the foot of the page where it’s cited, leaving a superscript number in the text. Notes are numbered through the document.</p>
+<p>In a markdown cell:</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>Revenue grew 12%&lt;span class="nbprint-footnote"&gt;Unaudited, as of Q3.&lt;/span&gt; year over year.
+</pre></div>
+</div>
+<p>From a code cell, <code class="docutils literal notranslate"><span class="pre">nbprint.footnote</span></code> returns the same HTML, with the note text escaped:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTML</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">footnote</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;p&gt;Revenue grew 12%</span><span class="si">{</span><span class="n">footnote</span><span class="p">(</span><span class="s1">'Unaudited, as of Q3.'</span><span class="p">)</span><span class="si">}</span><span class="s2"> year over year.&lt;/p&gt;"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Without paged.js (<code class="docutils literal notranslate"><span class="pre">pagedjs:</span> <span class="pre">false</span></code>), the note stays in the text as a small parenthetical.</p>
+</section>
 <section id="lerna-config-composition">
 <h2>Lerna Config Composition<a class="headerlink" href="#lerna-config-composition" title="Link to this heading">¶</a></h2>
 <p>nbprint uses <a class="reference external" href="https://github.com/nbprint/lerna">lerna</a> (a Rust-powered, Hydra-compatible config framework) for YAML composition. Everything Hydra supports works identically, and lerna adds a few features that are particularly useful for reports.</p>
@@ -952,6 +968,7 @@ nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="n
 <li><a class="reference internal" href="#pageboxoverlay-wrap-contiguous-cells-in-a-page-box"><code class="docutils literal notranslate"><span class="pre">PageBoxOverlay</span></code> — wrap contiguous cells in a page box</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#footnotes">Footnotes</a></li>
 <li><a class="reference internal" href="#lerna-config-composition">Lerna Config Composition</a><ul>
 <li><a class="reference internal" href="#composing-reports-from-parts">Composing reports from parts</a></li>
 <li><a class="reference internal" href="#cli-list-manipulation">CLI list manipulation</a></li>
