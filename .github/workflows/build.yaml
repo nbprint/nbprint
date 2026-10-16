@@ -69,6 +69,10 @@ jobs:
       - name: Lint
         run: make lint
   
+      - name: Type check
+        run: make check-types
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
+  
       - name: Test
         run: make coverage
         env:

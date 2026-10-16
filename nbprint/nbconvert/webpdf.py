@@ -10,7 +10,8 @@ import tempfile
 from typing import Any
 
 from nbconvert.exporters.webpdf import WebPDFExporter
-from traitlets import HasTraits, Int
+from traitlets import Int
+from traitlets.config import LoggingConfigurable
 
 __all__ = ("NBPrintWebPDFExporter", "PaginationWaitMixin")
 
@@ -20,7 +21,7 @@ _PAGED_MARKER = "html[data-nbprint-paged]"
 _PAGED_DONE = 'html[data-nbprint-paged="done"]'
 
 
-class PaginationWaitMixin(HasTraits):
+class PaginationWaitMixin(LoggingConfigurable):
     """Wait for nbprint's pagination-complete signal before capturing a page."""
 
     pagination_timeout = Int(
