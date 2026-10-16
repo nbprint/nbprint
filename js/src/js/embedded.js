@@ -34,6 +34,10 @@ async function waitForImages() {
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
+    // A page saved by the webhtml exporter is already rendered and paginated;
+    // running the pipeline again on it breaks pagination and the TOC.
+    if (document.documentElement.dataset.nbprintSnapshot === "true") return;
+
     // Ensure all <img> elements have valid natural dimensions before we
     // measure them or run pagedjs. Otherwise pagedjs sees zero-height
     // images and paginates around them incorrectly.
