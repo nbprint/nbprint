@@ -103,6 +103,35 @@ div#notebook {
   break-before: page;
 }
 
+/* paged.js moves footnotes to the foot of the page they're cited on */
+.nbprint-footnote {
+  float: footnote;
+}
+
+.pagedjs_footnote_area {
+  font-family: var(--jp-content-font-family);
+  font-size: var(--jp-content-font-size0);
+  color: var(--jp-content-font-color1);
+}
+
+.pagedjs_footnote_content:not(.pagedjs_footnote_empty) {
+  border-top: 0.5pt solid var(--color-mbox);
+  padding-top: 4pt;
+}
+
+/* Without paged.js, keep the note in the text as a parenthetical */
+body:not(.pagedjs) .nbprint-footnote {
+  font-size: 0.85em;
+}
+
+body:not(.pagedjs) .nbprint-footnote::before {
+  content: " (";
+}
+
+body:not(.pagedjs) .nbprint-footnote::after {
+  content: ")";
+}
+
 div.PSPContainer {
   min-height: 500px;
 }

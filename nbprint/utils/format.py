@@ -27,6 +27,15 @@ def hr() -> HTML:
     return HTML(str(dt.hr()))
 
 
+def footnote(text: str) -> str:
+    """HTML for a footnote: paged.js moves it to the foot of the page it's cited on.
+
+    Use it inline, e.g. ``HTML(f"<p>Revenue grew 12%{footnote('Unaudited.')}</p>")``.
+    In a markdown cell, write ``<span class="nbprint-footnote">...</span>`` directly.
+    """
+    return str(dt.span(text, cls="nbprint-footnote"))
+
+
 def newpage() -> HTML:
     """Make a new page. in html, this just does a horizontal rule"""
     p = dt.p(cls="pagebreak")
