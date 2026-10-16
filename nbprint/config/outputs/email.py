@@ -121,6 +121,32 @@ class EmailOutputs(NBConvertOutputs):
         return output_path
 
 
+def _common_subject(subjects: list[str]) -> str:
+    """Keep the prefix and suffix shared by every subject and replace the rest with ``*``."""
+    common_subject = subjects[0]
+    for subject in subjects[1:]:
+        # Find common prefix
+        prefix_len = 0
+        for a, b in zip(common_subject, subject, strict=False):
+            if a == b:
+                prefix_len += 1
+            else:
+                break
+        # Find common suffix, which may not overlap the prefix in either string
+        max_suffix_len = min(len(common_subject), len(subject)) - prefix_len
+        suffix_len = 0
+        for a, b in zip(reversed(common_subject), reversed(subject), strict=False):
+            if a == b and suffix_len < max_suffix_len:
+                suffix_len += 1
+            else:
+                break
+        # Build new common subject
+        middle_len = max(len(common_subject), len(subject)) - prefix_len - suffix_len
+        suffix = common_subject[len(common_subject) - suffix_len :]
+        common_subject = common_subject[:prefix_len] + ("*" * middle_len) + suffix
+    return common_subject
+
+
 def email_postprocess(configs: list[Configuration], comma_or_common: Literal["common", "comma"] = "common") -> None:
     """A postprocess hook to email all output files after processing completes.
     NOTE: it is assumed that all EmailOutputs instances are configured identically,
@@ -156,29 +182,7 @@ def email_postprocess(configs: list[Configuration], comma_or_common: Literal["co
         if comma_or_common == "comma":
             msg.subject = ", ".join(subjects)
         else:
-            common_subject = subjects[0]
-            for subject in subjects[1:]:
-                # Find common prefix
-                prefix_len = 0
-                for a, b in zip(common_subject, subject, strict=False):
-                    if a == b:
-                        prefix_len += 1
-                    else:
-                        break
-                # Find common suffix
-                suffix_len = 0
-                for a, b in zip(reversed(common_subject), reversed(subject), strict=False):
-                    if a == b:
-                        suffix_len += 1
-                    else:
-                        break
-                # Build new common subject
-                middle_len = max(len(common_subject), len(subject)) - prefix_len - suffix_len
-                common_subject = common_subject[:prefix_len] + ("*" * middle_len)
-                if suffix_len > 0:
-                    common_subject += common_subject[-suffix_len:]
-                break
-            msg.subject = common_subject
+            msg.subject = _common_subject(subjects)
 
         # Attach all attachements
         for m in msgs[1:]:
