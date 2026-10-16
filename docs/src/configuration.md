@@ -435,6 +435,27 @@ As with every overlay, these can live in notebook metadata instead of YAML:
 }
 ```
 
+## Footnotes
+
+Wrap a note in `<span class="nbprint-footnote">` and paged.js moves it to the foot of the page where it's cited, leaving a superscript number in the text. Notes are numbered through the document.
+
+In a markdown cell:
+
+```markdown
+Revenue grew 12%<span class="nbprint-footnote">Unaudited, as of Q3.</span> year over year.
+```
+
+From a code cell, `nbprint.footnote` returns the same HTML, with the note text escaped:
+
+```python
+from IPython.display import HTML
+from nbprint import footnote
+
+HTML(f"<p>Revenue grew 12%{footnote('Unaudited, as of Q3.')} year over year.</p>")
+```
+
+Without paged.js (`pagedjs: false`), the note stays in the text as a small parenthetical.
+
 ## Lerna Config Composition
 
 nbprint uses [lerna](https://github.com/nbprint/lerna) (a Rust-powered, Hydra-compatible config framework) for YAML composition. Everything Hydra supports works identically, and lerna adds a few features that are particularly useful for reports.

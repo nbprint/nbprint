@@ -146,6 +146,26 @@ test.describe("Visual regression — page-block fixtures", () => {
   });
 });
 
+test.describe("Visual regression — footnote fixtures", () => {
+  test("footnotes at the foot of each page", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/footnotes/paged.html");
+    await waitForPagedJS(page);
+    const count = await screenshotPages(page, test.info(), "footnotes");
+    expect(count).toBeGreaterThan(1);
+  });
+
+  test("footnotes inline without paged.js", async ({ page }) => {
+    await page.goto("/js/tests/fixtures/footnotes/unpaged.html");
+    await page.waitForSelector('html[data-nbprint-paged="done"]', {
+      state: "attached",
+    });
+    await expect(page.locator("#first")).toHaveScreenshot(
+      "footnotes-unpaged.png",
+      { maxDiffPixelRatio: 0.01 },
+    );
+  });
+});
+
 test.describe("Visual regression — report outputs", () => {
   // Report outputs can be large (many pages), so allow more time
   test.describe.configure({ timeout: 120_000 });
