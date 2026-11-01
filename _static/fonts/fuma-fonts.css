@@ -1,0 +1,33 @@
+/*!
+ * Bundled webfonts for the fuma theme.
+ *
+ * Geist — SIL Open Font License 1.1, Copyright 2024 The Geist Project Authors.
+ * JetBrains Mono — SIL Open Font License 1.1, Copyright 2020 The JetBrains Mono
+ * Project Authors. Full licence texts sit beside the font files.
+ *
+ * Both are variable-weight latin subsets, served from the docs themselves so a
+ * build has no third-party requests at page load. Set the ``fonts`` theme option
+ * to ``system`` to skip this stylesheet entirely.
+ */
+
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src:
+    local("Geist"),
+    url("./geist-latin-variable.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src:
+    local("JetBrains Mono"),
+    url("./jetbrains-mono-latin-variable.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

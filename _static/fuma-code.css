@@ -1,0 +1,203 @@
+/*!
+ * Pygments token colours for the fuma theme.
+ *
+ * The theme sets ``pygments_style = none`` so Sphinx emits token classes with
+ * no colours of its own. Colours are applied here through CSS variables, which
+ * gives light/dark theming from a single set of rules — the same approach
+ * fumadocs gets from Shiki's dual-theme output.
+ */
+
+:root {
+  --fd-code-foreground: #24292e;
+  --fd-code-comment: #6a737d;
+  --fd-code-keyword: #d73a49;
+  --fd-code-string: #032f62;
+  --fd-code-constant: #005cc5;
+  --fd-code-function: #6f42c1;
+  --fd-code-variable: #e36209;
+  --fd-code-tag: #22863a;
+  --fd-code-punctuation: #57606a;
+  --fd-code-error: #b31d28;
+  --fd-code-added: #22863a;
+  --fd-code-added-bg: rgba(34, 134, 58, 0.12);
+  --fd-code-removed: #b31d28;
+  --fd-code-removed-bg: rgba(179, 29, 40, 0.12);
+  --fd-code-highlight-bg: rgba(255, 212, 0, 0.14);
+}
+
+html.dark {
+  --fd-code-foreground: #e6edf3;
+  --fd-code-comment: #8b949e;
+  --fd-code-keyword: #ff7b72;
+  --fd-code-string: #a5d6ff;
+  --fd-code-constant: #79c0ff;
+  --fd-code-function: #d2a8ff;
+  --fd-code-variable: #ffa657;
+  --fd-code-tag: #7ee787;
+  --fd-code-punctuation: #8b949e;
+  --fd-code-error: #ffa198;
+  --fd-code-added: #7ee787;
+  --fd-code-added-bg: rgba(126, 231, 135, 0.12);
+  --fd-code-removed: #ffa198;
+  --fd-code-removed-bg: rgba(255, 161, 152, 0.12);
+  --fd-code-highlight-bg: rgba(187, 128, 9, 0.25);
+}
+
+/* Kept in sync with ``html.dark`` so highlighting works without JavaScript. */
+@media (prefers-color-scheme: dark) {
+  html:not(.light) {
+    --fd-code-foreground: #e6edf3;
+    --fd-code-comment: #8b949e;
+    --fd-code-keyword: #ff7b72;
+    --fd-code-string: #a5d6ff;
+    --fd-code-constant: #79c0ff;
+    --fd-code-function: #d2a8ff;
+    --fd-code-variable: #ffa657;
+    --fd-code-tag: #7ee787;
+    --fd-code-punctuation: #8b949e;
+    --fd-code-error: #ffa198;
+    --fd-code-added: #7ee787;
+    --fd-code-added-bg: rgba(126, 231, 135, 0.12);
+    --fd-code-removed: #ffa198;
+    --fd-code-removed-bg: rgba(255, 161, 152, 0.12);
+    --fd-code-highlight-bg: rgba(187, 128, 9, 0.25);
+  }
+}
+
+.highlight {
+  background: transparent;
+  color: var(--fd-code-foreground);
+}
+
+.highlight pre {
+  color: inherit;
+}
+
+.highlight .hll {
+  display: block;
+  margin-inline: -1rem;
+  padding-inline: 1rem;
+  background: var(--fd-code-highlight-bg);
+}
+
+.highlight .c,
+.highlight .ch,
+.highlight .cm,
+.highlight .cp,
+.highlight .cpf,
+.highlight .c1,
+.highlight .cs {
+  color: var(--fd-code-comment);
+  font-style: italic;
+}
+
+.highlight .k,
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .ow {
+  color: var(--fd-code-keyword);
+}
+
+.highlight .kt,
+.highlight .nc,
+.highlight .ne,
+.highlight .nn,
+.highlight .nt {
+  color: var(--fd-code-tag);
+}
+
+.highlight .s,
+.highlight .sa,
+.highlight .sb,
+.highlight .sc,
+.highlight .dl,
+.highlight .sd,
+.highlight .s2,
+.highlight .sh,
+.highlight .si,
+.highlight .sx,
+.highlight .sr,
+.highlight .s1,
+.highlight .ss {
+  color: var(--fd-code-string);
+}
+
+.highlight .se {
+  color: var(--fd-code-constant);
+}
+
+.highlight .m,
+.highlight .mb,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .mo,
+.highlight .il,
+.highlight .no,
+.highlight .nb,
+.highlight .bp,
+.highlight .nl {
+  color: var(--fd-code-constant);
+}
+
+.highlight .nf,
+.highlight .fm,
+.highlight .nd {
+  color: var(--fd-code-function);
+}
+
+.highlight .na,
+.highlight .nv,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi,
+.highlight .vm,
+.highlight .nx {
+  color: var(--fd-code-variable);
+}
+
+.highlight .o,
+.highlight .p {
+  color: var(--fd-code-punctuation);
+}
+
+.highlight .err {
+  color: var(--fd-code-error);
+}
+
+.highlight .gd {
+  color: var(--fd-code-removed);
+  background: var(--fd-code-removed-bg);
+}
+
+.highlight .gi {
+  color: var(--fd-code-added);
+  background: var(--fd-code-added-bg);
+}
+
+.highlight .gh,
+.highlight .gu,
+.highlight .gp {
+  color: var(--fd-code-constant);
+  font-weight: 600;
+}
+
+.highlight .ge {
+  font-style: italic;
+}
+
+.highlight .gs {
+  font-weight: 600;
+}
+
+.highlight .gr,
+.highlight .gt {
+  color: var(--fd-code-error);
+}
+
+.highlight .go {
+  color: var(--fd-code-comment);
+}

@@ -1,1005 +1,29 @@
-<!doctype html>
-<html class="no-js" lang="en" data-content_root="../../">
-  <head><meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="API Reference" href="api.html"><link rel="prev" title="Architecture" href="architecture.html">
+<!DOCTYPE html>
 
-    <!-- Generated with Sphinx 8.2.3 and Furo 2025.12.19 -->
-        <title>Configuration - nbprint v0.13.1</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+<html lang="en" data-content_root="../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Configuration &#8212; nbprint v0.13.1</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/fuma.css?v=ca04d621" />
+    <link rel="stylesheet" type="text/css" href="../../_static/fuma-code.css?v=a950e949" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../_static/autodoc_pydantic.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/searchlite.css?v=4235115c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/custom.css?v=890fd012" />
-    
-    
-
-
-<style>
-  body {
-    --color-code-background: #eeffcc;
-  --color-code-foreground: black;
-  
-  }
-  @media not print {
-    body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-    }
-    @media (prefers-color-scheme: dark) {
-      body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  
-      }
-    }
-  }
-</style></head>
-  <body>
-    
-    <script>
-      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
-    </script>
-    
-
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <symbol id="svg-toc" viewBox="0 0 24 24">
-    <title>Contents</title>
-    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
-      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-menu" viewBox="0 0 24 24">
-    <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
-    <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </symbol>
-  <symbol id="svg-sun" viewBox="0 0 24 24">
-    <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon" viewBox="0 0 24 24">
-    <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-    </svg>
-  </symbol>
-  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
-    <title>Auto light/dark, in light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
-      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
-      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
-      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
-      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
-      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
-      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
-      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
-      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
-      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
-      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
-      <circle cx="14.5" cy="9.55" r="3.6"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
-    <title>Auto light/dark, in dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
-      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
-      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
-      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
-      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
-      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
-      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
-      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
-      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
-      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
-      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
-      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-pencil" viewBox="0 0 24 24">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
-      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
-      <path d="M13.5 6.5l4 4" />
-      <path d="M20 21l2 -2l-2 -2" />
-      <path d="M17 17l-2 2l2 2" />
-    </svg>
-  </symbol>
-  <symbol id="svg-eye" viewBox="0 0 24 24">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-      <path
-        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
-      <path d="M20 21l2 -2l-2 -2" />
-      <path d="M17 17l-2 2l2 2" />
-    </svg>
-  </symbol>
-</svg>
-
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
-<label class="overlay sidebar-overlay" for="__navigation"></label>
-<label class="overlay toc-overlay" for="__toc"></label>
-
-<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
-
-
-
-<div class="page">
-  <header class="mobile-header">
-    <div class="header-left">
-      <label class="nav-overlay-icon" for="__navigation">
-        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
-      </label>
-    </div>
-    <div class="header-center">
-      <a href="../../index.html"><div class="brand">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.13.1</code></div></a>
-    </div>
-    <div class="header-right">
-      <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
-          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
-          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
-          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-        </button>
-      </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
-      </label>
-    </div>
-  </header>
-  <aside class="sidebar-drawer">
-    <div class="sidebar-container">
-      
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
-  
-  <span class="sidebar-brand-text">nbprint <code style='font-size: var(--font-size--small--4);color: var(--sd-color-primary);'>v0.13.1</code></span>
-  
-</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
-</form>
-<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="background.html">Background</a></li>
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Configuration</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API Reference</a><input aria-label="Toggle navigation of API Reference" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.Configuration.html">nbprint.config.core.Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.Parameters.html">nbprint.config.core.Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.Context.html">nbprint.config.core.Context</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.Page.html">nbprint.config.core.Page</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.Outputs.html">nbprint.config.core.Outputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.Content.html">nbprint.config.content.Content</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.cli.run.html">nbprint.cli.run</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.cli.hydra.html">nbprint.cli.hydra</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.cli.hydra_explain.html">nbprint.cli.hydra_explain</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.hydra.load_config.html">nbprint.config.hydra.load_config</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.core.PapermillParameters.html">nbprint.config.core.PapermillParameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentCode.html">nbprint.config.content.ContentCode</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentMarkdown.html">nbprint.config.content.ContentMarkdown</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentImage.html">nbprint.config.content.ContentImage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentTableOfContents.html">nbprint.config.content.ContentTableOfContents</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentLayout.html">nbprint.config.content.ContentLayout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentInlineLayout.html">nbprint.config.content.ContentInlineLayout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentFlexColumnLayout.html">nbprint.config.content.ContentFlexColumnLayout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentFlexRowLayout.html">nbprint.config.content.ContentFlexRowLayout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.content.ContentPageBreak.html">nbprint.config.content.ContentPageBreak</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.NBConvertOutputs.html">nbprint.config.outputs.NBConvertOutputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.PDFOutputs.html">nbprint.config.outputs.PDFOutputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.NotebookOutputs.html">nbprint.config.outputs.NotebookOutputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.HTMLOutputs.html">nbprint.config.outputs.HTMLOutputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.WebHTMLOutputs.html">nbprint.config.outputs.WebHTMLOutputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.NBConvertShortCircuitOutputs.html">nbprint.config.outputs.NBConvertShortCircuitOutputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.EmailOutputs.html">nbprint.config.outputs.EmailOutputs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.config.outputs.SMTP.html">nbprint.config.outputs.SMTP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.models.LoggingConfig.html">nbprint.models.LoggingConfig</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.models.PandasDisplayConfiguration.html">nbprint.models.PandasDisplayConfiguration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.models.PlotlyRendererConfiguration.html">nbprint.models.PlotlyRendererConfiguration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_build/nbprint.models.SeabornDisplayConfiguration.html">nbprint.models.SeabornDisplayConfiguration</a></li>
-</ul>
-</li>
-</ul>
-
-</div>
-</div>
-
-      </div>
-      
-    </div>
-  </aside>
-  <div class="main">
-    <div class="content">
-      <div class="article-container">
-        <a href="#" class="back-to-top muted-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
-          </svg>
-          <span>Back to top</span>
-        </a>
-        <div class="content-icon-container">
-          <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/docs/src/configuration.md.txt" title="View this page">
-    <svg><use href="#svg-eye"></use></svg>
-    <span class="visually-hidden">View this page</span>
-  </a>
-</div>
-<div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
-              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
-              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
-              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-            </button>
-          </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
-          </label>
-        </div>
-        <article role="main" id="furo-main-content">
-          <section class="tex2jax_ignore mathjax_ignore" id="configuration">
-<h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code> supports three complementary ways to configure a report:</p>
-<ol class="arabic simple">
-<li><p><strong>Notebook-first</strong> — point nbprint at an existing <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> and drive sectioning, styling, and page layout from cell tags, cell metadata, and a small <code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> magic.</p></li>
-<li><p><strong>YAML-first</strong> — describe the full document in YAML (via <a class="reference external" href="https://docs.pydantic.dev/latest/"><code class="docutils literal notranslate"><span class="pre">pydantic</span></code></a> models, composed with <a class="reference external" href="https://github.com/nbprint/lerna"><code class="docutils literal notranslate"><span class="pre">lerna</span></code></a> and <a class="reference external" href="https://github.com/omry/omegaconf"><code class="docutils literal notranslate"><span class="pre">omegaconf</span></code></a>).</p></li>
-<li><p><strong>Hybrid</strong> — start from a notebook and add YAML overlays that target cells by index, tag, section, or cell type without rewriting the notebook.</p></li>
-</ol>
-<pre  class="mermaid">
-        graph TB
-    subgraph Inputs
-        nb(&quot;notebook&lt;br&gt;(.ipynb)&quot;)
-        yml(&quot;YAML config&lt;br&gt;(.yaml)&quot;)
-        ovl(&quot;overlays&lt;br&gt;(YAML or&lt;br&gt;notebook metadata)&quot;)
-    end
-
-    nbct[/nbprint&lt;br&gt;template/]
-    pjs[/paged.js&lt;br&gt;layout engine/]
-    nbc{nbconvert}
-    o&#64;{ shape: doc, label: &quot;HTML / PDF&quot; }
-
-    nb e1&#64;--&gt;nbc
-    yml e2&#64;--&gt;nbc
-    ovl -.-&gt;|merged at ingest| nbc
-    nbct --&gt; nbc
-    pjs --- nbct
-    nbc e3&#64;--&gt; o
-    e1&#64;{animate: true}
-    e2&#64;{animate: true}
-    e3&#64;{animate: true}
-    </pre><section id="notebook-first-workflow">
-<h2>Notebook-First Workflow<a class="headerlink" href="#notebook-first-workflow" title="Link to this heading">¶</a></h2>
-<p>Point nbprint at a <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> and it is treated as a full configuration input. All notebook metadata under <code class="docutils literal notranslate"><span class="pre">notebook.metadata.nbprint</span></code> becomes configuration; cell metadata and tags drive routing, styling, and visibility.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>path/to/report.ipynb
-</pre></div>
-</div>
-<p>Worked examples live in <a class="reference internal" href="#../../examples"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">examples/</span></code></span></a>:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="../../examples/notebook-sections.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-sections.ipynb</span></code></span></a> — section routing via tags and cell metadata, with page/output config in notebook metadata.</p></li>
-<li><p><a class="reference internal" href="../../examples/notebook-runtime.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-runtime.ipynb</span></code></span></a> — runtime API (<code class="docutils literal notranslate"><span class="pre">NBPrintCell</span></code>) and <code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> magic.</p></li>
-<li><p><a class="reference internal" href="../../examples/notebook-overlays.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-overlays.ipynb</span></code></span></a> — <code class="docutils literal notranslate"><span class="pre">overlays</span></code> and <code class="docutils literal notranslate"><span class="pre">layout_overlays</span></code> embedded in notebook metadata.</p></li>
-</ul>
-<section id="section-routing-from-cell-tags">
-<h3>Section routing from cell tags<a class="headerlink" href="#section-routing-from-cell-tags" title="Link to this heading">¶</a></h3>
-<p>By default every ingested cell lands in <code class="docutils literal notranslate"><span class="pre">middlematter</span></code>. To route cells to named sections, tag them:</p>
-<div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// cell.metadata
-{
-  "tags": ["nbprint:section:covermatter"]
-}
-</pre></div>
-</div>
-<p>The tag form is <code class="docutils literal notranslate"><span class="pre">nbprint:section:&lt;name&gt;</span></code> where <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> is any of the 13 section names (see <a class="reference internal" href="#structured-sections"><span class="xref myst">Structured Sections</span></a> below).</p>
-</section>
-<section id="section-routing-from-cell-metadata">
-<h3>Section routing from cell metadata<a class="headerlink" href="#section-routing-from-cell-metadata" title="Link to this heading">¶</a></h3>
-<p>Equivalent to a tag, but takes priority:</p>
-<div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// cell.metadata.nbprint
-{
-  "section": "frontmatter"
-}
-</pre></div>
-</div>
-</section>
-<section id="notebook-level-page-and-output-config">
-<h3>Notebook-level page and output config<a class="headerlink" href="#notebook-level-page-and-output-config" title="Link to this heading">¶</a></h3>
-<p>Embed a full page/output spec directly in the notebook — no YAML required:</p>
-<div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// notebook.metadata.nbprint
-{
-  "page": {
-    "_target_": "nbprint.PageGlobal",
-    "size": "Letter",
-    "orientation": "portrait"
-  },
-  "outputs": {
-    "_target_": "nbprint.NBConvertOutputs",
-    "target": "pdf"
-  }
-}
-</pre></div>
-</div>
-<p>YAML or CLI overrides always take precedence over notebook-embedded values, so you can use a notebook’s defaults and override on the command line.</p>
-</section>
-<section id="nbprintcell-runtime-api">
-<h3><code class="docutils literal notranslate"><span class="pre">NBPrintCell</span></code> runtime API<a class="headerlink" href="#nbprintcell-runtime-api" title="Link to this heading">¶</a></h3>
-<p>Inside a running notebook you can express cell-level intent through a Python object. Metadata is persisted via a hidden <code class="docutils literal notranslate"><span class="pre">display()</span></code> output with a custom MIME type; nbprint picks it up at ingestion time.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">NBPrintCell</span><span class="p">,</span> <span class="n">Style</span><span class="p">,</span> <span class="n">Font</span>
-
-<span class="n">NBPrintCell</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s2">"covermatter"</span><span class="p">,</span> <span class="n">css</span><span class="o">=</span><span class="s2">":scope { text-align: center; }"</span><span class="p">)</span>
-
-<span class="k">with</span> <span class="n">NBPrintCell</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="n">Style</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="n">Font</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">24</span><span class="p">))):</span>
-    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"# Cover Page"</span><span class="p">))</span>
-</pre></div>
-</div>
-</section>
-<section id="nbprint-cell-magic">
-<h3><code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> cell magic<a class="headerlink" href="#nbprint-cell-magic" title="Link to this heading">¶</a></h3>
-<p>A lighter alternative for quick one-liners:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">nbprint</span> <span class="n">section</span><span class="o">=</span><span class="n">frontmatter</span> <span class="n">css</span><span class="o">=</span><span class="s2">":scope { font-size: 18px; }"</span>
-<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"# Introduction"</span><span class="p">))</span>
-</pre></div>
-</div>
-<p>Explicit cell metadata beats runtime metadata beats magic — so a hand-edited value in <code class="docutils literal notranslate"><span class="pre">cell.metadata.nbprint</span></code> always wins.</p>
-</section>
-</section>
-<section id="yaml-first-workflow">
-<h2>YAML-First Workflow<a class="headerlink" href="#yaml-first-workflow" title="Link to this heading">¶</a></h2>
-<p>YAML is the most expressive way to describe a report: every field of every pydantic model is reachable, and the lerna config system makes it easy to share pieces across reports.</p>
-<p>A minimal example:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
-<span class="nt">debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="nt">outputs</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.NBConvertOutputs</span>
-<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./outputs</span>
-<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">html</span>
-
-<span class="nt">content</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">      </span><span class="no"># A Generic Report</span>
-<span class="w">      </span><span class="no">## A Subtitle</span>
-<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}"</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBreak</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentTableOfContents</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBreak</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentFlexRowLayout</span>
-<span class="w">    </span><span class="nt">sizes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">]</span>
-<span class="w">    </span><span class="nt">content</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentFlexColumnLayout</span>
-<span class="w">        </span><span class="nt">content</span><span class="p">:</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">            </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Left</span><span class="nv"> </span><span class="s">column"</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentFlexColumnLayout</span>
-<span class="w">        </span><span class="nt">content</span><span class="p">:</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">            </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Right</span><span class="nv"> </span><span class="s">column"</span>
-</pre></div>
-</div>
-<p>Run it:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.yaml
-</pre></div>
-</div>
-<p>Common content types include <code class="docutils literal notranslate"><span class="pre">ContentMarkdown</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentCode</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentPageBreak</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentTableOfContents</span></code>, and the layout containers <code class="docutils literal notranslate"><span class="pre">ContentFlexRowLayout</span></code> / <code class="docutils literal notranslate"><span class="pre">ContentFlexColumnLayout</span></code> / <code class="docutils literal notranslate"><span class="pre">ContentInlineLayout</span></code>.</p>
-</section>
-<section id="output-formats-nbconvert-configuration">
-<h2>Output formats &amp; nbconvert configuration<a class="headerlink" href="#output-formats-nbconvert-configuration" title="Link to this heading">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">outputs</span></code> block (<code class="docutils literal notranslate"><span class="pre">NBConvertOutputs</span></code>) controls how the generated notebook is
-executed and converted. Common fields:</p>
-<div class="table-wrapper colwidths-auto docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Field</p></th>
-<th class="head"><p>Default</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">target</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">html</span></code></p></td>
-<td><p>Output format: <code class="docutils literal notranslate"><span class="pre">ipynb</span></code>, <code class="docutils literal notranslate"><span class="pre">html</span></code>, <code class="docutils literal notranslate"><span class="pre">webhtml</span></code>, <code class="docutils literal notranslate"><span class="pre">webpdf</span></code></p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">execute</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
-<td><p>Execute the notebook before converting</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">timeout</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">600</span></code></p></td>
-<td><p>Per-cell execution timeout (seconds)</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">template</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code></p></td>
-<td><p>nbconvert template name</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<section id="passing-arbitrary-nbconvert-traitlets-options">
-<h3>Passing arbitrary nbconvert / traitlets options<a class="headerlink" href="#passing-arbitrary-nbconvert-traitlets-options" title="Link to this heading">¶</a></h3>
-<p>Anything configurable on an nbconvert exporter, preprocessor, or the app itself
-is reachable generically through <code class="docutils literal notranslate"><span class="pre">nbconvert_config</span></code> — no nbprint field is needed
-per option. Entries map 1:1 onto nbconvert’s <code class="docutils literal notranslate"><span class="pre">--Class.trait=value</span></code> CLI options
-and are applied to the conversion (exporter) pass.</p>
-<p>For example, <a class="reference external" href="https://github.com/jupyter/nbconvert/pull/2250"><code class="docutils literal notranslate"><span class="pre">WebPDFExporter.page_render_timeout</span></code></a>
-controls how long (in ms) the headless browser waits for JavaScript output to
-settle before capturing the PDF — useful for notebooks with heavy interactive
-charts:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">outputs</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.NBConvertOutputs</span>
-<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webpdf</span>
-<span class="w">  </span><span class="nt">nbconvert_config</span><span class="p">:</span>
-<span class="w">    </span><span class="c1"># flat dotted keys ...</span>
-<span class="w">    </span><span class="nt">WebPDFExporter.page_render_timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
-<span class="w">    </span><span class="c1"># ... or nested namespaces — both are equivalent</span>
-<span class="w">    </span><span class="nt">TemplateExporter</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">exclude_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</pre></div>
-</div>
-<p>The nested form maps directly onto a hydra/lerna CLI override:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.yaml<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>++outputs.target<span class="o">=</span>webpdf<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>++outputs.nbconvert_config.WebPDFExporter.page_render_timeout<span class="o">=</span><span class="m">5000</span>
-</pre></div>
-</div>
-<p>Scalars pass through as-is, booleans render as <code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>, and lists are
-JSON-encoded so container traits round-trip through the CLI.</p>
-<p>Traits that nbprint already manages — <code class="docutils literal notranslate"><span class="pre">NbConvertApp.export_format</span></code> (<code class="docutils literal notranslate"><span class="pre">to</span></code>),
-<code class="docutils literal notranslate"><span class="pre">TemplateExporter.template_name</span></code> (<code class="docutils literal notranslate"><span class="pre">template</span></code>), <code class="docutils literal notranslate"><span class="pre">NbConvertApp.output_base</span></code>
-(<code class="docutils literal notranslate"><span class="pre">output</span></code>), <code class="docutils literal notranslate"><span class="pre">ExecutePreprocessor.enabled</span></code> (<code class="docutils literal notranslate"><span class="pre">execute</span></code>), and
-<code class="docutils literal notranslate"><span class="pre">ExecutePreprocessor.timeout</span></code> — are rejected in <code class="docutils literal notranslate"><span class="pre">nbconvert_config</span></code> with an error
-pointing at the dedicated field (<code class="docutils literal notranslate"><span class="pre">target</span></code>, <code class="docutils literal notranslate"><span class="pre">template</span></code>, <code class="docutils literal notranslate"><span class="pre">naming</span></code>/<code class="docutils literal notranslate"><span class="pre">root</span></code>,
-<code class="docutils literal notranslate"><span class="pre">execute</span></code>, <code class="docutils literal notranslate"><span class="pre">timeout</span></code>). Set those via their own fields instead.</p>
-</section>
-</section>
-<section id="structured-sections">
-<h2>Structured Sections<a class="headerlink" href="#structured-sections" title="Link to this heading">¶</a></h2>
-<p>For book-style documents, <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> supports 13 ordered sections grouped into 6 logical groups:</p>
-<div class="table-wrapper colwidths-auto docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Group</p></th>
-<th class="head"><p>Sections</p></th>
-<th class="head"><p>Description</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Prematter</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">prematter</span></code></p></td>
-<td><p>Hidden content executed before report construction</p></td>
-</tr>
-<tr class="row-odd"><td><p>Covermatter</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">covermatter</span></code></p></td>
-<td><p>Cover page content</p></td>
-</tr>
-<tr class="row-even"><td><p>Frontmatter</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">copyright</span></code>, <code class="docutils literal notranslate"><span class="pre">dedication</span></code>, <code class="docutils literal notranslate"><span class="pre">table_of_contents</span></code>, <code class="docutils literal notranslate"><span class="pre">frontmatter</span></code></p></td>
-<td><p>Title page, legal, dedication, TOC, preface</p></td>
-</tr>
-<tr class="row-odd"><td><p>Middlematter</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">middlematter</span></code>, <code class="docutils literal notranslate"><span class="pre">middlematter_separators</span></code></p></td>
-<td><p>Main body and chapter dividers</p></td>
-</tr>
-<tr class="row-even"><td><p>Endmatter</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">appendix</span></code>, <code class="docutils literal notranslate"><span class="pre">index</span></code>, <code class="docutils literal notranslate"><span class="pre">endmatter</span></code></p></td>
-<td><p>Supplementary material, index, bibliography</p></td>
-</tr>
-<tr class="row-odd"><td><p>Rearmatter</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">rearmatter</span></code></p></td>
-<td><p>Back cover content</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Instead of a flat list, <code class="docutils literal notranslate"><span class="pre">content:</span></code> can be keyed by section name. Sections are rendered in document order; unused sections are simply empty.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">covermatter</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">My</span><span class="nv"> </span><span class="s">Report"</span>
-<span class="w">      </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}"</span>
-
-<span class="w">  </span><span class="nt">table_of_contents</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentTableOfContents</span>
-
-<span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Section</span><span class="nv"> </span><span class="s">One"</span>
-
-<span class="w">  </span><span class="nt">endmatter</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Bibliography"</span>
-</pre></div>
-</div>
-<p>Flat-list <code class="docutils literal notranslate"><span class="pre">content:</span></code> is still fully supported — it is treated as <code class="docutils literal notranslate"><span class="pre">middlematter</span></code>.</p>
-<section id="chapters-list-of-lists-middlematter">
-<h3>Chapters (list-of-lists middlematter)<a class="headerlink" href="#chapters-list-of-lists-middlematter" title="Link to this heading">¶</a></h3>
-<p>For multi-chapter documents, supply <code class="docutils literal notranslate"><span class="pre">middlematter</span></code> as a <strong>list of lists</strong>. Each
-sublist is a chapter: its <strong>first element</strong> is promoted to a chapter separator
-and the remaining elements form the chapter body. nbprint interleaves them in
-document order — <code class="docutils literal notranslate"><span class="pre">[chapter1-title,</span> <span class="pre">*chapter1-body,</span> <span class="pre">chapter2-title,</span> <span class="pre">*chapter2-body,</span> <span class="pre">…]</span></code>.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="c1"># Chapter One — first item becomes the title page</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Chapter</span><span class="nv"> </span><span class="s">One"</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"Body</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">first</span><span class="nv"> </span><span class="s">chapter…"</span>
-
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="c1"># Chapter Two</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Chapter</span><span class="nv"> </span><span class="s">Two"</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"Body</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">second</span><span class="nv"> </span><span class="s">chapter…"</span>
-</pre></div>
-</div>
-<p>By default each separator renders as a <strong>standalone chapter title page</strong> — a hard
-page break is inserted before and after it. To keep separators inline with their
-chapter body instead, disable the behavior:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">separator_title_pages</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
-<span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">...</span><span class="p p-Indicator">]</span>
-</pre></div>
-</div>
-<p>The promoted separators are also available directly under the
-<code class="docutils literal notranslate"><span class="pre">middlematter_separators</span></code> section if you prefer to populate them explicitly
-alongside a flat <code class="docutils literal notranslate"><span class="pre">middlematter</span></code> list.</p>
-<p>See <code class="docutils literal notranslate"><span class="pre">examples/chapters.yaml</span></code> for a full working example.</p>
-</section>
-<section id="per-section-page-layout">
-<h3>Per-section page layout<a class="headerlink" href="#per-section-page-layout" title="Link to this heading">¶</a></h3>
-<p>Each section can carry its own page layout via <code class="docutils literal notranslate"><span class="pre">PageGlobal.pages</span></code>. This generates CSS <code class="docutils literal notranslate"><span class="pre">&#64;page</span> <span class="pre">&lt;section&gt;</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> rules and maps cells to them via <code class="docutils literal notranslate"><span class="pre">data-nbprint-section</span></code> attributes:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">page</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.PageGlobal</span>
-<span class="w">  </span><span class="nt">bottom_right</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.PageRegion</span>
-<span class="w">    </span><span class="nt">content</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.PageNumber</span>
-
-<span class="w">  </span><span class="nt">pages</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">covermatter</span><span class="p">:</span>
-<span class="w">      </span><span class="c1"># no headers/footers on the cover</span>
-<span class="w">    </span><span class="nt">frontmatter</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">counter_reset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">counter_style</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lower-roman</span>
-<span class="w">    </span><span class="nt">middlematter</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">counter_reset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-</pre></div>
-</div>
-<p>See <code class="docutils literal notranslate"><span class="pre">examples/sections.yaml</span></code> for a full working example.</p>
-</section>
-<section id="section-level-style-defaults">
-<h3>Section-level style defaults<a class="headerlink" href="#section-level-style-defaults" title="Link to this heading">¶</a></h3>
-<p>Each section can carry a default <code class="docutils literal notranslate"><span class="pre">Style</span></code> that every cell in that section inherits. A cell’s own <code class="docutils literal notranslate"><span class="pre">Style</span></code> fields take precedence; unset fields fall back to the section default.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">section_styles</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">covermatter</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">font</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="nv">28</span><span class="p p-Indicator">}</span>
-<span class="w">      </span><span class="nt">horizontal_alignment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">center</span>
-<span class="w">    </span><span class="nt">frontmatter</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">font</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">family</span><span class="p">:</span><span class="w"> </span><span class="s">"Georgia,</span><span class="nv"> </span><span class="s">serif"</span><span class="p p-Indicator">}</span>
-
-<span class="w">  </span><span class="nt">covermatter</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
-<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">My</span><span class="nv"> </span><span class="s">Report"</span>
-</pre></div>
-</div>
-</section>
-</section>
-<section id="formatting-overlays">
-<h2>Formatting Overlays<a class="headerlink" href="#formatting-overlays" title="Link to this heading">¶</a></h2>
-<p>Overlays are rules that apply formatting to ingested notebook cells without modifying the notebook itself. There are three kinds.</p>
-<section id="overlay-merge-formatting-onto-matching-cells">
-<h3><code class="docutils literal notranslate"><span class="pre">Overlay</span></code> — merge formatting onto matching cells<a class="headerlink" href="#overlay-merge-formatting-onto-matching-cells" title="Link to this heading">¶</a></h3>
-<p>Matches cells by index, tag, cell type, or target section, and merges <code class="docutils literal notranslate"><span class="pre">css</span></code> / <code class="docutils literal notranslate"><span class="pre">classname</span></code> / <code class="docutils literal notranslate"><span class="pre">attrs</span></code> / <code class="docutils literal notranslate"><span class="pre">style</span></code> / <code class="docutils literal notranslate"><span class="pre">ignore</span></code> into the resulting <code class="docutils literal notranslate"><span class="pre">Content</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">overlays</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">index</span><span class="p">:</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">}</span>
-<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}"</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"chart"</span><span class="p p-Indicator">}</span>
-<span class="w">    </span><span class="nt">style</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">border</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">bottom</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">width</span><span class="p">:</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nt"> style</span><span class="p">:</span><span class="w"> </span><span class="nv">solid</span><span class="p p-Indicator">,</span><span class="nt"> color</span><span class="p">:</span><span class="w"> </span><span class="s">"#333"</span><span class="p p-Indicator">}}</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">cell_type</span><span class="p">:</span><span class="w"> </span><span class="nv">markdown</span><span class="p p-Indicator">}</span>
-<span class="w">    </span><span class="nt">classname</span><span class="p">:</span><span class="w"> </span><span class="s">"prose-body"</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="nv">covermatter</span><span class="p p-Indicator">}</span>
-<span class="w">    </span><span class="nt">style</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">font</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="nv">28</span><span class="p p-Indicator">}</span>
-</pre></div>
-</div>
-<p>Match fields combine with AND semantics — an empty <code class="docutils literal notranslate"><span class="pre">match</span></code> matches every cell. Multiple overlays apply in list order; later overlays stack on top of earlier ones:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">css</span></code> is appended</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">classname</span></code> is appended (accumulated as a list)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">attrs</span></code> is merged (overlay keys win on collision)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">style</span></code> is merged via <code class="docutils literal notranslate"><span class="pre">Style.merge</span></code> (overlay fields win)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ignore</span></code> is set when provided</p></li>
-</ul>
-<p>Overlays can also come from notebook metadata. YAML-declared overlays and notebook-declared overlays compose:</p>
-<div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// notebook.metadata.nbprint
-{
-  "overlays": [
-    {"match": {"tag": "emphasis"}, "css": ":scope { font-style: italic; }"}
-  ]
-}
-</pre></div>
-</div>
-</section>
-<section id="layoutoverlay-wrap-contiguous-cells-in-a-flex-container">
-<h3><code class="docutils literal notranslate"><span class="pre">LayoutOverlay</span></code> — wrap contiguous cells in a flex container<a class="headerlink" href="#layoutoverlay-wrap-contiguous-cells-in-a-flex-container" title="Link to this heading">¶</a></h3>
-<p>A layout overlay matches the same way but <em>wraps</em> contiguous runs of matched cells (same section, consecutive notebook indices) in a <code class="docutils literal notranslate"><span class="pre">ContentFlexRowLayout</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentFlexColumnLayout</span></code>, or <code class="docutils literal notranslate"><span class="pre">ContentInlineLayout</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">layout_overlays</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># Any two adjacent "sidebyside"-tagged cells become a row</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"sidebyside"</span><span class="p p-Indicator">}</span>
-<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">row</span>
-<span class="w">    </span><span class="nt">sizes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">]</span>
-
-<span class="w">  </span><span class="c1"># Cells at notebook indices 3..5 (inclusive) get stacked in a column</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">index_range</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">]</span>
-<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">column</span>
-
-<span class="w">  </span><span class="c1"># Wrapper itself can carry CSS / classname / style</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"gallery"</span><span class="p p-Indicator">}</span>
-<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inline</span>
-<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">gap:</span><span class="nv"> </span><span class="s">8px;</span><span class="nv"> </span><span class="s">}"</span>
-<span class="w">    </span><span class="nt">classname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gallery-wrap</span>
-</pre></div>
-</div>
-<p>Non-contiguous matches produce multiple wrappers. Both kinds of overlay can be combined: formatting overlays apply to the individual cells, and a layout overlay then wraps them.</p>
-</section>
-<section id="pageboxoverlay-wrap-contiguous-cells-in-a-page-box">
-<h3><code class="docutils literal notranslate"><span class="pre">PageBoxOverlay</span></code> — wrap contiguous cells in a page box<a class="headerlink" href="#pageboxoverlay-wrap-contiguous-cells-in-a-page-box" title="Link to this heading">¶</a></h3>
-<p>Same matching rules, but the wrapper is a <a class="reference internal" href="architecture.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code></span></a>: the matched run becomes one logical page, arranged by a named layout preset and followed by a page break. Select it with <code class="docutils literal notranslate"><span class="pre">wrapper:</span> <span class="pre">page-box</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">layout_overlays</span><span class="p">:</span>
-<span class="w">  </span><span class="c1"># Every run of "pair"-tagged cells becomes a two-column page</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"pair"</span><span class="p p-Indicator">}</span>
-<span class="w">    </span><span class="nt">wrapper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">page-box</span>
-<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">columns-2</span>
-<span class="w">    </span><span class="nt">gap</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1rem</span>
-
-<span class="w">  </span><span class="c1"># A four-up dashboard page, in landscape</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"dashboard"</span><span class="p p-Indicator">}</span>
-<span class="w">    </span><span class="nt">wrapper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">page-box</span>
-<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grid-2x2</span>
-<span class="w">    </span><span class="nt">page_orientation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">landscape</span>
-</pre></div>
-</div>
-<p>This is the multi-cell counterpart to <a class="reference internal" href="architecture.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">NBPrintPage</span></code></span></a>, which turns a <em>single</em> cell into a page box from inside the notebook. Reach for the overlay when a page is assembled from several cells.</p>
-<p>Available fields mirror <code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code>: <code class="docutils literal notranslate"><span class="pre">layout</span></code> (any <a class="reference internal" href="architecture.html"><span class="std std-doc">layout preset</span></a>), <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">min_pages</span></code>, <code class="docutils literal notranslate"><span class="pre">gap</span></code>, <code class="docutils literal notranslate"><span class="pre">padding</span></code>, <code class="docutils literal notranslate"><span class="pre">align</span></code>, <code class="docutils literal notranslate"><span class="pre">justify</span></code>, <code class="docutils literal notranslate"><span class="pre">grid_template</span></code>, <code class="docutils literal notranslate"><span class="pre">page_size</span></code>, <code class="docutils literal notranslate"><span class="pre">page_orientation</span></code>, <code class="docutils literal notranslate"><span class="pre">page_margins</span></code> — plus the wrapper formatting (<code class="docutils literal notranslate"><span class="pre">css</span></code>, <code class="docutils literal notranslate"><span class="pre">classname</span></code>, <code class="docutils literal notranslate"><span class="pre">attrs</span></code>, <code class="docutils literal notranslate"><span class="pre">style</span></code>) shared with <code class="docutils literal notranslate"><span class="pre">LayoutOverlay</span></code>. Overlay <code class="docutils literal notranslate"><span class="pre">css</span></code> is appended to the preset’s CSS rather than replacing it.</p>
-<p><code class="docutils literal notranslate"><span class="pre">sizes</span></code> is flex-only and is rejected on a page-box overlay; use a columns/grid preset, or <code class="docutils literal notranslate"><span class="pre">grid_template</span></code> for explicit tracks.</p>
-<p>As with every overlay, these can live in notebook metadata instead of YAML:</p>
-<div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// notebook.metadata.nbprint
-{
-  "layout_overlays": [
-    {"match": {"tag": "pair"}, "wrapper": "page-box", "layout": "columns-2", "gap": "1rem"}
-  ]
-}
-</pre></div>
-</div>
-</section>
-</section>
-<section id="footnotes">
-<h2>Footnotes<a class="headerlink" href="#footnotes" title="Link to this heading">¶</a></h2>
-<p>Wrap a note in <code class="docutils literal notranslate"><span class="pre">&lt;span</span> <span class="pre">class=&quot;nbprint-footnote&quot;&gt;</span></code> and paged.js moves it to the foot of the page where it’s cited, leaving a superscript number in the text. Notes are numbered through the document.</p>
-<p>In a markdown cell:</p>
-<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>Revenue grew 12%&lt;span class="nbprint-footnote"&gt;Unaudited, as of Q3.&lt;/span&gt; year over year.
-</pre></div>
-</div>
-<p>From a code cell, <code class="docutils literal notranslate"><span class="pre">nbprint.footnote</span></code> returns the same HTML, with the note text escaped:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTML</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">footnote</span>
-
-<span class="n">HTML</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;p&gt;Revenue grew 12%</span><span class="si">{</span><span class="n">footnote</span><span class="p">(</span><span class="s1">'Unaudited, as of Q3.'</span><span class="p">)</span><span class="si">}</span><span class="s2"> year over year.&lt;/p&gt;"</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Without paged.js (<code class="docutils literal notranslate"><span class="pre">pagedjs:</span> <span class="pre">false</span></code>), the note stays in the text as a small parenthetical.</p>
-</section>
-<section id="lerna-config-composition">
-<h2>Lerna Config Composition<a class="headerlink" href="#lerna-config-composition" title="Link to this heading">¶</a></h2>
-<p>nbprint uses <a class="reference external" href="https://github.com/nbprint/lerna">lerna</a> (a Rust-powered, Hydra-compatible config framework) for YAML composition. Everything Hydra supports works identically, and lerna adds a few features that are particularly useful for reports.</p>
-<section id="composing-reports-from-parts">
-<h3>Composing reports from parts<a class="headerlink" href="#composing-reports-from-parts" title="Link to this heading">¶</a></h3>
-<p>Pull in reusable pieces via a <code class="docutils literal notranslate"><span class="pre">defaults:</span></code> list:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># examples/hydra.yaml</span>
-<span class="nt">defaults</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inline</span><span class="w">       </span><span class="c1"># examples/hydra/config/inline.yaml</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">page</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">report</span><span class="w">         </span><span class="c1"># examples/hydra/page/report.yaml</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parameters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string1</span><span class="w">  </span><span class="c1"># examples/hydra/parameters/string1.yaml</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
-
-<span class="nt">outputs</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">naming</span><span class="p">:</span><span class="w"> </span><span class="s">"{{name}}"</span>
-<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./outputs</span>
-</pre></div>
-</div>
-<p>This lets a handful of reusable YAML files describe a large family of reports.</p>
-</section>
-<section id="cli-list-manipulation">
-<h3>CLI list manipulation<a class="headerlink" href="#cli-list-manipulation" title="Link to this heading">¶</a></h3>
-<p>lerna supports list operations directly from the CLI — useful for adding a single chart or section to an existing report without editing the YAML:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Append a content item</span>
-nbprint<span class="w"> </span>examples/basic.yaml<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span><span class="s1">'content=append({_target_: nbprint.ContentMarkdown, content: "# Added"})'</span>
-
-<span class="c1"># Prepend</span>
-nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'content=prepend({_target_: nbprint.ContentPageBreak})'</span>
-
-<span class="c1"># Insert at a specific index</span>
-nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'content=insert(0, {_target_: nbprint.ContentMarkdown, content: "Intro"})'</span>
-
-<span class="c1"># Remove by index / value / clear</span>
-nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'content=remove_at(-1)'</span>
-nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'tags=remove_value(draft)'</span>
-nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'overlays=list_clear()'</span>
-</pre></div>
-</div>
-<div class="table-wrapper colwidths-auto docutils container">
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Operation</p></th>
-<th class="head"><p>Effect</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">key=append(v,</span> <span class="pre">...)</span></code></p></td>
-<td><p>Add item(s) to end</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">key=prepend(v,</span> <span class="pre">...)</span></code></p></td>
-<td><p>Add item(s) to beginning</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">key=insert(idx,</span> <span class="pre">v)</span></code></p></td>
-<td><p>Insert at index</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">key=remove_at(idx)</span></code></p></td>
-<td><p>Remove by index (negative allowed)</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">key=remove_value(v)</span></code></p></td>
-<td><p>Remove first matching item</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">key=list_clear()</span></code></p></td>
-<td><p>Clear all items</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>Quote the whole override for shell safety. Works in bash, zsh, fish, PowerShell, and cmd.</p>
-</section>
-<section id="sweeps-and-multirun">
-<h3>Sweeps and multirun<a class="headerlink" href="#sweeps-and-multirun" title="Link to this heading">¶</a></h3>
-<p>Generate a family of reports from one command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>report.yaml<span class="w"> </span>-m<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>parameters.model<span class="o">=</span>choice<span class="o">(</span>ridge,lasso,elasticnet<span class="o">)</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>parameters.alpha<span class="o">=</span>interval<span class="o">(</span><span class="m">0</span>.01,0.5<span class="o">)</span>
-</pre></div>
-</div>
-<p>Combined with <code class="docutils literal notranslate"><span class="pre">outputs.naming:</span> <span class="pre">&quot;{{name}}-{{parameters.model}}-{{parameters.alpha}}&quot;</span></code> this produces one cleanly named HTML/PDF per combination.</p>
-</section>
-<section id="patch-modify-composed-configs-before-cli-overrides">
-<h3><code class="docutils literal notranslate"><span class="pre">_patch_</span></code> — modify composed configs before CLI overrides<a class="headerlink" href="#patch-modify-composed-configs-before-cli-overrides" title="Link to this heading">¶</a></h3>
-<p>Pull in a vendored config and surgically modify it:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">defaults</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vendor/large_defaults</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_patch_</span><span class="p">:</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~unwanted_key</span><span class="w">                 </span><span class="c1"># delete a key</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">content=remove_value(stale)</span><span class="w">   </span><span class="c1"># drop a content item</span>
-<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">+overlays=append({match</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="nv">draft</span><span class="p p-Indicator">}</span><span class="err">,</span><span class="w"> </span><span class="nt">ignore</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true})</span><span class="w">  </span><span class="c1"># add an overlay</span>
-</pre></div>
-</div>
-<p>Patches apply after composition but before CLI overrides, so CLI still wins. See the <a class="reference external" href="https://github.com/nbprint/lerna">lerna README</a> for the full <code class="docutils literal notranslate"><span class="pre">_patch_</span></code> reference (scoped <code class="docutils literal notranslate"><span class="pre">_patch_&#64;package</span></code>, <code class="docutils literal notranslate"><span class="pre">_here_</span></code> / <code class="docutils literal notranslate"><span class="pre">_global_</span></code> prefixes, nested accumulation, etc.).</p>
-</section>
-<section id="default-overrides-at-the-call-site">
-<h3>Default overrides at the call site<a class="headerlink" href="#default-overrides-at-the-call-site" title="Link to this heading">¶</a></h3>
-<p>nbprint’s CLI accepts default overrides without editing YAML:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>++callable<span class="o">=</span>/nbprintx<span class="w"> </span><span class="se">\ </span><span class="w">                            </span><span class="c1"># switch to the multirun model</span>
-<span class="w">  </span>+nbprint.outputs.naming<span class="o">=</span><span class="s1">'{{name}}-{{date}}-{{a}}'</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>+nbprintx.parameters<span class="o">=[{</span>a:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">2</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">3</span><span class="o">}]</span><span class="w"> </span><span class="se">\ </span><span class="w">     </span><span class="c1"># inline JSON or file path</span>
-<span class="w">  </span>++nbprint.outputs.execute<span class="o">=</span>False<span class="w">                    </span><span class="c1"># disable execution</span>
-</pre></div>
-</div>
-</section>
-</section>
-<section id="running-a-report">
-<h2>Running a Report<a class="headerlink" href="#running-a-report" title="Link to this heading">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.yaml<span class="w">        </span><span class="c1"># YAML-first</span>
-nbprint<span class="w"> </span>path/to/report.ipynb<span class="w">       </span><span class="c1"># notebook-first</span>
-nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="nv">notebook</span><span class="o">=</span>foo.ipynb<span class="w">   </span><span class="c1"># hybrid: YAML + notebook</span>
-</pre></div>
-</div>
-<p>The output lands in the directory set by <code class="docutils literal notranslate"><span class="pre">outputs.root</span></code> (default <code class="docutils literal notranslate"><span class="pre">./outputs</span></code>), named per <code class="docutils literal notranslate"><span class="pre">outputs.naming</span></code> (default <code class="docutils literal notranslate"><span class="pre">{{name}}-{{date}}</span></code>). Both the generated notebook and the chosen render target (<code class="docutils literal notranslate"><span class="pre">html</span></code>, <code class="docutils literal notranslate"><span class="pre">pdf</span></code>, …) are written; the notebook is useful for inspection and further experimentation.</p>
-<a class="reference internal image-reference" href="https://github.com/nbprint/nbprint/raw/main/docs/img/example-notebook.png?raw=true"><img alt="example notebook output" src="https://github.com/nbprint/nbprint/raw/main/docs/img/example-notebook.png?raw=true" style="width: 800px;" />
-</a>
-<a class="reference internal image-reference" href="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.png?raw=true"><img alt="example basic output" src="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.png?raw=true" style="width: 800px;" />
-</a>
-<p>A rendered PDF of the basic example lives <a class="reference external" href="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.pdf?raw=true">here</a>.</p>
-</section>
-<section id="ccflow-integration">
-<h2>ccflow Integration<a class="headerlink" href="#ccflow-integration" title="Link to this heading">¶</a></h2>
-<p>nbprint is compatible with <a class="reference external" href="https://github.com/point72/ccflow">ccflow</a> callable models. nbprint outputs like <code class="docutils literal notranslate"><span class="pre">NBConvertOutputs</span></code> inherit from <a class="reference external" href="https://github.com/Point72/ccflow/wiki/Workflows#result-type"><code class="docutils literal notranslate"><span class="pre">ccflow.ResultsBase</span></code></a>, and parameters inherit from <a class="reference external" href="https://github.com/Point72/ccflow/wiki/Workflows#context"><code class="docutils literal notranslate"><span class="pre">ccflow.ContextBase</span></code></a>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint-cc<span class="w"> </span>+nbprint.name<span class="o">=</span><span class="nb">test</span><span class="w"> </span>+context<span class="o">=[]</span>
-</pre></div>
-</div>
-<p>ccflow workflows are exposed as multi-run models:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>++callable<span class="o">=</span>/nbprintx<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>+nbprint.outputs.naming<span class="o">=</span><span class="s1">'{{name}}-{{date}}-{{a}}'</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>+nbprintx.parameters<span class="o">=[{</span>a:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">2</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">3</span><span class="o">}]</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>++nbprint.outputs.execute<span class="o">=</span>False
-</pre></div>
-</div>
-</section>
-<section id="precedence-summary">
-<h2>Precedence Summary<a class="headerlink" href="#precedence-summary" title="Link to this heading">¶</a></h2>
-<p>When the same piece of configuration can come from multiple places, resolution order is:</p>
-<ol class="arabic simple">
-<li><p><strong>CLI overrides</strong> — always highest priority</p></li>
-<li><p><strong>YAML explicit values</strong> (<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">_self_</span></code>)</p></li>
-<li><p><strong>YAML <code class="docutils literal notranslate"><span class="pre">_patch_</span></code> directives</strong> (applied during composition)</p></li>
-<li><p><strong>Notebook-level metadata</strong> (<code class="docutils literal notranslate"><span class="pre">notebook.metadata.nbprint.{page,outputs,overlays,layout_overlays}</span></code>)</p></li>
-<li><p><strong>Defaults</strong> from composed configs and pydantic model defaults</p></li>
-</ol>
-<p>For section assignment specifically:</p>
-<ol class="arabic simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">cell.metadata.nbprint.section</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">nbprint:section:&lt;name&gt;</span></code> cell tag</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">NBPrintCell(section=...)</span></code> MIME metadata</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">%%nbprint</span> <span class="pre">section=...</span></code> magic</p></li>
-<li><p>Default: <code class="docutils literal notranslate"><span class="pre">middlematter</span></code></p></li>
-</ol>
-</section>
-</section>
-
-        </article>
-      </div>
-      <footer>
-        
-        <div class="related-pages">
-          <a class="next-page" href="api.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">API Reference</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="architecture.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">Architecture</div>
-                
-              </div>
-            </a>
-        </div>
-        <div class="bottom-of-page">
-          <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; the nbprint authors
-            </div>
-            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-            
-            <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
-          </div>
-          <div class="right-details">
-            
-          </div>
-        </div>
-        
-      </footer>
-    </div>
-    <aside class="toc-drawer">
-      
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Configuration</a><ul>
-<li><a class="reference internal" href="#notebook-first-workflow">Notebook-First Workflow</a><ul>
-<li><a class="reference internal" href="#section-routing-from-cell-tags">Section routing from cell tags</a></li>
-<li><a class="reference internal" href="#section-routing-from-cell-metadata">Section routing from cell metadata</a></li>
-<li><a class="reference internal" href="#notebook-level-page-and-output-config">Notebook-level page and output config</a></li>
-<li><a class="reference internal" href="#nbprintcell-runtime-api"><code class="docutils literal notranslate"><span class="pre">NBPrintCell</span></code> runtime API</a></li>
-<li><a class="reference internal" href="#nbprint-cell-magic"><code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> cell magic</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#yaml-first-workflow">YAML-First Workflow</a></li>
-<li><a class="reference internal" href="#output-formats-nbconvert-configuration">Output formats &amp; nbconvert configuration</a><ul>
-<li><a class="reference internal" href="#passing-arbitrary-nbconvert-traitlets-options">Passing arbitrary nbconvert / traitlets options</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#structured-sections">Structured Sections</a><ul>
-<li><a class="reference internal" href="#chapters-list-of-lists-middlematter">Chapters (list-of-lists middlematter)</a></li>
-<li><a class="reference internal" href="#per-section-page-layout">Per-section page layout</a></li>
-<li><a class="reference internal" href="#section-level-style-defaults">Section-level style defaults</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#formatting-overlays">Formatting Overlays</a><ul>
-<li><a class="reference internal" href="#overlay-merge-formatting-onto-matching-cells"><code class="docutils literal notranslate"><span class="pre">Overlay</span></code> — merge formatting onto matching cells</a></li>
-<li><a class="reference internal" href="#layoutoverlay-wrap-contiguous-cells-in-a-flex-container"><code class="docutils literal notranslate"><span class="pre">LayoutOverlay</span></code> — wrap contiguous cells in a flex container</a></li>
-<li><a class="reference internal" href="#pageboxoverlay-wrap-contiguous-cells-in-a-page-box"><code class="docutils literal notranslate"><span class="pre">PageBoxOverlay</span></code> — wrap contiguous cells in a page box</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#footnotes">Footnotes</a></li>
-<li><a class="reference internal" href="#lerna-config-composition">Lerna Config Composition</a><ul>
-<li><a class="reference internal" href="#composing-reports-from-parts">Composing reports from parts</a></li>
-<li><a class="reference internal" href="#cli-list-manipulation">CLI list manipulation</a></li>
-<li><a class="reference internal" href="#sweeps-and-multirun">Sweeps and multirun</a></li>
-<li><a class="reference internal" href="#patch-modify-composed-configs-before-cli-overrides"><code class="docutils literal notranslate"><span class="pre">_patch_</span></code> — modify composed configs before CLI overrides</a></li>
-<li><a class="reference internal" href="#default-overrides-at-the-call-site">Default overrides at the call site</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#running-a-report">Running a Report</a></li>
-<li><a class="reference internal" href="#ccflow-integration">ccflow Integration</a></li>
-<li><a class="reference internal" href="#precedence-summary">Precedence Summary</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
-      
-      
-    </aside>
-  </div>
-</div><script src="../../_static/documentation_options.js?v=b4617fb1"></script>
+    <link rel="stylesheet" type="text/css" href="../../_static/fonts/fuma-fonts.css?v=c2892c73" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/custom.css?v=88c24c6a" />
+    <script src="../../_static/documentation_options.js?v=b4617fb1"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script data-searchlite-index="searchlite-index.json" defer="defer" src="../../_static/searchlite.js?v=a5320898"></script>
-    <script data-searchlite-adopt="true" defer="defer" src="../../_static/searchlite-ui.js?v=4e4bdd69"></script>
+    <script defer="defer" src="../../_static/fuma.js?v=9c325f6c"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
     <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
 
@@ -1408,5 +432,1096 @@ mermaid.initialize(
 window.addEventListener("load", load);
 window.runMermaid = runMermaid;</script>
     <script src="../../_static/js/custom.js?v=956e5d78"></script>
-    </body>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="API Reference" href="api.html" />
+    <link rel="prev" title="Architecture" href="architecture.html" />
+    <script>
+      (function () {
+        var root = document.documentElement;
+        try {
+          var stored = localStorage.getItem("fuma-theme");
+          if (stored) {
+            root.classList.add(stored === "dark" ? "dark" : "light");
+            root.style.colorScheme = stored === "dark" ? "dark" : "light";
+          }
+          if (localStorage.getItem("fuma-sidebar") === "collapsed") root.dataset.sidebarCollapsed = "true";
+          if (localStorage.getItem("fuma-toc") === "collapsed") root.dataset.tocCollapsed = "true";
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+<body class="fd-body" data-layout="docs" data-toc-style="normal" data-open-level="0">
+<div id="fd-layout"><header id="fd-subnav">
+  <div class="fd-subnav-inner">
+    <button type="button" class="fd-icon-button fd-sidebar-toggle" aria-controls="fd-sidebar" aria-expanded="false" aria-label="Toggle navigation" title="Toggle navigation">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
+    </button><a class="fd-brand" href="../../index.html"><span class="fd-brand-name">nbprint v0.13.1</span>
+</a>
+
+    <div class="fd-nav-actions">
+      <button type="button" class="fd-icon-button" data-fd-search-open aria-label="Search" title="Search"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></button>
+      <a class="fd-icon-button" href="https://github.com/nbprint/nbprint" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg></a>
+      <button type="button" class="fd-icon-button fd-theme-toggle" aria-label="Toggle theme" title="Toggle theme">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon fd-icon-light"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon fd-icon-dark"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<aside id="fd-sidebar" aria-label="Documentation">
+  <div class="fd-sidebar-header">
+    <div class="fd-sidebar-brand-row"><a class="fd-brand" href="../../index.html"><span class="fd-brand-name">nbprint v0.13.1</span>
+</a>
+      <button type="button" class="fd-icon-button fd-sidebar-collapse" aria-label="Collapse sidebar" title="Collapse sidebar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg></button>
+    </div>
+    <button type="button" class="fd-search-trigger" data-fd-search-open title="Search">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><span>Search</span><kbd class="fd-kbd">/</kbd>
+    </button>
+  </div>
+
+  <nav class="fd-sidebar-nav">
+    <div class="fd-sidebar-group">
+      
+<ul class="fd-tree">
+  <li class="fd-tree-item">
+    <a class="fd-link" href="background.html">
+      <span class="fd-link-text">Background</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="architecture.html">
+      <span class="fd-link-text">Architecture</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link fd-current" href="#">
+      <span class="fd-link-text">Configuration</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <details class="fd-folder">
+      <summary class="fd-folder-summary" title="Toggle section: API Reference">
+        <a class="fd-link" href="api.html">
+          <span class="fd-link-text">API Reference</span>
+        </a>
+        <span class="fd-folder-marker" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="m6 9 6 6 6-6"/></svg></span>
+      </summary>
+      
+<ul class="fd-tree">
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.core.Configuration.html">
+      <span class="fd-link-text">nbprint.config.core.Configuration</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.core.Parameters.html">
+      <span class="fd-link-text">nbprint.config.core.Parameters</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.core.Context.html">
+      <span class="fd-link-text">nbprint.config.core.Context</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.core.Page.html">
+      <span class="fd-link-text">nbprint.config.core.Page</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.core.Outputs.html">
+      <span class="fd-link-text">nbprint.config.core.Outputs</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.content.Content.html">
+      <span class="fd-link-text">nbprint.config.content.Content</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.cli.run.html">
+      <span class="fd-link-text">nbprint.cli.run</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.cli.hydra.html">
+      <span class="fd-link-text">nbprint.cli.hydra</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.cli.hydra_explain.html">
+      <span class="fd-link-text">nbprint.cli.hydra_explain</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.hydra.load_config.html">
+      <span class="fd-link-text">nbprint.config.hydra.load_config</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.core.PapermillParameters.html">
+      <span class="fd-link-text">nbprint.config.core.PapermillParameters</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.content.ContentCode.html">
+      <span class="fd-link-text">nbprint.config.content.ContentCode</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.content.ContentMarkdown.html">
+      <span class="fd-link-text">nbprint.config.content.ContentMarkdown</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.content.ContentImage.html">
+      <span class="fd-link-text">nbprint.config.content.ContentImage</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.content.ContentTableOfContents.html">
+      <span class="fd-link-text">nbprint.config.content.ContentTableOfContents</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.content.ContentLayout.html">
+      <span class="fd-link-text">nbprint.config.content.ContentLayout</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.content.ContentInlineLayout.html">
+      <span class="fd-link-text">nbprint.config.content.ContentInlineLayout</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.content.ContentFlexColumnLayout.html">
+      <span class="fd-link-text">nbprint.config.content.ContentFlexColumnLayout</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.content.ContentFlexRowLayout.html">
+      <span class="fd-link-text">nbprint.config.content.ContentFlexRowLayout</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.content.ContentPageBreak.html">
+      <span class="fd-link-text">nbprint.config.content.ContentPageBreak</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.outputs.NBConvertOutputs.html">
+      <span class="fd-link-text">nbprint.config.outputs.NBConvertOutputs</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.outputs.PDFOutputs.html">
+      <span class="fd-link-text">nbprint.config.outputs.PDFOutputs</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.outputs.NotebookOutputs.html">
+      <span class="fd-link-text">nbprint.config.outputs.NotebookOutputs</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.outputs.HTMLOutputs.html">
+      <span class="fd-link-text">nbprint.config.outputs.HTMLOutputs</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.outputs.WebHTMLOutputs.html">
+      <span class="fd-link-text">nbprint.config.outputs.WebHTMLOutputs</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.outputs.NBConvertShortCircuitOutputs.html">
+      <span class="fd-link-text">nbprint.config.outputs.NBConvertShortCircuitOutputs</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.outputs.EmailOutputs.html">
+      <span class="fd-link-text">nbprint.config.outputs.EmailOutputs</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.config.outputs.SMTP.html">
+      <span class="fd-link-text">nbprint.config.outputs.SMTP</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.models.LoggingConfig.html">
+      <span class="fd-link-text">nbprint.models.LoggingConfig</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.models.PandasDisplayConfiguration.html">
+      <span class="fd-link-text">nbprint.models.PandasDisplayConfiguration</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.models.PlotlyRendererConfiguration.html">
+      <span class="fd-link-text">nbprint.models.PlotlyRendererConfiguration</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="_build/nbprint.models.SeabornDisplayConfiguration.html">
+      <span class="fd-link-text">nbprint.models.SeabornDisplayConfiguration</span>
+    </a>
+  </li>
+</ul>
+    </details>
+  </li>
+</ul>
+    </div>
+  </nav>
+
+  <div class="fd-sidebar-footer">
+    <div class="fd-toolbar">
+      <a class="fd-toolbar-item" href="https://github.com/nbprint/nbprint" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg></a>
+      <div class="fd-theme-switch" role="group" aria-label="Theme">
+        <button type="button" class="fd-theme-option" data-fd-theme="light" aria-label="Light theme" title="Light theme"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></button>
+        <button type="button" class="fd-theme-option" data-fd-theme="dark" aria-label="Dark theme" title="Dark theme"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9"/></svg></button>
+      </div>
+    </div>
+  </div>
+</aside>
+<button type="button" id="fd-sidebar-restore" class="fd-icon-button" aria-label="Expand sidebar" title="Expand sidebar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg></button>
+<div class="fd-sidebar-scrim" hidden></div>
+  <div id="fd-toc-popover">
+    <button type="button" class="fd-toc-trigger" aria-expanded="false" aria-controls="fd-toc-mobile" title="On this page">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg><span>On this page</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div id="fd-toc-mobile" hidden><ul class="fd-toc-list">
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#notebook-first-workflow">Notebook-First Workflow</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#section-routing-from-cell-tags">Section routing from cell tags</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#section-routing-from-cell-metadata">Section routing from cell metadata</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#notebook-level-page-and-output-config">Notebook-level page and output config</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#nbprintcell-runtime-api">NBPrintCell runtime API</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#nbprint-cell-magic">%%nbprint cell magic</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#yaml-first-workflow">YAML-First Workflow</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#output-formats-nbconvert-configuration">Output formats & nbconvert configuration</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#passing-arbitrary-nbconvert-traitlets-options">Passing arbitrary nbconvert / traitlets options</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#structured-sections">Structured Sections</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#chapters-list-of-lists-middlematter">Chapters (list-of-lists middlematter)</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#per-section-page-layout">Per-section page layout</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#section-level-style-defaults">Section-level style defaults</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#formatting-overlays">Formatting Overlays</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#overlay-merge-formatting-onto-matching-cells">Overlay — merge formatting onto matching cells</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#layoutoverlay-wrap-contiguous-cells-in-a-flex-container">LayoutOverlay — wrap contiguous cells in a flex container</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#pageboxoverlay-wrap-contiguous-cells-in-a-page-box">PageBoxOverlay — wrap contiguous cells in a page box</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#footnotes">Footnotes</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#lerna-config-composition">Lerna Config Composition</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#composing-reports-from-parts">Composing reports from parts</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#cli-list-manipulation">CLI list manipulation</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#sweeps-and-multirun">Sweeps and multirun</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#patch-modify-composed-configs-before-cli-overrides">_patch_ — modify composed configs before CLI overrides</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#default-overrides-at-the-call-site">Default overrides at the call site</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#running-a-report">Running a Report</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#ccflow-integration">ccflow Integration</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#precedence-summary">Precedence Summary</a>
+  </li>
+</ul>
+</div>
+  </div>
+
+  <main id="fd-main">
+    <article class="fd-page">
+      <div class="fd-prose">
+  <section class="tex2jax_ignore mathjax_ignore" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code> supports three complementary ways to configure a report:</p>
+<ol class="arabic simple">
+<li><p><strong>Notebook-first</strong> — point nbprint at an existing <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> and drive sectioning, styling, and page layout from cell tags, cell metadata, and a small <code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> magic.</p></li>
+<li><p><strong>YAML-first</strong> — describe the full document in YAML (via <a class="reference external" href="https://docs.pydantic.dev/latest/"><code class="docutils literal notranslate"><span class="pre">pydantic</span></code></a> models, composed with <a class="reference external" href="https://github.com/nbprint/lerna"><code class="docutils literal notranslate"><span class="pre">lerna</span></code></a> and <a class="reference external" href="https://github.com/omry/omegaconf"><code class="docutils literal notranslate"><span class="pre">omegaconf</span></code></a>).</p></li>
+<li><p><strong>Hybrid</strong> — start from a notebook and add YAML overlays that target cells by index, tag, section, or cell type without rewriting the notebook.</p></li>
+</ol>
+<pre  class="mermaid">
+        graph TB
+    subgraph Inputs
+        nb(&quot;notebook&lt;br&gt;(.ipynb)&quot;)
+        yml(&quot;YAML config&lt;br&gt;(.yaml)&quot;)
+        ovl(&quot;overlays&lt;br&gt;(YAML or&lt;br&gt;notebook metadata)&quot;)
+    end
+
+    nbct[/nbprint&lt;br&gt;template/]
+    pjs[/paged.js&lt;br&gt;layout engine/]
+    nbc{nbconvert}
+    o&#64;{ shape: doc, label: &quot;HTML / PDF&quot; }
+
+    nb e1&#64;--&gt;nbc
+    yml e2&#64;--&gt;nbc
+    ovl -.-&gt;|merged at ingest| nbc
+    nbct --&gt; nbc
+    pjs --- nbct
+    nbc e3&#64;--&gt; o
+    e1&#64;{animate: true}
+    e2&#64;{animate: true}
+    e3&#64;{animate: true}
+    </pre><section id="notebook-first-workflow">
+<h2>Notebook-First Workflow<a class="headerlink" href="#notebook-first-workflow" title="Link to this heading">¶</a></h2>
+<p>Point nbprint at a <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> and it is treated as a full configuration input. All notebook metadata under <code class="docutils literal notranslate"><span class="pre">notebook.metadata.nbprint</span></code> becomes configuration; cell metadata and tags drive routing, styling, and visibility.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>path/to/report.ipynb
+</pre></div>
+</div>
+<p>Worked examples live in <a class="reference internal" href="#../../examples"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">examples/</span></code></span></a>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../../examples/notebook-sections.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-sections.ipynb</span></code></span></a> — section routing via tags and cell metadata, with page/output config in notebook metadata.</p></li>
+<li><p><a class="reference internal" href="../../examples/notebook-runtime.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-runtime.ipynb</span></code></span></a> — runtime API (<code class="docutils literal notranslate"><span class="pre">NBPrintCell</span></code>) and <code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> magic.</p></li>
+<li><p><a class="reference internal" href="../../examples/notebook-overlays.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-overlays.ipynb</span></code></span></a> — <code class="docutils literal notranslate"><span class="pre">overlays</span></code> and <code class="docutils literal notranslate"><span class="pre">layout_overlays</span></code> embedded in notebook metadata.</p></li>
+</ul>
+<section id="section-routing-from-cell-tags">
+<h3>Section routing from cell tags<a class="headerlink" href="#section-routing-from-cell-tags" title="Link to this heading">¶</a></h3>
+<p>By default every ingested cell lands in <code class="docutils literal notranslate"><span class="pre">middlematter</span></code>. To route cells to named sections, tag them:</p>
+<div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// cell.metadata
+{
+  "tags": ["nbprint:section:covermatter"]
+}
+</pre></div>
+</div>
+<p>The tag form is <code class="docutils literal notranslate"><span class="pre">nbprint:section:&lt;name&gt;</span></code> where <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;</span></code> is any of the 13 section names (see <a class="reference internal" href="#structured-sections"><span class="xref myst">Structured Sections</span></a> below).</p>
+</section>
+<section id="section-routing-from-cell-metadata">
+<h3>Section routing from cell metadata<a class="headerlink" href="#section-routing-from-cell-metadata" title="Link to this heading">¶</a></h3>
+<p>Equivalent to a tag, but takes priority:</p>
+<div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// cell.metadata.nbprint
+{
+  "section": "frontmatter"
+}
+</pre></div>
+</div>
+</section>
+<section id="notebook-level-page-and-output-config">
+<h3>Notebook-level page and output config<a class="headerlink" href="#notebook-level-page-and-output-config" title="Link to this heading">¶</a></h3>
+<p>Embed a full page/output spec directly in the notebook — no YAML required:</p>
+<div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// notebook.metadata.nbprint
+{
+  "page": {
+    "_target_": "nbprint.PageGlobal",
+    "size": "Letter",
+    "orientation": "portrait"
+  },
+  "outputs": {
+    "_target_": "nbprint.NBConvertOutputs",
+    "target": "pdf"
+  }
+}
+</pre></div>
+</div>
+<p>YAML or CLI overrides always take precedence over notebook-embedded values, so you can use a notebook’s defaults and override on the command line.</p>
+</section>
+<section id="nbprintcell-runtime-api">
+<h3><code class="docutils literal notranslate"><span class="pre">NBPrintCell</span></code> runtime API<a class="headerlink" href="#nbprintcell-runtime-api" title="Link to this heading">¶</a></h3>
+<p>Inside a running notebook you can express cell-level intent through a Python object. Metadata is persisted via a hidden <code class="docutils literal notranslate"><span class="pre">display()</span></code> output with a custom MIME type; nbprint picks it up at ingestion time.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">NBPrintCell</span><span class="p">,</span> <span class="n">Style</span><span class="p">,</span> <span class="n">Font</span>
+
+<span class="n">NBPrintCell</span><span class="p">(</span><span class="n">section</span><span class="o">=</span><span class="s2">"covermatter"</span><span class="p">,</span> <span class="n">css</span><span class="o">=</span><span class="s2">":scope { text-align: center; }"</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">NBPrintCell</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="n">Style</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="n">Font</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">24</span><span class="p">))):</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"# Cover Page"</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="nbprint-cell-magic">
+<h3><code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> cell magic<a class="headerlink" href="#nbprint-cell-magic" title="Link to this heading">¶</a></h3>
+<p>A lighter alternative for quick one-liners:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">nbprint</span> <span class="n">section</span><span class="o">=</span><span class="n">frontmatter</span> <span class="n">css</span><span class="o">=</span><span class="s2">":scope { font-size: 18px; }"</span>
+<span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"# Introduction"</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Explicit cell metadata beats runtime metadata beats magic — so a hand-edited value in <code class="docutils literal notranslate"><span class="pre">cell.metadata.nbprint</span></code> always wins.</p>
+</section>
+</section>
+<section id="yaml-first-workflow">
+<h2>YAML-First Workflow<a class="headerlink" href="#yaml-first-workflow" title="Link to this heading">¶</a></h2>
+<p>YAML is the most expressive way to describe a report: every field of every pydantic model is reachable, and the lerna config system makes it easy to share pieces across reports.</p>
+<p>A minimal example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">debug</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="nt">outputs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.NBConvertOutputs</span>
+<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./outputs</span>
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">html</span>
+
+<span class="nt">content</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no"># A Generic Report</span>
+<span class="w">      </span><span class="no">## A Subtitle</span>
+<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}"</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBreak</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentTableOfContents</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBreak</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentFlexRowLayout</span>
+<span class="w">    </span><span class="nt">sizes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentFlexColumnLayout</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">            </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Left</span><span class="nv"> </span><span class="s">column"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentFlexColumnLayout</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">            </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Right</span><span class="nv"> </span><span class="s">column"</span>
+</pre></div>
+</div>
+<p>Run it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.yaml
+</pre></div>
+</div>
+<p>Common content types include <code class="docutils literal notranslate"><span class="pre">ContentMarkdown</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentCode</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentPageBreak</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentTableOfContents</span></code>, and the layout containers <code class="docutils literal notranslate"><span class="pre">ContentFlexRowLayout</span></code> / <code class="docutils literal notranslate"><span class="pre">ContentFlexColumnLayout</span></code> / <code class="docutils literal notranslate"><span class="pre">ContentInlineLayout</span></code>.</p>
+</section>
+<section id="output-formats-nbconvert-configuration">
+<h2>Output formats &amp; nbconvert configuration<a class="headerlink" href="#output-formats-nbconvert-configuration" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">outputs</span></code> block (<code class="docutils literal notranslate"><span class="pre">NBConvertOutputs</span></code>) controls how the generated notebook is
+executed and converted. Common fields:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">target</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">html</span></code></p></td>
+<td><p>Output format: <code class="docutils literal notranslate"><span class="pre">ipynb</span></code>, <code class="docutils literal notranslate"><span class="pre">html</span></code>, <code class="docutils literal notranslate"><span class="pre">webhtml</span></code>, <code class="docutils literal notranslate"><span class="pre">webpdf</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">execute</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">true</span></code></p></td>
+<td><p>Execute the notebook before converting</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">timeout</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">600</span></code></p></td>
+<td><p>Per-cell execution timeout (seconds)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">template</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code></p></td>
+<td><p>nbconvert template name</p></td>
+</tr>
+</tbody>
+</table>
+<section id="passing-arbitrary-nbconvert-traitlets-options">
+<h3>Passing arbitrary nbconvert / traitlets options<a class="headerlink" href="#passing-arbitrary-nbconvert-traitlets-options" title="Link to this heading">¶</a></h3>
+<p>Anything configurable on an nbconvert exporter, preprocessor, or the app itself
+is reachable generically through <code class="docutils literal notranslate"><span class="pre">nbconvert_config</span></code> — no nbprint field is needed
+per option. Entries map 1:1 onto nbconvert’s <code class="docutils literal notranslate"><span class="pre">--Class.trait=value</span></code> CLI options
+and are applied to the conversion (exporter) pass.</p>
+<p>For example, <a class="reference external" href="https://github.com/jupyter/nbconvert/pull/2250"><code class="docutils literal notranslate"><span class="pre">WebPDFExporter.page_render_timeout</span></code></a>
+controls how long (in ms) the headless browser waits for JavaScript output to
+settle before capturing the PDF — useful for notebooks with heavy interactive
+charts:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">outputs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.NBConvertOutputs</span>
+<span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webpdf</span>
+<span class="w">  </span><span class="nt">nbconvert_config</span><span class="p">:</span>
+<span class="w">    </span><span class="c1"># flat dotted keys ...</span>
+<span class="w">    </span><span class="nt">WebPDFExporter.page_render_timeout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span>
+<span class="w">    </span><span class="c1"># ... or nested namespaces — both are equivalent</span>
+<span class="w">    </span><span class="nt">TemplateExporter</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">exclude_input</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>The nested form maps directly onto a hydra/lerna CLI override:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>++outputs.target<span class="o">=</span>webpdf<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>++outputs.nbconvert_config.WebPDFExporter.page_render_timeout<span class="o">=</span><span class="m">5000</span>
+</pre></div>
+</div>
+<p>Scalars pass through as-is, booleans render as <code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>, and lists are
+JSON-encoded so container traits round-trip through the CLI.</p>
+<p>Traits that nbprint already manages — <code class="docutils literal notranslate"><span class="pre">NbConvertApp.export_format</span></code> (<code class="docutils literal notranslate"><span class="pre">to</span></code>),
+<code class="docutils literal notranslate"><span class="pre">TemplateExporter.template_name</span></code> (<code class="docutils literal notranslate"><span class="pre">template</span></code>), <code class="docutils literal notranslate"><span class="pre">NbConvertApp.output_base</span></code>
+(<code class="docutils literal notranslate"><span class="pre">output</span></code>), <code class="docutils literal notranslate"><span class="pre">ExecutePreprocessor.enabled</span></code> (<code class="docutils literal notranslate"><span class="pre">execute</span></code>), and
+<code class="docutils literal notranslate"><span class="pre">ExecutePreprocessor.timeout</span></code> — are rejected in <code class="docutils literal notranslate"><span class="pre">nbconvert_config</span></code> with an error
+pointing at the dedicated field (<code class="docutils literal notranslate"><span class="pre">target</span></code>, <code class="docutils literal notranslate"><span class="pre">template</span></code>, <code class="docutils literal notranslate"><span class="pre">naming</span></code>/<code class="docutils literal notranslate"><span class="pre">root</span></code>,
+<code class="docutils literal notranslate"><span class="pre">execute</span></code>, <code class="docutils literal notranslate"><span class="pre">timeout</span></code>). Set those via their own fields instead.</p>
+</section>
+</section>
+<section id="structured-sections">
+<h2>Structured Sections<a class="headerlink" href="#structured-sections" title="Link to this heading">¶</a></h2>
+<p>For book-style documents, <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> supports 13 ordered sections grouped into 6 logical groups:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Group</p></th>
+<th class="head"><p>Sections</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Prematter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">prematter</span></code></p></td>
+<td><p>Hidden content executed before report construction</p></td>
+</tr>
+<tr class="row-odd"><td><p>Covermatter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">covermatter</span></code></p></td>
+<td><p>Cover page content</p></td>
+</tr>
+<tr class="row-even"><td><p>Frontmatter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">title</span></code>, <code class="docutils literal notranslate"><span class="pre">copyright</span></code>, <code class="docutils literal notranslate"><span class="pre">dedication</span></code>, <code class="docutils literal notranslate"><span class="pre">table_of_contents</span></code>, <code class="docutils literal notranslate"><span class="pre">frontmatter</span></code></p></td>
+<td><p>Title page, legal, dedication, TOC, preface</p></td>
+</tr>
+<tr class="row-odd"><td><p>Middlematter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">middlematter</span></code>, <code class="docutils literal notranslate"><span class="pre">middlematter_separators</span></code></p></td>
+<td><p>Main body and chapter dividers</p></td>
+</tr>
+<tr class="row-even"><td><p>Endmatter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">appendix</span></code>, <code class="docutils literal notranslate"><span class="pre">index</span></code>, <code class="docutils literal notranslate"><span class="pre">endmatter</span></code></p></td>
+<td><p>Supplementary material, index, bibliography</p></td>
+</tr>
+<tr class="row-odd"><td><p>Rearmatter</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">rearmatter</span></code></p></td>
+<td><p>Back cover content</p></td>
+</tr>
+</tbody>
+</table>
+<p>Instead of a flat list, <code class="docutils literal notranslate"><span class="pre">content:</span></code> can be keyed by section name. Sections are rendered in document order; unused sections are simply empty.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">covermatter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">My</span><span class="nv"> </span><span class="s">Report"</span>
+<span class="w">      </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}"</span>
+
+<span class="w">  </span><span class="nt">table_of_contents</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentTableOfContents</span>
+
+<span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Section</span><span class="nv"> </span><span class="s">One"</span>
+
+<span class="w">  </span><span class="nt">endmatter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Bibliography"</span>
+</pre></div>
+</div>
+<p>Flat-list <code class="docutils literal notranslate"><span class="pre">content:</span></code> is still fully supported — it is treated as <code class="docutils literal notranslate"><span class="pre">middlematter</span></code>.</p>
+<section id="chapters-list-of-lists-middlematter">
+<h3>Chapters (list-of-lists middlematter)<a class="headerlink" href="#chapters-list-of-lists-middlematter" title="Link to this heading">¶</a></h3>
+<p>For multi-chapter documents, supply <code class="docutils literal notranslate"><span class="pre">middlematter</span></code> as a <strong>list of lists</strong>. Each
+sublist is a chapter: its <strong>first element</strong> is promoted to a chapter separator
+and the remaining elements form the chapter body. nbprint interleaves them in
+document order — <code class="docutils literal notranslate"><span class="pre">[chapter1-title,</span> <span class="pre">*chapter1-body,</span> <span class="pre">chapter2-title,</span> <span class="pre">*chapter2-body,</span> <span class="pre">…]</span></code>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="c1"># Chapter One — first item becomes the title page</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Chapter</span><span class="nv"> </span><span class="s">One"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"Body</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">first</span><span class="nv"> </span><span class="s">chapter…"</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="c1"># Chapter Two</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Chapter</span><span class="nv"> </span><span class="s">Two"</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"Body</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">second</span><span class="nv"> </span><span class="s">chapter…"</span>
+</pre></div>
+</div>
+<p>By default each separator renders as a <strong>standalone chapter title page</strong> — a hard
+page break is inserted before and after it. To keep separators inline with their
+chapter body instead, disable the behavior:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">separator_title_pages</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">...</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>The promoted separators are also available directly under the
+<code class="docutils literal notranslate"><span class="pre">middlematter_separators</span></code> section if you prefer to populate them explicitly
+alongside a flat <code class="docutils literal notranslate"><span class="pre">middlematter</span></code> list.</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">examples/chapters.yaml</span></code> for a full working example.</p>
+</section>
+<section id="per-section-page-layout">
+<h3>Per-section page layout<a class="headerlink" href="#per-section-page-layout" title="Link to this heading">¶</a></h3>
+<p>Each section can carry its own page layout via <code class="docutils literal notranslate"><span class="pre">PageGlobal.pages</span></code>. This generates CSS <code class="docutils literal notranslate"><span class="pre">&#64;page</span> <span class="pre">&lt;section&gt;</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> rules and maps cells to them via <code class="docutils literal notranslate"><span class="pre">data-nbprint-section</span></code> attributes:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">page</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.PageGlobal</span>
+<span class="w">  </span><span class="nt">bottom_right</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.PageRegion</span>
+<span class="w">    </span><span class="nt">content</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.PageNumber</span>
+
+<span class="w">  </span><span class="nt">pages</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">covermatter</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># no headers/footers on the cover</span>
+<span class="w">    </span><span class="nt">frontmatter</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">counter_reset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">counter_style</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lower-roman</span>
+<span class="w">    </span><span class="nt">middlematter</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">counter_reset</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>See <code class="docutils literal notranslate"><span class="pre">examples/sections.yaml</span></code> for a full working example.</p>
+</section>
+<section id="section-level-style-defaults">
+<h3>Section-level style defaults<a class="headerlink" href="#section-level-style-defaults" title="Link to this heading">¶</a></h3>
+<p>Each section can carry a default <code class="docutils literal notranslate"><span class="pre">Style</span></code> that every cell in that section inherits. A cell’s own <code class="docutils literal notranslate"><span class="pre">Style</span></code> fields take precedence; unset fields fall back to the section default.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">section_styles</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">covermatter</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">font</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="nv">28</span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">horizontal_alignment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">center</span>
+<span class="w">    </span><span class="nt">frontmatter</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">font</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">family</span><span class="p">:</span><span class="w"> </span><span class="s">"Georgia,</span><span class="nv"> </span><span class="s">serif"</span><span class="p p-Indicator">}</span>
+
+<span class="w">  </span><span class="nt">covermatter</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentMarkdown</span>
+<span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">My</span><span class="nv"> </span><span class="s">Report"</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="formatting-overlays">
+<h2>Formatting Overlays<a class="headerlink" href="#formatting-overlays" title="Link to this heading">¶</a></h2>
+<p>Overlays are rules that apply formatting to ingested notebook cells without modifying the notebook itself. There are three kinds.</p>
+<section id="overlay-merge-formatting-onto-matching-cells">
+<h3><code class="docutils literal notranslate"><span class="pre">Overlay</span></code> — merge formatting onto matching cells<a class="headerlink" href="#overlay-merge-formatting-onto-matching-cells" title="Link to this heading">¶</a></h3>
+<p>Matches cells by index, tag, cell type, or target section, and merges <code class="docutils literal notranslate"><span class="pre">css</span></code> / <code class="docutils literal notranslate"><span class="pre">classname</span></code> / <code class="docutils literal notranslate"><span class="pre">attrs</span></code> / <code class="docutils literal notranslate"><span class="pre">style</span></code> / <code class="docutils literal notranslate"><span class="pre">ignore</span></code> into the resulting <code class="docutils literal notranslate"><span class="pre">Content</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">overlays</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">index</span><span class="p">:</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">text-align:</span><span class="nv"> </span><span class="s">center;</span><span class="nv"> </span><span class="s">}"</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"chart"</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">style</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">border</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">bottom</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">width</span><span class="p">:</span><span class="w"> </span><span class="nv">2</span><span class="p p-Indicator">,</span><span class="nt"> style</span><span class="p">:</span><span class="w"> </span><span class="nv">solid</span><span class="p p-Indicator">,</span><span class="nt"> color</span><span class="p">:</span><span class="w"> </span><span class="s">"#333"</span><span class="p p-Indicator">}}</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">cell_type</span><span class="p">:</span><span class="w"> </span><span class="nv">markdown</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">classname</span><span class="p">:</span><span class="w"> </span><span class="s">"prose-body"</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">section</span><span class="p">:</span><span class="w"> </span><span class="nv">covermatter</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">style</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">font</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="nv">28</span><span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>Match fields combine with AND semantics — an empty <code class="docutils literal notranslate"><span class="pre">match</span></code> matches every cell. Multiple overlays apply in list order; later overlays stack on top of earlier ones:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">css</span></code> is appended</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">classname</span></code> is appended (accumulated as a list)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attrs</span></code> is merged (overlay keys win on collision)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">style</span></code> is merged via <code class="docutils literal notranslate"><span class="pre">Style.merge</span></code> (overlay fields win)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ignore</span></code> is set when provided</p></li>
+</ul>
+<p>Overlays can also come from notebook metadata. YAML-declared overlays and notebook-declared overlays compose:</p>
+<div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// notebook.metadata.nbprint
+{
+  "overlays": [
+    {"match": {"tag": "emphasis"}, "css": ":scope { font-style: italic; }"}
+  ]
+}
+</pre></div>
+</div>
+</section>
+<section id="layoutoverlay-wrap-contiguous-cells-in-a-flex-container">
+<h3><code class="docutils literal notranslate"><span class="pre">LayoutOverlay</span></code> — wrap contiguous cells in a flex container<a class="headerlink" href="#layoutoverlay-wrap-contiguous-cells-in-a-flex-container" title="Link to this heading">¶</a></h3>
+<p>A layout overlay matches the same way but <em>wraps</em> contiguous runs of matched cells (same section, consecutive notebook indices) in a <code class="docutils literal notranslate"><span class="pre">ContentFlexRowLayout</span></code>, <code class="docutils literal notranslate"><span class="pre">ContentFlexColumnLayout</span></code>, or <code class="docutils literal notranslate"><span class="pre">ContentInlineLayout</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">layout_overlays</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Any two adjacent "sidebyside"-tagged cells become a row</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"sidebyside"</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">row</span>
+<span class="w">    </span><span class="nt">sizes</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">1</span><span class="p p-Indicator">]</span>
+
+<span class="w">  </span><span class="c1"># Cells at notebook indices 3..5 (inclusive) get stacked in a column</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">index_range</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">3</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">5</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">column</span>
+
+<span class="w">  </span><span class="c1"># Wrapper itself can carry CSS / classname / style</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"gallery"</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inline</span>
+<span class="w">    </span><span class="nt">css</span><span class="p">:</span><span class="w"> </span><span class="s">":scope</span><span class="nv"> </span><span class="s">{</span><span class="nv"> </span><span class="s">gap:</span><span class="nv"> </span><span class="s">8px;</span><span class="nv"> </span><span class="s">}"</span>
+<span class="w">    </span><span class="nt">classname</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gallery-wrap</span>
+</pre></div>
+</div>
+<p>Non-contiguous matches produce multiple wrappers. Both kinds of overlay can be combined: formatting overlays apply to the individual cells, and a layout overlay then wraps them.</p>
+</section>
+<section id="pageboxoverlay-wrap-contiguous-cells-in-a-page-box">
+<h3><code class="docutils literal notranslate"><span class="pre">PageBoxOverlay</span></code> — wrap contiguous cells in a page box<a class="headerlink" href="#pageboxoverlay-wrap-contiguous-cells-in-a-page-box" title="Link to this heading">¶</a></h3>
+<p>Same matching rules, but the wrapper is a <a class="reference internal" href="architecture.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code></span></a>: the matched run becomes one logical page, arranged by a named layout preset and followed by a page break. Select it with <code class="docutils literal notranslate"><span class="pre">wrapper:</span> <span class="pre">page-box</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">layout_overlays</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Every run of "pair"-tagged cells becomes a two-column page</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"pair"</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">wrapper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">page-box</span>
+<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">columns-2</span>
+<span class="w">    </span><span class="nt">gap</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1rem</span>
+
+<span class="w">  </span><span class="c1"># A four-up dashboard page, in landscape</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">match</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">"dashboard"</span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">wrapper</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">page-box</span>
+<span class="w">    </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grid-2x2</span>
+<span class="w">    </span><span class="nt">page_orientation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">landscape</span>
+</pre></div>
+</div>
+<p>This is the multi-cell counterpart to <a class="reference internal" href="architecture.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">NBPrintPage</span></code></span></a>, which turns a <em>single</em> cell into a page box from inside the notebook. Reach for the overlay when a page is assembled from several cells.</p>
+<p>Available fields mirror <code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code>: <code class="docutils literal notranslate"><span class="pre">layout</span></code> (any <a class="reference internal" href="architecture.html"><span class="std std-doc">layout preset</span></a>), <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">min_pages</span></code>, <code class="docutils literal notranslate"><span class="pre">gap</span></code>, <code class="docutils literal notranslate"><span class="pre">padding</span></code>, <code class="docutils literal notranslate"><span class="pre">align</span></code>, <code class="docutils literal notranslate"><span class="pre">justify</span></code>, <code class="docutils literal notranslate"><span class="pre">grid_template</span></code>, <code class="docutils literal notranslate"><span class="pre">page_size</span></code>, <code class="docutils literal notranslate"><span class="pre">page_orientation</span></code>, <code class="docutils literal notranslate"><span class="pre">page_margins</span></code> — plus the wrapper formatting (<code class="docutils literal notranslate"><span class="pre">css</span></code>, <code class="docutils literal notranslate"><span class="pre">classname</span></code>, <code class="docutils literal notranslate"><span class="pre">attrs</span></code>, <code class="docutils literal notranslate"><span class="pre">style</span></code>) shared with <code class="docutils literal notranslate"><span class="pre">LayoutOverlay</span></code>. Overlay <code class="docutils literal notranslate"><span class="pre">css</span></code> is appended to the preset’s CSS rather than replacing it.</p>
+<p><code class="docutils literal notranslate"><span class="pre">sizes</span></code> is flex-only and is rejected on a page-box overlay; use a columns/grid preset, or <code class="docutils literal notranslate"><span class="pre">grid_template</span></code> for explicit tracks.</p>
+<p>As with every overlay, these can live in notebook metadata instead of YAML:</p>
+<div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// notebook.metadata.nbprint
+{
+  "layout_overlays": [
+    {"match": {"tag": "pair"}, "wrapper": "page-box", "layout": "columns-2", "gap": "1rem"}
+  ]
+}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="footnotes">
+<h2>Footnotes<a class="headerlink" href="#footnotes" title="Link to this heading">¶</a></h2>
+<p>Wrap a note in <code class="docutils literal notranslate"><span class="pre">&lt;span</span> <span class="pre">class=&quot;nbprint-footnote&quot;&gt;</span></code> and paged.js moves it to the foot of the page where it’s cited, leaving a superscript number in the text. Notes are numbered through the document.</p>
+<p>In a markdown cell:</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>Revenue grew 12%&lt;span class="nbprint-footnote"&gt;Unaudited, as of Q3.&lt;/span&gt; year over year.
+</pre></div>
+</div>
+<p>From a code cell, <code class="docutils literal notranslate"><span class="pre">nbprint.footnote</span></code> returns the same HTML, with the note text escaped:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTML</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">footnote</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="sa">f</span><span class="s2">"&lt;p&gt;Revenue grew 12%</span><span class="si">{</span><span class="n">footnote</span><span class="p">(</span><span class="s1">'Unaudited, as of Q3.'</span><span class="p">)</span><span class="si">}</span><span class="s2"> year over year.&lt;/p&gt;"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Without paged.js (<code class="docutils literal notranslate"><span class="pre">pagedjs:</span> <span class="pre">false</span></code>), the note stays in the text as a small parenthetical.</p>
+</section>
+<section id="lerna-config-composition">
+<h2>Lerna Config Composition<a class="headerlink" href="#lerna-config-composition" title="Link to this heading">¶</a></h2>
+<p>nbprint uses <a class="reference external" href="https://github.com/nbprint/lerna">lerna</a> (a Rust-powered, Hydra-compatible config framework) for YAML composition. Everything Hydra supports works identically, and lerna adds a few features that are particularly useful for reports.</p>
+<section id="composing-reports-from-parts">
+<h3>Composing reports from parts<a class="headerlink" href="#composing-reports-from-parts" title="Link to this heading">¶</a></h3>
+<p>Pull in reusable pieces via a <code class="docutils literal notranslate"><span class="pre">defaults:</span></code> list:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># examples/hydra.yaml</span>
+<span class="nt">defaults</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inline</span><span class="w">       </span><span class="c1"># examples/hydra/config/inline.yaml</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">page</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">report</span><span class="w">         </span><span class="c1"># examples/hydra/page/report.yaml</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">parameters</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string1</span><span class="w">  </span><span class="c1"># examples/hydra/parameters/string1.yaml</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
+
+<span class="nt">outputs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">naming</span><span class="p">:</span><span class="w"> </span><span class="s">"{{name}}"</span>
+<span class="w">  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./outputs</span>
+</pre></div>
+</div>
+<p>This lets a handful of reusable YAML files describe a large family of reports.</p>
+</section>
+<section id="cli-list-manipulation">
+<h3>CLI list manipulation<a class="headerlink" href="#cli-list-manipulation" title="Link to this heading">¶</a></h3>
+<p>lerna supports list operations directly from the CLI — useful for adding a single chart or section to an existing report without editing the YAML:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Append a content item</span>
+nbprint<span class="w"> </span>examples/basic.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s1">'content=append({_target_: nbprint.ContentMarkdown, content: "# Added"})'</span>
+
+<span class="c1"># Prepend</span>
+nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'content=prepend({_target_: nbprint.ContentPageBreak})'</span>
+
+<span class="c1"># Insert at a specific index</span>
+nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'content=insert(0, {_target_: nbprint.ContentMarkdown, content: "Intro"})'</span>
+
+<span class="c1"># Remove by index / value / clear</span>
+nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'content=remove_at(-1)'</span>
+nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'tags=remove_value(draft)'</span>
+nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s1">'overlays=list_clear()'</span>
+</pre></div>
+</div>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Effect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">key=append(v,</span> <span class="pre">...)</span></code></p></td>
+<td><p>Add item(s) to end</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">key=prepend(v,</span> <span class="pre">...)</span></code></p></td>
+<td><p>Add item(s) to beginning</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">key=insert(idx,</span> <span class="pre">v)</span></code></p></td>
+<td><p>Insert at index</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">key=remove_at(idx)</span></code></p></td>
+<td><p>Remove by index (negative allowed)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">key=remove_value(v)</span></code></p></td>
+<td><p>Remove first matching item</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">key=list_clear()</span></code></p></td>
+<td><p>Clear all items</p></td>
+</tr>
+</tbody>
+</table>
+<p>Quote the whole override for shell safety. Works in bash, zsh, fish, PowerShell, and cmd.</p>
+</section>
+<section id="sweeps-and-multirun">
+<h3>Sweeps and multirun<a class="headerlink" href="#sweeps-and-multirun" title="Link to this heading">¶</a></h3>
+<p>Generate a family of reports from one command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>report.yaml<span class="w"> </span>-m<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>parameters.model<span class="o">=</span>choice<span class="o">(</span>ridge,lasso,elasticnet<span class="o">)</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>parameters.alpha<span class="o">=</span>interval<span class="o">(</span><span class="m">0</span>.01,0.5<span class="o">)</span>
+</pre></div>
+</div>
+<p>Combined with <code class="docutils literal notranslate"><span class="pre">outputs.naming:</span> <span class="pre">&quot;{{name}}-{{parameters.model}}-{{parameters.alpha}}&quot;</span></code> this produces one cleanly named HTML/PDF per combination.</p>
+</section>
+<section id="patch-modify-composed-configs-before-cli-overrides">
+<h3><code class="docutils literal notranslate"><span class="pre">_patch_</span></code> — modify composed configs before CLI overrides<a class="headerlink" href="#patch-modify-composed-configs-before-cli-overrides" title="Link to this heading">¶</a></h3>
+<p>Pull in a vendored config and surgically modify it:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">defaults</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vendor/large_defaults</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">_patch_</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">~unwanted_key</span><span class="w">                 </span><span class="c1"># delete a key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">content=remove_value(stale)</span><span class="w">   </span><span class="c1"># drop a content item</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">+overlays=append({match</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="nv">draft</span><span class="p p-Indicator">}</span><span class="err">,</span><span class="w"> </span><span class="nt">ignore</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true})</span><span class="w">  </span><span class="c1"># add an overlay</span>
+</pre></div>
+</div>
+<p>Patches apply after composition but before CLI overrides, so CLI still wins. See the <a class="reference external" href="https://github.com/nbprint/lerna">lerna README</a> for the full <code class="docutils literal notranslate"><span class="pre">_patch_</span></code> reference (scoped <code class="docutils literal notranslate"><span class="pre">_patch_&#64;package</span></code>, <code class="docutils literal notranslate"><span class="pre">_here_</span></code> / <code class="docutils literal notranslate"><span class="pre">_global_</span></code> prefixes, nested accumulation, etc.).</p>
+</section>
+<section id="default-overrides-at-the-call-site">
+<h3>Default overrides at the call site<a class="headerlink" href="#default-overrides-at-the-call-site" title="Link to this heading">¶</a></h3>
+<p>nbprint’s CLI accepts default overrides without editing YAML:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>++callable<span class="o">=</span>/nbprintx<span class="w"> </span><span class="se">\ </span><span class="w">                            </span><span class="c1"># switch to the multirun model</span>
+<span class="w">  </span>+nbprint.outputs.naming<span class="o">=</span><span class="s1">'{{name}}-{{date}}-{{a}}'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>+nbprintx.parameters<span class="o">=[{</span>a:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">2</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">3</span><span class="o">}]</span><span class="w"> </span><span class="se">\ </span><span class="w">     </span><span class="c1"># inline JSON or file path</span>
+<span class="w">  </span>++nbprint.outputs.execute<span class="o">=</span>False<span class="w">                    </span><span class="c1"># disable execution</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="running-a-report">
+<h2>Running a Report<a class="headerlink" href="#running-a-report" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.yaml<span class="w">        </span><span class="c1"># YAML-first</span>
+nbprint<span class="w"> </span>path/to/report.ipynb<span class="w">       </span><span class="c1"># notebook-first</span>
+nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="nv">notebook</span><span class="o">=</span>foo.ipynb<span class="w">   </span><span class="c1"># hybrid: YAML + notebook</span>
+</pre></div>
+</div>
+<p>The output lands in the directory set by <code class="docutils literal notranslate"><span class="pre">outputs.root</span></code> (default <code class="docutils literal notranslate"><span class="pre">./outputs</span></code>), named per <code class="docutils literal notranslate"><span class="pre">outputs.naming</span></code> (default <code class="docutils literal notranslate"><span class="pre">{{name}}-{{date}}</span></code>). Both the generated notebook and the chosen render target (<code class="docutils literal notranslate"><span class="pre">html</span></code>, <code class="docutils literal notranslate"><span class="pre">pdf</span></code>, …) are written; the notebook is useful for inspection and further experimentation.</p>
+<a class="reference internal image-reference" href="https://github.com/nbprint/nbprint/raw/main/docs/img/example-notebook.png?raw=true"><img alt="example notebook output" src="https://github.com/nbprint/nbprint/raw/main/docs/img/example-notebook.png?raw=true" style="width: 800px;" />
+</a>
+<a class="reference internal image-reference" href="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.png?raw=true"><img alt="example basic output" src="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.png?raw=true" style="width: 800px;" />
+</a>
+<p>A rendered PDF of the basic example lives <a class="reference external" href="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.pdf?raw=true">here</a>.</p>
+</section>
+<section id="ccflow-integration">
+<h2>ccflow Integration<a class="headerlink" href="#ccflow-integration" title="Link to this heading">¶</a></h2>
+<p>nbprint is compatible with <a class="reference external" href="https://github.com/point72/ccflow">ccflow</a> callable models. nbprint outputs like <code class="docutils literal notranslate"><span class="pre">NBConvertOutputs</span></code> inherit from <a class="reference external" href="https://github.com/Point72/ccflow/wiki/Workflows#result-type"><code class="docutils literal notranslate"><span class="pre">ccflow.ResultsBase</span></code></a>, and parameters inherit from <a class="reference external" href="https://github.com/Point72/ccflow/wiki/Workflows#context"><code class="docutils literal notranslate"><span class="pre">ccflow.ContextBase</span></code></a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint-cc<span class="w"> </span>+nbprint.name<span class="o">=</span><span class="nb">test</span><span class="w"> </span>+context<span class="o">=[]</span>
+</pre></div>
+</div>
+<p>ccflow workflows are exposed as multi-run models:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>++callable<span class="o">=</span>/nbprintx<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>+nbprint.outputs.naming<span class="o">=</span><span class="s1">'{{name}}-{{date}}-{{a}}'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>+nbprintx.parameters<span class="o">=[{</span>a:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">2</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">3</span><span class="o">}]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>++nbprint.outputs.execute<span class="o">=</span>False
+</pre></div>
+</div>
+</section>
+<section id="precedence-summary">
+<h2>Precedence Summary<a class="headerlink" href="#precedence-summary" title="Link to this heading">¶</a></h2>
+<p>When the same piece of configuration can come from multiple places, resolution order is:</p>
+<ol class="arabic simple">
+<li><p><strong>CLI overrides</strong> — always highest priority</p></li>
+<li><p><strong>YAML explicit values</strong> (<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">_self_</span></code>)</p></li>
+<li><p><strong>YAML <code class="docutils literal notranslate"><span class="pre">_patch_</span></code> directives</strong> (applied during composition)</p></li>
+<li><p><strong>Notebook-level metadata</strong> (<code class="docutils literal notranslate"><span class="pre">notebook.metadata.nbprint.{page,outputs,overlays,layout_overlays}</span></code>)</p></li>
+<li><p><strong>Defaults</strong> from composed configs and pydantic model defaults</p></li>
+</ol>
+<p>For section assignment specifically:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">cell.metadata.nbprint.section</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nbprint:section:&lt;name&gt;</span></code> cell tag</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NBPrintCell(section=...)</span></code> MIME metadata</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">%%nbprint</span> <span class="pre">section=...</span></code> magic</p></li>
+<li><p>Default: <code class="docutils literal notranslate"><span class="pre">middlematter</span></code></p></li>
+</ol>
+</section>
+</section>
+
+
+      </div>
+<nav class="fd-pagination" aria-label="Pagination">
+  <a class="fd-pagination-card fd-pagination-prev" href="architecture.html" title="Previous: Architecture">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="m15 18-6-6 6-6"/></svg>
+    <span class="fd-pagination-text">
+      <span class="fd-pagination-label">Previous</span>
+      <span class="fd-pagination-title">Architecture</span>
+    </span>
+  </a>
+  <a class="fd-pagination-card fd-pagination-next" href="api.html" title="Next: API Reference">
+    <span class="fd-pagination-text">
+      <span class="fd-pagination-label">Next</span>
+      <span class="fd-pagination-title">API Reference</span>
+    </span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="m9 18 6-6-6-6"/></svg>
+  </a>
+</nav>
+<footer id="fd-footer">
+  <p class="fd-footer-meta"><span>&#169; the nbprint authors</span><span>Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.</span>
+  </p>
+</footer>
+    </article>
+  </main>
+<nav id="fd-toc" aria-label="On this page">
+  <div class="fd-toc-header">
+    <p class="fd-toc-title"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg>On this page</p>
+    <button type="button" class="fd-icon-button fd-toc-collapse" aria-label="Collapse page navigation" title="Collapse page navigation" aria-controls="fd-toc" aria-expanded="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></svg></button>
+  </div>
+  <div class="fd-toc-body"><svg class="fd-toc-rail" aria-hidden="true" preserveAspectRatio="none">
+      <path class="fd-toc-track" fill="none" />
+      <path class="fd-toc-thumb" fill="none" />
+    </svg><ul class="fd-toc-list">
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#notebook-first-workflow">Notebook-First Workflow</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#section-routing-from-cell-tags">Section routing from cell tags</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#section-routing-from-cell-metadata">Section routing from cell metadata</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#notebook-level-page-and-output-config">Notebook-level page and output config</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#nbprintcell-runtime-api">NBPrintCell runtime API</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#nbprint-cell-magic">%%nbprint cell magic</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#yaml-first-workflow">YAML-First Workflow</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#output-formats-nbconvert-configuration">Output formats & nbconvert configuration</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#passing-arbitrary-nbconvert-traitlets-options">Passing arbitrary nbconvert / traitlets options</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#structured-sections">Structured Sections</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#chapters-list-of-lists-middlematter">Chapters (list-of-lists middlematter)</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#per-section-page-layout">Per-section page layout</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#section-level-style-defaults">Section-level style defaults</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#formatting-overlays">Formatting Overlays</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#overlay-merge-formatting-onto-matching-cells">Overlay — merge formatting onto matching cells</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#layoutoverlay-wrap-contiguous-cells-in-a-flex-container">LayoutOverlay — wrap contiguous cells in a flex container</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#pageboxoverlay-wrap-contiguous-cells-in-a-page-box">PageBoxOverlay — wrap contiguous cells in a page box</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#footnotes">Footnotes</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#lerna-config-composition">Lerna Config Composition</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#composing-reports-from-parts">Composing reports from parts</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#cli-list-manipulation">CLI list manipulation</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#sweeps-and-multirun">Sweeps and multirun</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#patch-modify-composed-configs-before-cli-overrides">_patch_ — modify composed configs before CLI overrides</a>
+  </li>
+  <li class="fd-toc-item" data-depth="2">
+    <a href="#default-overrides-at-the-call-site">Default overrides at the call site</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#running-a-report">Running a Report</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#ccflow-integration">ccflow Integration</a>
+  </li>
+  <li class="fd-toc-item" data-depth="1">
+    <a href="#precedence-summary">Precedence Summary</a>
+  </li>
+</ul>
+
+  </div>
+  <div class="fd-toc-actions">
+    <a class="fd-toc-action" href="https://github.com/nbprint/nbprint/edit/HEAD/docs/src/configuration.md" target="_blank" rel="noopener" title="Edit this page"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg><span>Edit this page</span></a>
+    <a class="fd-toc-action" href="../../_sources/docs/src/configuration.md.txt" rel="nofollow" title="View source"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/></svg><span>View source</span></a>
+  </div>
+</nav>
+<button type="button" id="fd-toc-restore" class="fd-icon-button" aria-label="Expand page navigation" title="Expand page navigation" aria-controls="fd-toc" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/></svg></button>
+</div>
+<dialog id="fd-search-dialog" aria-label="Search">
+  <form class="fd-search-panel" method="dialog" role="search">
+    <div class="fd-search-field">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="search" id="fd-search-input" autocomplete="off" spellcheck="false" placeholder="Search documentation..." aria-label="Search" />
+      <kbd class="fd-kbd">Esc</kbd>
+    </div>
+    <div id="fd-search-results" role="listbox" aria-label="Search results"></div>
+    <p id="fd-search-empty" class="fd-search-empty" hidden>No results found.</p>
+  </form>
+</dialog>
+  </body>
 </html>
