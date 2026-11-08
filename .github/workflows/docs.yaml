@@ -36,11 +36,7 @@ jobs:
           playwright install chromium
 
       - name: Download distributions
-<<<<<<< before updating
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8
-=======
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333  # v8.0.2
->>>>>>> after updating
         with:
           pattern: dist
           merge-multiple: true
