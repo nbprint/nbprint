@@ -90,7 +90,7 @@ def _run_nbconvert(argv: list[str]) -> None:
 
     app = NbConvertApp()
     app.initialize(argv)
-    app.start()  # ty: ignore[missing-argument]
+    app.start()
 
 
 class NBConvertOutputs(Outputs):
