@@ -68,7 +68,7 @@ develop = [
     "hatch-js",
     "hatchling",
     "mdformat",
-    "mdformat-frontmatter",
+    "mdformat-myst",
     "mdformat-tables>=1",
     "pymupdf",
     "pytest",
