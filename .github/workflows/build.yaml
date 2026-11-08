@@ -106,17 +106,10 @@ jobs:
         with:
           name: test-results-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.node-version }}
           path: '**/junit.xml'
-<<<<<<< before updating
         if: ${{ always() }}
   
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@7622c5bf3d112a72ab4fa3951c2aa5723d8ab92d # v2.25.0
-=======
-        if: always()
-
-      - name: Publish test results
-        uses: EnricoMi/publish-unit-test-result-action@7622c5bf3d112a72ab4fa3951c2aa5723d8ab92d  # v2.25.0
->>>>>>> after updating
         with:
           files: '**/junit.xml'
         if: matrix.os == 'ubuntu-24.04'
