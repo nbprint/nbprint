@@ -56,12 +56,15 @@ jobs:
 
       - name: Install from source (manual trigger)
         run: |
-          uv pip install .[develop]
+          uv pip install -e .[develop]
           uv pip install "yardang[themes]"
         if: github.event_name == 'workflow_dispatch'
 
+      # examples load assets relative to the in-repo package, not site-packages
       - name: Build example gallery
         run: python docs/gallery.py
+        env:
+          PYTHONPATH: .
 
       - name: Build documentation
         run: yardang build
