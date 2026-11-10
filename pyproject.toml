@@ -327,6 +327,7 @@ cname = "nbprint.dev"
 root = "README.md"
 pages = [
     "docs/src/background.md",
+    "docs/src/gallery.md",
     "docs/src/architecture.md",
     "docs/src/configuration.md",
     "docs/src/api.md",
