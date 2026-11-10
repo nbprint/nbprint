@@ -4,7 +4,7 @@
 a set of standard parts, execute it with [`nbconvert`](https://nbconvert.readthedocs.io/en/latest/), and convert it to `html` or `pdf`
 with a standard template optionally running [`pagedjs`](https://pagedjs.org) to provide a print-oriented layout.
 
-It can be run off an existing notebook, or using the provided [YAML-based configuration framework](./configuration.md).
+It can be run off an existing notebook, or using the provided [YAML-based configuration framework](./configuration.md). The [gallery](./gallery.md) shows the output of each example.
 
 ```mermaid
 graph TB
@@ -121,7 +121,7 @@ We provide the following builtin versions:
 
 > `hydra` config: `nbprint/parameters/papermill`
 
-This is a basic object that takes any basic json-serializeable type and provides it in assignment as the first cell.
+This is a basic object that takes any JSON-serializable type and provides it in assignment as the first cell.
 
 As an example, the following `YAML`:
 
@@ -164,7 +164,7 @@ content:
 
 This will create two `ContentCode` instances, where one sets a value `string` on the `ExampleContext` instance and the other reads it.
 
-You can of course rely on notebook-global variables, but relying on typed contexts makes it easier to build modular reports.
+You can rely on notebook-global variables, but relying on typed contexts makes it easier to build modular reports.
 
 ### `Content`
 
@@ -177,7 +177,7 @@ Content has a few key attributes:
 - `Content.content`: string text content, or a `list[Content]` of subcontent for layout elements
 - `Content.style`: A `Style` element based on CSS for styling this content
 - `css`: Generic string content to be injected into a `<style>` tag scoped to this cell
-- `esm`: Generic string content to be injected into a `<script>` tag scoped to this cell. It is expected to contain a function `render(cell_nbprint_metadata_as_json, cell_dom_element)`. The function may be `async` — the render lifecycle (below) awaits it before Paged.js runs.
+- `esm`: Generic string content to be injected into a `<script>` tag scoped to this cell. It is expected to contain a function `render(cell_nbprint_metadata_as_json, cell_dom_element)`. The function may be `async`; the render lifecycle (below) awaits it before Paged.js runs.
 
 #### Render lifecycle
 
@@ -185,13 +185,13 @@ Every cell with an `esm` string is wrapped in a `<script type="module">` that li
 
 Phases, in order:
 
-1. **`DOMContentLoaded`** — `embedded.js` creates the `NBPrint` singleton and waits for every `<img>` to finish decoding (so measurements see correct `naturalWidth` / `naturalHeight`).
-1. **`nbprint.process()`** — reparents elements by `data-nbprint-parent-id`, hoists non-`@scope` styles to `<head>`, and runs the pre-pagination preprocessor.
-1. **`nbprint-ready` event dispatched** — every cell's ESM listener runs *synchronously* (the `CustomEvent` dispatch is synchronous), and inside its listener each cell calls `nbp.trackRender(async () => render(meta, elem))`. The registered promise is retained by the lifecycle.
-1. **Barrier: `nbp.waitForRenders()`** — awaits every tracked promise. If a render schedules further renders, the barrier loops until a tick passes with no new registrations, so cascading async work (e.g. dynamic imports, sub-renders) all settles. A rejection in one cell is logged and isolated; it does not block other cells.
-1. **`nbprint-esm-complete` event dispatched** — signals "DOM is stable, pagination starts now". Use this instead of `nbprint-ready` for any code that wants to run after user-land renders are done (diagnostics, measure-phase tweaks, future overflow detection).
-1. **`nbprint.build()`** — hands off to Paged.js. By this point the DOM is final.
-1. **`nbprint.postprocess()`** — dispatches `nbprint-done`, then sets `data-nbprint-paged="done"` on `<html>`. The nbprint template seeds that attribute with `"pending"` before any async work starts, so a PDF capture can distinguish "pagination still running" from "not an nbprint document". `NBPrintWebPDFExporter` waits for `"done"` instead of sleeping a fixed interval — nbconvert's stock webpdf exporter captures a fixed delay after the network goes idle, which races paged.js and silently truncates long documents. The attribute is set from a `finally`, so a failed render releases the capture rather than stalling it.
+1. **`DOMContentLoaded`**: `embedded.js` creates the `NBPrint` singleton and waits for every `<img>` to finish decoding (so measurements see correct `naturalWidth` / `naturalHeight`).
+1. **`nbprint.process()`**: reparents elements by `data-nbprint-parent-id`, hoists non-`@scope` styles to `<head>`, and runs the pre-pagination preprocessor.
+1. **`nbprint-ready` event dispatched**: every cell's ESM listener runs *synchronously* (the `CustomEvent` dispatch is synchronous), and inside its listener each cell calls `nbp.trackRender(async () => render(meta, elem))`. The registered promise is retained by the lifecycle.
+1. **Barrier: `nbp.waitForRenders()`**: awaits every tracked promise. If a render schedules further renders, the barrier loops until a tick passes with no new registrations, so cascading async work (e.g. dynamic imports, sub-renders) all settles. A rejection in one cell is logged and isolated; it does not block other cells.
+1. **`nbprint-esm-complete` event dispatched**: signals "DOM is stable, pagination starts now". Use this instead of `nbprint-ready` for any code that wants to run after user-land renders are done (diagnostics, measure-phase tweaks, future overflow detection).
+1. **`nbprint.build()`**: hands off to Paged.js. By this point the DOM is final.
+1. **`nbprint.postprocess()`**: dispatches `nbprint-done`, then sets `data-nbprint-paged="done"` on `<html>`. The nbprint template seeds that attribute with `"pending"` before any async work starts, so a PDF capture can distinguish "pagination still running" from "not an nbprint document". `NBPrintWebPDFExporter` waits for `"done"` instead of sleeping a fixed interval. nbconvert's stock webpdf exporter captures after a fixed delay once the network goes idle, which races paged.js and can truncate long documents. The attribute is set from a `finally`, so a failed render releases the capture rather than stalling it.
 
 **Writing a cell `render()` function.** The template handles registration automatically; author your ESM as if it were stand-alone:
 
@@ -214,7 +214,7 @@ Key guarantees:
 - **Isolation.** One cell's failure never blocks pagination of the rest of the document; the error is logged to the console with `[nbprint] cell render failed:` and the rejected promise resolves.
 - **Order independence.** `render()` calls run concurrently; do not rely on cell execution order. If you need cross-cell coordination, use the `Context` mechanism (typed, ordered, Python-side) rather than ad-hoc JS globals.
 - **Late registration is legal but not useful.** Calling `trackRender()` after `nbprint-esm-complete` has already fired produces a console warning and returns the promise ungated; pagedjs will not wait for it.
-- **Standalone fallback.** When the template is rendered outside the normal embedded pipeline (stand-alone fixtures, structural tests), the cell script falls back to fire-and-forget invocation — `trackRender` is optional.
+- **Standalone fallback.** When the template is rendered outside the normal embedded pipeline (stand-alone fixtures, structural tests), the cell script falls back to fire-and-forget invocation, so `trackRender` is optional.
 
 #### `ContentCode`
 
@@ -268,7 +268,7 @@ there is one source of truth for "what does `display: flex` mean."
 
 | `layout`      | CSS emitted                                                                     | Use for                              |
 | ------------- | ------------------------------------------------------------------------------- | ------------------------------------ |
-| `flow`        | normal block flow (`gap` → `margin-top` between siblings)                       | default — long-form content          |
+| `flow`        | normal block flow (`gap` → `margin-top` between siblings)                       | default; long-form content           |
 | `columns-2/3` | `column-count: N; column-fill: balance`                                         | newspaper-style multi-column layouts |
 | `grid-2x2`    | `display: grid; grid-template-columns: repeat(2, 1fr)`                          | 4-cell dashboards                    |
 | `grid-3x2`    | `display: grid; grid-template-columns: repeat(3, 1fr)`                          | 6-cell dashboards                    |
@@ -278,13 +278,13 @@ there is one source of truth for "what does `display: flex` mean."
 | `flex-column` | `display: flex; flex-direction: column` (shared with `ContentFlexColumnLayout`) | stacked panels with gap              |
 | `inline`      | `display: block` + per-sibling `margin-left` for `gap`                          | header/badge rows                    |
 | `masonry`     | `display: grid; grid-template-rows: masonry` (+ JS polyfill)                    | tile galleries                       |
-| `custom`      | suppresses preset CSS — user owns `:scope` via `css`                            | full manual control                  |
+| `custom`      | suppresses preset CSS; user owns `:scope` via `css`                             | full manual control                  |
 
 `gap`, `padding`, `align`, `justify` are passed to whichever preset
 makes sense for them; they are no-ops for presets that don't apply
 (e.g. `align` on `flow`).
 
-Crucially, the page-box runs an **auto-wrap validator**: any bare
+The page-box also runs an **auto-wrap validator**: any bare
 child `Content` inside its `content` list is wrapped in a
 `ContentPageBlock` so the DOM shape is always
 `page-box > block > <user content>`. Authors who want to escape
@@ -324,7 +324,7 @@ When `layout="grid"`, set `grid_template` to a raw CSS
 `grid-template` value to lay out children by name. Each child block
 references a cell via `area=`; the page-box validator cross-checks
 that every referenced area exists in the template (unused template
-areas are allowed — they just produce empty cells). The `.`
+areas are allowed and produce empty cells). The `.`
 placeholder is treated as an empty cell, not an area name.
 
 ```yaml
@@ -393,7 +393,7 @@ inside a notebook via the matching runtime context managers, which
 emit hidden `application/nbprint.page+json` /
 `application/nbprint.block+json` MIME outputs. The ingestion path
 extracts those payloads and routes them through the same
-`type_`-aware machinery that handles YAML — there is no separate
+`type_`-aware machinery that handles YAML, so there is no separate
 runtime path.
 
 ```python
@@ -420,7 +420,7 @@ with NBPrintPage(
 
 Both context managers accept every field of their corresponding
 `Content` model. Outside a `ContentPageBox`, `NBPrintBlock` still
-applies — `break_inside: avoid` is a useful "keep together"
+applies: `break_inside: avoid` is a useful "keep together"
 primitive even in long-scroll reports.
 
 #### Library Configuration Elements
@@ -525,11 +525,10 @@ Inherits from `NBConvertOutputs` and attaches the output to an email using a pre
 
 ## Configuration
 
-[`hydra`](https://hydra.cc) allows us the ability to mix and match the various components defined in YAML, or even build our own.
-Its easy for us to mix-and-match configuration for content, outputs, layout, and more.
-It also lets us tweak existing `pydantic`-defined options from the command line.
+[`hydra`](https://hydra.cc) lets us mix and match components defined in YAML, including our own, for content, outputs, layout, and more.
+It also lets us change existing `pydantic`-defined options from the command line.
 
-Let's look at some examples of how powerful this can be:
+Some examples:
 
 In this command, we run a default `nbprint.Configuration` but use content from an existing notebook.
 
@@ -602,5 +601,4 @@ Finally, we could accomplish the same thing by tweaking the default `Outputs` ob
 nbprint examples/basic.ipynb ++nbprint.outputs.target=webpdf
 ```
 
-By providing the ability to do deep dependency injection in existing objects and/or swap objects wholesale,
-we can customize, tweak, and extend `nbprint` as much as we need.
+Either approach works for any part of the configuration: override a nested field, or swap the whole object for another config group.
