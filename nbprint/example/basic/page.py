@@ -4,7 +4,7 @@ from pathlib import Path
 from IPython.display import HTML, Image
 from pydantic import Field, FilePath
 
-from nbprint import Configuration, ContentImage, Page, PageOrientation, PageRegion, PageRegionContent, Role
+from nbprint import Configuration, ContentImage, PageGlobal, PageOrientation, PageRegion, PageRegionContent, Role
 
 from .cover import ExampleNBPrintLogo
 
@@ -37,7 +37,7 @@ class ExampleBookIcon(ContentImage):
     path: FilePath = Path(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "examples", "assets", "book.png")))
 
 
-class ExampleReportPage(Page):
+class ExampleReportPage(PageGlobal):
     bottom_left: PageRegion = Field(default=ExampleLogoInFooter())
     bottom: PageRegion = Field(default=PageRegion(content=PageRegionContent(content="Example Report")))
     bottom_right: PageRegion = Field(default=PageRegion())
