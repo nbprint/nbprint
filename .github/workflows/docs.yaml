@@ -60,6 +60,9 @@ jobs:
           uv pip install "yardang[themes]"
         if: github.event_name == 'workflow_dispatch'
 
+      - name: Build example gallery
+        run: python docs/gallery.py
+
       - name: Build documentation
         run: yardang build
 

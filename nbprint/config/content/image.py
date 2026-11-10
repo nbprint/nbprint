@@ -8,7 +8,7 @@ from .base import Content
 
 class ContentImage(Content):
     path: FilePath | None = None
-    content: bytes | None = b""  # ty: ignore[invalid-attribute-override]
+    content: bytes | None = b""  # ty: ignore[incompatible-attribute-override]
     tags: list[str] = Field(default_factory=list)
 
     @field_validator("path", mode="before")

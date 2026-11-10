@@ -2,9 +2,9 @@
 
 `nbprint` supports three complementary ways to configure a report:
 
-1. **Notebook-first** — point nbprint at an existing `.ipynb` and drive sectioning, styling, and page layout from cell tags, cell metadata, and a small `%%nbprint` magic.
-1. **YAML-first** — describe the full document in YAML (via [`pydantic`](https://docs.pydantic.dev/latest/) models, composed with [`lerna`](https://github.com/nbprint/lerna) and [`omegaconf`](https://github.com/omry/omegaconf)).
-1. **Hybrid** — start from a notebook and add YAML overlays that target cells by index, tag, section, or cell type without rewriting the notebook.
+1. **Notebook-first**: point nbprint at an existing `.ipynb` and drive sectioning, styling, and page layout from cell tags, cell metadata, and a small `%%nbprint` magic.
+1. **YAML-first**: describe the full document in YAML (via [`pydantic`](https://docs.pydantic.dev/latest/) models, composed with [`lerna`](https://github.com/nbprint/lerna) and [`omegaconf`](https://github.com/omry/omegaconf)).
+1. **Hybrid**: start from a notebook and add YAML overlays that target cells by index, tag, section, or cell type without rewriting the notebook.
 
 ```mermaid
 graph TB
@@ -40,9 +40,9 @@ nbprint path/to/report.ipynb
 
 Worked examples live in [`examples/`](../../examples):
 
-- [`notebook-sections.ipynb`](../../examples/notebook-sections.ipynb) — section routing via tags and cell metadata, with page/output config in notebook metadata.
-- [`notebook-runtime.ipynb`](../../examples/notebook-runtime.ipynb) — runtime API (`NBPrintCell`) and `%%nbprint` magic.
-- [`notebook-overlays.ipynb`](../../examples/notebook-overlays.ipynb) — `overlays` and `layout_overlays` embedded in notebook metadata.
+- [`notebook-sections.ipynb`](../../examples/notebook-sections.ipynb): section routing via tags and cell metadata, with page/output config in notebook metadata.
+- [`notebook-runtime.ipynb`](../../examples/notebook-runtime.ipynb): runtime API (`NBPrintCell`) and `%%nbprint` magic.
+- [`notebook-overlays.ipynb`](../../examples/notebook-overlays.ipynb): `overlays` and `layout_overlays` embedded in notebook metadata.
 
 ### Section routing from cell tags
 
@@ -70,7 +70,7 @@ Equivalent to a tag, but takes priority:
 
 ### Notebook-level page and output config
 
-Embed a full page/output spec directly in the notebook — no YAML required:
+Embed a full page/output spec directly in the notebook. No YAML is required:
 
 ```jsonc
 // notebook.metadata.nbprint
@@ -111,7 +111,7 @@ A lighter alternative for quick one-liners:
 display(Markdown("# Introduction"))
 ```
 
-Explicit cell metadata beats runtime metadata beats magic — so a hand-edited value in `cell.metadata.nbprint` always wins.
+Explicit cell metadata takes precedence over runtime metadata, which takes precedence over the magic, so a hand-edited value in `cell.metadata.nbprint` always wins.
 
 ## YAML-First Workflow
 
@@ -174,14 +174,14 @@ executed and converted. Common fields:
 ### Passing arbitrary nbconvert / traitlets options
 
 Anything configurable on an nbconvert exporter, preprocessor, or the app itself
-is reachable generically through `nbconvert_config` — no nbprint field is needed
-per option. Entries map 1:1 onto nbconvert's `--Class.trait=value` CLI options
+is reachable through `nbconvert_config`, so nbprint doesn't need a field for each
+option. Entries map 1:1 onto nbconvert's `--Class.trait=value` CLI options
 and are applied to the conversion (exporter) pass.
 
 For example, [`WebPDFExporter.page_render_timeout`](https://github.com/jupyter/nbconvert/pull/2250)
 controls how long (in ms) the headless browser waits for JavaScript output to
-settle before capturing the PDF — useful for notebooks with heavy interactive
-charts:
+settle before capturing the PDF. This helps with notebooks that have heavy
+interactive charts:
 
 ```yaml
 outputs:
@@ -206,10 +206,10 @@ nbprint examples/basic.yaml \
 Scalars pass through as-is, booleans render as `True`/`False`, and lists are
 JSON-encoded so container traits round-trip through the CLI.
 
-Traits that nbprint already manages — `NbConvertApp.export_format` (`to`),
+Traits that nbprint already manages (`NbConvertApp.export_format` (`to`),
 `TemplateExporter.template_name` (`template`), `NbConvertApp.output_base`
 (`output`), `ExecutePreprocessor.enabled` (`execute`), and
-`ExecutePreprocessor.timeout` — are rejected in `nbconvert_config` with an error
+`ExecutePreprocessor.timeout`) are rejected in `nbconvert_config` with an error
 pointing at the dedicated field (`target`, `template`, `naming`/`root`,
 `execute`, `timeout`). Set those via their own fields instead.
 
@@ -247,14 +247,14 @@ content:
       content: "# Bibliography"
 ```
 
-Flat-list `content:` is still fully supported — it is treated as `middlematter`.
+Flat-list `content:` is still supported and is treated as `middlematter`.
 
 ### Chapters (list-of-lists middlematter)
 
 For multi-chapter documents, supply `middlematter` as a **list of lists**. Each
 sublist is a chapter: its **first element** is promoted to a chapter separator
 and the remaining elements form the chapter body. nbprint interleaves them in
-document order — `[chapter1-title, *chapter1-body, chapter2-title, *chapter2-body, …]`.
+document order: `[chapter1-title, *chapter1-body, chapter2-title, *chapter2-body, …]`.
 
 ```yaml
 content:
@@ -272,7 +272,7 @@ content:
         content: "Body of the second chapter…"
 ```
 
-By default each separator renders as a **standalone chapter title page** — a hard
+By default each separator renders as a **standalone chapter title page**, with a hard
 page break is inserted before and after it. To keep separators inline with their
 chapter body instead, disable the behavior:
 
@@ -356,7 +356,7 @@ overlays:
       font: {size: 28}
 ```
 
-Match fields combine with AND semantics — an empty `match` matches every cell. Multiple overlays apply in list order; later overlays stack on top of earlier ones:
+Match fields combine with AND semantics, and an empty `match` matches every cell. Multiple overlays apply in list order; later overlays stack on top of earlier ones:
 
 - `css` is appended
 - `classname` is appended (accumulated as a list)
@@ -420,7 +420,7 @@ layout_overlays:
 
 This is the multi-cell counterpart to [`NBPrintPage`](architecture.md), which turns a *single* cell into a page box from inside the notebook. Reach for the overlay when a page is assembled from several cells.
 
-Available fields mirror `ContentPageBox`: `layout` (any [layout preset](architecture.md)), `fit`, `min_pages`, `gap`, `padding`, `align`, `justify`, `grid_template`, `page_size`, `page_orientation`, `page_margins` — plus the wrapper formatting (`css`, `classname`, `attrs`, `style`) shared with `LayoutOverlay`. Overlay `css` is appended to the preset's CSS rather than replacing it.
+Available fields mirror `ContentPageBox`: `layout` (any [layout preset](architecture.md)), `fit`, `min_pages`, `gap`, `padding`, `align`, `justify`, `grid_template`, `page_size`, `page_orientation`, `page_margins`, plus the wrapper formatting (`css`, `classname`, `attrs`, `style`) shared with `LayoutOverlay`. Overlay `css` is appended to the preset's CSS rather than replacing it.
 
 `sizes` is flex-only and is rejected on a page-box overlay; use a columns/grid preset, or `grid_template` for explicit tracks.
 
@@ -481,7 +481,7 @@ This lets a handful of reusable YAML files describe a large family of reports.
 
 ### CLI list manipulation
 
-lerna supports list operations directly from the CLI — useful for adding a single chart or section to an existing report without editing the YAML:
+lerna supports list operations directly from the CLI, which is useful for adding a single chart or section to an existing report without editing the YAML:
 
 ```bash
 # Append a content item
@@ -525,7 +525,7 @@ Combined with `outputs.naming: "{{name}}-{{parameters.model}}-{{parameters.alpha
 
 ### `_patch_` — modify composed configs before CLI overrides
 
-Pull in a vendored config and surgically modify it:
+Pull in a vendored config and modify it:
 
 ```yaml
 defaults:
@@ -544,11 +544,13 @@ Patches apply after composition but before CLI overrides, so CLI still wins. See
 nbprint's CLI accepts default overrides without editing YAML:
 
 ```bash
+# ++callable switches to the multirun model, nbprintx.parameters takes inline
+# JSON or a file path, and execute=False skips execution
 nbprint examples/basic.ipynb \
-  ++callable=/nbprintx \                             # switch to the multirun model
+  ++callable=/nbprintx \
   +nbprint.outputs.naming='{{name}}-{{date}}-{{a}}' \
-  +nbprintx.parameters=[{a: 1},{a: 2},{a: 3}] \      # inline JSON or file path
-  ++nbprint.outputs.execute=False                    # disable execution
+  +nbprintx.parameters=[{a: 1},{a: 2},{a: 3}] \
+  ++nbprint.outputs.execute=False
 ```
 
 ## Running a Report
@@ -565,7 +567,7 @@ The output lands in the directory set by `outputs.root` (default `./outputs`), n
 
 <img src="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.png?raw=true" alt="example basic output" width="800">
 
-A rendered PDF of the basic example lives [here](https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.pdf?raw=true).
+You can also download [a rendered PDF of the basic example](https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.pdf?raw=true). The [gallery](gallery.md) has rendered HTML for every example.
 
 ## ccflow Integration
 
@@ -589,7 +591,7 @@ nbprint examples/basic.ipynb \
 
 When the same piece of configuration can come from multiple places, resolution order is:
 
-1. **CLI overrides** — always highest priority
+1. **CLI overrides** (always highest priority)
 1. **YAML explicit values** (`config.yaml`, `_self_`)
 1. **YAML `_patch_` directives** (applied during composition)
 1. **Notebook-level metadata** (`notebook.metadata.nbprint.{page,outputs,overlays,layout_overlays}`)
