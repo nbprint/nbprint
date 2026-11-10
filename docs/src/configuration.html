@@ -490,6 +490,11 @@ window.runMermaid = runMermaid;</script>
     </a>
   </li>
   <li class="fd-tree-item">
+    <a class="fd-link" href="gallery.html">
+      <span class="fd-link-text">Gallery</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
     <a class="fd-link" href="architecture.html">
       <span class="fd-link-text">Architecture</span>
     </a>
@@ -785,9 +790,9 @@ window.runMermaid = runMermaid;</script>
 <h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code> supports three complementary ways to configure a report:</p>
 <ol class="arabic simple">
-<li><p><strong>Notebook-first</strong> — point nbprint at an existing <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> and drive sectioning, styling, and page layout from cell tags, cell metadata, and a small <code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> magic.</p></li>
-<li><p><strong>YAML-first</strong> — describe the full document in YAML (via <a class="reference external" href="https://docs.pydantic.dev/latest/"><code class="docutils literal notranslate"><span class="pre">pydantic</span></code></a> models, composed with <a class="reference external" href="https://github.com/nbprint/lerna"><code class="docutils literal notranslate"><span class="pre">lerna</span></code></a> and <a class="reference external" href="https://github.com/omry/omegaconf"><code class="docutils literal notranslate"><span class="pre">omegaconf</span></code></a>).</p></li>
-<li><p><strong>Hybrid</strong> — start from a notebook and add YAML overlays that target cells by index, tag, section, or cell type without rewriting the notebook.</p></li>
+<li><p><strong>Notebook-first</strong>: point nbprint at an existing <code class="docutils literal notranslate"><span class="pre">.ipynb</span></code> and drive sectioning, styling, and page layout from cell tags, cell metadata, and a small <code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> magic.</p></li>
+<li><p><strong>YAML-first</strong>: describe the full document in YAML (via <a class="reference external" href="https://docs.pydantic.dev/latest/"><code class="docutils literal notranslate"><span class="pre">pydantic</span></code></a> models, composed with <a class="reference external" href="https://github.com/nbprint/lerna"><code class="docutils literal notranslate"><span class="pre">lerna</span></code></a> and <a class="reference external" href="https://github.com/omry/omegaconf"><code class="docutils literal notranslate"><span class="pre">omegaconf</span></code></a>).</p></li>
+<li><p><strong>Hybrid</strong>: start from a notebook and add YAML overlays that target cells by index, tag, section, or cell type without rewriting the notebook.</p></li>
 </ol>
 <pre  class="mermaid">
         graph TB
@@ -819,9 +824,9 @@ window.runMermaid = runMermaid;</script>
 </div>
 <p>Worked examples live in <a class="reference internal" href="#../../examples"><span class="xref myst"><code class="docutils literal notranslate"><span class="pre">examples/</span></code></span></a>:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="../../examples/notebook-sections.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-sections.ipynb</span></code></span></a> — section routing via tags and cell metadata, with page/output config in notebook metadata.</p></li>
-<li><p><a class="reference internal" href="../../examples/notebook-runtime.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-runtime.ipynb</span></code></span></a> — runtime API (<code class="docutils literal notranslate"><span class="pre">NBPrintCell</span></code>) and <code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> magic.</p></li>
-<li><p><a class="reference internal" href="../../examples/notebook-overlays.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-overlays.ipynb</span></code></span></a> — <code class="docutils literal notranslate"><span class="pre">overlays</span></code> and <code class="docutils literal notranslate"><span class="pre">layout_overlays</span></code> embedded in notebook metadata.</p></li>
+<li><p><a class="reference internal" href="../../examples/notebook-sections.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-sections.ipynb</span></code></span></a>: section routing via tags and cell metadata, with page/output config in notebook metadata.</p></li>
+<li><p><a class="reference internal" href="../../examples/notebook-runtime.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-runtime.ipynb</span></code></span></a>: runtime API (<code class="docutils literal notranslate"><span class="pre">NBPrintCell</span></code>) and <code class="docutils literal notranslate"><span class="pre">%%nbprint</span></code> magic.</p></li>
+<li><p><a class="reference internal" href="../../examples/notebook-overlays.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">notebook-overlays.ipynb</span></code></span></a>: <code class="docutils literal notranslate"><span class="pre">overlays</span></code> and <code class="docutils literal notranslate"><span class="pre">layout_overlays</span></code> embedded in notebook metadata.</p></li>
 </ul>
 <section id="section-routing-from-cell-tags">
 <h3>Section routing from cell tags<a class="headerlink" href="#section-routing-from-cell-tags" title="Link to this heading">¶</a></h3>
@@ -846,7 +851,7 @@ window.runMermaid = runMermaid;</script>
 </section>
 <section id="notebook-level-page-and-output-config">
 <h3>Notebook-level page and output config<a class="headerlink" href="#notebook-level-page-and-output-config" title="Link to this heading">¶</a></h3>
-<p>Embed a full page/output spec directly in the notebook — no YAML required:</p>
+<p>Embed a full page/output spec directly in the notebook. No YAML is required:</p>
 <div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// notebook.metadata.nbprint
 {
   "page": {
@@ -882,7 +887,7 @@ window.runMermaid = runMermaid;</script>
 <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="s2">"# Introduction"</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Explicit cell metadata beats runtime metadata beats magic — so a hand-edited value in <code class="docutils literal notranslate"><span class="pre">cell.metadata.nbprint</span></code> always wins.</p>
+<p>Explicit cell metadata takes precedence over runtime metadata, which takes precedence over the magic, so a hand-edited value in <code class="docutils literal notranslate"><span class="pre">cell.metadata.nbprint</span></code> always wins.</p>
 </section>
 </section>
 <section id="yaml-first-workflow">
@@ -959,13 +964,13 @@ executed and converted. Common fields:</p>
 <section id="passing-arbitrary-nbconvert-traitlets-options">
 <h3>Passing arbitrary nbconvert / traitlets options<a class="headerlink" href="#passing-arbitrary-nbconvert-traitlets-options" title="Link to this heading">¶</a></h3>
 <p>Anything configurable on an nbconvert exporter, preprocessor, or the app itself
-is reachable generically through <code class="docutils literal notranslate"><span class="pre">nbconvert_config</span></code> — no nbprint field is needed
-per option. Entries map 1:1 onto nbconvert’s <code class="docutils literal notranslate"><span class="pre">--Class.trait=value</span></code> CLI options
+is reachable through <code class="docutils literal notranslate"><span class="pre">nbconvert_config</span></code>, so nbprint doesn’t need a field for each
+option. Entries map 1:1 onto nbconvert’s <code class="docutils literal notranslate"><span class="pre">--Class.trait=value</span></code> CLI options
 and are applied to the conversion (exporter) pass.</p>
 <p>For example, <a class="reference external" href="https://github.com/jupyter/nbconvert/pull/2250"><code class="docutils literal notranslate"><span class="pre">WebPDFExporter.page_render_timeout</span></code></a>
 controls how long (in ms) the headless browser waits for JavaScript output to
-settle before capturing the PDF — useful for notebooks with heavy interactive
-charts:</p>
+settle before capturing the PDF. This helps with notebooks that have heavy
+interactive charts:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">outputs</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.NBConvertOutputs</span>
 <span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">webpdf</span>
@@ -985,10 +990,10 @@ charts:</p>
 </div>
 <p>Scalars pass through as-is, booleans render as <code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>, and lists are
 JSON-encoded so container traits round-trip through the CLI.</p>
-<p>Traits that nbprint already manages — <code class="docutils literal notranslate"><span class="pre">NbConvertApp.export_format</span></code> (<code class="docutils literal notranslate"><span class="pre">to</span></code>),
+<p>Traits that nbprint already manages (<code class="docutils literal notranslate"><span class="pre">NbConvertApp.export_format</span></code> (<code class="docutils literal notranslate"><span class="pre">to</span></code>),
 <code class="docutils literal notranslate"><span class="pre">TemplateExporter.template_name</span></code> (<code class="docutils literal notranslate"><span class="pre">template</span></code>), <code class="docutils literal notranslate"><span class="pre">NbConvertApp.output_base</span></code>
 (<code class="docutils literal notranslate"><span class="pre">output</span></code>), <code class="docutils literal notranslate"><span class="pre">ExecutePreprocessor.enabled</span></code> (<code class="docutils literal notranslate"><span class="pre">execute</span></code>), and
-<code class="docutils literal notranslate"><span class="pre">ExecutePreprocessor.timeout</span></code> — are rejected in <code class="docutils literal notranslate"><span class="pre">nbconvert_config</span></code> with an error
+<code class="docutils literal notranslate"><span class="pre">ExecutePreprocessor.timeout</span></code>) are rejected in <code class="docutils literal notranslate"><span class="pre">nbconvert_config</span></code> with an error
 pointing at the dedicated field (<code class="docutils literal notranslate"><span class="pre">target</span></code>, <code class="docutils literal notranslate"><span class="pre">template</span></code>, <code class="docutils literal notranslate"><span class="pre">naming</span></code>/<code class="docutils literal notranslate"><span class="pre">root</span></code>,
 <code class="docutils literal notranslate"><span class="pre">execute</span></code>, <code class="docutils literal notranslate"><span class="pre">timeout</span></code>). Set those via their own fields instead.</p>
 </section>
@@ -1049,13 +1054,13 @@ pointing at the dedicated field (<code class="docutils literal notranslate"><spa
 <span class="w">      </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"#</span><span class="nv"> </span><span class="s">Bibliography"</span>
 </pre></div>
 </div>
-<p>Flat-list <code class="docutils literal notranslate"><span class="pre">content:</span></code> is still fully supported — it is treated as <code class="docutils literal notranslate"><span class="pre">middlematter</span></code>.</p>
+<p>Flat-list <code class="docutils literal notranslate"><span class="pre">content:</span></code> is still supported and is treated as <code class="docutils literal notranslate"><span class="pre">middlematter</span></code>.</p>
 <section id="chapters-list-of-lists-middlematter">
 <h3>Chapters (list-of-lists middlematter)<a class="headerlink" href="#chapters-list-of-lists-middlematter" title="Link to this heading">¶</a></h3>
 <p>For multi-chapter documents, supply <code class="docutils literal notranslate"><span class="pre">middlematter</span></code> as a <strong>list of lists</strong>. Each
 sublist is a chapter: its <strong>first element</strong> is promoted to a chapter separator
 and the remaining elements form the chapter body. nbprint interleaves them in
-document order — <code class="docutils literal notranslate"><span class="pre">[chapter1-title,</span> <span class="pre">*chapter1-body,</span> <span class="pre">chapter2-title,</span> <span class="pre">*chapter2-body,</span> <span class="pre">…]</span></code>.</p>
+document order: <code class="docutils literal notranslate"><span class="pre">[chapter1-title,</span> <span class="pre">*chapter1-body,</span> <span class="pre">chapter2-title,</span> <span class="pre">*chapter2-body,</span> <span class="pre">…]</span></code>.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">middlematter</span><span class="p">:</span>
 <span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="c1"># Chapter One — first item becomes the title page</span>
@@ -1071,7 +1076,7 @@ document order — <code class="docutils literal notranslate"><span class="pre">
 <span class="w">        </span><span class="nt">content</span><span class="p">:</span><span class="w"> </span><span class="s">"Body</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">the</span><span class="nv"> </span><span class="s">second</span><span class="nv"> </span><span class="s">chapter…"</span>
 </pre></div>
 </div>
-<p>By default each separator renders as a <strong>standalone chapter title page</strong> — a hard
+<p>By default each separator renders as a <strong>standalone chapter title page</strong>, with a hard
 page break is inserted before and after it. To keep separators inline with their
 chapter body instead, disable the behavior:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">content</span><span class="p">:</span>
@@ -1147,7 +1152,7 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 <span class="w">      </span><span class="nt">font</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="nv">28</span><span class="p p-Indicator">}</span>
 </pre></div>
 </div>
-<p>Match fields combine with AND semantics — an empty <code class="docutils literal notranslate"><span class="pre">match</span></code> matches every cell. Multiple overlays apply in list order; later overlays stack on top of earlier ones:</p>
+<p>Match fields combine with AND semantics, and an empty <code class="docutils literal notranslate"><span class="pre">match</span></code> matches every cell. Multiple overlays apply in list order; later overlays stack on top of earlier ones:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">css</span></code> is appended</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">classname</span></code> is appended (accumulated as a list)</p></li>
@@ -1205,7 +1210,7 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 </pre></div>
 </div>
 <p>This is the multi-cell counterpart to <a class="reference internal" href="architecture.html"><span class="std std-doc"><code class="docutils literal notranslate"><span class="pre">NBPrintPage</span></code></span></a>, which turns a <em>single</em> cell into a page box from inside the notebook. Reach for the overlay when a page is assembled from several cells.</p>
-<p>Available fields mirror <code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code>: <code class="docutils literal notranslate"><span class="pre">layout</span></code> (any <a class="reference internal" href="architecture.html"><span class="std std-doc">layout preset</span></a>), <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">min_pages</span></code>, <code class="docutils literal notranslate"><span class="pre">gap</span></code>, <code class="docutils literal notranslate"><span class="pre">padding</span></code>, <code class="docutils literal notranslate"><span class="pre">align</span></code>, <code class="docutils literal notranslate"><span class="pre">justify</span></code>, <code class="docutils literal notranslate"><span class="pre">grid_template</span></code>, <code class="docutils literal notranslate"><span class="pre">page_size</span></code>, <code class="docutils literal notranslate"><span class="pre">page_orientation</span></code>, <code class="docutils literal notranslate"><span class="pre">page_margins</span></code> — plus the wrapper formatting (<code class="docutils literal notranslate"><span class="pre">css</span></code>, <code class="docutils literal notranslate"><span class="pre">classname</span></code>, <code class="docutils literal notranslate"><span class="pre">attrs</span></code>, <code class="docutils literal notranslate"><span class="pre">style</span></code>) shared with <code class="docutils literal notranslate"><span class="pre">LayoutOverlay</span></code>. Overlay <code class="docutils literal notranslate"><span class="pre">css</span></code> is appended to the preset’s CSS rather than replacing it.</p>
+<p>Available fields mirror <code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code>: <code class="docutils literal notranslate"><span class="pre">layout</span></code> (any <a class="reference internal" href="architecture.html"><span class="std std-doc">layout preset</span></a>), <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">min_pages</span></code>, <code class="docutils literal notranslate"><span class="pre">gap</span></code>, <code class="docutils literal notranslate"><span class="pre">padding</span></code>, <code class="docutils literal notranslate"><span class="pre">align</span></code>, <code class="docutils literal notranslate"><span class="pre">justify</span></code>, <code class="docutils literal notranslate"><span class="pre">grid_template</span></code>, <code class="docutils literal notranslate"><span class="pre">page_size</span></code>, <code class="docutils literal notranslate"><span class="pre">page_orientation</span></code>, <code class="docutils literal notranslate"><span class="pre">page_margins</span></code>, plus the wrapper formatting (<code class="docutils literal notranslate"><span class="pre">css</span></code>, <code class="docutils literal notranslate"><span class="pre">classname</span></code>, <code class="docutils literal notranslate"><span class="pre">attrs</span></code>, <code class="docutils literal notranslate"><span class="pre">style</span></code>) shared with <code class="docutils literal notranslate"><span class="pre">LayoutOverlay</span></code>. Overlay <code class="docutils literal notranslate"><span class="pre">css</span></code> is appended to the preset’s CSS rather than replacing it.</p>
 <p><code class="docutils literal notranslate"><span class="pre">sizes</span></code> is flex-only and is rejected on a page-box overlay; use a columns/grid preset, or <code class="docutils literal notranslate"><span class="pre">grid_template</span></code> for explicit tracks.</p>
 <p>As with every overlay, these can live in notebook metadata instead of YAML:</p>
 <div class="highlight-jsonc notranslate"><div class="highlight"><pre><span></span>// notebook.metadata.nbprint
@@ -1256,7 +1261,7 @@ alongside a flat <code class="docutils literal notranslate"><span class="pre">mi
 </section>
 <section id="cli-list-manipulation">
 <h3>CLI list manipulation<a class="headerlink" href="#cli-list-manipulation" title="Link to this heading">¶</a></h3>
-<p>lerna supports list operations directly from the CLI — useful for adding a single chart or section to an existing report without editing the YAML:</p>
+<p>lerna supports list operations directly from the CLI, which is useful for adding a single chart or section to an existing report without editing the YAML:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Append a content item</span>
 nbprint<span class="w"> </span>examples/basic.yaml<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span><span class="s1">'content=append({_target_: nbprint.ContentMarkdown, content: "# Added"})'</span>
@@ -1314,7 +1319,7 @@ nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s
 </section>
 <section id="patch-modify-composed-configs-before-cli-overrides">
 <h3><code class="docutils literal notranslate"><span class="pre">_patch_</span></code> — modify composed configs before CLI overrides<a class="headerlink" href="#patch-modify-composed-configs-before-cli-overrides" title="Link to this heading">¶</a></h3>
-<p>Pull in a vendored config and surgically modify it:</p>
+<p>Pull in a vendored config and modify it:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">defaults</span><span class="p">:</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vendor/large_defaults</span>
 <span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">_self_</span>
@@ -1329,11 +1334,13 @@ nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="s
 <section id="default-overrides-at-the-call-site">
 <h3>Default overrides at the call site<a class="headerlink" href="#default-overrides-at-the-call-site" title="Link to this heading">¶</a></h3>
 <p>nbprint’s CLI accepts default overrides without editing YAML:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>++callable<span class="o">=</span>/nbprintx<span class="w"> </span><span class="se">\ </span><span class="w">                            </span><span class="c1"># switch to the multirun model</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># ++callable switches to the multirun model, nbprintx.parameters takes inline</span>
+<span class="c1"># JSON or a file path, and execute=False skips execution</span>
+nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>++callable<span class="o">=</span>/nbprintx<span class="w"> </span><span class="se">\</span>
 <span class="w">  </span>+nbprint.outputs.naming<span class="o">=</span><span class="s1">'{{name}}-{{date}}-{{a}}'</span><span class="w"> </span><span class="se">\</span>
-<span class="w">  </span>+nbprintx.parameters<span class="o">=[{</span>a:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">2</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">3</span><span class="o">}]</span><span class="w"> </span><span class="se">\ </span><span class="w">     </span><span class="c1"># inline JSON or file path</span>
-<span class="w">  </span>++nbprint.outputs.execute<span class="o">=</span>False<span class="w">                    </span><span class="c1"># disable execution</span>
+<span class="w">  </span>+nbprintx.parameters<span class="o">=[{</span>a:<span class="w"> </span><span class="m">1</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">2</span><span class="o">}</span>,<span class="o">{</span>a:<span class="w"> </span><span class="m">3</span><span class="o">}]</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>++nbprint.outputs.execute<span class="o">=</span>False
 </pre></div>
 </div>
 </section>
@@ -1350,7 +1357,7 @@ nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="n
 </a>
 <a class="reference internal image-reference" href="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.png?raw=true"><img alt="example basic output" src="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.png?raw=true" style="width: 800px;" />
 </a>
-<p>A rendered PDF of the basic example lives <a class="reference external" href="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.pdf?raw=true">here</a>.</p>
+<p>You can also download <a class="reference external" href="https://github.com/nbprint/nbprint/raw/main/docs/img/example-basic.pdf?raw=true">a rendered PDF of the basic example</a>. The <a class="reference internal" href="gallery.html"><span class="std std-doc">gallery</span></a> has rendered HTML for every example.</p>
 </section>
 <section id="ccflow-integration">
 <h2>ccflow Integration<a class="headerlink" href="#ccflow-integration" title="Link to this heading">¶</a></h2>
@@ -1371,7 +1378,7 @@ nbprint<span class="w"> </span>report.yaml<span class="w"> </span><span class="n
 <h2>Precedence Summary<a class="headerlink" href="#precedence-summary" title="Link to this heading">¶</a></h2>
 <p>When the same piece of configuration can come from multiple places, resolution order is:</p>
 <ol class="arabic simple">
-<li><p><strong>CLI overrides</strong> — always highest priority</p></li>
+<li><p><strong>CLI overrides</strong> (always highest priority)</p></li>
 <li><p><strong>YAML explicit values</strong> (<code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">_self_</span></code>)</p></li>
 <li><p><strong>YAML <code class="docutils literal notranslate"><span class="pre">_patch_</span></code> directives</strong> (applied during composition)</p></li>
 <li><p><strong>Notebook-level metadata</strong> (<code class="docutils literal notranslate"><span class="pre">notebook.metadata.nbprint.{page,outputs,overlays,layout_overlays}</span></code>)</p></li>

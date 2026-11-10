@@ -8,6 +8,8 @@ hidden: true
 
 docs/src/background.md
 
+docs/src/gallery.md
+
 docs/src/architecture.md
 
 docs/src/configuration.md
@@ -35,9 +37,9 @@ A framework for building print media with [`nbconvert`](https://nbconvert.readth
 
 ## Background
 
-Jupyter Notebooks are widely used for reports via [`nbconvert`](https://nbconvert.readthedocs.io/en/latest/), but most development work has been on enabling building interactive websites. The goal of `nbprint` is to focus on print-oriented workflows, e.g. PDF, by leveraging new developments in `nbconvert` and the [`pagedjs`](https://pagedjs.org) print-oriented layout library.
+Jupyter Notebooks are widely used for reports via [`nbconvert`](https://nbconvert.readthedocs.io/en/latest/), but most development work has focused on interactive websites. The goal of `nbprint` is to focus on print-oriented workflows, e.g. PDF, by leveraging new developments in `nbconvert` and the [`pagedjs`](https://pagedjs.org) print-oriented layout library.
 
-For a deeper dive, see [the documentation](https://nbprint.github.io/nbprint/index.html).
+For a deeper dive, see [the documentation](https://nbprint.github.io/nbprint/index.html). To see what nbprint produces, browse the [gallery](https://nbprint.github.io/nbprint/docs/src/gallery.html) of rendered examples.
 
 ## Quickstart
 
@@ -103,7 +105,7 @@ graph TB
     class init,proc,pre,esm,pjs,post browserPhase
 ```
 
-nbprint splits work across three stages. Authoring happens in the notebook (plus optional YAML overrides via [hydra](https://hydra.cc)). At **build time**, `nbconvert` runs the nbprint Jinja2 template to emit a single self-contained HTML file with all JS, CSS, and data embedded. At **render time**, the browser does the heavy lifting: reparenting the DOM by parent-id, hoisting global styles, running a preprocessing pass that measures and scales oversized content, awaiting every cell's `render()` function through a [lifecycle barrier](https://nbprint.github.io/nbprint/docs/src/architecture.html#render-lifecycle) so pagination only starts after the DOM is stable, then handing off to [`paged.js`](https://pagedjs.org) for layout, and finally running a postvalidation pass that drops blank pages and surfaces overflow warnings. PDF output is produced by rendering the same HTML with `nbconvert --to webpdf` (headless Chromium); there is no separate PDF codepath.
+nbprint splits work across three stages. You author a notebook, optionally with YAML overrides via [hydra](https://hydra.cc). At **build time**, `nbconvert` runs the nbprint Jinja2 template and writes a single self-contained HTML file with all JS, CSS, and data embedded. At **render time**, the browser lays out the pages. It reparents the DOM by parent id, hoists global styles, measures and scales oversized content, and waits for every cell's `render()` function through a [lifecycle barrier](https://nbprint.github.io/nbprint/docs/src/architecture.html#render-lifecycle), so pagination starts only after the DOM is stable. [`paged.js`](https://pagedjs.org) then paginates the document, and a final validation pass drops blank pages and warns about overflow. PDF output comes from rendering the same HTML with `nbconvert --to webpdf` (headless Chromium), so there is no separate PDF code path.
 
 For more information, see [the architecture documentation](https://nbprint.github.io/nbprint/docs/src/architecture.html).
 

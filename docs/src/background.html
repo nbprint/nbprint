@@ -29,7 +29,7 @@
     <script src="../../_static/js/custom.js?v=956e5d78"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Architecture" href="architecture.html" />
+    <link rel="next" title="Gallery" href="gallery.html" />
     <link rel="prev" title="Background" href="../../index.html" />
     <script>
       (function () {
@@ -82,6 +82,11 @@
   <li class="fd-tree-item">
     <a class="fd-link fd-current" href="#">
       <span class="fd-link-text">Background</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="gallery.html">
+      <span class="fd-link-text">Gallery</span>
     </a>
   </li>
   <li class="fd-tree-item">
@@ -301,9 +306,9 @@
   <section class="tex2jax_ignore mathjax_ignore" id="background">
 <h1>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h1>
 <p>Jupyter Notebooks are widely used for reports via <a class="reference external" href="https://nbconvert.readthedocs.io/en/latest/"><code class="docutils literal notranslate"><span class="pre">nbconvert</span></code></a>. Most efforts focus on building web reports / websites from notebooks, including <a class="reference external" href="https://github.com/voila-dashboards/voila"><code class="docutils literal notranslate"><span class="pre">Voilà</span></code></a> and <a class="reference external" href="https://jupyterbook.org/en/stable/intro.html"><code class="docutils literal notranslate"><span class="pre">Jupyter</span> <span class="pre">Book</span></code></a>.</p>
-<p>Despite being the primary goal of early notebook conversion efforts, in recent years much less focus has been spent on print media - PDFs for reports, academic papers, newspapers, etc. There are many examples of <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> templates for academic papers, as well as projects like <a class="reference external" href="https://github.com/chrisjsewell/ipypublish/tree/develop"><code class="docutils literal notranslate"><span class="pre">ipypublish</span></code></a>. Most of these efforts focus on <span class="math notranslate nohighlight">\(\\LaTeX\)</span>, and indeed <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> itself started as convenience framework for formatting charts and tables similarly between html and pdf outputs.</p>
-<p>However, with recent releases to <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code>, which now supports <code class="docutils literal notranslate"><span class="pre">webpdf</span></code> (printing as pdf from within a headless web browser), and with advances to the <code class="docutils literal notranslate"><span class="pre">&#64;media</span> <span class="pre">print</span></code> CSS directive spearheaded by the lovely folks at <a class="reference external" href="https://pagedjs.org"><code class="docutils literal notranslate"><span class="pre">pagedjs</span></code></a>, it is now much easier to build publication ready print-oriented media on the web.</p>
-<p>This is the goal of <code class="docutils literal notranslate"><span class="pre">nbprint</span></code>. Using <a class="reference external" href="https://pagedjs.org"><code class="docutils literal notranslate"><span class="pre">pagedjs</span></code></a>, <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> provides templates and utilities for building web reports targeting print media. Beyond that, it provides infrastructure for parameterizing and configuring documents via <a class="reference external" href="https://docs.pydantic.dev/latest/"><code class="docutils literal notranslate"><span class="pre">pydantic</span></code></a>, which makes designing and generating reports a breeze, even without knowledge of Python. Documents are modular and can be easily composed via <a class="reference external" href="https://hydra.cc"><code class="docutils literal notranslate"><span class="pre">hydra</span></code></a>.</p>
+<p>Despite being the primary goal of early notebook conversion efforts, in recent years much less focus has been spent on print media - PDFs for reports, academic papers, newspapers, etc. There are many examples of <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> templates for academic papers, as well as projects like <a class="reference external" href="https://github.com/chrisjsewell/ipypublish/tree/develop"><code class="docutils literal notranslate"><span class="pre">ipypublish</span></code></a>. Most of these efforts focus on <span class="math notranslate nohighlight">\(\\LaTeX\)</span>, and <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> itself started as a convenience framework for formatting charts and tables similarly between html and pdf outputs.</p>
+<p>However, with recent releases to <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code>, which now supports <code class="docutils literal notranslate"><span class="pre">webpdf</span></code> (printing as pdf from within a headless web browser), and with the work <a class="reference external" href="https://pagedjs.org"><code class="docutils literal notranslate"><span class="pre">pagedjs</span></code></a> has done on paged media in CSS, it is now much easier to build publication ready print-oriented media on the web.</p>
+<p>This is the goal of <code class="docutils literal notranslate"><span class="pre">nbprint</span></code>. Using <a class="reference external" href="https://pagedjs.org"><code class="docutils literal notranslate"><span class="pre">pagedjs</span></code></a>, <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> provides templates and utilities for building web reports targeting print media. Beyond that, it provides infrastructure for parameterizing and configuring documents via <a class="reference external" href="https://docs.pydantic.dev/latest/"><code class="docutils literal notranslate"><span class="pre">pydantic</span></code></a>, so reports can be designed and generated without writing Python. Documents are modular and can be composed via <a class="reference external" href="https://hydra.cc"><code class="docutils literal notranslate"><span class="pre">hydra</span></code></a>. The <a class="reference internal" href="gallery.html"><span class="std std-doc">gallery</span></a> shows rendered examples.</p>
 <section id="related-projects">
 <h2>Related Projects<a class="headerlink" href="#related-projects" title="Link to this heading">¶</a></h2>
 <ul class="simple">
@@ -333,10 +338,10 @@
       <span class="fd-pagination-title">Background</span>
     </span>
   </a>
-  <a class="fd-pagination-card fd-pagination-next" href="architecture.html" title="Next: Architecture">
+  <a class="fd-pagination-card fd-pagination-next" href="gallery.html" title="Next: Gallery">
     <span class="fd-pagination-text">
       <span class="fd-pagination-label">Next</span>
-      <span class="fd-pagination-title">Architecture</span>
+      <span class="fd-pagination-title">Gallery</span>
     </span>
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="m9 18 6-6-6-6"/></svg>
   </a>

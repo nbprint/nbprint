@@ -487,6 +487,11 @@ window.runMermaid = runMermaid;</script>
     </a>
   </li>
   <li class="fd-tree-item">
+    <a class="fd-link" href="../../../../docs/src/gallery.html">
+      <span class="fd-link-text">Gallery</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
     <a class="fd-link" href="../../../../docs/src/architecture.html">
       <span class="fd-link-text">Architecture</span>
     </a>
@@ -711,7 +716,7 @@ window.runMermaid = runMermaid;</script>
 <a class="viewcode-back" href="../../../../docs/src/_build/nbprint.config.content.ContentImage.html#nbprint.config.content.ContentImage">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ContentImage</span><span class="p">(</span><span class="n">Content</span><span class="p">):</span>
     <span class="n">path</span><span class="p">:</span> <span class="n">FilePath</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span>  <span class="c1"># ty: ignore[invalid-attribute-override]</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span>  <span class="c1"># ty: ignore[incompatible-attribute-override]</span>
     <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
 
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">"path"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"before"</span><span class="p">)</span>

@@ -489,6 +489,11 @@ window.runMermaid = runMermaid;</script>
     </a>
   </li>
   <li class="fd-tree-item">
+    <a class="fd-link" href="docs/src/gallery.html">
+      <span class="fd-link-text">Gallery</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
     <a class="fd-link" href="docs/src/architecture.html">
       <span class="fd-link-text">Architecture</span>
     </a>
@@ -734,8 +739,8 @@ window.runMermaid = runMermaid;</script>
 <a class="reference external" href="https://pypi.python.org/pypi/nbprint"><img alt="PyPI" src="https://img.shields.io/pypi/v/nbprint.svg" /></a></p>
 <section id="background">
 <h1>Background<a class="headerlink" href="#background" title="Link to this heading">¶</a></h1>
-<p>Jupyter Notebooks are widely used for reports via <a class="reference external" href="https://nbconvert.readthedocs.io/en/latest/"><code class="docutils literal notranslate"><span class="pre">nbconvert</span></code></a>, but most development work has been on enabling building interactive websites. The goal of <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> is to focus on print-oriented workflows, e.g. PDF, by leveraging new developments in <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> and the <a class="reference external" href="https://pagedjs.org"><code class="docutils literal notranslate"><span class="pre">pagedjs</span></code></a> print-oriented layout library.</p>
-<p>For a deeper dive, see <a class="reference external" href="https://nbprint.github.io/nbprint/index.html">the documentation</a>.</p>
+<p>Jupyter Notebooks are widely used for reports via <a class="reference external" href="https://nbconvert.readthedocs.io/en/latest/"><code class="docutils literal notranslate"><span class="pre">nbconvert</span></code></a>, but most development work has focused on interactive websites. The goal of <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> is to focus on print-oriented workflows, e.g. PDF, by leveraging new developments in <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> and the <a class="reference external" href="https://pagedjs.org"><code class="docutils literal notranslate"><span class="pre">pagedjs</span></code></a> print-oriented layout library.</p>
+<p>For a deeper dive, see <a class="reference external" href="https://nbprint.github.io/nbprint/index.html">the documentation</a>. To see what nbprint produces, browse the <a class="reference external" href="https://nbprint.github.io/nbprint/docs/src/gallery.html">gallery</a> of rendered examples.</p>
 </section>
 <section id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Link to this heading">¶</a></h1>
@@ -795,7 +800,7 @@ nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span>nbpri
 
     classDef browserPhase fill:#eef,stroke:#557,color:#000
     class init,proc,pre,esm,pjs,post browserPhase
-    </pre><p>nbprint splits work across three stages. Authoring happens in the notebook (plus optional YAML overrides via <a class="reference external" href="https://hydra.cc">hydra</a>). At <strong>build time</strong>, <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> runs the nbprint Jinja2 template to emit a single self-contained HTML file with all JS, CSS, and data embedded. At <strong>render time</strong>, the browser does the heavy lifting: reparenting the DOM by parent-id, hoisting global styles, running a preprocessing pass that measures and scales oversized content, awaiting every cell’s <code class="docutils literal notranslate"><span class="pre">render()</span></code> function through a <a class="reference external" href="https://nbprint.github.io/nbprint/docs/src/architecture.html#render-lifecycle">lifecycle barrier</a> so pagination only starts after the DOM is stable, then handing off to <a class="reference external" href="https://pagedjs.org"><code class="docutils literal notranslate"><span class="pre">paged.js</span></code></a> for layout, and finally running a postvalidation pass that drops blank pages and surfaces overflow warnings. PDF output is produced by rendering the same HTML with <code class="docutils literal notranslate"><span class="pre">nbconvert</span> <span class="pre">--to</span> <span class="pre">webpdf</span></code> (headless Chromium); there is no separate PDF codepath.</p>
+    </pre><p>nbprint splits work across three stages. You author a notebook, optionally with YAML overrides via <a class="reference external" href="https://hydra.cc">hydra</a>. At <strong>build time</strong>, <code class="docutils literal notranslate"><span class="pre">nbconvert</span></code> runs the nbprint Jinja2 template and writes a single self-contained HTML file with all JS, CSS, and data embedded. At <strong>render time</strong>, the browser lays out the pages. It reparents the DOM by parent id, hoists global styles, measures and scales oversized content, and waits for every cell’s <code class="docutils literal notranslate"><span class="pre">render()</span></code> function through a <a class="reference external" href="https://nbprint.github.io/nbprint/docs/src/architecture.html#render-lifecycle">lifecycle barrier</a>, so pagination starts only after the DOM is stable. <a class="reference external" href="https://pagedjs.org"><code class="docutils literal notranslate"><span class="pre">paged.js</span></code></a> then paginates the document, and a final validation pass drops blank pages and warns about overflow. PDF output comes from rendering the same HTML with <code class="docutils literal notranslate"><span class="pre">nbconvert</span> <span class="pre">--to</span> <span class="pre">webpdf</span></code> (headless Chromium), so there is no separate PDF code path.</p>
 <p>For more information, see <a class="reference external" href="https://nbprint.github.io/nbprint/docs/src/architecture.html">the architecture documentation</a>.</p>
 <section id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h2>

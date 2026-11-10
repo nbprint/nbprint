@@ -435,7 +435,7 @@ window.runMermaid = runMermaid;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Configuration" href="configuration.html" />
-    <link rel="prev" title="Background" href="background.html" />
+    <link rel="prev" title="Gallery" href="gallery.html" />
     <script>
       (function () {
         var root = document.documentElement;
@@ -487,6 +487,11 @@ window.runMermaid = runMermaid;</script>
   <li class="fd-tree-item">
     <a class="fd-link" href="background.html">
       <span class="fd-link-text">Background</span>
+    </a>
+  </li>
+  <li class="fd-tree-item">
+    <a class="fd-link" href="gallery.html">
+      <span class="fd-link-text">Gallery</span>
     </a>
   </li>
   <li class="fd-tree-item">
@@ -795,7 +800,7 @@ window.runMermaid = runMermaid;</script>
 <p><code class="docutils literal notranslate"><span class="pre">nbprint</span></code> is a collection of <a class="reference external" href="https://docs.pydantic.dev/latest/"><code class="docutils literal notranslate"><span class="pre">pydantic</span></code></a> models to take or construct a Jupyter notebook from
 a set of standard parts, execute it with <a class="reference external" href="https://nbconvert.readthedocs.io/en/latest/"><code class="docutils literal notranslate"><span class="pre">nbconvert</span></code></a>, and convert it to <code class="docutils literal notranslate"><span class="pre">html</span></code> or <code class="docutils literal notranslate"><span class="pre">pdf</span></code>
 with a standard template optionally running <a class="reference external" href="https://pagedjs.org"><code class="docutils literal notranslate"><span class="pre">pagedjs</span></code></a> to provide a print-oriented layout.</p>
-<p>It can be run off an existing notebook, or using the provided <a class="reference internal" href="configuration.html"><span class="std std-doc">YAML-based configuration framework</span></a>.</p>
+<p>It can be run off an existing notebook, or using the provided <a class="reference internal" href="configuration.html"><span class="std std-doc">YAML-based configuration framework</span></a>. The <a class="reference internal" href="gallery.html"><span class="std std-doc">gallery</span></a> shows the output of each example.</p>
 <pre  class="mermaid">
         graph TB
     nb(&quot;notebook&lt;br&gt;(.ipynb)&quot;)
@@ -907,7 +912,7 @@ This allows us to represent notebook “state” as a typed <code class="docutil
 <blockquote>
 <div><p><code class="docutils literal notranslate"><span class="pre">hydra</span></code> config: <code class="docutils literal notranslate"><span class="pre">nbprint/parameters/papermill</span></code></p>
 </div></blockquote>
-<p>This is a basic object that takes any basic json-serializeable type and provides it in assignment as the first cell.</p>
+<p>This is a basic object that takes any JSON-serializable type and provides it in assignment as the first cell.</p>
 <p>As an example, the following <code class="docutils literal notranslate"><span class="pre">YAML</span></code>:</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># @package nbprint.parameters</span>
 <span class="nt">_target_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.PapermillParameters</span>
@@ -945,7 +950,7 @@ The best documentation is a simple example in YAML form:</p>
 </pre></div>
 </div>
 <p>This will create two <code class="docutils literal notranslate"><span class="pre">ContentCode</span></code> instances, where one sets a value <code class="docutils literal notranslate"><span class="pre">string</span></code> on the <code class="docutils literal notranslate"><span class="pre">ExampleContext</span></code> instance and the other reads it.</p>
-<p>You can of course rely on notebook-global variables, but relying on typed contexts makes it easier to build modular reports.</p>
+<p>You can rely on notebook-global variables, but relying on typed contexts makes it easier to build modular reports.</p>
 </section>
 <section id="content">
 <h3><code class="docutils literal notranslate"><span class="pre">Content</span></code><a class="headerlink" href="#content" title="Link to this heading">¶</a></h3>
@@ -957,20 +962,20 @@ It can also be convenient to reuse display configuration.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">Content.content</span></code>: string text content, or a <code class="docutils literal notranslate"><span class="pre">list[Content]</span></code> of subcontent for layout elements</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Content.style</span></code>: A <code class="docutils literal notranslate"><span class="pre">Style</span></code> element based on CSS for styling this content</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">css</span></code>: Generic string content to be injected into a <code class="docutils literal notranslate"><span class="pre">&lt;style&gt;</span></code> tag scoped to this cell</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">esm</span></code>: Generic string content to be injected into a <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;</span></code> tag scoped to this cell. It is expected to contain a function <code class="docutils literal notranslate"><span class="pre">render(cell_nbprint_metadata_as_json,</span> <span class="pre">cell_dom_element)</span></code>. The function may be <code class="docutils literal notranslate"><span class="pre">async</span></code> — the render lifecycle (below) awaits it before Paged.js runs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">esm</span></code>: Generic string content to be injected into a <code class="docutils literal notranslate"><span class="pre">&lt;script&gt;</span></code> tag scoped to this cell. It is expected to contain a function <code class="docutils literal notranslate"><span class="pre">render(cell_nbprint_metadata_as_json,</span> <span class="pre">cell_dom_element)</span></code>. The function may be <code class="docutils literal notranslate"><span class="pre">async</span></code>; the render lifecycle (below) awaits it before Paged.js runs.</p></li>
 </ul>
 <section id="render-lifecycle">
 <h4>Render lifecycle<a class="headerlink" href="#render-lifecycle" title="Link to this heading">¶</a></h4>
 <p>Every cell with an <code class="docutils literal notranslate"><span class="pre">esm</span></code> string is wrapped in a <code class="docutils literal notranslate"><span class="pre">&lt;script</span> <span class="pre">type=&quot;module&quot;&gt;</span></code> that listens for the global <code class="docutils literal notranslate"><span class="pre">nbprint-ready</span></code> event, then invokes the cell’s <code class="docutils literal notranslate"><span class="pre">render(meta,</span> <span class="pre">elem)</span></code> function. To guarantee pagination only starts after every cell has finished mutating the DOM, <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> coordinates renders through a small lifecycle API on the global <code class="docutils literal notranslate"><span class="pre">NBPrint</span></code> instance (<code class="docutils literal notranslate"><span class="pre">window._n</span></code>).</p>
 <p>Phases, in order:</p>
 <ol class="arabic simple">
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">DOMContentLoaded</span></code></strong> — <code class="docutils literal notranslate"><span class="pre">embedded.js</span></code> creates the <code class="docutils literal notranslate"><span class="pre">NBPrint</span></code> singleton and waits for every <code class="docutils literal notranslate"><span class="pre">&lt;img&gt;</span></code> to finish decoding (so measurements see correct <code class="docutils literal notranslate"><span class="pre">naturalWidth</span></code> / <code class="docutils literal notranslate"><span class="pre">naturalHeight</span></code>).</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">nbprint.process()</span></code></strong> — reparents elements by <code class="docutils literal notranslate"><span class="pre">data-nbprint-parent-id</span></code>, hoists non-<code class="docutils literal notranslate"><span class="pre">&#64;scope</span></code> styles to <code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code>, and runs the pre-pagination preprocessor.</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">nbprint-ready</span></code> event dispatched</strong> — every cell’s ESM listener runs <em>synchronously</em> (the <code class="docutils literal notranslate"><span class="pre">CustomEvent</span></code> dispatch is synchronous), and inside its listener each cell calls <code class="docutils literal notranslate"><span class="pre">nbp.trackRender(async</span> <span class="pre">()</span> <span class="pre">=&gt;</span> <span class="pre">render(meta,</span> <span class="pre">elem))</span></code>. The registered promise is retained by the lifecycle.</p></li>
-<li><p><strong>Barrier: <code class="docutils literal notranslate"><span class="pre">nbp.waitForRenders()</span></code></strong> — awaits every tracked promise. If a render schedules further renders, the barrier loops until a tick passes with no new registrations, so cascading async work (e.g. dynamic imports, sub-renders) all settles. A rejection in one cell is logged and isolated; it does not block other cells.</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">nbprint-esm-complete</span></code> event dispatched</strong> — signals “DOM is stable, pagination starts now”. Use this instead of <code class="docutils literal notranslate"><span class="pre">nbprint-ready</span></code> for any code that wants to run after user-land renders are done (diagnostics, measure-phase tweaks, future overflow detection).</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">nbprint.build()</span></code></strong> — hands off to Paged.js. By this point the DOM is final.</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">nbprint.postprocess()</span></code></strong> — dispatches <code class="docutils literal notranslate"><span class="pre">nbprint-done</span></code>, then sets <code class="docutils literal notranslate"><span class="pre">data-nbprint-paged=&quot;done&quot;</span></code> on <code class="docutils literal notranslate"><span class="pre">&lt;html&gt;</span></code>. The nbprint template seeds that attribute with <code class="docutils literal notranslate"><span class="pre">&quot;pending&quot;</span></code> before any async work starts, so a PDF capture can distinguish “pagination still running” from “not an nbprint document”. <code class="docutils literal notranslate"><span class="pre">NBPrintWebPDFExporter</span></code> waits for <code class="docutils literal notranslate"><span class="pre">&quot;done&quot;</span></code> instead of sleeping a fixed interval — nbconvert’s stock webpdf exporter captures a fixed delay after the network goes idle, which races paged.js and silently truncates long documents. The attribute is set from a <code class="docutils literal notranslate"><span class="pre">finally</span></code>, so a failed render releases the capture rather than stalling it.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">DOMContentLoaded</span></code></strong>: <code class="docutils literal notranslate"><span class="pre">embedded.js</span></code> creates the <code class="docutils literal notranslate"><span class="pre">NBPrint</span></code> singleton and waits for every <code class="docutils literal notranslate"><span class="pre">&lt;img&gt;</span></code> to finish decoding (so measurements see correct <code class="docutils literal notranslate"><span class="pre">naturalWidth</span></code> / <code class="docutils literal notranslate"><span class="pre">naturalHeight</span></code>).</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nbprint.process()</span></code></strong>: reparents elements by <code class="docutils literal notranslate"><span class="pre">data-nbprint-parent-id</span></code>, hoists non-<code class="docutils literal notranslate"><span class="pre">&#64;scope</span></code> styles to <code class="docutils literal notranslate"><span class="pre">&lt;head&gt;</span></code>, and runs the pre-pagination preprocessor.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nbprint-ready</span></code> event dispatched</strong>: every cell’s ESM listener runs <em>synchronously</em> (the <code class="docutils literal notranslate"><span class="pre">CustomEvent</span></code> dispatch is synchronous), and inside its listener each cell calls <code class="docutils literal notranslate"><span class="pre">nbp.trackRender(async</span> <span class="pre">()</span> <span class="pre">=&gt;</span> <span class="pre">render(meta,</span> <span class="pre">elem))</span></code>. The registered promise is retained by the lifecycle.</p></li>
+<li><p><strong>Barrier: <code class="docutils literal notranslate"><span class="pre">nbp.waitForRenders()</span></code></strong>: awaits every tracked promise. If a render schedules further renders, the barrier loops until a tick passes with no new registrations, so cascading async work (e.g. dynamic imports, sub-renders) all settles. A rejection in one cell is logged and isolated; it does not block other cells.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nbprint-esm-complete</span></code> event dispatched</strong>: signals “DOM is stable, pagination starts now”. Use this instead of <code class="docutils literal notranslate"><span class="pre">nbprint-ready</span></code> for any code that wants to run after user-land renders are done (diagnostics, measure-phase tweaks, future overflow detection).</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nbprint.build()</span></code></strong>: hands off to Paged.js. By this point the DOM is final.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">nbprint.postprocess()</span></code></strong>: dispatches <code class="docutils literal notranslate"><span class="pre">nbprint-done</span></code>, then sets <code class="docutils literal notranslate"><span class="pre">data-nbprint-paged=&quot;done&quot;</span></code> on <code class="docutils literal notranslate"><span class="pre">&lt;html&gt;</span></code>. The nbprint template seeds that attribute with <code class="docutils literal notranslate"><span class="pre">&quot;pending&quot;</span></code> before any async work starts, so a PDF capture can distinguish “pagination still running” from “not an nbprint document”. <code class="docutils literal notranslate"><span class="pre">NBPrintWebPDFExporter</span></code> waits for <code class="docutils literal notranslate"><span class="pre">&quot;done&quot;</span></code> instead of sleeping a fixed interval. nbconvert’s stock webpdf exporter captures after a fixed delay once the network goes idle, which races paged.js and can truncate long documents. The attribute is set from a <code class="docutils literal notranslate"><span class="pre">finally</span></code>, so a failed render releases the capture rather than stalling it.</p></li>
 </ol>
 <p><strong>Writing a cell <code class="docutils literal notranslate"><span class="pre">render()</span></code> function.</strong> The template handles registration automatically; author your ESM as if it were stand-alone:</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// esm string on a Content model</span>
@@ -991,7 +996,7 @@ It can also be convenient to reuse display configuration.</p>
 <li><p><strong>Isolation.</strong> One cell’s failure never blocks pagination of the rest of the document; the error is logged to the console with <code class="docutils literal notranslate"><span class="pre">[nbprint]</span> <span class="pre">cell</span> <span class="pre">render</span> <span class="pre">failed:</span></code> and the rejected promise resolves.</p></li>
 <li><p><strong>Order independence.</strong> <code class="docutils literal notranslate"><span class="pre">render()</span></code> calls run concurrently; do not rely on cell execution order. If you need cross-cell coordination, use the <code class="docutils literal notranslate"><span class="pre">Context</span></code> mechanism (typed, ordered, Python-side) rather than ad-hoc JS globals.</p></li>
 <li><p><strong>Late registration is legal but not useful.</strong> Calling <code class="docutils literal notranslate"><span class="pre">trackRender()</span></code> after <code class="docutils literal notranslate"><span class="pre">nbprint-esm-complete</span></code> has already fired produces a console warning and returns the promise ungated; pagedjs will not wait for it.</p></li>
-<li><p><strong>Standalone fallback.</strong> When the template is rendered outside the normal embedded pipeline (stand-alone fixtures, structural tests), the cell script falls back to fire-and-forget invocation — <code class="docutils literal notranslate"><span class="pre">trackRender</span></code> is optional.</p></li>
+<li><p><strong>Standalone fallback.</strong> When the template is rendered outside the normal embedded pipeline (stand-alone fixtures, structural tests), the cell script falls back to fire-and-forget invocation, so <code class="docutils literal notranslate"><span class="pre">trackRender</span></code> is optional.</p></li>
 </ul>
 </section>
 <section id="contentcode">
@@ -1054,7 +1059,7 @@ there is one source of truth for “what does <code class="docutils literal notr
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flow</span></code></p></td>
 <td><p>normal block flow (<code class="docutils literal notranslate"><span class="pre">gap</span></code> → <code class="docutils literal notranslate"><span class="pre">margin-top</span></code> between siblings)</p></td>
-<td><p>default — long-form content</p></td>
+<td><p>default; long-form content</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">columns-2/3</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">column-count:</span> <span class="pre">N;</span> <span class="pre">column-fill:</span> <span class="pre">balance</span></code></p></td>
@@ -1093,7 +1098,7 @@ there is one source of truth for “what does <code class="docutils literal notr
 <td><p>tile galleries</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">custom</span></code></p></td>
-<td><p>suppresses preset CSS — user owns <code class="docutils literal notranslate"><span class="pre">:scope</span></code> via <code class="docutils literal notranslate"><span class="pre">css</span></code></p></td>
+<td><p>suppresses preset CSS; user owns <code class="docutils literal notranslate"><span class="pre">:scope</span></code> via <code class="docutils literal notranslate"><span class="pre">css</span></code></p></td>
 <td><p>full manual control</p></td>
 </tr>
 </tbody>
@@ -1101,7 +1106,7 @@ there is one source of truth for “what does <code class="docutils literal notr
 <p><code class="docutils literal notranslate"><span class="pre">gap</span></code>, <code class="docutils literal notranslate"><span class="pre">padding</span></code>, <code class="docutils literal notranslate"><span class="pre">align</span></code>, <code class="docutils literal notranslate"><span class="pre">justify</span></code> are passed to whichever preset
 makes sense for them; they are no-ops for presets that don’t apply
 (e.g. <code class="docutils literal notranslate"><span class="pre">align</span></code> on <code class="docutils literal notranslate"><span class="pre">flow</span></code>).</p>
-<p>Crucially, the page-box runs an <strong>auto-wrap validator</strong>: any bare
+<p>The page-box also runs an <strong>auto-wrap validator</strong>: any bare
 child <code class="docutils literal notranslate"><span class="pre">Content</span></code> inside its <code class="docutils literal notranslate"><span class="pre">content</span></code> list is wrapped in a
 <code class="docutils literal notranslate"><span class="pre">ContentPageBlock</span></code> so the DOM shape is always
 <code class="docutils literal notranslate"><span class="pre">page-box</span> <span class="pre">&gt;</span> <span class="pre">block</span> <span class="pre">&gt;</span> <span class="pre">&lt;user</span> <span class="pre">content&gt;</span></code>. Authors who want to escape
@@ -1139,7 +1144,7 @@ nbprint<span class="w"> </span>examples/research.yaml<span class="w"> </span><sp
 <code class="docutils literal notranslate"><span class="pre">grid-template</span></code> value to lay out children by name. Each child block
 references a cell via <code class="docutils literal notranslate"><span class="pre">area=</span></code>; the page-box validator cross-checks
 that every referenced area exists in the template (unused template
-areas are allowed — they just produce empty cells). The <code class="docutils literal notranslate"><span class="pre">.</span></code>
+areas are allowed and produce empty cells). The <code class="docutils literal notranslate"><span class="pre">.</span></code>
 placeholder is treated as an empty cell, not an area name.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type_</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nbprint.ContentPageBox</span>
 <span class="w">  </span><span class="nt">layout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grid</span>
@@ -1205,7 +1210,7 @@ inside a notebook via the matching runtime context managers, which
 emit hidden <code class="docutils literal notranslate"><span class="pre">application/nbprint.page+json</span></code> /
 <code class="docutils literal notranslate"><span class="pre">application/nbprint.block+json</span></code> MIME outputs. The ingestion path
 extracts those payloads and routes them through the same
-<code class="docutils literal notranslate"><span class="pre">type_</span></code>-aware machinery that handles YAML — there is no separate
+<code class="docutils literal notranslate"><span class="pre">type_</span></code>-aware machinery that handles YAML, so there is no separate
 runtime path.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">display</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nbprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">NBPrintPage</span><span class="p">,</span> <span class="n">NBPrintBlock</span>
@@ -1230,7 +1235,7 @@ runtime path.</p>
 </div>
 <p>Both context managers accept every field of their corresponding
 <code class="docutils literal notranslate"><span class="pre">Content</span></code> model. Outside a <code class="docutils literal notranslate"><span class="pre">ContentPageBox</span></code>, <code class="docutils literal notranslate"><span class="pre">NBPrintBlock</span></code> still
-applies — <code class="docutils literal notranslate"><span class="pre">break_inside:</span> <span class="pre">avoid</span></code> is a useful “keep together”
+applies: <code class="docutils literal notranslate"><span class="pre">break_inside:</span> <span class="pre">avoid</span></code> is a useful “keep together”
 primitive even in long-scroll reports.</p>
 </section>
 </section>
@@ -1354,10 +1359,9 @@ It supports the following configuration options:</p>
 </section>
 <section id="id2">
 <h2>Configuration<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
-<p><a class="reference external" href="https://hydra.cc"><code class="docutils literal notranslate"><span class="pre">hydra</span></code></a> allows us the ability to mix and match the various components defined in YAML, or even build our own.
-Its easy for us to mix-and-match configuration for content, outputs, layout, and more.
-It also lets us tweak existing <code class="docutils literal notranslate"><span class="pre">pydantic</span></code>-defined options from the command line.</p>
-<p>Let’s look at some examples of how powerful this can be:</p>
+<p><a class="reference external" href="https://hydra.cc"><code class="docutils literal notranslate"><span class="pre">hydra</span></code></a> lets us mix and match components defined in YAML, including our own, for content, outputs, layout, and more.
+It also lets us change existing <code class="docutils literal notranslate"><span class="pre">pydantic</span></code>-defined options from the command line.</p>
+<p>Some examples:</p>
 <p>In this command, we run a default <code class="docutils literal notranslate"><span class="pre">nbprint.Configuration</span></code> but use content from an existing notebook.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create HTML from notebook as-is</span>
 nbprint<span class="w"> </span>examples/basic.ipynb
@@ -1410,19 +1414,18 @@ nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span>nbpri
 nbprint<span class="w"> </span>examples/basic.ipynb<span class="w"> </span>++nbprint.outputs.target<span class="o">=</span>webpdf
 </pre></div>
 </div>
-<p>By providing the ability to do deep dependency injection in existing objects and/or swap objects wholesale,
-we can customize, tweak, and extend <code class="docutils literal notranslate"><span class="pre">nbprint</span></code> as much as we need.</p>
+<p>Either approach works for any part of the configuration: override a nested field, or swap the whole object for another config group.</p>
 </section>
 </section>
 
 
       </div>
 <nav class="fd-pagination" aria-label="Pagination">
-  <a class="fd-pagination-card fd-pagination-prev" href="background.html" title="Previous: Background">
+  <a class="fd-pagination-card fd-pagination-prev" href="gallery.html" title="Previous: Gallery">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="fd-icon "><path d="m15 18-6-6 6-6"/></svg>
     <span class="fd-pagination-text">
       <span class="fd-pagination-label">Previous</span>
-      <span class="fd-pagination-title">Background</span>
+      <span class="fd-pagination-title">Gallery</span>
     </span>
   </a>
   <a class="fd-pagination-card fd-pagination-next" href="configuration.html" title="Next: Configuration">
